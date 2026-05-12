@@ -1,0 +1,1052 @@
+<!doctype html>
+<!--
+  R_RougeSlot · 可交互原型 · 老虎机式红绿灯路口（方向 A）
+  ==========================================================
+  完整的玩法循环：拉杆 → 真随机抽 12 车 → auto_place 落位动画 → 5 类 combo 判定
+  → combo2 修饰 → 结算 → 金币累计 → RPBD 商店购买道具 → 影响下次 spin。
+  使用 localStorage 持久化存档。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>🚦 老虎机式红绿灯 · 可交互原型 (v5)</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  body { background: #14111c; }
+  .proto-wrap { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  /* 顶部状态条 */
+  .status-bar {
+    display: grid;
+    grid-template-columns: auto auto auto auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 14px 20px;
+    background: linear-gradient(90deg, rgba(34,211,153,0.08), rgba(124,58,237,0.06));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    margin-bottom: 18px;
+  }
+  .stat-pill {
+    display: flex; align-items: center; gap: 6px;
+    font-family: ui-monospace, monospace;
+    font-size: 13px;
+  }
+  .stat-pill .lab { color: var(--fg-muted); font-size: 11px; }
+  .stat-pill .val { font-weight: 700; color: var(--accent); font-size: 15px; }
+  .stat-pill .val.big { font-size: 22px; color: #fbbf24; }
+  .reset-btn {
+    background: rgba(248,113,113,0.15); color: #f87171;
+    border: 1px solid rgba(248,113,113,0.3);
+    padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 11px;
+  }
+  .reset-btn:hover { background: rgba(248,113,113,0.25); }
+
+  /* 主舞台两栏 */
+  .main-stage { display: grid; grid-template-columns: 480px 1fr; gap: 20px; margin-bottom: 20px; }
+
+  /* 路口 */
+  .intersection-wrap { padding: 20px; }
+  .intersection {
+    position: relative;
+    aspect-ratio: 1;
+    background: #1a1727;
+    border: 2px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 1fr 3fr 1fr;
+    gap: 4px;
+  }
+  .lane { display: grid; background: rgba(0,0,0,0.4); border-radius: 6px; padding: 4px; gap: 3px; border: 1px solid rgba(255,255,255,0.04); }
+  .lane.lane-N { grid-column: 2; grid-row: 1; grid-template-columns: repeat(3, 1fr); }
+  .lane.lane-S { grid-column: 2; grid-row: 3; grid-template-columns: repeat(3, 1fr); }
+  .lane.lane-W { grid-column: 1; grid-row: 2; grid-template-rows: repeat(3, 1fr); }
+  .lane.lane-E { grid-column: 3; grid-row: 2; grid-template-rows: repeat(3, 1fr); }
+  .lane-label { position: absolute; font-size: 11px; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; }
+  .lane-label.N { top: 4px; left: 50%; transform: translateX(-50%); }
+  .lane-label.S { bottom: 4px; left: 50%; transform: translateX(-50%); }
+  .lane-label.W { left: 4px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; }
+  .lane-label.E { right: 4px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; }
+  .cell {
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; line-height: 1; position: relative; transition: all 0.2s;
+    min-height: 48px;
+  }
+  .cell.spinning {
+    animation: rollAnim 0.08s linear infinite;
+  }
+  @keyframes rollAnim {
+    0% { transform: translateY(-4px); opacity: 0.6; }
+    100% { transform: translateY(4px); opacity: 1; }
+  }
+  .center {
+    grid-column: 2; grid-row: 2;
+    background: radial-gradient(circle, rgba(124,58,237,0.15), rgba(0,0,0,0.4));
+    border: 1px dashed rgba(124,58,237,0.4);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--fg-muted); font-size: 12px; text-align: center;
+  }
+  .traffic-light { position: absolute; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff2; opacity: 0.4; }
+  .traffic-light.green { background: #34d399; box-shadow: 0 0 12px #34d399; opacity: 1; }
+  .traffic-light.red { background: #f87171; }
+  .traffic-light.tl-N { top: 6px; left: 50%; transform: translateX(-50%); }
+  .traffic-light.tl-S { bottom: 6px; left: 50%; transform: translateX(-50%); }
+  .traffic-light.tl-W { left: 6px; top: 50%; transform: translateY(-50%); }
+  .traffic-light.tl-E { right: 6px; top: 50%; transform: translateY(-50%); }
+
+  .cell.combo-adj { background: rgba(96,165,250,0.30); box-shadow: inset 0 0 0 2px #60a5fa; }
+  .cell.combo-line { background: rgba(34,211,153,0.30); box-shadow: inset 0 0 0 2px #34d399; }
+  .cell.combo-cascade { background: rgba(248,113,113,0.30); box-shadow: inset 0 0 0 2px #f87171; }
+  .cell.combo-dict { background: rgba(251,191,36,0.30); box-shadow: inset 0 0 0 2px #fbbf24; }
+  .cell.combo-thresh { background: rgba(196,149,106,0.25); box-shadow: inset 0 0 0 2px #c4956a; }
+
+  /* 拉杆按钮 */
+  .lever {
+    width: 100%;
+    margin-top: 16px;
+    padding: 18px;
+    background: linear-gradient(180deg, #c4956a, #8b6940);
+    border: none; border-radius: 10px;
+    color: #1c1300; font-weight: 700; font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #5a3f20, 0 6px 16px rgba(0,0,0,0.4);
+    transition: all 0.1s;
+  }
+  .lever:hover:not(:disabled) { background: linear-gradient(180deg, #d4a578, #a17a48); }
+  .lever:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #5a3f20; }
+  .lever:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* 右栏：combo 触发 + 结算 */
+  .right-panel { padding: 16px 18px; max-height: 720px; overflow-y: auto; }
+  .panel-section { margin-bottom: 18px; }
+  .panel-section h3 {
+    font-size: 13px; font-weight: 700; margin: 0 0 8px;
+    color: var(--accent);
+  }
+
+  /* combo trigger rows */
+  .combo-list { display: flex; flex-direction: column; gap: 6px; }
+  .combo-trigger {
+    display: grid;
+    grid-template-columns: 26px 1fr 56px;
+    gap: 8px; align-items: center;
+    padding: 6px 8px;
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+  .combo-trigger .icon { font-size: 16px; text-align: center; }
+  .combo-trigger .text { line-height: 1.4; }
+  .combo-trigger .text b { font-size: 11px; }
+  .combo-trigger .value { font-family: ui-monospace, monospace; font-weight: 700; color: var(--accent); text-align: right; font-size: 12px; }
+  .combo-trigger.adj { border-color: #60a5fa; }
+  .combo-trigger.dict { border-color: #fbbf24; }
+  .combo-trigger.line { border-color: #34d399; }
+  .combo-trigger.cascade { border-color: #f87171; }
+  .combo-trigger.thresh { border-color: #c4956a; }
+  .combo-trigger.empty { opacity: 0.4; border-color: #444; }
+
+  /* combo2 道具栏 */
+  .combo2-bar { display: flex; gap: 6px; flex-wrap: wrap; }
+  .combo2-chip {
+    padding: 5px 10px;
+    background: linear-gradient(135deg, rgba(196,149,106,0.18), rgba(251,191,36,0.10));
+    border: 1px solid rgba(196,149,106,0.4);
+    border-radius: 14px;
+    font-size: 11px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .combo2-chip .glyph { font-size: 14px; }
+  .combo2-chip .name { font-weight: 700; }
+  .combo2-chip .mult { color: var(--accent); font-family: ui-monospace, monospace; font-weight: 700; font-size: 11px; }
+  .empty-text { color: var(--fg-muted); font-size: 11px; font-style: italic; }
+
+  /* 结算面板 */
+  .settle-panel {
+    background: linear-gradient(180deg, rgba(34,211,153,0.06), rgba(124,58,237,0.04));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 11px;
+  }
+  .settle-line {
+    display: grid;
+    grid-template-columns: 18px 1fr 80px;
+    gap: 6px;
+    padding: 4px 0;
+    align-items: center;
+    border-bottom: 1px dashed rgba(255,255,255,0.06);
+  }
+  .settle-line:last-child { border-bottom: none; }
+  .settle-line .op { color: var(--fg-muted); font-family: ui-monospace, monospace; text-align: center; }
+  .settle-line .num { text-align: right; font-family: ui-monospace, monospace; font-weight: 700; }
+  .settle-line.combo1-sub { background: rgba(167,139,250,0.10); margin: 4px -14px; padding: 6px 14px; border-bottom: none; }
+  .settle-line.combo1-sub .num { color: #a78bfa; }
+  .settle-line.total { background: rgba(52,211,153,0.10); margin: 4px -14px -12px; padding: 10px 14px; border-radius: 0 0 8px 8px; }
+  .settle-line.total .num { color: #34d399; font-size: 18px; }
+  .settle-line.total .desc { color: #34d399; font-weight: 700; }
+
+  /* 商店面板 */
+  .shop-panel {
+    margin-top: 18px;
+    padding: 18px 22px;
+  }
+  .shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .shop-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 14px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .shop-card:not(.owned):not(.afford-no):hover {
+    border-color: var(--accent);
+    background: rgba(196,149,106,0.08);
+    transform: translateY(-2px);
+  }
+  .shop-card.owned {
+    background: rgba(52,211,153,0.06);
+    border-color: rgba(52,211,153,0.4);
+    cursor: default;
+  }
+  .shop-card.afford-no {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .shop-card .head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .shop-card .glyph { font-size: 22px; }
+  .shop-card .name { font-weight: 700; font-size: 13px; flex: 1; }
+  .shop-card .mult { font-family: ui-monospace, monospace; font-weight: 700; color: var(--accent); font-size: 12px; }
+  .shop-card .desc { font-size: 11px; color: var(--fg-muted); line-height: 1.5; margin-bottom: 6px; }
+  .shop-card .foot { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+  .shop-card .cost { font-family: ui-monospace, monospace; font-weight: 700; color: #fbbf24; }
+  .shop-card .own-tag { color: #34d399; font-weight: 700; }
+
+  /* 通知动画 */
+  .toast {
+    position: fixed;
+    top: 24px; right: 24px;
+    padding: 12px 18px;
+    background: var(--accent);
+    color: #1c1300;
+    font-weight: 700;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    opacity: 0; transform: translateX(20px);
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 1000;
+    font-size: 13px;
+  }
+  .toast.show { opacity: 1; transform: translateX(0); }
+  .toast.danger { background: #f87171; color: #fff; }
+  .toast.info { background: #60a5fa; color: #1c1300; }
+
+  /* 历史日志 */
+  .log-panel {
+    margin-top: 18px;
+    padding: 14px 18px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .log-entry { padding: 3px 0; border-bottom: 1px dashed rgba(255,255,255,0.04); }
+  .log-entry .day { color: var(--fg-muted); margin-right: 8px; }
+  .log-entry .gold { color: #34d399; font-weight: 700; }
+
+  .empty-stage {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--fg-muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  h2.proto-title {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    margin: 0 0 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 6px;
+  }
+
+  details summary {
+    cursor: pointer;
+    color: var(--fg-muted);
+    font-size: 11px;
+    padding: 4px 0;
+  }
+  details summary:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap proto-wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div class="page-head">
+  <h1>🚦 老虎机式红绿灯路口 · 可交互原型</h1>
+  <p class="lede">v5 完备模型 · auto_place + 2D_grid + multiplicative_chain。点拉杆 → 真随机抽 12 车 → auto 落位 → 5 类 combo 自动判定 → combo2 修饰乘算 → 结算到金币 → 商店购买道具 → 影响下次。</p>
+</div>
+
+<!-- 状态栏 -->
+<div class="status-bar">
+  <div class="stat-pill">
+    <span class="lab">💰 金币</span>
+    <span class="val big" id="stat-gold">100</span>
+  </div>
+  <div class="stat-pill">
+    <span class="lab">📅 第</span>
+    <span class="val" id="stat-day">1</span>
+    <span class="lab">天</span>
+  </div>
+  <div class="stat-pill">
+    <span class="lab">🎰 spin</span>
+    <span class="val" id="stat-spin">0</span>
+    <span class="lab">/ 6</span>
+  </div>
+  <div class="stat-pill">
+    <span class="lab">🎯 今日通行</span>
+    <span class="val" id="stat-today">0</span>
+    <span class="lab">/ <b id="stat-target">80</b></span>
+  </div>
+  <div></div>
+  <button class="reset-btn" onclick="resetGame()">重置存档</button>
+</div>
+
+<!-- 主舞台 -->
+<div class="main-stage">
+
+  <!-- 左：路口 + 拉杆 -->
+  <div class="card intersection-wrap">
+    <h2 class="proto-title">🎬 show_topology · 2D_grid（4 方向 × 3 车道）</h2>
+    <div class="intersection" id="intersection">
+      <span class="lane-label N">北 N</span>
+      <span class="lane-label S">南 S</span>
+      <span class="lane-label W">西 W</span>
+      <span class="lane-label E">东 E</span>
+      <span class="traffic-light tl-N green" id="tl-N"></span>
+      <span class="traffic-light tl-S red" id="tl-S"></span>
+      <span class="traffic-light tl-W red" id="tl-W"></span>
+      <span class="traffic-light tl-E red" id="tl-E"></span>
+      <div class="lane lane-N" id="lane-N">
+        <div class="cell" data-pos="N0">·</div>
+        <div class="cell" data-pos="N1">·</div>
+        <div class="cell" data-pos="N2">·</div>
+      </div>
+      <div class="center">
+        <div>
+          <div style="font-weight:700; color: var(--accent);">路口</div>
+          <div style="font-size: 10px; opacity: 0.7;">4 邻接判定区</div>
+        </div>
+      </div>
+      <div class="lane lane-W" id="lane-W">
+        <div class="cell" data-pos="W0">·</div>
+        <div class="cell" data-pos="W1">·</div>
+        <div class="cell" data-pos="W2">·</div>
+      </div>
+      <div class="lane lane-E" id="lane-E">
+        <div class="cell" data-pos="E0">·</div>
+        <div class="cell" data-pos="E1">·</div>
+        <div class="cell" data-pos="E2">·</div>
+      </div>
+      <div class="lane lane-S" id="lane-S">
+        <div class="cell" data-pos="S0">·</div>
+        <div class="cell" data-pos="S1">·</div>
+        <div class="cell" data-pos="S2">·</div>
+      </div>
+    </div>
+    <button class="lever" id="lever-btn" onclick="pullLever()">🎰 拉杆 · 开始 spin</button>
+  </div>
+
+  <!-- 右：combo + 结算 -->
+  <div class="card right-panel">
+    <div class="panel-section">
+      <h3>🔗 Combo 1 · 自动判定（5 类 predicate）</h3>
+      <div class="combo-list" id="combo-list">
+        <div class="combo-trigger empty">
+          <span class="icon">⊘</span>
+          <span class="text">还没拉杆——点击左侧拉杆开始</span>
+          <span class="value">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>✨ Combo 2 · 修饰协同（已购买道具 / multiplicative_chain）</h3>
+      <div class="combo2-bar" id="combo2-bar">
+        <div class="empty-text">尚未购买道具——下方商店选购</div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>💰 结算公式</h3>
+      <div class="settle-panel" id="settle-panel">
+        <div class="empty-text" style="text-align: center; padding: 20px 0;">拉杆后此处显示完整结算</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 商店 -->
+<div class="card shop-panel">
+  <h2 class="proto-title">🛒 RPBD · 市政厅商店（spin 之间任意购买）</h2>
+  <p style="font-size: 11px; color: var(--fg-muted); margin: 0 0 12px;">
+    每件道具购买后<b>立即生效</b>，影响后续每次 spin 的结算。typology = multiplicative_chain，乘性叠加。
+  </p>
+  <div class="shop-grid" id="shop-grid"></div>
+</div>
+
+<!-- 历史日志 -->
+<div class="card log-panel">
+  <h2 class="proto-title">📜 历史日志（最近 10 spin）</h2>
+  <div id="log-content">
+    <div class="empty-text">尚无 spin 历史</div>
+  </div>
+</div>
+
+<!-- 设计说明（可折叠）-->
+<details style="margin-top: 18px; padding: 12px 18px; background: rgba(255,255,255,0.02); border-radius: 8px;">
+  <summary>📐 完备模型对应（点击展开）</summary>
+  <div style="margin-top: 10px; font-size: 12px; line-height: 1.7;">
+    <p><b>spin 流程</b>：</p>
+    <pre style="background: var(--bg-deep); padding: 10px; border-radius: 4px; font-size: 11px;">spin[
+  1.random  → 真随机抽 12 辆车（从 12 元素 base pool，按稀有度权重）
+       ↓
+  2.put     → auto_place 自动平均分配到 4 方向 × 3 车道 = 12 格
+       ↓
+  combo[
+    combo1: 5 类 predicate 自动判定（adj / dict / thresh / line / cascade）
+    combo2: 已购道具乘算（multiplicative_chain）
+  ] @ show_topology = 2D_grid
+]_N → RPBD（商店购买）</pre>
+
+    <p><b>核心数据池</b>：</p>
+    <ul style="font-size: 11px;">
+      <li>基础池（pool_base）：12 种车辆，4 档稀有度（普 / 非 / 稀 / 极稀），每档赋权重</li>
+      <li>主动池（pool_active）：8 个道具，3 档威力（普 / 稀 / 传），影响 combo2 倍率</li>
+    </ul>
+
+    <p><b>压力曲线</b>：M=12 / N=6 / T₀=80 / r=1.35 / m_boss=2.8（暂仅做第 1 周）</p>
+  </div>
+</details>
+
+<!-- ============== 业务逻辑 ============== -->
+<script>
+(function () {
+  'use strict';
+
+  // ====== 数据池 ======
+
+  // 基础池（pool_base）：12 种车辆 + 稀有度权重
+  const VEHICLE_POOL = [
+    // 普通 60% (单权重 10，共 6 种 = 60%)
+    { id: 'taxi',     glyph: '🚕', name: '出租车',   rare: '普', weight: 12, base: 5 },
+    { id: 'bus',      glyph: '🚌', name: '公交车',   rare: '普', weight: 10, base: 5, color: 'green' },
+    { id: 'bus2',     glyph: '🚍', name: '小巴',     rare: '普', weight: 8,  base: 5, color: 'green' },
+    { id: 'truck',    glyph: '🚚', name: '货车',     rare: '普', weight: 8,  base: 6, speedy: true },
+    { id: 'bike',     glyph: '🏍', name: '摩托',     rare: '普', weight: 7,  base: 4, speedy: true },
+    { id: 'car',      glyph: '🚗', name: '小轿车',   rare: '普', weight: 15, base: 5 },
+    // 非普通 25%
+    { id: 'amb',      glyph: '🚑', name: '救护车',   rare: '非', weight: 10, base: 8, openLane: true },
+    { id: 'police',   glyph: '🚓', name: '警车',     rare: '非', weight: 8,  base: 7, cascadePartner: 'rob' },
+    { id: 'fire',     glyph: '🚒', name: '消防车',   rare: '非', weight: 7,  base: 8, openLane: true },
+    // 稀有 12%
+    { id: 'wedding',  glyph: '🤵', name: '婚车',     rare: '稀', weight: 8,  base: 10 },
+    { id: 'limo',     glyph: '🏎', name: '总裁车',   rare: '稀', weight: 4,  base: 12, vip: true },
+    // 极稀有 3%
+    { id: 'rob',      glyph: '💰', name: '抢劫案',   rare: '极稀', weight: 3, base: 5, cascadeKey: 'rob' }
+  ];
+
+  // 主动池（pool_active）：8 个 combo2 道具
+  const SHOP_ITEMS = [
+    { id: 'smart_light', glyph: '🚦', name: '智能灯',     mult: 1.5, type: 'global_mult', cost: 50,  rare: '普', desc: '所有产出 ×1.5（全局倍率）' },
+    { id: 'toll',        glyph: '💵', name: '收费站',     add: 1,    type: 'per_vehicle', cost: 30,  rare: '普', desc: '每辆通过车 +1 币基础费' },
+    { id: 'camera',      glyph: '📷', name: '测速摄像头', add: 5,    type: 'per_speedy',  cost: 35,  rare: '普', desc: '每辆超速车（货车/摩托）+5 罚款' },
+    { id: 'amb_lane',    glyph: '🚑', name: '应急车道',   mult: 3,   type: 'amb_mult',    cost: 60,  rare: '稀', desc: '救护车 / 消防车 ×3' },
+    { id: 'overpass',    glyph: '🌉', name: '高架桥',     mult: 2,   type: 'global_mult', cost: 80,  rare: '稀', desc: '全局产出 ×2' },
+    { id: 'vip_lane',    glyph: '🏎', name: 'VIP 通道',  mult: 4,   type: 'vip_mult',    cost: 200, rare: '传', desc: '婚车 / 总裁车 ×4' },
+    { id: 'patrol',      glyph: '🚓', name: '巡逻警车',   mult: 1.3, type: 'global_mult', cost: 45,  rare: '普', desc: '全局产出 ×1.3' },
+    { id: 'priority_bus',glyph: '🚌', name: '公交优先',   mult: 2,   type: 'bus_mult',    cost: 70,  rare: '稀', desc: '所有公交车 ×2 + 公交字典加成 ×1.5' }
+  ];
+
+  // 字典套牌（type_dict 触发规则）
+  const DICT_RECIPES = [
+    { name: '早高峰套餐', match: g => count(g, 'taxi') >= 3, bonus: 15, desc: '3+ 出租车' },
+    { name: '公交三连',   match: g => count(g, 'bus') + count(g, 'bus2') >= 3, bonus: 30, desc: '3+ 公交' },
+    { name: '联合救援',   match: g => count(g, 'amb') >= 2 && count(g, 'police') >= 1, bonus: 50, desc: '2救护+1警车' },
+    { name: '喜事三连',   match: g => count(g, 'wedding') >= 3, bonus: 80, desc: '3+ 婚车' },
+    { name: 'VIP 出行',   match: g => count(g, 'wedding') + count(g, 'limo') >= 3, bonus: 60, desc: '3+ VIP车' }
+  ];
+
+  // ====== 状态管理 ======
+
+  const STORAGE_KEY = 'rr_traffic_slot_save';
+  let state = loadState();
+
+  function defaultState() {
+    return {
+      gold: 100,
+      day: 1,
+      spinThisDay: 0,
+      todayRevenue: 0,
+      todayTarget: 80,
+      ownedItems: [],
+      log: [], // [{day, spin, total, summary}]
+      version: 1
+    };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      const s = JSON.parse(raw);
+      if (s.version !== 1) return defaultState();
+      return s;
+    } catch (e) { return defaultState(); }
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function resetGame() {
+    if (!confirm('重置存档？所有进度将清除。')) return;
+    state = defaultState();
+    saveState();
+    renderAll();
+    toast('存档已重置 · 重新开始', 'info');
+  }
+  window.resetGame = resetGame;
+
+  // ====== 工具函数 ======
+
+  // 加权随机抽 1 辆车
+  function rollOneVehicle() {
+    const totalWeight = VEHICLE_POOL.reduce((sum, v) => sum + v.weight, 0);
+    let r = Math.random() * totalWeight;
+    for (const v of VEHICLE_POOL) {
+      r -= v.weight;
+      if (r <= 0) return { ...v };
+    }
+    return { ...VEHICLE_POOL[0] };
+  }
+
+  // 抽 12 辆车（多重集 = 数组）
+  function rollVehicles(n = 12) {
+    return Array.from({ length: n }, () => rollOneVehicle());
+  }
+
+  // 把 12 辆车 auto_place 到 4 方向 × 3 车道
+  function autoPlace(vehicles) {
+    const lanes = { N: [], E: [], S: [], W: [] };
+    const dirs = ['N', 'E', 'S', 'W'];
+    // 简化：均匀分配（每方向 3 辆）
+    const shuffled = [...vehicles].sort(() => Math.random() - 0.5);
+    shuffled.forEach((v, i) => {
+      const dir = dirs[Math.floor(i / 3)];
+      lanes[dir].push(v);
+    });
+    return lanes;
+  }
+
+  // 计数辅助
+  function count(grid, vehicleId) {
+    let n = 0;
+    for (const dir of ['N','E','S','W']) {
+      for (const v of grid[dir]) if (v.id === vehicleId) n++;
+    }
+    return n;
+  }
+
+  // 求所有车辆 flat 数组
+  function flatGrid(grid) {
+    return [...grid.N, ...grid.E, ...grid.S, ...grid.W];
+  }
+
+  // ====== combo1 判定 ======
+
+  function evaluateCombo1(grid) {
+    const triggers = [];
+    const allVehicles = flatGrid(grid);
+
+    // adjacency: 救护/消防车的同方向邻位 +50%
+    let adjBonus = 0;
+    let adjCount = 0;
+    for (const dir of ['N','E','S','W']) {
+      const lane = grid[dir];
+      for (let i = 0; i < lane.length; i++) {
+        if (lane[i].openLane) {
+          // 同方向邻位（i-1, i+1）加成 50%
+          [i-1, i+1].forEach(j => {
+            if (j >= 0 && j < lane.length && !lane[j].openLane) {
+              adjBonus += Math.round(lane[j].base * 0.5);
+              adjCount++;
+            }
+          });
+        }
+      }
+    }
+    if (adjBonus > 0) {
+      triggers.push({
+        type: 'adj',
+        icon: '🚑',
+        title: 'adjacency',
+        text: `救护/消防邻位 ${adjCount} 辆 +50%`,
+        value: adjBonus
+      });
+    }
+
+    // type_dict: 字典套牌
+    for (const recipe of DICT_RECIPES) {
+      if (recipe.match(grid)) {
+        triggers.push({
+          type: 'dict',
+          icon: '📚',
+          title: 'type_dict',
+          text: `「${recipe.name}」（${recipe.desc}）`,
+          value: recipe.bonus
+        });
+      }
+    }
+
+    // threshold: 同方向 ≥ 5 辆触发拥堵罚款（但每方向只有 3 辆所以这里改为 ≥ 5 同色或同种）
+    // 调整：12 辆中同种 ≥ 4 触发"批量奖"
+    const idCount = {};
+    allVehicles.forEach(v => { idCount[v.id] = (idCount[v.id] || 0) + 1; });
+    for (const [id, n] of Object.entries(idCount)) {
+      if (n >= 4) {
+        const v = VEHICLE_POOL.find(x => x.id === id);
+        triggers.push({
+          type: 'thresh',
+          icon: '📊',
+          title: 'threshold',
+          text: `${v.name} ≥ 4 辆批量奖`,
+          value: n * 5
+        });
+      }
+    }
+
+    // line_complete: 一条 3 车道整列同色
+    let lineBonus = 0;
+    const lineDetails = [];
+    for (const dir of ['N','E','S','W']) {
+      const lane = grid[dir];
+      if (lane.length === 3) {
+        const allSameColor = lane[0].color && lane.every(v => v.color === lane[0].color);
+        if (allSameColor) {
+          const sumBase = lane.reduce((s, v) => s + v.base, 0);
+          lineBonus += sumBase * 2; // ×3 净 +×2
+          lineDetails.push(dir);
+        }
+      }
+    }
+    if (lineBonus > 0) {
+      triggers.push({
+        type: 'line',
+        icon: '📏',
+        title: 'line_complete',
+        text: `${lineDetails.join('+')}列整列同色 ×3`,
+        value: lineBonus
+      });
+    }
+
+    // cascade: 抢劫案 + 警车追击
+    const robCount = count(grid, 'rob');
+    const policeCount = count(grid, 'police');
+    if (robCount > 0 && policeCount >= 1) {
+      const cascadeBonus = 200 + (policeCount - 1) * 100;
+      triggers.push({
+        type: 'cascade',
+        icon: '🚓',
+        title: 'cascade',
+        text: `抢劫 → 警车追击 → "抓捕成功" (${robCount}案 / ${policeCount}警)`,
+        value: cascadeBonus
+      });
+    }
+
+    return triggers;
+  }
+
+  // ====== combo2 修饰 ======
+
+  function applyCombo2(grid, combo1Sub) {
+    const owned = SHOP_ITEMS.filter(s => state.ownedItems.includes(s.id));
+    let runningTotal = combo1Sub;
+    const steps = [];
+
+    // 加性项先（per_vehicle / per_speedy）
+    const allVehicles = flatGrid(grid);
+    for (const item of owned) {
+      if (item.type === 'per_vehicle') {
+        const add = allVehicles.length * item.add;
+        runningTotal += add;
+        steps.push({ icon: item.glyph, name: item.name, op: '+', value: add });
+      } else if (item.type === 'per_speedy') {
+        const speedyCount = allVehicles.filter(v => v.speedy).length;
+        if (speedyCount > 0) {
+          const add = speedyCount * item.add;
+          runningTotal += add;
+          steps.push({ icon: item.glyph, name: item.name, op: '+', value: add });
+        }
+      }
+    }
+
+    // 类型乘性（amb_mult / vip_mult / bus_mult）
+    for (const item of owned) {
+      if (item.type === 'amb_mult') {
+        const ambs = allVehicles.filter(v => v.openLane);
+        if (ambs.length > 0) {
+          const baseSum = ambs.reduce((s, v) => s + v.base, 0);
+          const extra = baseSum * (item.mult - 1);
+          runningTotal += extra;
+          steps.push({ icon: item.glyph, name: item.name, op: `×${item.mult}（救护族）`, value: extra });
+        }
+      } else if (item.type === 'vip_mult') {
+        const vips = allVehicles.filter(v => v.vip || v.id === 'wedding');
+        if (vips.length > 0) {
+          const baseSum = vips.reduce((s, v) => s + v.base, 0);
+          const extra = baseSum * (item.mult - 1);
+          runningTotal += extra;
+          steps.push({ icon: item.glyph, name: item.name, op: `×${item.mult}（VIP族）`, value: extra });
+        }
+      } else if (item.type === 'bus_mult') {
+        const buses = allVehicles.filter(v => v.id === 'bus' || v.id === 'bus2');
+        if (buses.length > 0) {
+          const baseSum = buses.reduce((s, v) => s + v.base, 0);
+          const extra = baseSum * (item.mult - 1);
+          runningTotal += extra;
+          steps.push({ icon: item.glyph, name: item.name, op: `×${item.mult}（公交族）`, value: extra });
+        }
+      }
+    }
+
+    // 全局倍率（最后乘）
+    let globalMult = 1;
+    for (const item of owned) {
+      if (item.type === 'global_mult') {
+        globalMult *= item.mult;
+      }
+    }
+    if (globalMult !== 1) {
+      const before = runningTotal;
+      runningTotal = Math.round(runningTotal * globalMult);
+      const globalItems = owned.filter(i => i.type === 'global_mult');
+      const labels = globalItems.map(i => `${i.glyph}×${i.mult}`).join(' ');
+      steps.push({ icon: '🌐', name: '全局倍率', op: `×${globalMult.toFixed(2)} (${labels})`, value: runningTotal - before });
+    }
+
+    return { total: Math.round(runningTotal), steps };
+  }
+
+  // ====== 主流程：拉杆 ======
+
+  let isSpinning = false;
+  function pullLever() {
+    if (isSpinning) return;
+    if (state.spinThisDay >= 6) {
+      // 一天结束，下一天开始
+      checkpoint();
+      return;
+    }
+    isSpinning = true;
+    document.getElementById('lever-btn').disabled = true;
+    document.getElementById('lever-btn').textContent = '🎰 滚动中...';
+
+    // 1. 滚动动画（所有 cell 显示随机 emoji，1.2s 后定稿）
+    const allCells = document.querySelectorAll('.intersection .cell');
+    allCells.forEach(c => {
+      c.classList.add('spinning');
+      c.classList.remove('combo-adj','combo-line','combo-cascade','combo-dict','combo-thresh');
+    });
+    let scrollTimer = setInterval(() => {
+      allCells.forEach(c => { c.textContent = randomEmoji(); });
+    }, 80);
+
+    // 2. random 抽 12 车
+    const vehicles = rollVehicles(12);
+
+    // 3. auto_place
+    const grid = autoPlace(vehicles);
+
+    setTimeout(() => {
+      clearInterval(scrollTimer);
+      // 落位
+      placeVehiclesToCells(grid);
+      allCells.forEach(c => c.classList.remove('spinning'));
+
+      // 4. combo1 判定
+      const triggers = evaluateCombo1(grid);
+
+      // 5. 高亮触发的 cells
+      highlightCombos(grid, triggers);
+
+      // 6. 计算 combo1 小计
+      const baseSum = flatGrid(grid).reduce((s, v) => s + v.base, 0);
+      const combo1Bonus = triggers.reduce((s, t) => s + t.value, 0);
+      const combo1Sub = baseSum + combo1Bonus;
+
+      // 7. combo2 修饰
+      const { total, steps: c2Steps } = applyCombo2(grid, combo1Sub);
+
+      // 8. 更新 UI
+      renderComboList(triggers);
+      renderSettlePanel(grid, baseSum, triggers, combo1Sub, c2Steps, total);
+
+      // 9. 累加金币 + 通行量
+      state.gold += total;
+      state.todayRevenue += total;
+      state.spinThisDay++;
+      state.log.unshift({
+        day: state.day,
+        spin: state.spinThisDay,
+        total,
+        triggerCount: triggers.length,
+        time: Date.now()
+      });
+      if (state.log.length > 10) state.log.length = 10;
+
+      saveState();
+      renderStatus();
+      renderShop();
+      renderLog();
+
+      // 10. 解锁拉杆
+      isSpinning = false;
+      document.getElementById('lever-btn').disabled = false;
+      if (state.spinThisDay >= 6) {
+        document.getElementById('lever-btn').textContent = `📅 第 ${state.day} 天结束 · 点击进入下一天`;
+      } else {
+        document.getElementById('lever-btn').textContent = `🎰 拉杆 · 第 ${state.day} 天 · spin ${state.spinThisDay+1}/6`;
+      }
+
+      toast(`+${total} 币 / 触发 ${triggers.length} 类 combo`, 'info');
+
+    }, 1200);
+  }
+  window.pullLever = pullLever;
+
+  function checkpoint() {
+    const passed = state.todayRevenue >= state.todayTarget;
+    if (passed) {
+      const bonus = Math.round(state.todayTarget * 0.2);
+      state.gold += bonus;
+      toast(`✅ 第 ${state.day} 天达标！通行量 ${state.todayRevenue}/${state.todayTarget} · 奖励 +${bonus}`, 'info');
+    } else {
+      toast(`❌ 第 ${state.day} 天未达标 · ${state.todayRevenue}/${state.todayTarget} · 但你可继续`, 'danger');
+    }
+    state.day++;
+    state.spinThisDay = 0;
+    state.todayRevenue = 0;
+    state.todayTarget = Math.round(80 * Math.pow(1.35, state.day - 1));
+    saveState();
+    renderStatus();
+    document.getElementById('lever-btn').textContent = `🎰 拉杆 · 第 ${state.day} 天 · spin 1/6`;
+  }
+
+  // ====== UI 渲染 ======
+
+  function placeVehiclesToCells(grid) {
+    ['N','E','S','W'].forEach(dir => {
+      grid[dir].forEach((v, i) => {
+        const cell = document.querySelector(`[data-pos="${dir}${i}"]`);
+        if (cell) {
+          cell.textContent = v.glyph;
+          cell.title = `${v.name} (${v.rare}) · 基础 ${v.base} 币`;
+        }
+      });
+    });
+  }
+
+  function highlightCombos(grid, triggers) {
+    // adjacency 高亮：救护邻位
+    for (const dir of ['N','E','S','W']) {
+      const lane = grid[dir];
+      for (let i = 0; i < lane.length; i++) {
+        if (lane[i].openLane) {
+          markCell(`${dir}${i}`, 'adj');
+          [i-1,i+1].forEach(j => {
+            if (j >= 0 && j < lane.length && !lane[j].openLane) markCell(`${dir}${j}`, 'adj');
+          });
+        }
+      }
+    }
+    // line_complete 高亮：整列同色车道
+    for (const dir of ['N','E','S','W']) {
+      const lane = grid[dir];
+      if (lane.length === 3 && lane[0].color && lane.every(v => v.color === lane[0].color)) {
+        for (let i = 0; i < lane.length; i++) markCell(`${dir}${i}`, 'line');
+      }
+    }
+    // cascade 高亮：抢劫 + 警车
+    if (triggers.some(t => t.type === 'cascade')) {
+      for (const dir of ['N','E','S','W']) {
+        grid[dir].forEach((v, i) => {
+          if (v.id === 'rob' || v.id === 'police') markCell(`${dir}${i}`, 'cascade');
+        });
+      }
+    }
+  }
+  function markCell(pos, type) {
+    const c = document.querySelector(`[data-pos="${pos}"]`);
+    if (c) c.classList.add(`combo-${type}`);
+  }
+
+  function randomEmoji() {
+    const pool = VEHICLE_POOL.slice(0, 8);
+    return pool[Math.floor(Math.random() * pool.length)].glyph;
+  }
+
+  function renderComboList(triggers) {
+    const list = document.getElementById('combo-list');
+    if (triggers.length === 0) {
+      list.innerHTML = `<div class="combo-trigger empty"><span class="icon">⊘</span><span class="text">本 spin 未触发任何 combo</span><span class="value">0</span></div>`;
+      return;
+    }
+    list.innerHTML = triggers.map(t => `
+      <div class="combo-trigger ${t.type}">
+        <span class="icon">${t.icon}</span>
+        <span class="text"><b>${t.title}</b> · ${t.text}</span>
+        <span class="value">+${t.value}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderSettlePanel(grid, baseSum, triggers, combo1Sub, c2Steps, total) {
+    const panel = document.getElementById('settle-panel');
+    const lines = [];
+    lines.push(`<div class="settle-line"><span class="op">+</span><span class="desc">基础通行费 (${flatGrid(grid).length} 辆)</span><span class="num">${baseSum}</span></div>`);
+    triggers.forEach(t => {
+      lines.push(`<div class="settle-line"><span class="op">+</span><span class="desc">${t.title} · ${t.text}</span><span class="num">+${t.value}</span></div>`);
+    });
+    lines.push(`<div class="settle-line combo1-sub"><span class="op">=</span><span class="desc"><b>combo1 小计</b></span><span class="num">${combo1Sub}</span></div>`);
+    c2Steps.forEach(s => {
+      lines.push(`<div class="settle-line"><span class="op">${s.op.startsWith('×') ? '×' : '+'}</span><span class="desc">${s.icon} ${s.name} · ${s.op}</span><span class="num">+${s.value}</span></div>`);
+    });
+    lines.push(`<div class="settle-line total"><span class="op">=</span><span class="desc">本 spin 总产出</span><span class="num">${total} 💰</span></div>`);
+    panel.innerHTML = lines.join('');
+  }
+
+  function renderStatus() {
+    document.getElementById('stat-gold').textContent = state.gold;
+    document.getElementById('stat-day').textContent = state.day;
+    document.getElementById('stat-spin').textContent = state.spinThisDay;
+    document.getElementById('stat-today').textContent = state.todayRevenue;
+    document.getElementById('stat-target').textContent = state.todayTarget;
+  }
+
+  function renderShop() {
+    const grid = document.getElementById('shop-grid');
+    grid.innerHTML = SHOP_ITEMS.map(item => {
+      const owned = state.ownedItems.includes(item.id);
+      const canAfford = state.gold >= item.cost;
+      const cls = owned ? 'owned' : (canAfford ? '' : 'afford-no');
+      const action = owned
+        ? `<span class="own-tag">✓ 已购买</span>`
+        : `<span class="cost">💰 ${item.cost}</span>`;
+      const onclick = (!owned && canAfford)
+        ? `onclick="buyItem('${item.id}')"`
+        : '';
+      return `
+        <div class="shop-card ${cls}" ${onclick}>
+          <div class="head">
+            <span class="glyph">${item.glyph}</span>
+            <span class="name">${item.name}</span>
+            <span class="mult">${item.mult ? '×'+item.mult : '+'+item.add}</span>
+          </div>
+          <div class="desc">${item.desc}</div>
+          <div class="foot">
+            <span style="color: var(--fg-muted); font-size: 10px;">${item.rare}</span>
+            ${action}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // combo2 bar
+    const bar = document.getElementById('combo2-bar');
+    const owned = SHOP_ITEMS.filter(s => state.ownedItems.includes(s.id));
+    if (owned.length === 0) {
+      bar.innerHTML = `<div class="empty-text">尚未购买道具——下方商店选购</div>`;
+    } else {
+      bar.innerHTML = owned.map(item => `
+        <div class="combo2-chip">
+          <span class="glyph">${item.glyph}</span>
+          <span class="name">${item.name}</span>
+          <span class="mult">${item.mult ? '×'+item.mult : '+'+item.add}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  function buyItem(id) {
+    const item = SHOP_ITEMS.find(s => s.id === id);
+    if (!item || state.ownedItems.includes(id) || state.gold < item.cost) return;
+    state.gold -= item.cost;
+    state.ownedItems.push(id);
+    saveState();
+    renderStatus();
+    renderShop();
+    toast(`已购买：${item.glyph} ${item.name}`, 'info');
+  }
+  window.buyItem = buyItem;
+
+  function renderLog() {
+    const c = document.getElementById('log-content');
+    if (state.log.length === 0) {
+      c.innerHTML = `<div class="empty-text">尚无 spin 历史</div>`;
+      return;
+    }
+    c.innerHTML = state.log.map(l =>
+      `<div class="log-entry"><span class="day">D${l.day} · spin ${l.spin}</span> 触发 ${l.triggerCount} combo · <span class="gold">+${l.total} 币</span></div>`
+    ).join('');
+  }
+
+  function toast(msg, type) {
+    const t = document.createElement('div');
+    t.className = `toast ${type || ''}`;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('show'));
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 300);
+    }, 2200);
+  }
+
+  function renderAll() {
+    renderStatus();
+    renderShop();
+    renderLog();
+    // reset cells
+    document.querySelectorAll('.intersection .cell').forEach(c => {
+      c.textContent = '·';
+      c.classList.remove('combo-adj','combo-line','combo-cascade','combo-dict','combo-thresh');
+    });
+    if (state.spinThisDay >= 6) {
+      document.getElementById('lever-btn').textContent = `📅 第 ${state.day} 天结束 · 点击进入下一天`;
+    } else {
+      document.getElementById('lever-btn').textContent = `🎰 拉杆 · 第 ${state.day} 天 · spin ${state.spinThisDay+1}/6`;
+    }
+  }
+
+  // ====== 初始化 ======
+  renderAll();
+
+})();
+</script>
+
+</div>
+</body>
+</html>

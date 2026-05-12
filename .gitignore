@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs / 临时文件
+*.log
+.tmp/
+tmp/
+/tmp/
+
+# Node（不用但防御）
+node_modules/
+
+# Python（不用但防御）
+__pycache__/
+*.pyc
+
+# 个人草稿（如有）
+*.draft.md
+.scratch/

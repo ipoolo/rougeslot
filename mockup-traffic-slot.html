@@ -1,0 +1,911 @@
+<!doctype html>
+<!--
+  R_RougeSlot · 题材 mockup · 老虎机式红绿灯路口（方向 A）
+  ===================================================
+  把 v5 完备模型 random → put → combo @ show_topology 用"红绿灯堵车" auto_place 题材落地。
+  本页展示一次具体 spin 的视觉布局 + combo 触发 + 结算。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>老虎机式红绿灯路口 · Mockup</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  body { background: #14111c; }
+  .mockup-wrap { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+  /* 顶部流程条 */
+  .flow-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    background: linear-gradient(90deg, rgba(96,165,250,0.08), rgba(167,139,250,0.08), rgba(251,191,36,0.08));
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    margin-bottom: 24px;
+  }
+  .flow-step {
+    flex: 1;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.3);
+  }
+  .flow-step .icon { font-size: 28px; line-height: 1; }
+  .flow-step .label { font-size: 12px; font-weight: 700; margin-top: 6px; color: var(--accent); }
+  .flow-step .desc { font-size: 11px; color: var(--fg-muted); margin-top: 4px; }
+  .flow-arrow { font-size: 24px; color: var(--fg-muted); }
+
+  /* 主舞台布局 */
+  .stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .stage-left { padding: 16px; }
+  .stage-right { padding: 16px; }
+
+  /* 路口 4×3 网格 */
+  .intersection {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    background: #1a1727;
+    border: 2px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 1fr 3fr 1fr;
+    gap: 4px;
+  }
+  .lane {
+    display: grid;
+    background: rgba(0,0,0,0.4);
+    border-radius: 6px;
+    padding: 4px;
+    gap: 3px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .lane.lane-N { grid-column: 2; grid-row: 1; grid-template-columns: repeat(3, 1fr); }
+  .lane.lane-S { grid-column: 2; grid-row: 3; grid-template-columns: repeat(3, 1fr); }
+  .lane.lane-W { grid-column: 1; grid-row: 2; grid-template-rows: repeat(3, 1fr); }
+  .lane.lane-E { grid-column: 3; grid-row: 2; grid-template-rows: repeat(3, 1fr); }
+  .lane-label {
+    position: absolute;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+  }
+  .lane-label.N { top: 4px; left: 50%; transform: translateX(-50%); }
+  .lane-label.S { bottom: 4px; left: 50%; transform: translateX(-50%); }
+  .lane-label.W { left: 4px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; }
+  .lane-label.E { right: 4px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; }
+
+  .cell {
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    line-height: 1;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  /* 中心路口 */
+  .center {
+    grid-column: 2; grid-row: 2;
+    background: radial-gradient(circle, rgba(124,58,237,0.15), rgba(0,0,0,0.4));
+    border: 1px dashed rgba(124,58,237,0.4);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-muted);
+    font-size: 12px;
+    text-align: center;
+    gap: 4px;
+    padding: 20px;
+  }
+  .center .label-big { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .center .label-small { font-size: 10px; opacity: 0.7; }
+
+  /* 红绿灯指示 */
+  .traffic-light {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #fff2;
+  }
+  .traffic-light.green { background: #34d399; box-shadow: 0 0 12px #34d399; }
+  .traffic-light.red { background: #f87171; opacity: 0.5; }
+  .traffic-light.tl-N { top: 10px; left: 50%; transform: translateX(-50%); }
+  .traffic-light.tl-S { bottom: 10px; left: 50%; transform: translateX(-50%); }
+  .traffic-light.tl-W { left: 10px; top: 50%; transform: translateY(-50%); }
+  .traffic-light.tl-E { right: 10px; top: 50%; transform: translateY(-50%); }
+
+  /* combo 触发高亮 */
+  .cell.combo-adj { background: rgba(96,165,250,0.25); box-shadow: inset 0 0 0 2px #60a5fa; }
+  .cell.combo-line { background: rgba(34,211,153,0.25); box-shadow: inset 0 0 0 2px #34d399; }
+  .cell.combo-cascade { background: rgba(248,113,113,0.25); box-shadow: inset 0 0 0 2px #f87171; }
+  .cell.combo-dict { background: rgba(251,191,36,0.25); box-shadow: inset 0 0 0 2px #fbbf24; }
+
+  /* combo 标注 */
+  .combo-tag {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    font-size: 9px;
+    padding: 1px 4px;
+    border-radius: 6px;
+    color: #1c1300;
+    font-weight: 700;
+    z-index: 2;
+  }
+  .combo-tag.adj { background: #60a5fa; }
+  .combo-tag.line { background: #34d399; }
+  .combo-tag.cascade { background: #f87171; }
+  .combo-tag.dict { background: #fbbf24; }
+
+  /* combo 触发列表 */
+  .combo-list .combo-row {
+    display: grid;
+    grid-template-columns: 28px 1fr 70px;
+    gap: 10px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid;
+    border-radius: 4px;
+    align-items: center;
+  }
+  .combo-row .icon { font-size: 18px; text-align: center; }
+  .combo-row .text { font-size: 12px; line-height: 1.5; }
+  .combo-row .value { text-align: right; font-family: ui-monospace, monospace; font-weight: 700; color: var(--accent); font-size: 13px; }
+  .combo-row.adj { border-color: #60a5fa; }
+  .combo-row.dict { border-color: #fbbf24; }
+  .combo-row.line { border-color: #34d399; }
+  .combo-row.cascade { border-color: #f87171; }
+
+  /* combo2 道具栏 */
+  .combo2-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .combo2-item {
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(196,149,106,0.18), rgba(251,191,36,0.10));
+    border: 1px solid rgba(196,149,106,0.4);
+    border-radius: 6px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .combo2-item .glyph { font-size: 16px; }
+  .combo2-item .name { font-weight: 700; }
+  .combo2-item .mult { color: var(--accent); font-family: ui-monospace, monospace; font-weight: 700; }
+
+  /* 结算面板 */
+  .settle {
+    background: linear-gradient(180deg, rgba(34,211,153,0.06), rgba(124,58,237,0.04));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 18px 22px;
+  }
+  .settle-line {
+    display: grid;
+    grid-template-columns: 24px 1fr 100px;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    align-items: center;
+    border-bottom: 1px dashed rgba(255,255,255,0.06);
+  }
+  .settle-line:last-child { border-bottom: none; }
+  .settle-line .op { color: var(--fg-muted); font-family: ui-monospace, monospace; text-align: center; }
+  .settle-line .desc { color: var(--fg); }
+  .settle-line .num { text-align: right; font-family: ui-monospace, monospace; font-weight: 700; }
+  .settle-line.total { background: rgba(52,211,153,0.10); margin: 8px -22px -18px; padding: 14px 22px; border-radius: 0 0 10px 10px; }
+  .settle-line.total .num { color: #34d399; font-size: 22px; }
+  .settle-line.total .desc { color: #34d399; font-weight: 700; }
+
+  .legend {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 5px;
+  }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 3px;
+  }
+
+  /* 网格细节 */
+  .topology-info {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    font-size: 11px;
+  }
+  .topology-info .kbd {
+    background: rgba(96,165,250,0.18);
+    color: #93c5fd;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: ui-monospace, monospace;
+  }
+
+  /* 标题区 */
+  .stage-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--accent);
+  }
+  .stage-subtitle {
+    font-size: 11px;
+    color: var(--fg-muted);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="wrap mockup-wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div class="page-head">
+  <h1>🚦 老虎机式红绿灯路口 · 视觉 Mockup</h1>
+  <p class="lede">v5 完备模型的题材化落地：<code>random → put → combo @ show_topology</code> 用「红绿灯堵车 + auto_place」包装。本页展示一次具体 spin 的视觉布局 + combo 触发 + 结算。</p>
+  <p class="meta">put_form = <b style="color:#60a5fa;">⚙ auto_place</b> · show_topology = <b style="color:#93c5fd;">2D_grid</b>（4 方向 × 3 车道 = 12 格） · combo2 typology = <b style="color:#fbbf24;">multiplicative_chain</b></p>
+</div>
+
+<!-- 顶部 spin 流程条 -->
+<h2 class="section-title" style="font-size:15px;">① Spin 流程：拉杆 → 自动落位 → 自动通过 → 结算（约 3-5s）</h2>
+<div class="flow-bar">
+  <div class="flow-step">
+    <div class="icon">🎰</div>
+    <div class="label">1. 拉杆</div>
+    <div class="desc">玩家按按钮 0.3s</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">
+    <div class="icon">🎲</div>
+    <div class="label">2. random</div>
+    <div class="desc">池抽 12 辆车 = 多重集</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">
+    <div class="icon">⚙</div>
+    <div class="label">3. put（auto）</div>
+    <div class="desc">自动落入 4×3 网格 1-2s</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">
+    <div class="icon">🚦</div>
+    <div class="label">4. 通过</div>
+    <div class="desc">N→E→S→W 循环放行 1s</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">
+    <div class="icon">🔗</div>
+    <div class="label">5. combo</div>
+    <div class="desc">5 类 predicate 自动触发</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">
+    <div class="icon">💰</div>
+    <div class="label">6. 结算</div>
+    <div class="desc">combo2 修饰 → 总产出</div>
+  </div>
+</div>
+
+<!-- 主舞台 -->
+<h2 class="section-title" style="font-size:15px;">② 一次具体 Spin · 第 7 天上午高峰 · spin #3</h2>
+
+<div class="stage">
+
+  <!-- 左：路口 -->
+  <div class="card stage-left">
+    <div class="stage-title">🎬 show_topology = 2D_grid · 12 格路口</div>
+    <div class="stage-subtitle">random 抽出的 12 辆车被 auto_place 自动分配到 4 方向 × 3 车道。当前北灯绿。</div>
+
+    <div class="topology-info">
+      <span class="kbd">2D_grid</span>
+      <span class="kbd">12 格</span>
+      <span class="kbd">邻接 = 同方向相邻 + 中心 4 邻接</span>
+    </div>
+
+    <div class="intersection">
+      <span class="lane-label N">北 N</span>
+      <span class="lane-label S">南 S</span>
+      <span class="lane-label W">西 W</span>
+      <span class="lane-label E">东 E</span>
+
+      <span class="traffic-light tl-N green"></span>
+      <span class="traffic-light tl-S red"></span>
+      <span class="traffic-light tl-W red"></span>
+      <span class="traffic-light tl-E red"></span>
+
+      <!-- 北方向：救护🚑 + 出租🚕 + 出租🚕 -->
+      <div class="lane lane-N">
+        <div class="cell combo-adj" title="救护车">🚑<span class="combo-tag adj">ADJ</span></div>
+        <div class="cell combo-adj" title="出租车（救护邻位 +50%）">🚕</div>
+        <div class="cell combo-adj" title="出租车（救护邻位 +50%）">🚕</div>
+      </div>
+
+      <!-- 中心 -->
+      <div class="center">
+        <div class="label-big">路口中心</div>
+        <div class="label-small">4 邻接判定区</div>
+        <div style="font-size:24px; margin-top: 4px;">＋</div>
+      </div>
+
+      <!-- 西方向：抢劫💰 + 警车🚓 + 警车🚓（cascade 触发）-->
+      <div class="lane lane-W">
+        <div class="cell combo-cascade" title="抢劫案">💰<span class="combo-tag cascade">CAS</span></div>
+        <div class="cell combo-cascade" title="警车追击 +200">🚓</div>
+        <div class="cell combo-cascade" title="警车追击 +200">🚓</div>
+      </div>
+
+      <!-- 东方向：婚车🤵 + 婚车🤵 + 摩托🏍 -->
+      <div class="lane lane-E">
+        <div class="cell" title="婚车">🤵</div>
+        <div class="cell" title="婚车（< 3 不触发字典）">🤵</div>
+        <div class="cell" title="摩托">🏍</div>
+      </div>
+
+      <!-- 南方向：3 同色公交🚌 line_complete 触发 -->
+      <div class="lane lane-S">
+        <div class="cell combo-line" title="公交车">🚌<span class="combo-tag line">LINE</span></div>
+        <div class="cell combo-line" title="公交车（同色三连）">🚌</div>
+        <div class="cell combo-line" title="公交车（整列同色）">🚌</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#60a5fa"></span>adjacency 邻接</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#34d399"></span>line_complete 整列</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#f87171"></span>cascade 连锁</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#fbbf24"></span>type_dict 字典</div>
+    </div>
+  </div>
+
+  <!-- 右：combo 触发 -->
+  <div class="card stage-right">
+    <div class="stage-title">🔗 Combo 1 · 在 12 格上自动判定</div>
+    <div class="stage-subtitle">5 类 predicate 中本 spin 触发了 4 类。<code>threshold</code> 因为同方向 ≥ 5 才触发，本 spin 各方向 ≤ 3 不达。</div>
+
+    <div class="combo-list">
+      <div class="combo-row adj">
+        <div class="icon">🚑</div>
+        <div class="text"><b style="color:#60a5fa;">adjacency</b> · 救护车 邻位 2 辆出租 → "开道" +50%<br><span style="color:var(--fg-muted); font-size:11px;">基础 5×2 = 10 → 邻接 +5</span></div>
+        <div class="value">+15</div>
+      </div>
+      <div class="combo-row dict">
+        <div class="icon">📚</div>
+        <div class="text"><b style="color:#fbbf24;">type_dict</b> · 「3 同色公交 = 公交三连」字典套牌触发<br><span style="color:var(--fg-muted); font-size:11px;">字典查表：早高峰公交套餐 +30</span></div>
+        <div class="value">+30</div>
+      </div>
+      <div class="combo-row line">
+        <div class="icon">📏</div>
+        <div class="text"><b style="color:#34d399;">line_complete</b> · 南方向整列 3 格全部同色 → "整列爆奖"<br><span style="color:var(--fg-muted); font-size:11px;">南列基础 5×3 = 15 → ×3 倍率 = 45</span></div>
+        <div class="value">×3</div>
+      </div>
+      <div class="combo-row cascade">
+        <div class="icon">🚓</div>
+        <div class="text"><b style="color:#f87171;">cascade</b> · 西方向 抢劫💰 → 警车🚓 → 警车🚓 链式触发<br><span style="color:var(--fg-muted); font-size:11px;">"抓捕成功"+ 罚金奖励 200</span></div>
+        <div class="value">+200</div>
+      </div>
+      <div class="combo-row" style="border-color:#444; opacity:0.5;">
+        <div class="icon">⊘</div>
+        <div class="text"><b style="color:#888;">threshold</b> · 同方向 ≥ 5 辆 触发拥堵罚款<br><span style="color:var(--fg-muted); font-size:11px;">本 spin 各方向 3 辆 < 5，未触发</span></div>
+        <div class="value">—</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- combo2 修饰 -->
+<h2 class="section-title" style="font-size:15px;">③ Combo 2 · 修饰协同（玩家从主动池购买的 3 件设施）</h2>
+<div class="card" style="padding: 16px 20px; margin-bottom: 24px;">
+  <div class="stage-subtitle" style="margin-bottom: 12px;">主动池规模 120+，玩家在 RPBD 阶段购买，永远生效。<b>multiplicative_chain typology</b>——多件叠乘。</div>
+  <div class="combo2-bar">
+    <div class="combo2-item">
+      <span class="glyph">🚦</span>
+      <span class="name">智能灯</span>
+      <span class="mult">×1.5</span>
+      <span style="color:var(--fg-muted); font-size:10px;">全局通行量</span>
+    </div>
+    <div class="combo2-item">
+      <span class="glyph">🚑</span>
+      <span class="name">应急车道</span>
+      <span class="mult">×3</span>
+      <span style="color:var(--fg-muted); font-size:10px;">救护车专属</span>
+    </div>
+    <div class="combo2-item">
+      <span class="glyph">💵</span>
+      <span class="name">收费站</span>
+      <span class="mult">+1/辆</span>
+      <span style="color:var(--fg-muted); font-size:10px;">基础费加成</span>
+    </div>
+    <div class="combo2-item" style="opacity:0.4; border-style:dashed;">
+      <span class="glyph">📷</span>
+      <span class="name">测速摄像头</span>
+      <span class="mult">×1.3</span>
+      <span style="color:var(--fg-muted); font-size:10px;">未购买</span>
+    </div>
+    <div class="combo2-item" style="opacity:0.4; border-style:dashed;">
+      <span class="glyph">🌉</span>
+      <span class="name">高架桥</span>
+      <span class="mult">×2</span>
+      <span style="color:var(--fg-muted); font-size:10px;">未购买</span>
+    </div>
+  </div>
+</div>
+
+<!-- 结算 -->
+<h2 class="section-title" style="font-size:15px;">④ 结算公式 · combo1 加性 → combo2 乘性</h2>
+<div class="settle">
+  <div class="settle-line">
+    <div class="op">+</div>
+    <div class="desc">基础通行费：12 辆 × 5 币</div>
+    <div class="num">60</div>
+  </div>
+  <div class="settle-line">
+    <div class="op">+</div>
+    <div class="desc">收费站加成：12 辆 × 1 币（combo2 加性项）</div>
+    <div class="num">+12</div>
+  </div>
+  <div class="settle-line">
+    <div class="op">+</div>
+    <div class="desc">adjacency · 救护邻位 2 辆 +50%</div>
+    <div class="num">+15</div>
+  </div>
+  <div class="settle-line">
+    <div class="op">+</div>
+    <div class="desc">type_dict · 公交三连套牌</div>
+    <div class="num">+30</div>
+  </div>
+  <div class="settle-line">
+    <div class="op">+</div>
+    <div class="desc">line_complete · 南列整列 ×3（仅作用南列基础 15 → 45 = 净 +30）</div>
+    <div class="num">+30</div>
+  </div>
+  <div class="settle-line">
+    <div class="op">+</div>
+    <div class="desc">cascade · 抢劫 → 警车追击「抓捕成功」</div>
+    <div class="num">+200</div>
+  </div>
+  <div class="settle-line" style="background:rgba(167,139,250,0.10); margin: 6px -22px; padding: 10px 22px;">
+    <div class="op">=</div>
+    <div class="desc"><b>combo1 小计</b>（基础 + combo1 各 predicate 加成）</div>
+    <div class="num" style="color:#a78bfa;">347</div>
+  </div>
+  <div class="settle-line">
+    <div class="op">×</div>
+    <div class="desc">应急车道 ×3（仅作用救护车 1 辆 → 救护基础 5 → 15，净 +10）</div>
+    <div class="num">+10</div>
+  </div>
+  <div class="settle-line">
+    <div class="op">×</div>
+    <div class="desc">智能灯 ×1.5（全局倍率）：357 × 1.5</div>
+    <div class="num">×1.5</div>
+  </div>
+  <div class="settle-line total">
+    <div class="op" style="color:#34d399;">=</div>
+    <div class="desc">本 spin 总产出</div>
+    <div class="num">536 币</div>
+  </div>
+</div>
+
+<!-- 信息卡 -->
+<h2 class="section-title" style="font-size:15px; margin-top: 28px;">⑤ 关键设计点</h2>
+<div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+  <div class="card" style="padding: 14px 16px; border-left: 3px solid #60a5fa;">
+    <div style="font-weight:700; font-size:14px; color:#60a5fa; margin-bottom:8px;">🎰 与 LBL 的同族投影</div>
+    <div style="font-size:12px; line-height:1.7;">本设计是 LBL（3×5 = 15 格）的"题材换皮 + 网格调整版"——4×3 = 12 格更紧凑，combo1 复用 adjacency + threshold + 新增 line_complete + cascade。预测总分 R8 / C8 / P9 / S8 = <b style="color:var(--accent);">33</b>，落在 LBL 同档。</div>
+  </div>
+  <div class="card" style="padding: 14px 16px; border-left: 3px solid #34d399;">
+    <div style="font-weight:700; font-size:14px; color:#34d399; margin-bottom:8px;">⚡ 体验密度</div>
+    <div style="font-size:12px; line-height:1.7;">单 spin 3-5s（拉杆 0.3s + 落位 1.5s + 通过 1s + 结算 1.5s），玩家每分钟约 12-20 次拉杆。第一峰多巴胺的悬念在"落位"阶段——12 辆车每秒滚动落入。</div>
+  </div>
+  <div class="card" style="padding: 14px 16px; border-left: 3px solid #fbbf24;">
+    <div style="font-weight:700; font-size:14px; color:#fbbf24; margin-bottom:8px;">📚 字典深度</div>
+    <div style="font-size:12px; line-height:1.7;">type_dict 套牌组合规模约 30 个（早高峰套餐 / 喜事三连 / 联合救援 / VIP 通行 / ...），每个都是玩家可学习的"规律"——拉杆时心算"我要凑出哪个套牌"。</div>
+  </div>
+  <div class="card" style="padding: 14px 16px; border-left: 3px solid #f87171;">
+    <div style="font-weight:700; font-size:14px; color:#f87171; margin-bottom:8px;">🎲 cascade 戏剧化</div>
+    <div style="font-size:12px; line-height:1.7;">极稀"抢劫案 / 抓捕"等事件出现概率 3%，但触发后链式爆奖 200-500 币。这是 slot 老虎机"中大奖"的体验来源——稀有但戏剧化。</div>
+  </div>
+  <div class="card" style="padding: 14px 16px; border-left: 3px solid #c4956a;">
+    <div style="font-weight:700; font-size:14px; color:#c4956a; margin-bottom:8px;">🛒 RPBD 决策面</div>
+    <div style="font-size:12px; line-height:1.7;">spin 内零决策 → 所有深度堆在 RPBD：120 主动池设施 + 80 车种解锁 + 路口拓宽 / 红绿灯节奏调整。每天 6-8 次 spin 后进入"市政厅"做 30-60s 思考。</div>
+  </div>
+  <div class="card" style="padding: 14px 16px; border-left: 3px solid #a78bfa;">
+    <div style="font-weight:700; font-size:14px; color:#a78bfa; margin-bottom:8px;">🎯 压力曲线</div>
+    <div style="font-size:12px; line-height:1.7;">M=12 月 / N=6 spin/天 / T₀=80 辆通过 / r=1.35 / m_boss=2.8。每月末"市级巡检" boss 关——当月通行量必须达标。整局约 12 月 × 30 天 = 360 个 spin / 4 小时。</div>
+  </div>
+</div>
+
+<div style="margin-top: 30px; padding: 18px 22px; background: linear-gradient(90deg, rgba(124,58,237,0.06), rgba(34,211,153,0.04)); border-radius: 10px; font-size: 13px; line-height: 1.7;">
+  <b style="color:var(--accent);">📐 完备模型对应</b> · <code>spin[ 1.random（抽 12 车多重集） → 2.put（auto_place 自动落入 12 格） → combo[ combo1（5 类 predicate）+ combo2（multiplicative_chain）] @ show_topology = 2D_grid ]_N → RPBD</code>
+</div>
+
+<!-- ===================================================================== -->
+<!-- 区块 ⑥ RPBD 商店 mockup -->
+<!-- ===================================================================== -->
+<h2 class="section-title" style="font-size:15px; margin-top: 36px;">⑥ RPBD · 市政厅商店（spin 之间 30-60s 决策）</h2>
+<p class="muted" style="font-size:12px; margin-bottom: 16px; line-height: 1.7;">每天结束（约 6-8 个 spin 后）进入"市政厅"。spin 内零决策，所有深度都在这里。<b>3 个决策面</b>：商店三选一买设施 / 车种解锁 / 删车与升级。</p>
+
+<style>
+  .shop-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .shop-section { padding: 16px 18px; }
+  .shop-section .stage-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .shop-section .stage-subtitle { font-size: 11px; color: var(--fg-muted); margin-bottom: 12px; }
+  .shop-coin {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: linear-gradient(90deg, #fbbf2422, #34d39922);
+    border: 1px solid rgba(251,191,36,0.4);
+    padding: 4px 12px; border-radius: 14px;
+    font-weight: 700; font-family: ui-monospace, monospace;
+    color: #fbbf24;
+  }
+  .shop-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .shop-card.featured {
+    background: linear-gradient(135deg, rgba(196,149,106,0.15), rgba(251,191,36,0.08));
+    border-color: rgba(196,149,106,0.5);
+  }
+  .shop-card .card-head {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .shop-card .card-glyph { font-size: 22px; }
+  .shop-card .card-name { font-weight: 700; font-size: 13px; flex: 1; }
+  .shop-card .card-mult { font-family: ui-monospace, monospace; font-weight: 700; color: var(--accent); font-size: 12px; }
+  .shop-card .card-desc { font-size: 11px; color: var(--fg-muted); line-height: 1.6; }
+  .shop-card .card-foot {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 8px;
+    font-size: 11px;
+  }
+  .shop-card .card-cost {
+    font-family: ui-monospace, monospace; font-weight: 700; color: #fbbf24;
+  }
+  .shop-card .card-buy {
+    background: var(--accent); color: #1c1300; padding: 2px 10px; border-radius: 8px;
+    font-weight: 700;
+  }
+  .shop-card .rare-tag {
+    position: absolute; top: 8px; right: 10px;
+    font-size: 9px; padding: 1px 6px; border-radius: 6px;
+    font-weight: 700;
+  }
+  .rare-tag.r-uncommon { background: rgba(96,165,250,0.3); color: #93c5fd; }
+  .rare-tag.r-rare { background: rgba(167,139,250,0.3); color: #c4b5fd; }
+  .rare-tag.r-legendary { background: rgba(251,191,36,0.3); color: #fbbf24; }
+</style>
+
+<div class="shop-grid">
+
+  <!-- 左：商店三选一 -->
+  <div class="card shop-section">
+    <div class="stage-title">🛒 商店三选一 · 买设施 / 政策</div>
+    <div class="stage-subtitle">每天结束自动刷新 3 件主动池物件，付金币购买（剩 ★★★ 选 1）。再刷新需 8 币。</div>
+
+    <div class="shop-card featured">
+      <span class="rare-tag r-rare">稀有</span>
+      <div class="card-head">
+        <span class="card-glyph">🌉</span>
+        <span class="card-name">高架桥</span>
+        <span class="card-mult">×2</span>
+      </div>
+      <div class="card-desc">每个 spin 跳过最拥堵的 1 个方向直接通过——通行量 ×2。combo2 乘性项，与"智能灯"叠乘。</div>
+      <div class="card-foot">
+        <span class="card-cost">💰 80</span>
+        <span class="card-buy">购买</span>
+      </div>
+    </div>
+
+    <div class="shop-card">
+      <span class="rare-tag r-uncommon">非普通</span>
+      <div class="card-head">
+        <span class="card-glyph">📷</span>
+        <span class="card-name">测速摄像头</span>
+        <span class="card-mult">+5/超速车</span>
+      </div>
+      <div class="card-desc">每辆超速车（货车 / 摩托 / 改装车）额外 +5 罚款。combo2 加性项。</div>
+      <div class="card-foot">
+        <span class="card-cost">💰 35</span>
+        <span class="card-buy">购买</span>
+      </div>
+    </div>
+
+    <div class="shop-card">
+      <span class="rare-tag r-legendary">传说</span>
+      <div class="card-head">
+        <span class="card-glyph">🏎</span>
+        <span class="card-name">VIP 专用通道</span>
+        <span class="card-mult">×4</span>
+      </div>
+      <div class="card-desc">总裁车 / 婚车 / 总统车队 ×4。规则改写：让 VIP 优先放行（独立绿灯 cycle）。</div>
+      <div class="card-foot">
+        <span class="card-cost">💰 200</span>
+        <span class="card-buy">购买</span>
+      </div>
+    </div>
+
+    <div style="text-align: right; margin-top: 8px; font-size: 11px;">
+      <span style="color: var(--fg-muted);">不喜欢这三件？</span>
+      <span style="color: var(--accent); cursor: pointer;">🔄 刷新（8💰）</span>
+    </div>
+  </div>
+
+  <!-- 中：车种解锁 -->
+  <div class="card shop-section">
+    <div class="stage-title">🚗 车种解锁 · 扩充基础池</div>
+    <div class="stage-subtitle">每周 1 次解锁机会，永久加入基础池（68 → 80+）。</div>
+
+    <div class="shop-card">
+      <span class="rare-tag r-rare">稀有</span>
+      <div class="card-head">
+        <span class="card-glyph">🚓</span>
+        <span class="card-name">运钞车</span>
+      </div>
+      <div class="card-desc">通过 +50 / cascade 抓捕 ×2。极稀有出现时戏剧性高。</div>
+      <div class="card-foot">
+        <span class="card-cost">💰 60</span>
+        <span class="card-buy">解锁</span>
+      </div>
+    </div>
+
+    <div class="shop-card">
+      <span class="rare-tag r-uncommon">非普通</span>
+      <div class="card-head">
+        <span class="card-glyph">🚜</span>
+        <span class="card-name">拖拉机（懵货）</span>
+      </div>
+      <div class="card-desc">慢速通过 +固定 8 / 但每次出现拖慢整方向 -3 时间。高风险高收益。</div>
+      <div class="card-foot">
+        <span class="card-cost">💰 25</span>
+        <span class="card-buy">解锁</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 12px; padding: 10px 12px; background: rgba(0,0,0,0.3); border-radius: 6px; font-size: 11px; line-height: 1.6;">
+      <b style="color: var(--fg-muted);">📊 当前基础池</b>：68 / 80<br>
+      <span style="color: var(--fg-muted);">普 60% · 非普 25% · 稀 12% · 极稀 3%</span>
+    </div>
+  </div>
+
+  <!-- 右：删除 + 升级 -->
+  <div class="card shop-section">
+    <div class="stage-title">✂ 删除 / 升级</div>
+    <div class="stage-subtitle">付费删除"麻烦车种"或升级现有设施。</div>
+
+    <div class="shop-card" style="border-left: 3px solid #f87171;">
+      <div class="card-head">
+        <span class="card-glyph">🗑</span>
+        <span class="card-name">删除：故障车</span>
+      </div>
+      <div class="card-desc">永久从基础池移除 1 个故障车。减少负面 cascade。</div>
+      <div class="card-foot">
+        <span class="card-cost">💰 30</span>
+        <span class="card-buy">删除</span>
+      </div>
+    </div>
+
+    <div class="shop-card" style="border-left: 3px solid #34d399;">
+      <div class="card-head">
+        <span class="card-glyph">⬆</span>
+        <span class="card-name">升级：智能灯 → 量子灯</span>
+      </div>
+      <div class="card-desc">×1.5 → ×2.0 全局加成。已购买可升级。</div>
+      <div class="card-foot">
+        <span class="card-cost">💰 120</span>
+        <span class="card-buy">升级</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 12px; padding: 10px 12px; background: rgba(0,0,0,0.3); border-radius: 6px; font-size: 11px; line-height: 1.6;">
+      <b style="color: var(--fg-muted);">🏛 路口设施</b><br>
+      <span style="color: var(--fg-muted);">网格规模：4×3（默认）</span><br>
+      <span style="color: var(--accent); cursor: pointer;">🛣 拓宽路口（5×3）· 💰 500</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- 顶部金币条 -->
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: rgba(0,0,0,0.4); border-radius: 8px; margin-bottom: 16px; font-size: 13px;">
+  <div style="display: flex; gap: 16px; align-items: center;">
+    <span class="shop-coin">💰 当前 425</span>
+    <span style="color: var(--fg-muted);">· 第 7 天结束 · 通行量 92 / 目标 80 ✅</span>
+  </div>
+  <div style="color: var(--fg-muted); font-size: 11px;">
+    spin 内 0 决策 · RPBD 决策密度 100%
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<!-- 区块 ⑦ 第一周 5 天压力曲线图 -->
+<!-- ===================================================================== -->
+<h2 class="section-title" style="font-size:15px; margin-top: 36px;">⑦ 第一周 5 天压力曲线（M=12 / N=6 / T₀=80 / r=1.35 / m_boss=2.8）</h2>
+<p class="muted" style="font-size:12px; margin-bottom: 16px; line-height: 1.7;">每天 6 个 spin / 每天结束 checkpoint 检查通行量是否达标 / 第 5 天周末巡检（boss 关倍率 2.8）。曲线展示 <b>目标线</b>（虚线）vs <b>玩家产出</b>（实线，假设最优 RPBD 决策）。</p>
+
+<style>
+  .pressure-chart {
+    background: linear-gradient(180deg, rgba(34,211,153,0.05), rgba(0,0,0,0.3));
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .pressure-svg-wrap { width: 100%; }
+  .pressure-stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .pressure-day {
+    padding: 12px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 6px;
+    border-left: 3px solid #34d399;
+    font-size: 11px;
+  }
+  .pressure-day.boss { border-left-color: #f87171; background: linear-gradient(180deg, rgba(248,113,113,0.1), rgba(0,0,0,0.4)); }
+  .pressure-day .day-label { font-weight: 700; font-size: 13px; color: var(--accent); margin-bottom: 6px; }
+  .pressure-day .day-row { display: flex; justify-content: space-between; padding: 2px 0; color: var(--fg-muted); }
+  .pressure-day .day-row b { color: var(--fg); }
+</style>
+
+<div class="card pressure-chart">
+  <div class="pressure-svg-wrap">
+    <svg viewBox="0 0 800 320" style="width: 100%; height: auto; max-height: 380px;">
+      <!-- 背景网格 -->
+      <defs>
+        <pattern id="chart-grid" width="80" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 80 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect x="60" y="20" width="700" height="260" fill="url(#chart-grid)"/>
+
+      <!-- 坐标轴 -->
+      <line x1="60" y1="20" x2="60" y2="280" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+      <line x1="60" y1="280" x2="760" y2="280" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+
+      <!-- Y 轴标签 -->
+      <text x="55" y="285" text-anchor="end" fill="var(--fg-muted)" font-size="11">0</text>
+      <text x="55" y="225" text-anchor="end" fill="var(--fg-muted)" font-size="11">100</text>
+      <text x="55" y="170" text-anchor="end" fill="var(--fg-muted)" font-size="11">200</text>
+      <text x="55" y="115" text-anchor="end" fill="var(--fg-muted)" font-size="11">300</text>
+      <text x="55" y="60" text-anchor="end" fill="var(--fg-muted)" font-size="11">400</text>
+      <text x="35" y="150" text-anchor="middle" fill="var(--fg-muted)" font-size="11" transform="rotate(-90 35 150)">通行量（辆/天）</text>
+
+      <!-- 5 天 X 轴 -->
+      <text x="180" y="298" text-anchor="middle" fill="var(--fg-muted)" font-size="11">Day 1</text>
+      <text x="320" y="298" text-anchor="middle" fill="var(--fg-muted)" font-size="11">Day 2</text>
+      <text x="460" y="298" text-anchor="middle" fill="var(--fg-muted)" font-size="11">Day 3</text>
+      <text x="600" y="298" text-anchor="middle" fill="var(--fg-muted)" font-size="11">Day 4</text>
+      <text x="720" y="298" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">Day 5 ⚡周末</text>
+
+      <!-- 目标线（虚线 · 红色）80 → 108 → 146 → 197 → 224(boss=80×2.8) -->
+      <!-- y 映射：通行量 X → 280 - X * (260/400) = 280 - X*0.65 -->
+      <!-- D1=80→228, D2=108→210, D3=146→185, D4=197→152, D5=224=80*2.8→134 -->
+      <polyline points="180,228 320,210 460,185 600,152 720,134"
+                fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="6 4"/>
+      <circle cx="180" cy="228" r="4" fill="#f87171"/>
+      <circle cx="320" cy="210" r="4" fill="#f87171"/>
+      <circle cx="460" cy="185" r="4" fill="#f87171"/>
+      <circle cx="600" cy="152" r="4" fill="#f87171"/>
+      <circle cx="720" cy="134" r="6" fill="#f87171" stroke="#fff" stroke-width="1.5"/>
+
+      <!-- 数值标签（目标线）-->
+      <text x="180" y="222" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">80</text>
+      <text x="320" y="204" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">108</text>
+      <text x="460" y="179" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">146</text>
+      <text x="600" y="146" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">197</text>
+      <text x="720" y="120" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">224 (boss)</text>
+
+      <!-- 玩家产出曲线（绿色实线）· 假设最优 RPBD 决策 -->
+      <!-- D1=92, D2=135, D3=180, D4=240, D5=265 -->
+      <polyline points="180,220 320,192 460,163 600,124 720,108"
+                fill="none" stroke="#34d399" stroke-width="3"/>
+      <circle cx="180" cy="220" r="5" fill="#34d399"/>
+      <circle cx="320" cy="192" r="5" fill="#34d399"/>
+      <circle cx="460" cy="163" r="5" fill="#34d399"/>
+      <circle cx="600" cy="124" r="5" fill="#34d399"/>
+      <circle cx="720" cy="108" r="7" fill="#34d399" stroke="#fff" stroke-width="2"/>
+
+      <!-- 数值标签（玩家产出）-->
+      <text x="180" y="240" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">92</text>
+      <text x="320" y="212" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">135</text>
+      <text x="460" y="183" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">180</text>
+      <text x="600" y="144" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">240</text>
+      <text x="720" y="100" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700">265 ✓</text>
+
+      <!-- 标题 -->
+      <text x="400" y="14" text-anchor="middle" fill="var(--fg)" font-size="14" font-weight="700">第一周通行量曲线（绿=实际 / 红虚线=目标）</text>
+
+      <!-- boss 关高亮 -->
+      <rect x="680" y="20" width="80" height="260" fill="rgba(248,113,113,0.06)" stroke="rgba(248,113,113,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="720" y="40" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">⚡ Boss</text>
+
+      <!-- 图例 -->
+      <g transform="translate(620, 250)">
+        <line x1="0" y1="0" x2="20" y2="0" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="25" y="3" fill="#f87171" font-size="10">目标</text>
+        <line x1="60" y1="0" x2="80" y2="0" stroke="#34d399" stroke-width="3"/>
+        <text x="85" y="3" fill="#34d399" font-size="10">实际</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- 5 天数据卡 -->
+  <div class="pressure-stats">
+    <div class="pressure-day">
+      <div class="day-label">Day 1（开局）</div>
+      <div class="day-row"><span>spin 数</span><b>6</b></div>
+      <div class="day-row"><span>目标 T₁</span><b>80</b></div>
+      <div class="day-row"><span>实际产出</span><b style="color:#34d399;">92 ✓</b></div>
+      <div class="day-row"><span>结余金币</span><b>+ 425</b></div>
+    </div>
+    <div class="pressure-day">
+      <div class="day-label">Day 2</div>
+      <div class="day-row"><span>spin 数</span><b>6</b></div>
+      <div class="day-row"><span>目标 T₂ = 80×r</span><b>108</b></div>
+      <div class="day-row"><span>实际产出</span><b style="color:#34d399;">135 ✓</b></div>
+      <div class="day-row"><span>累计金币</span><b>+ 845</b></div>
+    </div>
+    <div class="pressure-day">
+      <div class="day-label">Day 3</div>
+      <div class="day-row"><span>spin 数</span><b>7</b></div>
+      <div class="day-row"><span>目标 T₃ = 80×r²</span><b>146</b></div>
+      <div class="day-row"><span>实际产出</span><b style="color:#34d399;">180 ✓</b></div>
+      <div class="day-row"><span>累计金币</span><b>+ 1320</b></div>
+    </div>
+    <div class="pressure-day">
+      <div class="day-label">Day 4</div>
+      <div class="day-row"><span>spin 数</span><b>7</b></div>
+      <div class="day-row"><span>目标 T₄ = 80×r³</span><b>197</b></div>
+      <div class="day-row"><span>实际产出</span><b style="color:#34d399;">240 ✓</b></div>
+      <div class="day-row"><span>累计金币</span><b>+ 2010</b></div>
+    </div>
+    <div class="pressure-day boss">
+      <div class="day-label" style="color:#f87171;">Day 5 · ⚡Boss</div>
+      <div class="day-row"><span>spin 数</span><b>8</b></div>
+      <div class="day-row"><span>目标 T₅ = T₀×m_boss</span><b style="color:#f87171;">224</b></div>
+      <div class="day-row"><span>实际产出</span><b style="color:#34d399;">265 ✓</b></div>
+      <div class="day-row"><span>晋级</span><b style="color:#fbbf24;">⬆ 第 2 周</b></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 16px; padding: 12px 14px; background: rgba(34,211,153,0.06); border-left: 3px solid #34d399; border-radius: 0 6px 6px 0; font-size: 12px; line-height: 1.7;">
+    <b style="color:#34d399;">📈 节奏分析</b>：实际产出曲线（绿）整体 +12-30% 高于目标线（红虚线）—— RPBD 阶段每天 30-60s 决策（买道具 / 解锁车种 / 升级），让玩家产出指数级跑赢压力曲线。Day 5 boss 关 ×2.8 倍率压力下，玩家通过累积的 combo2 主动池（智能灯 + 高架 + VIP 通道）依然产出 265 / 目标 224，达成第 1 周晋级。
+  </div>
+</div></div>
+</body>
+</html>

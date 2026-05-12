@@ -1,0 +1,207 @@
+<!doctype html>
+<!--
+  R_RougeSlot · show_topology 单维聚类（v5）
+  ==============================================
+  按 show_topology 的 5 个枚举值聚类 34 款游戏，每组列成员 + 关键属性。
+  show_topology 是 put 与 combo 共享的舞台拓扑。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>show_topology · 单维聚类 · R_RougeSlot</title>
+<link rel="stylesheet" href="../lib/theme.css"/>
+<style>
+  .topo-card { padding: 16px 18px; margin-bottom: 18px; }
+  .topo-card .topo-name { font-weight: 700; font-size: 17px; }
+  .topo-card .topo-key { font-family: ui-monospace, monospace; font-size: 11px; color: var(--fg-muted); margin-left: 8px; }
+  .topo-card .topo-desc { font-size: 12px; line-height: 1.7; color: var(--fg-muted); margin: 8px 0 14px; }
+  .topo-card .members { display: flex; flex-wrap: wrap; gap: 6px; }
+  .topo-card .member-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 14px;
+    background: rgba(255,255,255,0.06);
+    text-decoration: none; font-size: 12px;
+  }
+  .topo-card .member-chip:hover { background: rgba(255,255,255,0.12); }
+  .topo-card .member-chip .pill {
+    font-size: 10px; padding: 1px 5px; border-radius: 6px;
+    margin-left: 2px;
+  }
+  .topo-card.empty { opacity: 0.55; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="../index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div id="root"></div>
+
+<script src="../framework/v5/schema.js"></script>
+<script src="../data/games.js"></script>
+<script src="../lib/render.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+  const fw = RR.getFramework();
+  const escapeHtml = RR.escapeHtml;
+  const allGames = RR.getAllGames().filter(g => g.analysis && g.analysis.qualitative);
+  const games = allGames.filter(g => g.analysis.qualitative.show_topology);
+
+  const TOPO = fw.show_topology_enum || [];
+  const PUT_TYPES = fw.put_form_enum || [];
+
+  // 颜色 / 字形
+  const TOPO_COLOR = {
+    '0D_multiset': '#a78bfa',
+    '1D_sequence': '#60a5fa',
+    '1D_ring':     '#34d399',
+    '2D_grid':     '#fbbf24',
+    '2D_physical': '#f87171'
+  };
+  const TOPO_GLYPH = {
+    '0D_multiset': '🎴',
+    '1D_sequence': '➡',
+    '1D_ring':     '↻',
+    '2D_grid':     '⬜',
+    '2D_physical': '🌀'
+  };
+  const PUT_COLOR = { auto_place: '#60a5fa', manual_set: '#a78bfa', manual_place: '#fbbf24', auto_set: '#94a3b8' };
+  const PUT_GLYPH = { auto_place: '⚙', manual_set: '✋', manual_place: '🎯', auto_set: '∅' };
+  const putName = k => PUT_TYPES.find(p => p.key === k)?.name || k;
+
+  // 按 show_topology 分组
+  const byTopo = new Map();
+  TOPO.forEach(t => byTopo.set(t.key, []));
+  for (const g of games) {
+    const t = g.analysis.qualitative.show_topology;
+    if (byTopo.has(t)) byTopo.get(t).push(g);
+  }
+  // 按 combo 分降序
+  for (const arr of byTopo.values()) {
+    arr.sort((a, b) => b.analysis.scores.combo - a.analysis.scores.combo);
+  }
+
+  // === 头部 ===
+  const head = `
+    <div class="page-head">
+      <h1>show_topology · 单维聚类（舞台拓扑）</h1>
+      <p class="lede"><b>show_topology = put 与 combo 共享的舞台拓扑</b>。put 把 random 输出的多重集写入 show_topology，combo 在同一个 show_topology 上做判定。本页按 5 个枚举值聚类 ${games.length} 款游戏。</p>
+      <p class="meta"><b>${games.length}</b> / ${allGames.length} 款已标注 · ${TOPO.length} 个枚举值 · 框架 <b>${fw.version}</b></p>
+    </div>
+  `;
+
+  // === 分布快照 ===
+  const distribution = `
+    <h2 class="section-title">分布快照</h2>
+    <div class="card" style="display: flex; flex-wrap: wrap; gap: 18px; padding: 14px 18px; margin-bottom: 18px;">
+      ${TOPO.map(t => {
+        const n = byTopo.get(t.key)?.length || 0;
+        const color = TOPO_COLOR[t.key];
+        return `
+          <div style="display:flex; align-items:baseline; gap:8px;">
+            <span style="font-size:18px;">${TOPO_GLYPH[t.key]}</span>
+            <span style="font-weight:600; color:${color};">${escapeHtml(t.name)}</span>
+            <span class="kbd" style="font-size:11px; background: ${color}22; color: ${color};">${n}</span>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  // === 5 个枚举分组卡片 ===
+  const groupCards = TOPO.map(t => {
+    const members = byTopo.get(t.key) || [];
+    const color = TOPO_COLOR[t.key];
+    const glyph = TOPO_GLYPH[t.key];
+    const isEmpty = members.length === 0;
+
+    const memberChips = members.map(g => {
+      const sc = g.analysis.scores;
+      const pf = g.analysis.qualitative.put_form;
+      const pfColor = PUT_COLOR[pf] || '#888';
+      const total = sc.random + sc.combo + sc.pool + sc.structure;
+      return `
+        <a href="../analysis/${escapeHtml(g.slug)}.html" class="member-chip"
+           title="combo ${sc.combo}/10 · 总分 ${total} · put_form: ${escapeHtml(pf)}">
+          <span style="color: var(--fg);">${escapeHtml(g.basic.name_cn)}</span>
+          <span class="pill" style="background: var(--accent); color: #1c1300;">C${sc.combo}</span>
+          <span class="pill" style="background: ${pfColor}22; color: ${pfColor};">${PUT_GLYPH[pf]}</span>
+        </a>
+      `;
+    }).join('');
+
+    // put_form 子分布（同一 topology 下的 put_form 分布）
+    const subPutCount = {};
+    for (const g of members) {
+      const pf = g.analysis.qualitative.put_form;
+      subPutCount[pf] = (subPutCount[pf] || 0) + 1;
+    }
+    const subPutBadges = Object.entries(subPutCount).map(([pf, n]) => {
+      const c = PUT_COLOR[pf];
+      return `<span class="kbd" style="font-size:11px; background:${c}22; color:${c};">${PUT_GLYPH[pf]} ${escapeHtml(putName(pf))} × ${n}</span>`;
+    }).join(' ');
+
+    return `
+      <div class="card topo-card ${isEmpty ? 'empty' : ''}" style="border-left: 4px solid ${color};">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 24px;">${glyph}</span>
+          <span class="topo-name" style="color: ${color};">${escapeHtml(t.name)}</span>
+          <span class="topo-key">${escapeHtml(t.key)}</span>
+          <span class="kbd" style="margin-left: auto; font-size: 11px; background: ${color}22; color: ${color};">${members.length} 款</span>
+        </div>
+        <div class="topo-desc">${escapeHtml(t.desc)}</div>
+        ${members.length > 0 ? `<div class="muted" style="font-size: 11px; margin-bottom: 8px;">put_form 子分布：${subPutBadges}</div>` : ''}
+        <div class="members">${memberChips || '<span class="dim" style="font-size:11px;">— 无成员（34 款样本中无）</span>'}</div>
+      </div>
+    `;
+  }).join('');
+
+  // === 关键洞察 ===
+  const insights = [];
+  // 找最大族
+  const maxN = Math.max(...TOPO.map(t => byTopo.get(t.key)?.length || 0));
+  const maxTopos = TOPO.filter(t => (byTopo.get(t.key)?.length || 0) === maxN);
+  if (maxTopos.length > 0) {
+    insights.push({
+      icon: '👑',
+      title: `最大族：${maxTopos.map(t => t.name).join(' / ')}`,
+      body: `${maxN} 款游戏属于这个舞台拓扑。是 RPB 装置类的主流舞台选择。`
+    });
+  }
+  // 找空族 / 稀有族
+  const sparseTopos = TOPO.filter(t => (byTopo.get(t.key)?.length || 0) <= 2);
+  if (sparseTopos.length > 0) {
+    insights.push({
+      icon: '🪐',
+      title: `稀有族：${sparseTopos.map(t => t.name + '(' + (byTopo.get(t.key)?.length || 0) + ')').join(' / ')}`,
+      body: `34 款样本中 ≤ 2 款属于这些舞台拓扑。可能是设计探索空间，或是装置类型上有结构性限制。`
+    });
+  }
+  // put_form 与 topology 的关系
+  insights.push({
+    icon: '🔗',
+    title: 'put_form 与 show_topology 的耦合关系',
+    body: `manual_set 类游戏 show_topology 必为 0D_multiset；manual_place 类游戏会升维到 1D_sequence / 2D_grid 等。auto_place 类游戏受装置类型决定（slot → 2D_grid，弹珠 → 2D_physical）。详见 <a href="../put-design-axis.html" style="color: var(--accent);">Put 维度详解</a>。`
+  });
+  const insightCards = insights.map(i => `
+    <div class="card" style="display:flex; gap:14px; align-items:flex-start; margin-bottom: 12px;">
+      <div style="font-size: 22px; line-height: 1;">${i.icon}</div>
+      <div>
+        <div style="font-weight: 700; margin-bottom: 4px;">${escapeHtml(i.title)}</div>
+        <div class="muted" style="font-size: 13px; line-height: 1.7;">${i.body}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.querySelector('#root').innerHTML = head + distribution +
+    `<h2 class="section-title">5 个舞台拓扑分组</h2>` + groupCards +
+    `<h2 class="section-title" style="margin-top: 24px;">关键洞察</h2>` + insightCards;
+})();
+</script>
+
+</div>
+</body>
+</html>

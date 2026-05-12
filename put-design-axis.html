@@ -1,0 +1,434 @@
+<!doctype html>
+<!--
+  R_RougeSlot · Put 维度独立详解（v4 新增设计轴）
+  ====================================================
+  Put = random 与 combo 之间的"安置/选择"步骤——v3 漏掉的独立维度。
+  从概念定义、几何形式化、4 子类、跨拓扑关系、跨 predicate 解锁、34 款映射等多角度详解。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>Put 维度详解 · R_RougeSlot</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  /* Put 4 子类卡片 */
+  .pf-card { padding: 18px 20px; border-radius: 8px; }
+  .pf-card .glyph { font-size: 32px; line-height: 1; }
+  .pf-card .name { font-weight: 700; font-size: 16px; }
+  .pf-card .def { font-size: 13px; line-height: 1.7; margin: 8px 0; }
+  .pf-card .stack { font-size: 11px; font-family: ui-monospace, monospace; padding: 6px 10px; background: var(--bg-deep); border-radius: 6px; margin: 8px 0; }
+  .pf-card .topo-map { font-size: 12px; line-height: 1.7; margin: 8px 0; padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 6px; }
+
+  /* 矩阵单元格 */
+  .pf-matrix-occupied { background: rgba(167, 139, 250, 0.10); border: 1px solid rgba(167, 139, 250, 0.30); padding: 6px 4px; text-align: center; vertical-align: middle; }
+  .pf-matrix-empty { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); opacity: 0.45; text-align: center; padding: 6px 4px; }
+  .pf-matrix-empty-class { background: rgba(248,113,113,0.06); border: 1px dashed rgba(248,113,113,0.3); text-align: center; padding: 6px 4px; }
+  .pf-game-chip { display: inline-block; font-size: 11px; padding: 2px 6px; border-radius: 8px; background: var(--accent); color: #1c1300; text-decoration: none; margin: 1px; }
+
+  /* tooltip */
+  .rr-help { display: inline-block; margin-left: 4px; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 50%; background: rgba(124, 58, 237, 0.30); color: #d8c5ff; font-size: 11px; font-weight: 700; cursor: help; vertical-align: middle; user-select: none; }
+  .rr-help:hover { background: rgba(124, 58, 237, 0.65); color: #fff; }
+  .rr-help-pop { position: fixed; background: #1a1825; border: 1px solid rgba(124, 58, 237, 0.5); color: #e0d8f5; padding: 10px 14px; border-radius: 8px; font-size: 12px; line-height: 1.7; max-width: 360px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6); z-index: 10000; pointer-events: none; opacity: 0; transition: opacity 0.12s; white-space: pre-wrap; }
+  .rr-help-pop.show { opacity: 1; }
+</style>
+<script>
+  (function () {
+    let tipEl = null;
+    function show(target) {
+      const text = target.getAttribute('data-tooltip'); if (!text) return; hide();
+      tipEl = document.createElement('div'); tipEl.className = 'rr-help-pop'; tipEl.textContent = text;
+      document.body.appendChild(tipEl);
+      const r = target.getBoundingClientRect(); const tw = tipEl.offsetWidth; const th = tipEl.offsetHeight; const margin = 8;
+      let x = r.left + r.width / 2 - tw / 2; let y = r.top - th - margin;
+      if (y < margin) y = r.bottom + margin;
+      if (x < margin) x = margin;
+      if (x + tw > window.innerWidth - margin) x = window.innerWidth - tw - margin;
+      tipEl.style.left = x + 'px'; tipEl.style.top = y + 'px';
+      requestAnimationFrame(() => tipEl && tipEl.classList.add('show'));
+    }
+    function hide() { if (tipEl) { tipEl.remove(); tipEl = null; } }
+    document.addEventListener('mouseover', e => { const t = e.target.closest && e.target.closest('.rr-help'); if (t) show(t); });
+    document.addEventListener('mouseout', e => { const t = e.target.closest && e.target.closest('.rr-help'); if (t) hide(); });
+    document.addEventListener('scroll', hide, true);
+  })();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div class="page-head">
+  <h1>Put 维度详解 · v4 新增设计轴</h1>
+  <p class="lede"><b>Put = random 与 combo 之间的「安置/选择」步骤</b>——v3 模型遗漏的独立维度。本页从概念、几何、分类、跨维关系、34 款映射等角度全面详解。</p>
+  <p class="meta" id="meta-info"></p>
+</div>
+
+<div id="root"></div>
+
+<script src="framework/v5/schema.js"></script>
+<script src="data/games.js"></script>
+<script src="lib/render.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+  const fw = RR.getFramework();
+  const allGames = RR.getAllGames().filter(g => g.analysis && g.analysis.qualitative);
+  const games = allGames.filter(g => g.analysis.qualitative.put_form);
+
+  const PUT_TYPES = fw.put_form_enum || [];
+  const TOPO = fw.show_topology_enum || [];
+  const PRED = fw.combo_predicate_enum || [];
+
+  const TYPE_COLOR = { auto_place: '#60a5fa', manual_set: '#a78bfa', manual_place: '#fbbf24', auto_set: '#94a3b8' };
+  const TYPE_GLYPH = { auto_place: '⚙', manual_set: '✋', manual_place: '🎯', auto_set: '∅' };
+
+  /* meta */
+  document.querySelector('#meta-info').innerHTML =
+    `${games.length}/${allGames.length} 款已标注 put_form · 4 子类 · 框架 <b>${fw.version}</b>`;
+
+  /* 工具 */
+  const escapeHtml = RR.escapeHtml;
+  const helpMark = (desc, hint) => `<span class="rr-help" data-tooltip="${escapeHtml(desc + (hint ? '\n\n[key] ' + hint : ''))}">?</span>`;
+  const slugToGame = new Map(games.map(g => [g.slug, g]));
+  const topoName = k => TOPO.find(t => t.key === k)?.name || k;
+  const topoDesc = k => TOPO.find(t => t.key === k)?.desc || '';
+  const predName = k => PRED.find(p => p.key === k)?.name || k;
+
+  /* 按 put_form 分组 */
+  const byPutForm = new Map();
+  PUT_TYPES.forEach(t => byPutForm.set(t.key, []));
+  for (const g of games) {
+    byPutForm.get(g.analysis.qualitative.put_form)?.push(g);
+  }
+  // 按 combo 分降序
+  for (const arr of byPutForm.values()) {
+    arr.sort((a, b) => b.analysis.scores.combo - a.analysis.scores.combo);
+  }
+
+  /* === 区块 ① put 是什么 v3 vs v4 === */
+  const sec1 = `
+    <h2 class="section-title">① Put 是什么：v3 漏掉的中间步骤</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+      <div class="card" style="padding: 16px; border-left: 3px solid #94a3b8;">
+        <div style="font-weight: 700; margin-bottom: 8px;">v3 模型（不完备）</div>
+        <pre style="margin: 0; padding: 12px; background: var(--bg-deep); border-radius: 6px; font-size: 12px; line-height: 1.7;">spin[
+  random
+    ↓ <span style="color: #f87171;">（这一步 v3 没有命名）</span>
+  combo[ combo1 + combo2 ]
+] → RPBD</pre>
+        <div class="muted" style="font-size: 12px; margin-top: 8px;">v3 默认 random 结果"自动"进入 combo 评估，没有显式描述中间安置步骤。</div>
+      </div>
+      <div class="card" style="padding: 16px; border-left: 3px solid var(--accent);">
+        <div style="font-weight: 700; margin-bottom: 8px;">v5 模型（完备）</div>
+        <pre style="margin: 0; padding: 12px; background: var(--bg-deep); border-radius: 6px; font-size: 12px; line-height: 1.7;">spin[
+  random（→ 多重集）
+    ↓
+  <span style="color: var(--accent);">put（自动 | 手动 × set | place）</span>
+    ↓
+  combo[ combo1 + combo2 ]
+] @ <span style="color: var(--fg-muted);">show_topology（共享舞台）</span>
+]_N → RPBD</pre>
+        <div class="muted" style="font-size: 12px; margin-top: 8px;"><b>Put = 把 random 输出的多重集写入 show_topology</b>。这一步永远存在，只是 v3 把它"自动化"地隐去了。</div>
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ② put 的几何本质 === */
+  const sec2 = `
+    <h2 class="section-title">② Put 的几何本质：put 与 combo 共享同一个舞台拓扑</h2>
+    <div class="card" style="padding: 24px; margin-bottom: 24px; background: linear-gradient(180deg, rgba(124,58,237,0.06), rgba(96,165,250,0.04));">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; font-family: ui-monospace, monospace; font-size: 14px;">
+        <div style="text-align: center;">
+          <div style="padding: 12px 18px; border-radius: 8px; background: rgba(96,165,250,0.12); border: 1px solid #60a5fa44; color: #60a5fa;">
+            <div style="font-size: 11px; opacity: 0.7; margin-bottom: 4px;">random</div>
+            <div style="font-weight: 700;">输出多重集</div>
+            <div style="font-size: 11px; opacity: 0.7; margin-top: 4px;">（无序，不带位置）</div>
+          </div>
+        </div>
+        <div style="font-size: 24px; color: var(--accent);">─ <b>put</b> ▶</div>
+        <div style="text-align: center;">
+          <div style="padding: 12px 18px; border-radius: 8px; background: rgba(167,139,250,0.12); border: 2px solid #a78bfa; color: #a78bfa;">
+            <div style="font-size: 11px; opacity: 0.7; margin-bottom: 4px;">@ show_topology</div>
+            <div style="font-weight: 700;">舞台拓扑</div>
+            <div style="font-size: 11px; opacity: 0.7; margin-top: 4px;">（put 写入 + combo 读取）</div>
+          </div>
+        </div>
+        <div style="font-size: 24px; color: var(--fg-dim);">◀ <b>combo</b> ─</div>
+        <div style="text-align: center;">
+          <div style="padding: 12px 18px; border-radius: 8px; background: rgba(251,191,36,0.12); border: 1px solid #fbbf2444; color: #fbbf24;">
+            <div style="font-size: 11px; opacity: 0.7; margin-bottom: 4px;">combo1 在舞台上判定</div>
+            <div style="font-weight: 700;">符号协同</div>
+          </div>
+        </div>
+      </div>
+      <div class="muted" style="text-align: center; margin-top: 16px; font-size: 13px; line-height: 1.7;">
+        Put 不只是"选择/放置"——它是<b>把 random 输出的多重集写入 show_topology</b>。<br>
+        <code>show_topology</code> 是 <b>put 与 combo 共享的舞台</b>：put 写入元素，combo 在同一个舞台上做判定。<br>
+        <span style="color: #34d399;">v5 简化</span>：消除了 v4 的"起点 vs 目标"二元区分——random 输出本质是多重集（隐式 0D），无需"起点拓扑"概念。
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ③ 二维分类 === */
+  const sec3 = `
+    <h2 class="section-title">③ Put 的二维分类（执行者 × 是否带空间映射）</h2>
+    <div class="card" style="padding: 18px 20px; margin-bottom: 24px;">
+      <table class="tbl" style="font-size: 13px;">
+        <thead>
+          <tr>
+            <th style="width: 100px;"></th>
+            <th><b>set</b>（无空间映射）<br><span style="font-weight:400; font-size:11px;" class="muted">put 输出 = 无序集合</span></th>
+            <th><b>place</b>（带空间映射）<br><span style="font-weight:400; font-size:11px;" class="muted">put 输出 = 集合 + 位置/顺序</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>auto</b><br><span class="muted" style="font-size:11px;">系统/物理执行</span></td>
+            <td style="background: rgba(248,113,113,0.06); border: 1px dashed rgba(248,113,113,0.3); text-align: center;"><span style="color: #94a3b8;">∅ auto_set</span><br><span class="muted" style="font-size: 11px;">结构性空类<br>（34 款样本中无）</span></td>
+            <td style="background: rgba(96,165,250,0.06);"><b style="color: #60a5fa;">⚙ auto_place</b><br><span class="muted" style="font-size: 11px;">slot 自动落位 / 物理路径</span></td>
+          </tr>
+          <tr>
+            <td><b>manual</b><br><span class="muted" style="font-size:11px;">玩家执行</span></td>
+            <td style="background: rgba(167,139,250,0.06);"><b style="color: #a78bfa;">✋ manual_set</b><br><span class="muted" style="font-size: 11px;">选子集（牌型 / 番数）</span></td>
+            <td style="background: rgba(251,191,36,0.06);"><b style="color: #fbbf24;">🎯 manual_place</b><br><span class="muted" style="font-size: 11px;">选子集 + 放到位置/序列/目标</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top: 14px; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 6px; font-size: 12px; line-height: 1.7;">
+        <b>判别规则</b>：put 是否需要交付"<b>玩家产生的</b>位置/顺序"给 combo1？
+        <ul style="margin: 6px 0 0; padding-left: 18px;">
+          <li>不需要（combo1 只看集合属性 / 元素内禀属性如点数花色）→ <b>set</b></li>
+          <li>需要（combo1 用 adjacency / line_complete / path / chain 等位置敏感判定）→ <b>place</b></li>
+        </ul>
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ④ 4 子类卡片 === */
+  const cardChips = (arr) => arr.map(g => {
+    const c = g.analysis.scores.combo;
+    return `<a href="analysis/${escapeHtml(g.slug)}.html"
+              style="display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:14px; background:rgba(255,255,255,0.06); margin:2px; text-decoration:none; font-size:12px;"
+              title="combo ${c}/10">
+              <span style="color: var(--fg);">${escapeHtml(g.basic.name_cn)}</span>
+              <span style="opacity:.7; font-size:11px;">C${c}</span>
+            </a>`;
+  }).join('');
+
+  const sec4 = `
+    <h2 class="section-title">④ Put 4 子类详解</h2>
+    <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); margin-bottom: 24px;">
+      ${PUT_TYPES.map(t => {
+        const members = byPutForm.get(t.key) || [];
+        const color = TYPE_COLOR[t.key];
+        const glyph = TYPE_GLYPH[t.key];
+        const isEmpty = members.length === 0;
+        return `
+          <div class="card pf-card" style="border-left: 4px solid ${color}; ${isEmpty ? 'opacity: 0.6;' : ''}">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+              <span class="glyph">${glyph}</span>
+              <div>
+                <div class="name" style="color: ${color};">${escapeHtml(t.name)}</div>
+                <div class="muted" style="font-size: 11px; font-family: ui-monospace, monospace;">${t.key}</div>
+              </div>
+              <span class="kbd" style="margin-left: auto; font-size: 11px;">${members.length} 款</span>
+            </div>
+            <div class="def">${escapeHtml(t.desc)}</div>
+            <div style="margin-top: 8px;">${cardChips(members) || '<span class="dim" style="font-size: 11px;">— 无成员（结构性空类）</span>'}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  /* === 区块 ⑤ put_form → show_topology 映射表 === */
+  const topoMappingByPutForm = {
+    auto_place:    { 写入方式: '装置/物理引擎自动写入', 舞台拓扑: '装置自带（slot 网格 / 圆环 / 物理）', 例子: 'LBL 池→2D_grid、弹珠大亨 池→2D_physical' },
+    manual_set:    { 写入方式: '玩家选子集（不带空间映射）', 舞台拓扑: '0D_multiset（不升维）', 例子: 'Balatro 手牌→选 5 张组合（仍是 0D）' },
+    manual_place:  { 写入方式: '玩家选 + 放置/排序', 舞台拓扑: 'put 升维到新拓扑', 例子: '吸血鬼爬行者 池→1D 序列、地牢掷骰 池→2D 网格' },
+    auto_set:      { 写入方式: '—', 舞台拓扑: '—', 例子: '结构性空类，34 款样本中无' }
+  };
+  const sec5 = `
+    <h2 class="section-title">⑤ put_form → show_topology 映射</h2>
+    <p class="muted" style="font-size: 12px; margin-bottom: 12px;">v5 简化：random 输出统一是<b>多重集</b>（无需"起点拓扑"概念）；put 把多重集<b>写入</b> show_topology，combo 在同一个 show_topology 上做判定。下表展示 4 种 put_form 与 show_topology 的关系。</p>
+    <div class="card" style="padding: 18px 20px; margin-bottom: 24px;">
+      <table class="tbl" style="font-size: 13px;">
+        <thead>
+          <tr><th>put_form</th><th>写入方式</th><th>show_topology（舞台拓扑）</th><th>例子</th></tr>
+        </thead>
+        <tbody>
+          ${PUT_TYPES.map(t => {
+            const map = topoMappingByPutForm[t.key] || {};
+            const color = TYPE_COLOR[t.key];
+            return `
+              <tr>
+                <td><span class="kbd" style="background: ${color}22; color: ${color};">${TYPE_GLYPH[t.key]} ${escapeHtml(t.name)}</span></td>
+                <td>${escapeHtml(map.写入方式 || '—')}</td>
+                <td><b>${escapeHtml(map.舞台拓扑 || '—')}</b></td>
+                <td class="muted" style="font-size: 12px;">${escapeHtml(map.例子 || '—')}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  /* === 区块 ⑥ put × combo_predicate 解锁关系 === */
+  // 收集每个 put_form 在哪些 predicate 上有实例
+  const cellMembers = new Map(); // "put|pred" -> [game...]
+  for (const g of games) {
+    const pf = g.analysis.qualitative.put_form;
+    const ps = g.analysis.qualitative.combo_predicate || [];
+    for (const p of ps) {
+      const key = `${pf}|${p}`;
+      if (!cellMembers.has(key)) cellMembers.set(key, []);
+      cellMembers.get(key).push(g);
+    }
+  }
+  // predicate 与位置敏感的关系
+  const SPATIAL_PREDS = new Set(['adjacency', 'line_complete', 'path', 'chain', 'cascade']);
+  const sec6 = `
+    <h2 class="section-title">⑥ put_form × combo_predicate 解锁关系</h2>
+    <p class="muted" style="font-size: 12px; margin-bottom: 12px;">空间敏感的 predicate（adjacency / line_complete / path / chain / cascade）必须 place put 才能用——因为它们读位置/顺序信息。type_dict / threshold / trigger_chain 在 set put 下也可用。下表琥珀色格 = 已有实例；空格 = 该组合在 34 款样本中未出现。</p>
+    <div class="card" style="overflow-x: auto; margin-bottom: 24px;">
+      <table style="border-collapse: separate; border-spacing: 2px; font-size: 12px; min-width: 100%;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 8px;">put_form ＼ predicate</th>
+            ${PRED.map(p => `<th style="text-align: center; font-size: 11px; padding: 6px 4px; ${SPATIAL_PREDS.has(p.key) ? 'background: rgba(167,139,250,0.10);' : ''}"><div>${escapeHtml(p.name)}${SPATIAL_PREDS.has(p.key) ? ' <span style="color: #a78bfa;">·空间</span>' : ''}${helpMark(p.desc, p.key)}</div></th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${PUT_TYPES.map(t => {
+            const cells = PRED.map(p => {
+              const m = cellMembers.get(`${t.key}|${p.key}`) || [];
+              if (m.length > 0) {
+                const chips = m.map(g => `<a href="analysis/${escapeHtml(g.slug)}.html" class="pf-game-chip" title="combo ${g.analysis.scores.combo}/10">${escapeHtml(g.basic.name_cn)}</a>`).join('');
+                return `<td class="pf-matrix-occupied">${chips}</td>`;
+              }
+              // set put 类与空间 predicate 的组合应该是"理论不可能"
+              const isStructuralEmpty = (t.key === 'manual_set' || t.key === 'auto_set') && SPATIAL_PREDS.has(p.key);
+              return `<td class="${isStructuralEmpty ? 'pf-matrix-empty-class' : 'pf-matrix-empty'}">${isStructuralEmpty ? '<span style="color: #f87171; font-size: 11px;">理论不可</span>' : '<span class="dim">—</span>'}</td>`;
+            }).join('');
+            const color = TYPE_COLOR[t.key];
+            return `<tr><td style="padding: 8px; font-weight: 700; color: ${color}; white-space: nowrap;"><span class="kbd" style="background: ${color}22; color: ${color};">${TYPE_GLYPH[t.key]} ${escapeHtml(t.name)}</span></td>${cells}</tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  /* === 区块 ⑦ 34 款完整对照表 === */
+  const tableRows = games
+    .slice()
+    .sort((a, b) => {
+      // 按 put_form 排序，再按 combo 分降序
+      const order = { auto_place: 1, manual_set: 2, manual_place: 3, auto_set: 4 };
+      const oa = order[a.analysis.qualitative.put_form] || 9;
+      const ob = order[b.analysis.qualitative.put_form] || 9;
+      if (oa !== ob) return oa - ob;
+      return b.analysis.scores.combo - a.analysis.scores.combo;
+    })
+    .map(g => {
+      const q = g.analysis.qualitative;
+      const sc = g.analysis.scores;
+      const pf = q.put_form;
+      const color = TYPE_COLOR[pf];
+      const pTag = `<span class="kbd" style="background: ${color}22; color: ${color}; font-size: 11px;">${TYPE_GLYPH[pf]} ${escapeHtml(PUT_TYPES.find(t => t.key === pf)?.name || pf)}</span>`;
+      const preds = (q.combo_predicate || []).map(p => `<span class="kbd" style="font-size: 10px;" title="${escapeHtml(p)}">${escapeHtml(predName(p))}</span>`).join(' ');
+      return `
+        <tr>
+          <td><a href="analysis/${escapeHtml(g.slug)}.html" style="text-decoration: none; color: var(--accent); font-weight: 600;">${escapeHtml(g.basic.name_cn)}</a></td>
+          <td>${pTag}</td>
+          <td><span class="kbd" title="${escapeHtml(topoDesc(q.show_topology))}">${escapeHtml(topoName(q.show_topology))}</span></td>
+          <td>${preds}</td>
+          <td style="text-align: center;"><span class="kbd" style="background: var(--accent); color: #1c1300; font-weight: 700;">${sc.combo}</span></td>
+        </tr>
+      `;
+    }).join('');
+  const sec7 = `
+    <h2 class="section-title">⑦ 34 款完整对照表（按 put_form 分组）</h2>
+    <div class="card" style="overflow-x: auto; margin-bottom: 24px;">
+      <table class="tbl" style="font-size: 13px;">
+        <thead>
+          <tr>
+            <th style="width: 160px;">游戏</th>
+            <th style="width: 180px;">put_form</th>
+            <th style="width: 120px;">show_topology<br><span style="font-weight: 400; font-size: 10px;" class="muted">（舞台拓扑）</span></th>
+            <th>combo_predicate</th>
+            <th style="width: 60px; text-align: center;">combo</th>
+          </tr>
+        </thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  /* === 区块 ⑧ 为什么 v3 漏了 + 边界案例 === */
+  const sec8 = `
+    <h2 class="section-title">⑧ 为什么 v3 漏了 Put + 边界案例</h2>
+    <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); margin-bottom: 24px;">
+      <div class="card" style="padding: 16px 18px; border-left: 3px solid #f87171;">
+        <div style="font-weight: 700; margin-bottom: 8px;">📍 v3 把 put 隐去的原因</div>
+        <div style="font-size: 13px; line-height: 1.7;">v3 用 LBL（slot 自动落位）作为锚点游戏——random 出 15 个符号自动落到 3×5 格，put 这一步"看不见"地完成了。这种"装置自动 put"的形式让 v3 默认 random 直通 combo，遗漏了显式 put 步骤。</div>
+      </div>
+      <div class="card" style="padding: 16px 18px; border-left: 3px solid #fbbf24;">
+        <div style="font-weight: 700; margin-bottom: 8px;">🔍 v4 修正：put 是普适步骤</div>
+        <div style="font-size: 13px; line-height: 1.7;">所有游戏都有 put——slot 是机器自动 put（auto_place），Balatro 是玩家手动 set put，地牢掷骰是手动 place put。"无 put" 不再作为分支存在。</div>
+      </div>
+      <div class="card" style="padding: 16px 18px; border-left: 3px solid #a78bfa;">
+        <div style="font-weight: 700; margin-bottom: 8px;">⚠ 边界案例 1：Balatro 顺子的"连续"</div>
+        <div style="font-size: 13px; line-height: 1.7;">Balatro 选 5 张牌打"顺子"——看似有顺序，但顺序来自<b>点数内禀属性</b>（系统自动按点数排），不是玩家产生的位置。put 输出 = 5 张牌的纯集合 → <b>manual_set</b>。</div>
+      </div>
+      <div class="card" style="padding: 16px 18px; border-left: 3px solid #34d399;">
+        <div style="font-weight: 700; margin-bottom: 8px;">⚠ 边界案例 2：吸血鬼爬行者的法力顺序</div>
+        <div style="font-size: 13px; line-height: 1.7;">games.js 字面描述"按法力从低到高自动排"，看似 manual_set；但用户玩家视角是 UNO 风格手动排序。本页按用户判断归 <b>manual_place</b>，但 show_topology 保持 <code>0D_multiset</code>——这是个待复核的边界案例。</div>
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ⑨ 关键洞察 === */
+  const totalManualPlace = byPutForm.get('manual_place')?.length || 0;
+  const totalAutoPlace = byPutForm.get('auto_place')?.length || 0;
+  const totalManualSet = byPutForm.get('manual_set')?.length || 0;
+  const sec9 = `
+    <h2 class="section-title">⑨ 关键洞察</h2>
+    <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); margin-bottom: 24px;">
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-weight: 700; margin-bottom: 6px;">🎯 主流是 auto_place（${totalAutoPlace}/${games.length}）</div>
+        <div class="muted" style="font-size: 13px; line-height: 1.7;">超半数游戏选择"装置自动 put"路线——slot / 物理引擎自动决定落位。设计上这降低了局内决策密度，把所有玩家技巧推到 RPBD 阶段。</div>
+      </div>
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-weight: 700; margin-bottom: 6px;">🃏 manual_set 极稀有（${totalManualSet}/${games.length}）</div>
+        <div class="muted" style="font-size: 13px; line-height: 1.7;">仅 Balatro / 青天井 用纯 set put——它们的 combo1 都是无序牌型/番数。这种"选组合不放位置"的设计高度依赖 0D 多重集 + type_dict 判定。</div>
+      </div>
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-weight: 700; margin-bottom: 6px;">🎲 manual_place 是骰子族主战场（${totalManualPlace}/${games.length}）</div>
+        <div class="muted" style="font-size: 13px; line-height: 1.7;">12 款手动放置类游戏中骰子机制占多数——投出骰子后玩家放到棋盘 / 槽 / 目标。这给 combo1 解锁了 adjacency / line_complete / path 等空间敏感判定。</div>
+      </div>
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-weight: 700; margin-bottom: 6px;">∅ auto_set 是结构性空类</div>
+        <div class="muted" style="font-size: 13px; line-height: 1.7;">"系统自动选子集但不放任何位置"在 34 款样本中无实例——一旦机器筛选，几乎都伴随空间映射（路径 / 落位）。这是模型的逻辑空格，不是数据稀缺。</div>
+      </div>
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-weight: 700; margin-bottom: 6px;">📐 put 与 topology 强相关但独立</div>
+        <div class="muted" style="font-size: 13px; line-height: 1.7;">同一 0D 多重集拓扑下，Balatro（manual_set）和幸运市长（auto_place）共存——证明 put 不是 topology 的派生属性，是独立维度。</div>
+      </div>
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-weight: 700; margin-bottom: 6px;">🔓 place put 解锁了 5/8 predicate</div>
+        <div class="muted" style="font-size: 13px; line-height: 1.7;">空间敏感判定（adjacency / line_complete / path / chain / cascade）必须 place put 才能用——这就是为什么 combo1 设计深度跟 put_form 强耦合。</div>
+      </div>
+    </div>
+  `;
+
+  document.querySelector('#root').innerHTML = sec1 + sec2 + sec3 + sec4 + sec5 + sec6 + sec7 + sec8 + sec9;
+})();
+</script>
+
+</div>
+</body>
+</html>

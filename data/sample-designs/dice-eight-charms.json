@@ -1,0 +1,129 @@
+{
+  "design_name": "骰子德州（暂名）",
+  "total_charms": 150,
+  "rarity_distribution": {
+    "common": "60%（90 个）",
+    "rare": "25%（38 个）",
+    "epic": "12%（18 个）",
+    "legendary": "3%（4 个）"
+  },
+  "categories": [
+    {
+      "category": "① 点数概率类（30 个）",
+      "purpose": "增加某点数的出现率，影响 random 分布",
+      "examples": [
+        { "name": "幸运六", "rarity": "common", "effect": "本局所有 6 点骰 +1 颗（替换随机一颗最小点数骰）" },
+        { "name": "偶数偏好", "rarity": "common", "effect": "偶数点（2/4/6）出现率 +20%" },
+        { "name": "奇数偏好", "rarity": "common", "effect": "奇数点（1/3/5）出现率 +20%" },
+        { "name": "小点专精", "rarity": "common", "effect": "点数 1-2 的骰子 +1 颗" },
+        { "name": "大点专精", "rarity": "common", "effect": "点数 5-6 的骰子 +1 颗" },
+        { "name": "三点流", "rarity": "common", "effect": "每出现 1 个 3 点 → 多触发 1 次结算" },
+        { "name": "对称美", "rarity": "rare", "effect": "1 与 6 / 2 与 5 / 3 与 4 互换出现率" },
+        { "name": "骰面锻造", "rarity": "rare", "effect": "首颗落地的骰子 +1 点" },
+        { "name": "重力锁", "rarity": "rare", "effect": "最大点数骰子固定为 6 点" },
+        { "name": "骰子神谕", "rarity": "epic", "effect": "本局 random 时显示 4 颗骰子的点数预览（玩家可选触发顺序）" },
+        { "name": "六点雪崩", "rarity": "epic", "effect": "若本局出现 ≥ 3 颗 6 点 → 所有 6 点变 wild" },
+        { "name": "百搭骰", "rarity": "legendary", "effect": "本局随机 1 颗骰可代任何点数（wild dice）" }
+      ],
+      "design_principle": "改变 random 出来的多重集的点数分布，提高高级牌型（五条以上）的成立概率"
+    },
+    {
+      "category": "② 颜色概率类（25 个）",
+      "purpose": "影响骰子颜色分布，撑同色类牌型",
+      "examples": [
+        { "name": "赤焰", "rarity": "common", "effect": "本局所有骰子 +1 颗红色（替换最少色）" },
+        { "name": "翠林", "rarity": "common", "effect": "本局所有骰子 +1 颗绿色" },
+        { "name": "蔚蓝", "rarity": "common", "effect": "本局所有骰子 +1 颗蓝色" },
+        { "name": "三才均衡", "rarity": "common", "effect": "本局保证至少各 2 颗 R/G/B（不足补满）" },
+        { "name": "色变·红", "rarity": "rare", "effect": "本局所有 1 点骰变红" },
+        { "name": "色谱炼金", "rarity": "rare", "effect": "本局开始时随机选 1 种颜色，该色骰子 +2 颗" },
+        { "name": "彩虹守护", "rarity": "rare", "effect": "彩虹牌型（含 3 色）×2" },
+        { "name": "纯净", "rarity": "epic", "effect": "本局所有骰子统一为一种随机颜色（每次随机）" },
+        { "name": "色谱裂变", "rarity": "epic", "effect": "本局获得 4 色骰子（解锁紫色 Purple）" },
+        { "name": "原色之锚", "rarity": "legendary", "effect": "玩家可主动选择本局所有骰子的颜色（绝对控色）" }
+      ],
+      "design_principle": "影响 random 颜色分布，让同色顺子/同色八条等极致牌型成为可能"
+    },
+    {
+      "category": "③ 牌型倍率类（35 个）",
+      "purpose": "对成立的牌型施加 ×N 倍率（最常见 charms 类型）",
+      "examples": [
+        { "name": "对子之礼", "rarity": "common", "effect": "一对 +50%" },
+        { "name": "三条狂热", "rarity": "common", "effect": "三条 ×2" },
+        { "name": "葫芦升华", "rarity": "common", "effect": "葫芦 ×1.5" },
+        { "name": "顺子大师", "rarity": "common", "effect": "顺子 ×2" },
+        { "name": "颜色狂热者", "rarity": "common", "effect": "同色对 ×1.5" },
+        { "name": "四喜临门", "rarity": "rare", "effect": "四条 ×3" },
+        { "name": "五行齐聚", "rarity": "rare", "effect": "五条 ×4" },
+        { "name": "大顺光环", "rarity": "rare", "effect": "大顺(1-6) ×3" },
+        { "name": "同色顺子之颂", "rarity": "epic", "effect": "同色顺子 ×5" },
+        { "name": "六合咒", "rarity": "epic", "effect": "六条 ×7" },
+        { "name": "彩虹爆裂", "rarity": "epic", "effect": "彩虹 + 大顺 同时成立 → 额外 ×5" },
+        { "name": "天命八条", "rarity": "legendary", "effect": "七条 ×10 / 八条 ×25" },
+        { "name": "同色八条·神迹", "rarity": "legendary", "effect": "同色八条 ×50（直接清债）" }
+      ],
+      "design_principle": "针对牌型表给定倍率，乘性叠加形成爆发链"
+    },
+    {
+      "category": "④ 结构改造类（20 个）",
+      "purpose": "改变扔骰数 / 颜色规则 / 重投机会等基础规则",
+      "examples": [
+        { "name": "九骰盅", "rarity": "rare", "effect": "本局扔 9 颗骰子" },
+        { "name": "十骰盅", "rarity": "epic", "effect": "本局扔 10 颗骰子" },
+        { "name": "重投·小", "rarity": "common", "effect": "每局允许 1 次重投 ≤ 3 颗骰子" },
+        { "name": "重投·大", "rarity": "rare", "effect": "每局允许 1 次重投全部" },
+        { "name": "骰盅升级", "rarity": "common", "effect": "本局基础分 +20%" },
+        { "name": "黄金骰盅", "rarity": "rare", "effect": "本局所有结算 +50%" },
+        { "name": "颜色融合", "rarity": "rare", "effect": "本局红蓝视为同色" },
+        { "name": "骰面记忆", "rarity": "epic", "effect": "保留上局最高点数骰子到本局" },
+        { "name": "骰子博物馆", "rarity": "epic", "effect": "每局开始时从历史已扔过的骰子中选 2 颗作为本局起手" },
+        { "name": "时间之钟", "rarity": "legendary", "effect": "每局开始时可时光倒流：重投全部骰子最多 3 次（每次保留最高分结果）" }
+      ],
+      "design_principle": "改变基础规则，扩展构筑空间"
+    },
+    {
+      "category": "⑤ 触发链类（20 个）",
+      "purpose": "跨牌型 / 跨局触发额外效果（cascade）",
+      "examples": [
+        { "name": "对子连环", "rarity": "common", "effect": "连续 2 局成立一对 → 第 3 局对子 ×3" },
+        { "name": "三条爆裂", "rarity": "common", "effect": "三条成立 → 触发额外 +50 基础分" },
+        { "name": "葫芦诱发", "rarity": "rare", "effect": "葫芦成立 → 随机引爆 1 个其他牌型 ×1.5" },
+        { "name": "顺子涟漪", "rarity": "rare", "effect": "顺子成立 → 下一局基础分 ×2" },
+        { "name": "颜色共鸣", "rarity": "rare", "effect": "同色组 5+ 成立 → 引爆所有颜色类牌型 ×1.5" },
+        { "name": "四条传染", "rarity": "epic", "effect": "四条成立 → 自动转化为五条评分（charms 触发）" },
+        { "name": "牌型爆裂", "rarity": "epic", "effect": "本局成立 ≥ 8 种牌型 → 总分 ×3" },
+        { "name": "无尽链", "rarity": "epic", "effect": "连续 3 局成立同一最高牌型 → 该牌型 ×4 永久" },
+        { "name": "命运重叠", "rarity": "legendary", "effect": "本局所有牌型同时触发各自的 charms 效果（无视位置顺序）" }
+      ],
+      "design_principle": "创造跨牌型 / 跨局的 cascade 引爆，乘性链滚雪球"
+    },
+    {
+      "category": "⑥ 颠覆规则类（20 个传奇）",
+      "purpose": "改变核心机制（最稀有，单 charm 可改变 build 路线）",
+      "examples": [
+        { "name": "wild dice·百搭", "rarity": "legendary", "effect": "本局 1 颗骰子可代任意点数和颜色" },
+        { "name": "wild dice·双百搭", "rarity": "legendary", "effect": "本局 2 颗骰子可代任意点数和颜色" },
+        { "name": "全色任意", "rarity": "legendary", "effect": "本局颜色判定全部自动匹配（所有颜色视为同色）" },
+        { "name": "牌型升档", "rarity": "legendary", "effect": "所有牌型评分升 1 档（对子 → 三条评分 / 三条 → 葫芦评分 …）" },
+        { "name": "八条直接通关", "rarity": "legendary", "effect": "成立八条 → 直接清空本轮债务" },
+        { "name": "倍率永恒", "rarity": "legendary", "effect": "本局所有 ×N 倍率永久挂载（不消失）" },
+        { "name": "无视破产", "rarity": "legendary", "effect": "本局未达标也不死，债务结转下局" },
+        { "name": "骰子复制", "rarity": "legendary", "effect": "本局某 1 颗骰子复制 2 次（成 3 颗）" },
+        { "name": "命运反转", "rarity": "legendary", "effect": "本局最低牌型变最高（反向计分）—— 极风险 build 路线" }
+      ],
+      "design_principle": "提供「我做到了」瞬间高潮 + 解锁极端 build 路线"
+    }
+  ],
+  "rarity_examples_summary": {
+    "common_90": "基础概率 / 倍率类（30% 折扣牌型修饰），玩家前 3 关大量获得",
+    "rare_38": "结构改造 + 颜色控 + 触发链初阶，第 3-5 关解锁",
+    "epic_18": "颠覆性效果初阶 + 高级触发链，第 5 关后才有概率刷出",
+    "legendary_4": "极致 charm（4 个，每个改变 build 路线），整局 ≤ 1 个"
+  },
+  "balance_notes": [
+    "倍率乘积上限设计：8 装备槽 × 平均 ×2 = 256 倍 → 期望基础分 351 × 256 ≈ 90000，匹配第 6 轮债务（T₀=100，r=2，6 轮 = 6400 × 多 charms 期望调整）",
+    "rare 概率倍率 ×3-5，epic ×5-10，legendary ×20-50",
+    "传奇 charms 4 个就够 —— 每个能颠覆 build 路线，多了选择疲劳",
+    "禁止单 charm 提供 ×100+，避免 build 收敛到单一路线"
+  ]
+}

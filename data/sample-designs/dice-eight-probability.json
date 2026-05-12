@@ -1,0 +1,281 @@
+{
+  "iterations": 1000000,
+  "base_pool": {
+    "dice_count": 8,
+    "points": 6,
+    "colors": 3,
+    "total_variants": 18
+  },
+  "expected_total_score": 350.94167999999996,
+  "patterns": [
+    {
+      "key": "pair",
+      "name": "一对",
+      "probability": 1,
+      "prob_pct": "100.00",
+      "expected_contribution": 5,
+      "figure_score": 1,
+      "tier": 1,
+      "legacy_base_score": 5
+    },
+    {
+      "key": "two_pair",
+      "name": "两对",
+      "probability": 0.932035,
+      "prob_pct": "93.20",
+      "expected_contribution": 9.32035,
+      "figure_score": 1,
+      "tier": 1,
+      "legacy_base_score": 10
+    },
+    {
+      "key": "three_pair",
+      "name": "三对",
+      "probability": 0.416647,
+      "prob_pct": "41.66",
+      "expected_contribution": 12.49941,
+      "figure_score": 1.5,
+      "tier": 2,
+      "legacy_base_score": 30
+    },
+    {
+      "key": "three_of_a_kind",
+      "name": "三条",
+      "probability": 0.707481,
+      "prob_pct": "70.75",
+      "expected_contribution": 14.14962,
+      "figure_score": 1,
+      "tier": 1,
+      "legacy_base_score": 20
+    },
+    {
+      "key": "full_house",
+      "name": "葫芦",
+      "probability": 0.639516,
+      "prob_pct": "63.95",
+      "expected_contribution": 25.58064,
+      "figure_score": 1.5,
+      "tier": 2,
+      "legacy_base_score": 40
+    },
+    {
+      "key": "double_full_house",
+      "name": "双葫芦",
+      "probability": 0.101867,
+      "prob_pct": "10.19",
+      "expected_contribution": 10.1867,
+      "figure_score": 3,
+      "tier": 3,
+      "legacy_base_score": 100
+    },
+    {
+      "key": "four_of_a_kind",
+      "name": "四条",
+      "probability": 0.183416,
+      "prob_pct": "18.34",
+      "expected_contribution": 18.3416,
+      "figure_score": 2.5,
+      "tier": 2,
+      "legacy_base_score": 100
+    },
+    {
+      "key": "straight",
+      "name": "顺子",
+      "probability": 0.264102,
+      "prob_pct": "26.41",
+      "expected_contribution": 21.12816,
+      "figure_score": 2,
+      "tier": 2,
+      "legacy_base_score": 80
+    },
+    {
+      "key": "big_straight",
+      "name": "大顺(1-6)",
+      "probability": 0.114108,
+      "prob_pct": "11.41",
+      "expected_contribution": 28.527,
+      "figure_score": 3,
+      "tier": 3,
+      "legacy_base_score": 250
+    },
+    {
+      "key": "five_of_a_kind",
+      "name": "五条",
+      "probability": 0.027699,
+      "prob_pct": "2.77",
+      "expected_contribution": 13.8495,
+      "figure_score": 5,
+      "tier": 3,
+      "legacy_base_score": 500
+    },
+    {
+      "key": "six_of_a_kind",
+      "name": "六条",
+      "probability": 0.002624,
+      "prob_pct": "0.26",
+      "expected_contribution": 5.248,
+      "figure_score": 12,
+      "tier": 4,
+      "legacy_base_score": 2000
+    },
+    {
+      "key": "seven_of_a_kind",
+      "name": "七条",
+      "probability": 0.000159,
+      "prob_pct": "0.0159",
+      "expected_contribution": 1.5899999999999999,
+      "figure_score": 30,
+      "tier": 5,
+      "legacy_base_score": 10000
+    },
+    {
+      "key": "eight_of_a_kind",
+      "name": "八条",
+      "probability": 0.000006,
+      "prob_pct": "0.0006",
+      "expected_contribution": 0.6,
+      "figure_score": 50,
+      "tier": 5,
+      "legacy_base_score": 100000
+    },
+    {
+      "key": "rainbow_3color",
+      "name": "彩虹(3色)",
+      "probability": 0.883413,
+      "prob_pct": "88.34",
+      "expected_contribution": 4.417065,
+      "figure_score": 1,
+      "tier": 1,
+      "legacy_base_score": 5
+    },
+    {
+      "key": "color_pair",
+      "name": "同色对",
+      "probability": 0.839907,
+      "prob_pct": "83.99",
+      "expected_contribution": 20.997674999999997,
+      "figure_score": 1,
+      "tier": 1,
+      "legacy_base_score": 25
+    },
+    {
+      "key": "color_three_kind",
+      "name": "同色三条",
+      "probability": 0.137254,
+      "prob_pct": "13.73",
+      "expected_contribution": 20.588099999999997,
+      "figure_score": 2.5,
+      "tier": 2,
+      "legacy_base_score": 150
+    },
+    {
+      "key": "color_four_kind",
+      "name": "同色四条",
+      "probability": 0.00985,
+      "prob_pct": "0.98",
+      "expected_contribution": 7.88,
+      "figure_score": 7,
+      "tier": 4,
+      "legacy_base_score": 800
+    },
+    {
+      "key": "color_five_kind",
+      "name": "同色五条",
+      "probability": 0.000433,
+      "prob_pct": "0.0433",
+      "expected_contribution": 2.165,
+      "figure_score": 25,
+      "tier": 5,
+      "legacy_base_score": 5000
+    },
+    {
+      "key": "color_group_5",
+      "name": "同色组5",
+      "probability": 0.263702,
+      "prob_pct": "26.37",
+      "expected_contribution": 7.91106,
+      "figure_score": 2,
+      "tier": 2,
+      "legacy_base_score": 30
+    },
+    {
+      "key": "color_group_6",
+      "name": "同色组6",
+      "probability": 0.058856,
+      "prob_pct": "5.89",
+      "expected_contribution": 8.8284,
+      "figure_score": 4,
+      "tier": 3,
+      "legacy_base_score": 150
+    },
+    {
+      "key": "color_group_7",
+      "name": "同色组7",
+      "probability": 0.007733,
+      "prob_pct": "0.77",
+      "expected_contribution": 6.1864,
+      "figure_score": 8,
+      "tier": 4,
+      "legacy_base_score": 800
+    },
+    {
+      "key": "all_same_color",
+      "name": "全同色8",
+      "probability": 0.000475,
+      "prob_pct": "0.0475",
+      "expected_contribution": 9.5,
+      "figure_score": 25,
+      "tier": 5,
+      "legacy_base_score": 20000
+    },
+    {
+      "key": "color_straight",
+      "name": "同色顺子",
+      "probability": 0.012299,
+      "prob_pct": "1.23",
+      "expected_contribution": 36.897,
+      "figure_score": 7,
+      "tier": 4,
+      "legacy_base_score": 3000
+    },
+    {
+      "key": "color_big_straight",
+      "name": "同色大顺",
+      "probability": 0.001191,
+      "prob_pct": "0.12",
+      "expected_contribution": 59.55,
+      "figure_score": 15,
+      "tier": 4,
+      "legacy_base_score": 50000
+    }
+  ],
+  "symbol_values_by_point": {
+    "1": 2,
+    "2": 2,
+    "3": 3,
+    "4": 3,
+    "5": 5,
+    "6": 7
+  },
+  "symbol_mult_default": 1,
+  "figure_mult_default": 1,
+  "scoring_formula": "pattern_score = sum(contributing_dice.value * symbol_mult) * figure_score * figure_mult",
+  "scoring_dimensions": [
+    {
+      "name": "符号价值",
+      "desc": "骰子点数对应的基础分（1-2→2, 3-4→3, 5→5, 6→7）"
+    },
+    {
+      "name": "符号倍率",
+      "desc": "每点数的当前倍率（默认 ×1，charm 可改）"
+    },
+    {
+      "name": "图形分",
+      "desc": "该牌型的基础分数（决策 2 用户采纳值）"
+    },
+    {
+      "name": "图形倍率",
+      "desc": "该牌型的当前倍率（默认 ×1，charm 可改）"
+    }
+  ]
+}

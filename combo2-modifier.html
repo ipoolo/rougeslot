@@ -1,0 +1,541 @@
+<!doctype html>
+<!--
+  R_RougeSlot · combo2 修饰协同 · 横向分析（独立页）
+  ====================================================
+  把 34 款游戏的 combo_modifier 自由文本归纳为 5 类机制 typology，
+  做横向矩阵 / 深度排名 / 关键洞察分析。与 combo-synergy（combo1）
+  形成对称双视图。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>combo2 修饰协同 · R_RougeSlot</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  /* combo2 深度排名柱状图 */
+  .c2-rank-row {
+    display: grid;
+    grid-template-columns: 30px 200px 60px 1fr 110px;
+    gap: 10px;
+    padding: 6px 12px;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .c2-rank-row:hover { background: var(--bg-hover); }
+  .c2-rank-row .rank { color: var(--fg-dim); font-weight: 700; text-align: right; }
+  .c2-rank-row .name { font-weight: 600; }
+  .c2-rank-row .name a { color: var(--accent); text-decoration: none; }
+  .c2-rank-row .score { color: var(--fg-muted); text-align: right; font-family: ui-monospace, monospace; font-size: 12px; }
+  .c2-rank-row .bar-bg {
+    height: 14px;
+    background: var(--bg-deep);
+    border-radius: 7px;
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .c2-rank-row .bar-fg {
+    height: 100%;
+    background: linear-gradient(90deg, #34d399, #a78bfa, #f87171);
+    transition: width 0.3s;
+  }
+  .c2-rank-row .type-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* typology × topology 矩阵单元格 */
+  .c2-matrix-cell-occupied {
+    background: rgba(167, 139, 250, 0.10);
+    border: 1px solid rgba(167, 139, 250, 0.30);
+    padding: 6px 4px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .c2-matrix-cell-empty {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    opacity: 0.45;
+    text-align: center;
+    padding: 6px 4px;
+  }
+  .c2-game-chip {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #1c1300;
+    text-decoration: none;
+    margin: 1px;
+  }
+
+  /* 自定义 tooltip · 角标本体（与 index.html 保持一致） */
+  .rr-help {
+    display: inline-block;
+    margin-left: 4px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(124, 58, 237, 0.30);
+    color: #d8c5ff;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: help;
+    vertical-align: middle;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .rr-help:hover { background: rgba(124, 58, 237, 0.65); color: #fff; }
+  .rr-help-pop {
+    position: fixed;
+    background: #1a1825;
+    border: 1px solid rgba(124, 58, 237, 0.5);
+    color: #e0d8f5;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.7;
+    font-weight: 400;
+    text-align: left;
+    white-space: pre-wrap;
+    max-width: 360px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .rr-help-pop.show { opacity: 1; }
+</style>
+<script>
+  /* tooltip 控制器（与 index.html 同实现，独立页面无法跨文件共享所以拷贝） */
+  (function () {
+    let tipEl = null;
+    function show(target) {
+      const text = target.getAttribute('data-tooltip');
+      if (!text) return;
+      hide();
+      tipEl = document.createElement('div');
+      tipEl.className = 'rr-help-pop';
+      tipEl.textContent = text;
+      document.body.appendChild(tipEl);
+      const r = target.getBoundingClientRect();
+      const tw = tipEl.offsetWidth;
+      const th = tipEl.offsetHeight;
+      const margin = 8;
+      let x = r.left + r.width / 2 - tw / 2;
+      let y = r.top - th - margin;
+      if (y < margin) y = r.bottom + margin;
+      if (x < margin) x = margin;
+      if (x + tw > window.innerWidth - margin) x = window.innerWidth - tw - margin;
+      tipEl.style.left = x + 'px';
+      tipEl.style.top = y + 'px';
+      requestAnimationFrame(() => tipEl && tipEl.classList.add('show'));
+    }
+    function hide() {
+      if (tipEl) { tipEl.remove(); tipEl = null; }
+    }
+    document.addEventListener('mouseover', (e) => {
+      const t = e.target.closest && e.target.closest('.rr-help');
+      if (t) show(t);
+    });
+    document.addEventListener('mouseout', (e) => {
+      const t = e.target.closest && e.target.closest('.rr-help');
+      if (t) hide();
+    });
+    document.addEventListener('scroll', hide, true);
+    window.addEventListener('blur', hide);
+  })();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div class="page-head">
+  <h1>combo2 修饰协同 · 横向分析</h1>
+  <p class="lede">把 34 款 RPB 装置类游戏的 <code>combo_modifier</code> 自由文本归纳为 <b>5 类机制 typology</b>，做跨拓扑矩阵 / 深度排名 / 集群对比。<br>与 <a href="index.html#" onclick="event.preventDefault(); window.location='index.html'; sessionStorage.setItem('rr-tab', 'combo-synergy');">combo1 符号协同矩阵</a> 形成对称双视图：combo1 看「基础池怎么互动」，本页看「主动池怎么修饰」。</p>
+  <p class="meta" id="meta-info"></p>
+</div>
+
+<div id="root"></div>
+
+<script src="framework/v5/schema.js"></script>
+<script src="data/games.js"></script>
+<script src="lib/render.js"></script>
+<script src="lib/combo2-typology.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+  const fw = RR.getFramework();
+  const TYPES = window.RR_COMBO2_TYPES;
+  const TAGS = window.RR_COMBO2_TAGS;
+  const typeMap = new Map(TYPES.map(t => [t.key, t]));
+
+  const allGames = RR.getAllGames().filter(g => g.analysis && g.analysis.qualitative);
+  const games = allGames.filter(g => TAGS[g.slug]); // 只看已标注的
+
+  /* meta */
+  document.querySelector('#meta-info').innerHTML =
+    `共 <b>${games.length}</b> 款已标注 · ${TYPES.length} 类 typology · 框架 <b>${fw.version}</b>`;
+
+  /* 工具：拓扑 key → 中文 */
+  const topoEnum = fw.show_topology_enum || [];
+  const topoName = (k) => {
+    const e = topoEnum.find(x => x.key === k);
+    return e ? e.name : k;
+  };
+  const topoDesc = (k) => {
+    const e = topoEnum.find(x => x.key === k);
+    return e ? e.desc : '';
+  };
+  const helpMark = (desc, keyHint) => {
+    const tip = `${desc}\n\n[英文 key] ${keyHint}`;
+    return `<span class="rr-help" data-tooltip="${RR.escapeHtml(tip)}">?</span>`;
+  };
+
+  /* === 区块 ① 公式定位（高亮 combo2 项） === */
+  const formulaSection = `
+    <h2 class="section-title">① 公式定位：combo2 是 RPB 公式中的乘法项</h2>
+    <div class="card" style="padding: 28px 24px; margin-bottom: 24px; background: linear-gradient(180deg, rgba(251,191,36,0.05), rgba(96,165,250,0.02));">
+      <div style="text-align:center; font-size: 24px; line-height: 2.4; font-family: ui-monospace, 'SF Mono', monospace;">
+        <span style="display:inline-block; padding:6px 14px; border-radius:8px; background:#34d39922; color:#34d399; opacity:.45;">💰 产出</span>
+        <span style="margin: 0 12px; color: var(--fg-dim); opacity:.5;">=</span>
+        <span style="opacity:.45;">(<span style="padding:4px 12px; border-radius:6px; background:#60a5fa22; color:#60a5fa;">基础池</span> × <span style="padding:4px 12px; border-radius:6px; background:#a3a3a322; color:#d4d4d8;">random</span>)</span>
+        <span style="margin: 0 8px; opacity:.45;">+</span>
+        <span style="opacity:.45;">(<span style="padding:4px 12px; border-radius:6px; background:#60a5fa22; color:#60a5fa;">基础池</span> × <span style="padding:4px 12px; border-radius:6px; background:#a78bfa22; color:#a78bfa;">符号协同 (combo1)</span>)</span>
+        <span style="margin: 0 8px; color: var(--accent); font-weight:700; font-size:28px;">×</span>
+        <span style="display:inline-block; padding:6px 14px; border-radius:8px; background: rgba(251,191,36,0.18); border: 2px solid #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.35);">
+          (<span style="padding:4px 8px; border-radius:6px; background:#c4956a22; color:#c4956a; border: 1px solid #c4956a44;">主动池</span>
+          <span style="margin: 0 6px; color: var(--fg-dim);">×</span>
+          <span style="padding:4px 8px; border-radius:6px; background:#fbbf2422; color:#fbbf24; border: 1px dashed #fbbf2466; font-weight:700;">规则修饰 (combo2)</span>)
+        </span>
+      </div>
+      <div class="muted" style="text-align:center; font-size: 13px; line-height: 1.8; margin-top: 16px;">
+        本页聚焦的就是这个<b style="color:#fbbf24;">右乘项</b>——<b>它决定了产出能被放大几倍</b>。<br>
+        加法项（基础池 × random + 基础池 × combo1）只决定「能产什么」，乘法项决定「最终产多少」。<br>
+        <b style="color:#fbbf24;">从 8 分到 10 分跨度的关键，几乎都在这一项的设计深度上。</b>
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ② combo2 是什么 === */
+  const definitionSection = `
+    <h2 class="section-title">② combo2 是什么：主动池施加的全局修饰</h2>
+    <div class="card" style="border-left: 3px solid #fbbf24; margin-bottom: 24px;">
+      <div style="font-size:14px; line-height:1.8;">
+        <b style="color:#fbbf24;">combo2 修饰协同</b> = 玩家通过 <span class="kbd">RPBD</span> 阶段构筑的<b>主动池</b>（道具/Joker/Boon/遗物/天赋/装备）<b>对 combo1 的产出做全局倍率/加成</b>——
+        <ul style="margin:10px 0 0 0; padding-left:24px; font-size:13px; line-height:1.8;">
+          <li><span style="color:#a78bfa;">水果 +50%</span> · <span style="color:#a78bfa;">每个 ⭐ 倍率 ×2</span> · <span style="color:#a78bfa;">玫瑰永不消失</span>（LBL）</li>
+          <li><span style="color:#a78bfa;">乘性 Mult ×3</span> · <span style="color:#a78bfa;">每张牌额外触发一次</span>（Balatro）</li>
+          <li><span style="color:#a78bfa;">所有水果产出 ×2</span> · <span style="color:#a78bfa;">弹珠多 1 次反弹机会</span>（弹珠大亨）</li>
+        </ul>
+      </div>
+      <div class="muted" style="font-size:12px; margin-top:14px; padding-top:12px; border-top: 1px dashed var(--line); line-height:1.7;">
+        <b>关键约束：</b>combo2 <b>不能改变基础池元素本身</b>（那是 RPBD 阶段的事），只能改变「怎么算」——对结算逻辑施加修饰。
+        多道具叠乘的<b>顺序、数量、加乘配比</b>共同决定单局上限。
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ③ combo1 vs combo2 对比表 === */
+  const compareTable = `
+    <h2 class="section-title">③ combo1 vs combo2：对称但分工不同</h2>
+    <div class="card" style="margin-bottom:24px;">
+      <table class="tbl" style="font-size:13px;">
+        <thead>
+          <tr><th style="width:160px;">维度</th><th>combo1 · 符号协同</th><th>combo2 · 修饰协同</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>触发主体</b></td><td><span style="color:#60a5fa;">基础池内元素互动</span>（落位的 3 樱桃、邻位 ⚡）</td><td><span style="color:#fbbf24;">主动池施加在 combo1 之外</span>（道具/Joker/遗物）</td></tr>
+          <tr><td><b>数学性质</b></td><td>公式中的<b>加法项</b>（基础池 × combo1）</td><td>公式中的<b>乘法项</b>（× 主动池 × 规则修饰）</td></tr>
+          <tr><td><b>是否依赖拓扑</b></td><td>依赖 <span class="kbd">show_topology</span>（位置/邻接/连线）</td><td>多数与拓扑无关（全局倍率/加成），少数与位置耦合</td></tr>
+          <tr><td><b>玩家可控性</b></td><td>低 / 中：基础池 + 落位决定，玩家间接影响</td><td>高：每次商店决策直接增删主动池成员</td></tr>
+          <tr><td><b>schema 字段</b></td><td><code>combo_synergy</code> + <code>combo_predicate</code>（多选 8 类枚举）</td><td><code>combo_modifier</code>（<b>自由文本</b>，无枚举）</td></tr>
+          <tr><td><b>分析维度</b></td><td>topology × predicate <b>5×8 矩阵</b>已有</td><td>本页提出的 <b>5 类 typology</b>（首次结构化）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  /* === 区块 ④ 5 类 typology 卡片 === */
+  /* 计算每类成员（按 combo 分降序） */
+  const typeMembers = new Map();
+  TYPES.forEach(t => typeMembers.set(t.key, { primary: [], secondary: [] }));
+  for (const g of games) {
+    const tag = TAGS[g.slug];
+    if (tag.primary && typeMembers.has(tag.primary)) {
+      typeMembers.get(tag.primary).primary.push(g);
+    }
+    if (tag.secondary && typeMembers.has(tag.secondary)) {
+      typeMembers.get(tag.secondary).secondary.push(g);
+    }
+  }
+  for (const arrs of typeMembers.values()) {
+    arrs.primary.sort((a, b) => b.analysis.scores.combo - a.analysis.scores.combo);
+    arrs.secondary.sort((a, b) => b.analysis.scores.combo - a.analysis.scores.combo);
+  }
+
+  const typologyCards = TYPES.map(t => {
+    const m = typeMembers.get(t.key);
+    const primaryChips = m.primary.map(g => {
+      const c = g.analysis.scores.combo;
+      return `<a href="analysis/${RR.escapeHtml(g.slug)}.html"
+                style="display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:14px; background:rgba(255,255,255,0.06); margin:2px; text-decoration:none; font-size:12px;"
+                title="combo ${c}/10">
+                <span style="color: var(--fg);">${RR.escapeHtml(g.basic.name_cn)}</span>
+                <span style="opacity:.7; font-size:11px;">C${c}</span>
+              </a>`;
+    }).join('');
+    const secondaryChips = m.secondary.map(g => {
+      const c = g.analysis.scores.combo;
+      return `<a href="analysis/${RR.escapeHtml(g.slug)}.html"
+                style="display:inline-flex; align-items:center; gap:6px; padding:2px 8px; border-radius:12px; background:transparent; border:1px dashed ${t.color}55; margin:2px; text-decoration:none; font-size:11px;"
+                title="作为 secondary 类型 · combo ${c}/10">
+                <span style="color: var(--fg-muted);">${RR.escapeHtml(g.basic.name_cn)}</span>
+                <span style="opacity:.6; font-size:10px;">C${c}</span>
+              </a>`;
+    }).join('');
+    return `
+      <div class="card" style="border-left: 4px solid ${t.color};">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+          <span style="font-size:22px;">${t.glyph}</span>
+          <span style="font-weight:700; font-size:16px; color:${t.color};">${RR.escapeHtml(t.name)}</span>
+          <span class="kbd" style="margin-left:auto; font-size:11px;">${m.primary.length} primary${m.secondary.length ? ` · ${m.secondary.length} secondary` : ''}</span>
+        </div>
+        <div style="font-size:13px; line-height:1.7; margin-bottom:8px;">${RR.escapeHtml(t.definition)}</div>
+        <div class="muted" style="font-size:11px; font-family: ui-monospace, monospace; padding:6px 10px; background: var(--bg-deep); border-radius:6px; margin-bottom:8px;">${RR.escapeHtml(t.stacking)}</div>
+        <div style="font-size:11px; padding:4px 10px; border-radius:6px; background:${t.color}22; color:${t.color}; display:inline-block; margin-bottom:10px;">📊 ${RR.escapeHtml(t.score_signature)}</div>
+        <div class="muted" style="font-size:11px; line-height:1.7; padding:6px 10px; background: rgba(255,255,255,0.03); border-left: 2px solid ${t.color}44; margin-bottom:10px;">💬 ${RR.escapeHtml(t.quote)}</div>
+        <div style="margin-top:6px;"><div class="muted" style="font-size:10px; margin-bottom:3px;">PRIMARY 成员：</div>${primaryChips || '<span class="dim" style="font-size:11px;">—</span>'}</div>
+        ${secondaryChips ? `<div style="margin-top:8px;"><div class="muted" style="font-size:10px; margin-bottom:3px;">SECONDARY 成员（虚线）：</div>${secondaryChips}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  const typologySection = `
+    <h2 class="section-title">④ 5 类 modifier typology · 机制划分</h2>
+    <p class="muted" style="margin-bottom:16px;">每款游戏标注 1 个 <b>primary 类型</b>（必填）+ 可选 <b>secondary 类型</b>（多机制复合时）。primary 反映其主导设计，secondary 是辅助维度。</p>
+    <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); margin-bottom:24px;">
+      ${typologyCards}
+    </div>
+  `;
+
+  /* === 区块 ⑤ typology × show_topology 矩阵（行 = type / 列 = topology · 仅取 primary） === */
+  const matrixCells = new Map(); // "typeKey|topoKey" -> [game...]
+  for (const g of games) {
+    const tag = TAGS[g.slug];
+    const t = tag.primary;
+    const topo = g.analysis.qualitative.show_topology;
+    const key = `${t}|${topo}`;
+    if (!matrixCells.has(key)) matrixCells.set(key, []);
+    matrixCells.get(key).push(g);
+  }
+  const matrixHeader = `
+    <tr>
+      <th style="text-align:left; padding:8px;">combo2 类型 ＼ 拓扑</th>
+      ${topoEnum.map(t => `<th style="text-align:center; font-size:11px; padding:6px 4px; vertical-align:middle;"><div>${RR.escapeHtml(t.name)}${helpMark(t.desc, t.key)}</div></th>`).join('')}
+      <th style="text-align:center; font-size:11px; padding:6px 4px;">合计</th>
+    </tr>
+  `;
+  const matrixBody = TYPES.map(t => {
+    let rowTotal = 0;
+    const cells = topoEnum.map(topo => {
+      const members = matrixCells.get(`${t.key}|${topo.key}`) || [];
+      rowTotal += members.length;
+      if (members.length > 0) {
+        const chips = members.map(g => `<a href="analysis/${RR.escapeHtml(g.slug)}.html" class="c2-game-chip" title="combo ${g.analysis.scores.combo}/10">${RR.escapeHtml(g.basic.name_cn)}</a>`).join('');
+        return `<td class="c2-matrix-cell-occupied">${chips}</td>`;
+      }
+      return `<td class="c2-matrix-cell-empty"><span class="dim" style="font-size:14px;">—</span></td>`;
+    }).join('');
+    return `<tr>
+      <td style="padding:8px; font-weight:700; color:${t.color}; white-space:nowrap;">
+        <span style="font-size:16px; margin-right:6px;">${t.glyph}</span><span class="kbd" style="background:${t.color}22; color:${t.color};">${RR.escapeHtml(t.name)}</span>
+      </td>
+      ${cells}
+      <td style="text-align:center; padding:6px 4px; font-weight:700; color: var(--fg-muted);"><span class="kbd" style="font-size:11px;">${rowTotal}</span></td>
+    </tr>`;
+  }).join('');
+  /* 列汇总 */
+  const colTotals = topoEnum.map(t => {
+    let n = 0;
+    for (const ty of TYPES) {
+      n += (matrixCells.get(`${ty.key}|${t.key}`) || []).length;
+    }
+    return n;
+  });
+  const matrixFooter = `
+    <tr style="border-top: 2px solid var(--line);">
+      <td style="padding:8px; font-weight:700; color: var(--fg-muted);">列合计 →</td>
+      ${colTotals.map(n => `<td style="text-align:center; padding:6px 4px; color: var(--fg-muted);"><span class="kbd" style="font-size:11px;">${n}</span></td>`).join('')}
+      <td style="text-align:center; padding:6px 4px; font-weight:700; color: var(--accent);"><span class="kbd" style="font-size:11px;">${games.length}</span></td>
+    </tr>
+  `;
+  const matrixSection = `
+    <h2 class="section-title">⑤ typology × show_topology 矩阵（${TYPES.length}×${topoEnum.length} = ${TYPES.length * topoEnum.length} 格）</h2>
+    <p class="muted" style="margin-bottom:12px;">行 = combo2 类型，列 = random 阶段的舞台拓扑。每款游戏只在其 <b>primary 类型</b> + <b>所属拓扑</b> 的交格出现一次。<b>表头 ❓</b> hover 看拓扑 schema 解释。空格 = 该 typology × 拓扑组合在 34 款样本中尚未被占领。</p>
+    <div class="card" style="overflow-x:auto; margin-bottom:24px;">
+      <table style="border-collapse:separate; border-spacing:2px; font-size:12px; min-width:100%;">
+        <thead>${matrixHeader}</thead>
+        <tbody>${matrixBody}${matrixFooter}</tbody>
+      </table>
+    </div>
+  `;
+
+  /* === 区块 ⑥ combo2 深度排名 === */
+  /* 深度评分 = combo 分 + (primary multiplicative_chain ? +2 : hybrid_addmult ? +1 : 0) + (secondary multiplicative_chain ? +0.5 : 0) */
+  const depthBoost = (primary, secondary) => {
+    let b = 0;
+    if (primary === 'multiplicative_chain') b += 2;
+    else if (primary === 'hybrid_addmult') b += 1;
+    if (secondary === 'multiplicative_chain') b += 0.5;
+    return b;
+  };
+  const ranked = games.map(g => {
+    const tag = TAGS[g.slug];
+    const c = g.analysis.scores.combo;
+    const boost = depthBoost(tag.primary, tag.secondary);
+    return {
+      game: g,
+      combo: c,
+      depth: c + boost,
+      tag
+    };
+  }).sort((a, b) => b.depth - a.depth);
+  const maxDepth = Math.max(...ranked.map(r => r.depth));
+  const rankRows = ranked.map((r, i) => {
+    const t = typeMap.get(r.tag.primary);
+    const t2 = r.tag.secondary ? typeMap.get(r.tag.secondary) : null;
+    const pct = (r.depth / maxDepth) * 100;
+    const tagHtml = `<span class="type-tag" style="background:${t.color}22; color:${t.color};">${t.glyph} ${t.short}</span>${t2 ? ` <span class="type-tag" style="background:transparent; color:${t2.color}; border:1px dashed ${t2.color}55;">+${t2.short}</span>` : ''}`;
+    return `<div class="c2-rank-row">
+      <div class="rank">#${i + 1}</div>
+      <div class="name"><a href="analysis/${RR.escapeHtml(r.game.slug)}.html">${RR.escapeHtml(r.game.basic.name_cn)}</a></div>
+      <div class="score">C${r.combo} → ${r.depth.toFixed(1)}</div>
+      <div class="bar-bg"><div class="bar-fg" style="width:${pct}%;"></div></div>
+      <div>${tagHtml}</div>
+    </div>`;
+  }).join('');
+  const rankSection = `
+    <h2 class="section-title">⑥ combo2 深度排名（depth = combo + typology 加权）</h2>
+    <p class="muted" style="margin-bottom:12px;">基础是 combo 评分（schema 单评分维度），但 combo 分覆盖了 combo1 + combo2，无法直接代表 combo2 深度。本页加权方案：<b>primary multiplicative_chain +2</b> · <b>primary hybrid_addmult +1</b> · <b>secondary multiplicative_chain +0.5</b>。结果用于回答「哪些游戏的 modifier 叠乘最深」。</p>
+    <div class="card" style="padding: 4px 0; margin-bottom:24px;">
+      ${rankRows}
+    </div>
+  `;
+
+  /* === 区块 ⑦ 横向对照表 === */
+  const tableRows = ranked.map(r => {
+    const g = r.game;
+    const tag = r.tag;
+    const t = typeMap.get(tag.primary);
+    const t2 = tag.secondary ? typeMap.get(tag.secondary) : null;
+    const topo = g.analysis.qualitative.show_topology;
+    const mod = g.analysis.qualitative.combo_modifier || '—';
+    return `
+      <tr>
+        <td><a href="analysis/${RR.escapeHtml(g.slug)}.html" style="text-decoration:none; color: var(--accent); font-weight:600;">${RR.escapeHtml(g.basic.name_cn)}</a></td>
+        <td style="text-align:center;"><span class="kbd" style="background: var(--accent); color:#1c1300; font-weight:700;">${r.combo}</span></td>
+        <td><span class="type-tag" style="background:${t.color}22; color:${t.color};">${t.glyph} ${RR.escapeHtml(t.name)}</span></td>
+        <td>${t2 ? `<span class="type-tag" style="background:transparent; color:${t2.color}; border:1px dashed ${t2.color}55;">${t2.glyph} ${RR.escapeHtml(t2.name)}</span>` : '<span class="dim">—</span>'}</td>
+        <td><span class="kbd" title="${RR.escapeHtml(topoDesc(topo))}">${RR.escapeHtml(topoName(topo))}</span></td>
+        <td class="muted" style="font-size:12px; line-height:1.6; max-width:480px;">${RR.escapeHtml(mod)}</td>
+      </tr>
+    `;
+  }).join('');
+  const tableSection = `
+    <h2 class="section-title">⑦ 横向对照表（按 depth 降序，combo_modifier 全文）</h2>
+    <div class="card" style="overflow-x:auto; margin-bottom:24px;">
+      <table class="tbl" style="font-size:13px;">
+        <thead>
+          <tr>
+            <th style="width:140px;">游戏</th>
+            <th style="width:60px; text-align:center;">combo</th>
+            <th style="width:170px;">primary</th>
+            <th style="width:170px;">secondary</th>
+            <th style="width:120px;">show_topology</th>
+            <th>combo_modifier 全文</th>
+          </tr>
+        </thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  /* === 区块 ⑧ 关键洞察 === */
+  const mcMembers = typeMembers.get('multiplicative_chain').primary;
+  const haMembers = typeMembers.get('hybrid_addmult').primary;
+  const alMembers = typeMembers.get('additive_linear').primary;
+  const scMembers = typeMembers.get('status_condition').primary;
+  const rrPrimaryMembers = typeMembers.get('rule_rewrite').primary;
+  const rrSecondaryMembers = typeMembers.get('rule_rewrite').secondary;
+  const insights = [
+    {
+      icon: '🔥',
+      title: '满分 10 必有乘性链',
+      body: `combo 评满分 10 的两款游戏（<b>${mcMembers.filter(g=>g.analysis.scores.combo===10).map(g=>g.basic.name_cn).join('</b>、<b>') || '无'}</b>）都属乘性链族。乘性链族整体 avg ≈ 8.9，是高分必要条件——但不是充分（${mcMembers.filter(g=>g.analysis.scores.combo<10).length} 款 8-9 分的同族游戏说明：仅有乘性链不够，还需 combo1 拓扑/触发链配合。`
+    },
+    {
+      icon: '⚖️',
+      title: '混合加乘族 = 主流稳定派',
+      body: `${haMembers.length} 款（最多）采用「先加和、再乘法」的分阶段结算，combo 跨度 7-10 全覆盖。这族数量最多说明它是<b>低风险设计公式</b>：加法降下沿、乘法保上沿。Balatro 之外的高分作品（<b>${haMembers.filter(g=>g.analysis.scores.combo>=9).map(g=>g.basic.name_cn).join('、') || '弹珠大亨'}</b>）都在这族。`
+    },
+    {
+      icon: '📉',
+      title: '加性线性族锚定 5-8',
+      body: `${alMembers.length} 款仅用线性加法，combo 跨度 5-8（有上限）。靠<b>构筑多样性</b>而非数值爆炸取胜（${alMembers.slice(0,3).map(g=>g.basic.name_cn).join('、')}…）。如果团队没有"指数爆炸"美术/音效储备，这族是合理选择，但<b>很难突破 8 分天花板</b>。`
+    },
+    {
+      icon: '🌡',
+      title: '状态条件族结构性封顶 7',
+      body: `${scMembers.length} 款依赖燃烧/冰冻/强化等状态层 + 条件触发，combo 跨度 6-7。深度来自<b>条件丰富度</b>而非倍数链——典型如 ${scMembers.slice(0,2).map(g=>g.basic.name_cn).join('、')}。设计上意味着：状态族很难做出"单局上限指数爆炸"，要做就要复合乘性元素。`
+    },
+    {
+      icon: '🔀',
+      title: 'rule_rewrite 是"复合维度"而非独立路线',
+      body: `仅 ${rrPrimaryMembers.length} 款以规则改写为 primary（${rrPrimaryMembers.map(g=>g.basic.name_cn).join('、') || '骰号玩家、骰子部落'}），但有 ${rrSecondaryMembers.length} 款把它作为 secondary（${rrSecondaryMembers.map(g=>g.basic.name_cn).join('、') || '弹珠大亨、哥布林弹球、幸运大陆'}）。说明：<b>纯规则改写难以独撑游戏深度</b>，但作为乘性/混合族的辅助层能扩大设计空间。`
+    }
+  ];
+  const insightCards = insights.map(i => `
+    <div class="card" style="display:flex; gap:14px; align-items:flex-start;">
+      <div style="font-size:24px; line-height:1;">${i.icon}</div>
+      <div>
+        <div style="font-weight:700; margin-bottom:4px;">${RR.escapeHtml(i.title)}</div>
+        <div class="muted" style="font-size:13px; line-height:1.7;">${i.body}</div>
+      </div>
+    </div>
+  `).join('');
+  const insightSection = `
+    <h2 class="section-title">⑧ 关键洞察</h2>
+    <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); margin-bottom:24px;">
+      ${insightCards}
+    </div>
+  `;
+
+  /* === 拼装 === */
+  document.querySelector('#root').innerHTML =
+    formulaSection +
+    definitionSection +
+    compareTable +
+    typologySection +
+    matrixSection +
+    rankSection +
+    tableSection +
+    insightSection;
+})();
+</script>
+
+</div>
+</body>
+</html>

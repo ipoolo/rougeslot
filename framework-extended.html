@@ -1,0 +1,385 @@
+<!doctype html>
+<!--
+  R_RougeSlot · 设计完备模型总览（v5）
+  ==========================================
+  把 v5 的体验层 → 设计完备模型的因果推导显式化（show_topology 是 put 与 combo 共享的舞台），
+  并基于 4 子类 × 5 combo2 typology 交叉表回看 typology 是否需要校准。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>设计完备模型总览 · R_RougeSlot</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  /* 手绘风 SVG 节点辅助 */
+  .hand-node { fill: var(--bg-card); stroke: var(--accent); stroke-width: 2; }
+  .hand-node-text { font-size: 13px; fill: var(--fg); font-family: 'Comic Sans MS', 'Marker Felt', sans-serif; }
+  .hand-arrow { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; }
+  .hand-label { font-size: 11px; fill: var(--fg-muted); font-family: 'Comic Sans MS', 'Marker Felt', sans-serif; }
+
+  /* 校准矩阵单元格 */
+  .cal-cell { padding: 8px 6px; text-align: center; vertical-align: middle; font-size: 13px; }
+  .cal-cell-occupied { background: rgba(167, 139, 250, 0.10); border: 1px solid rgba(167, 139, 250, 0.30); }
+  .cal-cell-empty { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); opacity: 0.45; }
+  .cal-cell-significant { background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.50); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div class="page-head">
+  <h1>设计完备模型总览（v5）</h1>
+  <p class="lede">从「体验模型层」（双峰多巴胺 + 前额叶 BD）<b>因果推导</b>出「设计完备模型」`random → put → combo(C₁,C₂) → RPBD @ show_topology`。<b style="color:#a78bfa;">v5 关键</b>：put 与 combo 共享同一个 <code>show_topology</code>（舞台拓扑）。本页含完整因果图 + combo2 typology 校准分析。</p>
+  <p class="meta" id="meta-info"></p>
+</div>
+
+<div id="root"></div>
+
+<script src="framework/v5/schema.js"></script>
+<script src="data/games.js"></script>
+<script src="lib/render.js"></script>
+<script src="lib/combo2-typology.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+  const fw = RR.getFramework();
+  const allGames = RR.getAllGames().filter(g => g.analysis && g.analysis.qualitative && g.analysis.qualitative.put_form);
+  const COMBO2_TYPES = window.RR_COMBO2_TYPES;
+  const COMBO2_TAGS = window.RR_COMBO2_TAGS;
+  const PUT_TYPES = fw.put_form_enum || [];
+  const escapeHtml = RR.escapeHtml;
+
+  const PUT_COLOR = { auto_place: '#60a5fa', manual_set: '#a78bfa', manual_place: '#fbbf24', auto_set: '#94a3b8' };
+  const PUT_GLYPH = { auto_place: '⚙', manual_set: '✋', manual_place: '🎯', auto_set: '∅' };
+
+  document.querySelector('#meta-info').innerHTML =
+    `${allGames.length} 款样本 · 框架 <b>${fw.version}</b> · v5 完备模型 · show_topology = put⇄combo 共享舞台`;
+
+  /* === 区块 ① 体验模型层 === */
+  const sec1 = `
+    <h2 class="section-title">① 体验模型层：双峰多巴胺 + 前额叶 BD</h2>
+    <p class="muted" style="margin-bottom: 16px;">人类奖赏系统在游戏体验中的两套独立回路——它们决定了游戏公式必须是什么形状。</p>
+    <div class="game-grid" style="grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+      <div class="card" style="padding: 18px 20px; border-left: 4px solid #34d399;">
+        <div style="font-size: 32px; line-height: 1; margin-bottom: 10px;">🧠💚</div>
+        <div style="font-weight: 700; font-size: 16px; color: #34d399;">双峰多巴胺</div>
+        <div style="font-size: 13px; line-height: 1.7; margin-top: 10px;">奖赏期待 + 释放的双相回路：</div>
+        <ul style="font-size: 13px; line-height: 1.8; margin: 8px 0 0; padding-left: 22px;">
+          <li><b>第一峰</b>：random + put 的即时反馈（0.5–1.5s）<br><span class="muted" style="font-size: 11px;">VR 触发 → 落位戏剧化 → 视觉锁定</span></li>
+          <li><b>第二峰</b>：combo 结算的延迟爆炸（1–2s）<br><span class="muted" style="font-size: 11px;">数字累加 + 动画 + 音效升级</span></li>
+        </ul>
+        <div class="muted" style="font-size: 11px; margin-top: 10px; padding: 8px 10px; background: rgba(52,211,153,0.08); border-radius: 4px;">→ 推出：spin 必须分为 random / put / combo 三段，每段都是体验载体</div>
+      </div>
+      <div class="card" style="padding: 18px 20px; border-left: 4px solid #60a5fa;">
+        <div style="font-size: 32px; line-height: 1; margin-bottom: 10px;">🧠💙</div>
+        <div style="font-weight: 700; font-size: 16px; color: #60a5fa;">前额叶 BD（Builder Decision）</div>
+        <div style="font-size: 13px; line-height: 1.7; margin-top: 10px;">认知决策回路：玩家在 spin 之间做<b>构筑判断</b>——评估当前局势、规划下一阶段、权衡风险与收益。</div>
+        <ul style="font-size: 13px; line-height: 1.8; margin: 8px 0 0; padding-left: 22px;">
+          <li>商店三选一买符号/道具</li>
+          <li>付费删卡 / 升级</li>
+          <li>抽商店刷新 vs 留金币</li>
+        </ul>
+        <div class="muted" style="font-size: 11px; margin-top: 10px; padding: 8px 10px; background: rgba(96,165,250,0.08); border-radius: 4px;">→ 推出：必须有 <b>RPBD 阶段</b>承载"30–60s 思考时间"</div>
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ② 因果推导 SVG === */
+  const sec2 = `
+    <h2 class="section-title">② 因果推导：体验层 → 设计完备模型</h2>
+    <p class="muted" style="margin-bottom: 16px;">设计公式的<b>形状</b>是体验需求的工程映射——少了任何一段，体验就不完整。</p>
+    <div class="card" style="padding: 24px; margin-bottom: 24px;">
+      <svg viewBox="0 0 980 460" style="width: 100%; height: auto; max-height: 500px; font-family: ui-sans-serif, system-ui;">
+        <defs>
+          <marker id="arrow-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#c4956a"/>
+          </marker>
+          <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
+          </marker>
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa"/>
+          </marker>
+        </defs>
+
+        <!-- 体验层 容器 -->
+        <rect x="40" y="30" width="900" height="120" rx="14" fill="rgba(52,211,153,0.05)" stroke="#34d399" stroke-width="1.5" stroke-dasharray="6 3"/>
+        <text x="60" y="55" font-size="14" font-weight="700" fill="#34d399">🧠 体验模型层（神经回路）</text>
+
+        <!-- 节点：双峰多巴胺 -->
+        <rect x="120" y="75" width="240" height="60" rx="8" fill="rgba(52,211,153,0.15)" stroke="#34d399" stroke-width="2" transform="rotate(-0.5 240 105)"/>
+        <text x="240" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#34d399">💚 双峰多巴胺</text>
+        <text x="240" y="120" text-anchor="middle" font-size="11" fill="#a7f3d0">第一峰（即时） + 第二峰（结算）</text>
+
+        <!-- 节点：前额叶 BD -->
+        <rect x="620" y="75" width="240" height="60" rx="8" fill="rgba(96,165,250,0.15)" stroke="#60a5fa" stroke-width="2" transform="rotate(0.5 740 105)"/>
+        <text x="740" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#60a5fa">💙 前额叶 BD</text>
+        <text x="740" y="120" text-anchor="middle" font-size="11" fill="#bfdbfe">Builder Decision · 认知决策</text>
+
+        <!-- 推出箭头 -->
+        <text x="40" y="190" font-size="13" font-weight="700" fill="#c4956a">↓ 工程映射</text>
+        <path d="M 240 145 Q 240 175 240 200" stroke="#34d399" stroke-width="2.5" fill="none" marker-end="url(#arrow-green)" stroke-dasharray="4 3"/>
+        <path d="M 740 145 Q 740 175 850 240" stroke="#60a5fa" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)" stroke-dasharray="4 3"/>
+
+        <!-- 设计层 容器 -->
+        <rect x="40" y="220" width="900" height="240" rx="14" fill="rgba(196,149,106,0.04)" stroke="#c4956a" stroke-width="1.5" stroke-dasharray="6 3"/>
+        <text x="60" y="245" font-size="14" font-weight="700" fill="#c4956a">⚙️ 设计完备模型（v5）</text>
+
+        <!-- v5 新增：show_topology 横跨框（B2 风格 · 只覆盖 Put + Combo，不包括 Random） -->
+        <rect x="255" y="278" width="405" height="100" rx="10" fill="rgba(167,139,250,0.06)" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <text x="457" y="296" text-anchor="middle" font-size="11" font-weight="700" fill="#a78bfa">🎬 show_topology（舞台拓扑 · 共享舞台）</text>
+
+        <!-- 节点：random -->
+        <rect x="80" y="305" width="140" height="80" rx="8" fill="rgba(96,165,250,0.10)" stroke="#60a5fa" stroke-width="2"/>
+        <text x="150" y="330" text-anchor="middle" font-size="14" font-weight="700" fill="#60a5fa">1. random</text>
+        <text x="150" y="350" text-anchor="middle" font-size="11" fill="var(--fg)">装置抽出</text>
+        <text x="150" y="366" text-anchor="middle" font-size="10" fill="var(--fg-muted)">→ 多重集（无序）</text>
+
+        <!-- 节点：put（v4 引入 · 在舞台框内） -->
+        <rect x="270" y="305" width="160" height="80" rx="8" fill="rgba(196,149,106,0.18)" stroke="#c4956a" stroke-width="3"/>
+        <text x="350" y="330" text-anchor="middle" font-size="14" font-weight="700" fill="#c4956a">2. put</text>
+        <text x="350" y="347" text-anchor="middle" font-size="11" fill="var(--fg)">自动 | 手动</text>
+        <text x="350" y="362" text-anchor="middle" font-size="11" fill="var(--fg)">× set | place</text>
+        <text x="350" y="378" text-anchor="middle" font-size="9" fill="#fbbf24">写入 show_topology</text>
+
+        <!-- 节点：combo C1+C2（在舞台框内） -->
+        <rect x="475" y="305" width="170" height="80" rx="8" fill="rgba(167,139,250,0.10)" stroke="#a78bfa" stroke-width="2"/>
+        <text x="560" y="328" text-anchor="middle" font-size="14" font-weight="700" fill="#a78bfa">3. combo</text>
+        <text x="560" y="347" text-anchor="middle" font-size="11" fill="var(--fg)">C₁ 符号协同（加）</text>
+        <text x="560" y="362" text-anchor="middle" font-size="11" fill="var(--fg)">C₂ 修饰协同（乘）</text>
+        <text x="560" y="378" text-anchor="middle" font-size="9" fill="#a78bfa">读取 show_topology</text>
+
+        <!-- 节点：RPBD -->
+        <rect x="700" y="305" width="160" height="80" rx="8" fill="rgba(96,165,250,0.10)" stroke="#60a5fa" stroke-width="2"/>
+        <text x="780" y="330" text-anchor="middle" font-size="14" font-weight="700" fill="#60a5fa">4. RPBD</text>
+        <text x="780" y="350" text-anchor="middle" font-size="11" fill="var(--fg)">商店 / 删卡 / 升级</text>
+        <text x="780" y="366" text-anchor="middle" font-size="10" fill="var(--fg-muted)">玩家构筑决策</text>
+
+        <!-- 流程箭头 -->
+        <path d="M 220 345 L 270 345" stroke="#c4956a" stroke-width="2.5" fill="none" marker-end="url(#arrow-accent)"/>
+        <path d="M 430 345 L 475 345" stroke="#c4956a" stroke-width="2.5" fill="none" marker-end="url(#arrow-accent)"/>
+        <path d="M 645 345 L 700 345" stroke="#c4956a" stroke-width="2.5" fill="none" marker-end="url(#arrow-accent)"/>
+
+        <!-- 循环箭头 RPBD → random -->
+        <path d="M 780 385 Q 780 432 470 432 Q 150 432 150 385" stroke="#c4956a" stroke-width="2" fill="none" marker-end="url(#arrow-accent)" stroke-dasharray="4 4"/>
+        <text x="465" y="450" text-anchor="middle" font-size="11" fill="#c4956a" font-style="italic">下一次 spin（×N）</text>
+
+        <!-- 体验层 → 设计层映射连线（语义） -->
+        <text x="245" y="200" text-anchor="middle" font-size="11" fill="#34d399" font-style="italic">第一峰 = random + put（即时反馈段）</text>
+        <text x="780" y="200" text-anchor="middle" font-size="11" fill="#60a5fa" font-style="italic">认知决策 = RPBD</text>
+        <text x="560" y="218" text-anchor="middle" font-size="11" fill="#34d399" font-style="italic">第二峰 = combo 结算</text>
+
+      </svg>
+      <div class="muted" style="text-align: center; font-size: 12px; line-height: 1.7; margin-bottom: 12px; padding: 10px 14px; background: rgba(167,139,250,0.05); border-radius: 6px;">
+        <b style="color:#a78bfa;">v5 关键升级</b>：紫色虚线框是 <code>show_topology</code>（舞台拓扑）——<b>put 与 combo 共享同一个舞台</b>，put 写入元素，combo 在同一个舞台上做判定。v5 消除了 v4 的"起点 vs 目标拓扑"二元区分（random 输出本质是多重集，无需起点拓扑概念）。
+      </div>
+      <div class="muted" style="text-align: center; font-size: 12px; line-height: 1.7; margin-top: 4px; padding: 10px 14px; background: rgba(52,211,153,0.05); border-radius: 6px;">
+        <b>v3 vs v4 vs v5 演化</b>：v3 把 random 和 combo 直接相连（漏掉 put）→ v4 引入 put 步骤 + 起点/目标拓扑区分 → v5 把 put 与 combo 显式定位为<b>共享舞台 show_topology</b>，模型与神经回路一一对应。
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ③ put 几何含义（链接详解页）=== */
+  const sec3 = `
+    <h2 class="section-title">③ Put 的几何含义（简版）</h2>
+    <div class="card" style="padding: 18px 20px; margin-bottom: 24px;">
+      <div style="font-size: 13px; line-height: 1.7; margin-bottom: 12px;">
+        Put 不只是"选择/放置"——它是把 <b>random 输出的多重集 ──写入──▶ show_topology（舞台拓扑）</b>。<b>put 与 combo 共享同一个 show_topology</b>：put 写入元素，combo 在同一个舞台上做判定。
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;">
+        ${PUT_TYPES.map(t => {
+          const color = PUT_COLOR[t.key];
+          const glyph = PUT_GLYPH[t.key];
+          const count = allGames.filter(g => g.analysis.qualitative.put_form === t.key).length;
+          return `
+            <div style="padding: 12px 14px; border-radius: 6px; border-left: 3px solid ${color}; background: ${color}11;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <span style="font-size: 22px;">${glyph}</span>
+                <span style="font-weight: 700; color: ${color};">${escapeHtml(t.name)}</span>
+                <span class="kbd" style="margin-left: auto; font-size: 11px;">${count} 款</span>
+              </div>
+              <div class="muted" style="font-size: 11px; line-height: 1.6;">${escapeHtml(t.desc.split('；')[0].split('。')[0])}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <div style="margin-top: 14px; padding: 10px 14px; background: rgba(167,139,250,0.06); border-radius: 6px; font-size: 13px; line-height: 1.7;">
+        → 完整概念、起点/舞台拓扑映射、跨 predicate 解锁关系、34 款映射，看 <a href="put-design-axis.html" style="color: var(--accent); font-weight: 700;">Put 维度独立详解页 →</a>
+      </div>
+    </div>
+  `;
+
+  /* === 区块 ④ 4 子类简版分布 === */
+  const cardChips = arr => arr.map(g => {
+    const c = g.analysis.scores.combo;
+    return `<a href="analysis/${escapeHtml(g.slug)}.html"
+              style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:12px; background:rgba(255,255,255,0.06); margin:2px; text-decoration:none; font-size:11px;"
+              title="combo ${c}/10">
+              <span style="color: var(--fg);">${escapeHtml(g.basic.name_cn)}</span>
+              <span style="opacity:.7; font-size:10px;">C${c}</span>
+            </a>`;
+  }).join('');
+  const byPutForm = new Map();
+  PUT_TYPES.forEach(t => byPutForm.set(t.key, []));
+  for (const g of allGames) byPutForm.get(g.analysis.qualitative.put_form)?.push(g);
+  for (const arr of byPutForm.values()) arr.sort((a, b) => b.analysis.scores.combo - a.analysis.scores.combo);
+
+  const sec4 = `
+    <h2 class="section-title">④ 4 子类成员分布（简版）</h2>
+    <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); margin-bottom: 24px;">
+      ${PUT_TYPES.map(t => {
+        const m = byPutForm.get(t.key) || [];
+        const color = PUT_COLOR[t.key];
+        return `
+          <div class="card" style="padding: 14px 16px; border-left: 3px solid ${color}; ${m.length === 0 ? 'opacity: 0.6;' : ''}">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span style="font-size: 22px;">${PUT_GLYPH[t.key]}</span>
+              <span style="font-weight: 700; color: ${color};">${escapeHtml(t.name)}</span>
+              <span class="kbd" style="margin-left: auto; font-size: 11px;">${m.length} 款</span>
+            </div>
+            <div>${cardChips(m) || '<span class="dim" style="font-size: 11px;">— 结构性空类</span>'}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  /* === 区块 ⑤ combo2 typology 校准回看 === */
+  // 计算交叉表
+  const matrix = {}; // "putForm|c2Type" -> count
+  for (const g of allGames) {
+    const pf = g.analysis.qualitative.put_form;
+    const c2 = COMBO2_TAGS[g.slug]?.primary;
+    if (!c2) continue;
+    const k = `${pf}|${c2}`;
+    matrix[k] = (matrix[k] || 0) + 1;
+  }
+  const matrixHeader = `
+    <tr>
+      <th style="text-align: left; padding: 8px;">put_form ＼ combo2 typology</th>
+      ${COMBO2_TYPES.map(t => `<th style="text-align: center; font-size: 11px; padding: 6px 4px; min-width: 80px;"><div>${t.glyph} ${escapeHtml(t.short)}</div></th>`).join('')}
+      <th style="text-align: center; font-size: 11px; padding: 6px 4px;">合计</th>
+    </tr>
+  `;
+  const matrixRows = PUT_TYPES.map(pt => {
+    let rowTotal = 0;
+    const cells = COMBO2_TYPES.map(c2t => {
+      const n = matrix[`${pt.key}|${c2t.key}`] || 0;
+      rowTotal += n;
+      if (n === 0) return `<td class="cal-cell cal-cell-empty">—</td>`;
+      // significant: manual_set 全去 multiplicative_chain
+      const sig = pt.key === 'manual_set' && c2t.key === 'multiplicative_chain';
+      return `<td class="cal-cell ${sig ? 'cal-cell-significant' : 'cal-cell-occupied'}">${n}</td>`;
+    }).join('');
+    return `<tr>
+      <td style="padding: 8px; font-weight: 700; color: ${PUT_COLOR[pt.key]}; white-space: nowrap;"><span class="kbd" style="background: ${PUT_COLOR[pt.key]}22; color: ${PUT_COLOR[pt.key]};">${PUT_GLYPH[pt.key]} ${escapeHtml(pt.name)}</span></td>
+      ${cells}
+      <td style="text-align: center; padding: 6px 4px; font-weight: 700; color: var(--fg-muted);"><span class="kbd" style="font-size: 11px;">${rowTotal}</span></td>
+    </tr>`;
+  }).join('');
+  // 列汇总
+  const colTotals = COMBO2_TYPES.map(c2t => {
+    let n = 0;
+    for (const pt of PUT_TYPES) n += (matrix[`${pt.key}|${c2t.key}`] || 0);
+    return n;
+  });
+  const matrixFooter = `
+    <tr style="border-top: 2px solid var(--line);">
+      <td style="padding: 8px; font-weight: 700; color: var(--fg-muted);">列合计 →</td>
+      ${colTotals.map(n => `<td style="text-align: center; padding: 6px 4px;"><span class="kbd" style="font-size: 11px;">${n}</span></td>`).join('')}
+      <td style="text-align: center; padding: 6px 4px; font-weight: 700; color: var(--accent);"><span class="kbd" style="font-size: 11px;">${allGames.length}</span></td>
+    </tr>
+  `;
+
+  // 校准结论
+  const sec5 = `
+    <h2 class="section-title">⑤ combo2 typology 5 类校准分析</h2>
+    <p class="muted" style="margin-bottom: 12px;">v4 引入 put_form 后，是否需要重新校准 combo2 的 5 类 typology？通过 4 子类 × 5 typology 交叉表回看二者是否独立。</p>
+    <div class="card" style="overflow-x: auto; margin-bottom: 16px;">
+      <table style="border-collapse: separate; border-spacing: 2px; font-size: 12px; min-width: 100%;">
+        <thead>${matrixHeader}</thead>
+        <tbody>${matrixRows}${matrixFooter}</tbody>
+      </table>
+    </div>
+
+    <div class="card" style="padding: 18px 20px; margin-bottom: 16px; border-left: 4px solid #34d399;">
+      <div style="font-weight: 700; font-size: 16px; color: #34d399; margin-bottom: 10px;">✅ 校准结论：5 类 combo2 typology <b>无需校准</b></div>
+      <div style="font-size: 13px; line-height: 1.8;">
+        <b>理由 1：分布广度</b> — 5 个 typology 中 4 个跨 ≥ 2 个 put_form（multiplicative_chain 跨 3 个、hybrid_addmult 跨 2 个、additive_linear 跨 2 个、status_condition 跨 2 个），证明 typology 不是 put_form 的派生。
+        <br><br>
+        <b>理由 2：正交性</b> — put_form 描述"random→combo 怎么映射"（结构维度），combo2 typology 描述"主动池怎么修饰"（数学维度）。两者**几何/数学**完全不同。
+        <br><br>
+        <b>理由 3：5 类各有支撑</b> — auto_place / manual_place 都广泛覆盖各 typology，没有单一 put_form 独占某 typology 的情况（除 manual_set 外，但 manual_set 仅 2 款，样本不足以支撑分类合并）。
+      </div>
+    </div>
+
+    <div class="card" style="padding: 18px 20px; margin-bottom: 24px; border-left: 4px solid #fbbf24;">
+      <div style="font-weight: 700; font-size: 14px; color: #fbbf24; margin-bottom: 10px;">⚠️ 唯一显著观察：manual_set 全去 multiplicative_chain（2/2）</div>
+      <div style="font-size: 13px; line-height: 1.7;">
+        Balatro 和青天井——34 款里仅有的 2 款 manual_set——同时归属于 combo2 的 multiplicative_chain（乘性链爆发族）。这暗示：<br>
+        <b>纯选子集设计（manual_set）几乎必然搭配乘性链 combo2</b> 才能撑出深度（牌型/番数本身只是加法项 combo1，乘性链是放大器）。<br>
+        但样本量 N=2 不足以将其升格为类别合并依据——更可能的解读是：<b>这是一个稀有但稳定的"高深度组合"</b>，未来若有新的 manual_set 游戏出现，应观察其是否遵循同一规律。
+      </div>
+    </div>
+
+    <div class="card" style="padding: 18px 20px; margin-bottom: 24px;">
+      <div style="font-weight: 700; font-size: 14px; margin-bottom: 10px;">📊 几个空格的设计含义（潜在创新位）</div>
+      <table class="tbl" style="font-size: 13px;">
+        <thead><tr><th style="width:160px;">空格</th><th>结构性原因</th><th>设计可能性</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>manual_set × 其他 4 类</b></td>
+            <td>纯选子集设计极少；现有 2 款都走 mc</td>
+            <td><span class="muted" style="font-size: 12px;">manual_set + hybrid 是潜在创新：选子集 + 加乘混合（保深度但降方差）</span></td>
+          </tr>
+          <tr>
+            <td><b>auto_place × rule_rewrite</b></td>
+            <td>自动落位下规则改写很难有玩家感</td>
+            <td><span class="muted" style="font-size: 12px;">极难填——自动 put 的"规则改写"通常隐于装置内部，玩家感知弱</span></td>
+          </tr>
+          <tr>
+            <td><b>auto_set 全行</b></td>
+            <td>结构性空类（系统选子集无映射）</td>
+            <td><span class="muted" style="font-size: 12px;">理论存在，实际罕见——比如某些"系统自动取最高 3 颗骰"的规则</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  /* === 区块 ⑥ 新设计提案入口 === */
+  const sec6 = `
+    <h2 class="section-title">⑥ 新设计提案 · 完备模型的实战落地</h2>
+    <p class="muted" style="margin-bottom: 16px;">把 v5 完备模型 + 修饰器构筑型 Roguelike 子品类规约用于实际游戏设计——本节列出已成形的新设计提案，验证框架能否承载具体玩法。</p>
+    <a href="design-proposal-vp.html" class="card" style="display: block; padding: 20px 24px; text-decoration: none; border-left: 4px solid #fbbf24; background: linear-gradient(90deg, rgba(251,191,36,0.10), rgba(167,139,250,0.05)); margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="font-size: 36px;">🎰</span>
+        <div style="flex: 1;">
+          <div style="font-weight: 700; font-size: 18px; color: #fbbf24; margin-bottom: 6px;">→ Multi-Line Video Poker Roguelike（网格化）</div>
+          <div style="font-size: 13px; line-height: 1.7; color: var(--fg); margin-bottom: 8px;">用 <b>Cloverpit 网格思路</b> 改造 <b>多线 Video Poker</b>——消除"1D 顺子"+"独立多线"两个复杂度来源，回到 2D 网格 + 0D 牌型字典。题材：<b>高利贷地下赌场</b>。市场空白：Steam 几乎无人开采。</div>
+          <div class="muted" style="font-size: 11.5px; line-height: 1.6;">
+            含：差异化定位 · 复杂度消除证明 · v5 结构指纹 · SVG 网格 UI 草图（3 阶段）· <b>150 charms 池详细设计</b>（5 类 × 30 个）· 数学模型 · 风险对策 · 开发路线图
+          </div>
+          <div style="margin-top: 10px;">
+            <span class="kbd" style="background: rgba(251,191,36,0.2); color: #fbbf24; font-size: 11px;">预测总分 33-34（A 级）</span>
+            <span class="kbd" style="font-size: 11px;">show_topology = 2D_grid</span>
+            <span class="kbd" style="font-size: 11px;">put_form = manual_set</span>
+            <span class="kbd" style="font-size: 11px;">multiplicative_chain</span>
+          </div>
+        </div>
+        <span style="color: #fbbf24; font-size: 28px;">›</span>
+      </div>
+    </a>
+  `;
+
+  document.querySelector('#root').innerHTML = sec1 + sec2 + sec3 + sec4 + sec5 + sec6;
+})();
+</script>
+
+</div>
+</body>
+</html>

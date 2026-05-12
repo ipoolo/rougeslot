@@ -1,0 +1,719 @@
+<!doctype html>
+<!--
+  R_RougeSlot · 新设计提案：网格化 Multi-Line Video Poker Roguelike
+  =================================================================
+  基于 v5 完备模型 + 修饰器构筑型 Roguelike 子品类规约，
+  用 Cloverpit 网格思路 + Video Poker 多线 hold 机制构建的爆款候选设计。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>新设计提案 · Multi-Line VP Rogue · R_RougeSlot</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; padding: 14px 16px; background: var(--bg-card); border-radius: 8px; border-left: 3px solid #fbbf24; }
+  .toc a { padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); color: var(--fg); text-decoration: none; font-size: 12px; }
+  .toc a:hover { background: #fbbf24; color: #1c1300; }
+
+  /* Charm 表格 */
+  .charm-tbl { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  .charm-tbl thead th { padding: 8px 10px; text-align: left; border-bottom: 2px solid var(--accent); background: var(--bg-card); position: sticky; top: 0; }
+  .charm-tbl tbody td { padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.5; }
+  .charm-tbl tbody tr:hover { background: var(--bg-hover); }
+  .charm-id { font-family: ui-monospace, monospace; color: var(--fg-muted); }
+  .rarity { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+  .rar-c { background: rgba(148,163,184,0.20); color: #cbd5e1; }     /* 普 60% */
+  .rar-u { background: rgba(96,165,250,0.20);  color: #93c5fd; }     /* 罕 25% */
+  .rar-r { background: rgba(167,139,250,0.25); color: #c4b5fd; }     /* 史 12% */
+  .rar-l { background: rgba(251,191,36,0.25);  color: #fde68a; font-weight: 700; }     /* 传 3% */
+  .cat-prob   { background: rgba(96,165,250,0.10);  color: #93c5fd; padding: 1px 6px; border-radius: 8px; font-size: 10px; }
+  .cat-pay    { background: rgba(248,113,113,0.10); color: #fca5a5; padding: 1px 6px; border-radius: 8px; font-size: 10px; }
+  .cat-struct { background: rgba(167,139,250,0.10); color: #c4b5fd; padding: 1px 6px; border-radius: 8px; font-size: 10px; }
+  .cat-chain  { background: rgba(52,211,153,0.10);  color: #86efac; padding: 1px 6px; border-radius: 8px; font-size: 10px; }
+  .cat-legend { background: rgba(251,191,36,0.10);  color: #fde68a; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+
+  /* 风险卡 */
+  .risk-card { border-left: 4px solid #f87171; padding: 14px 18px; margin-bottom: 12px; background: rgba(248,113,113,0.04); border-radius: 0 8px 8px 0; }
+  .risk-card .risk-num { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #f87171; color: #1c1300; font-weight: 700; font-size: 11px; margin-right: 8px; }
+
+  /* 阶段卡 */
+  .phase-card { padding: 16px 18px; border-radius: 8px; background: rgba(52,211,153,0.04); border-left: 4px solid #34d399; margin-bottom: 12px; }
+
+  /* 数学公式块 */
+  .formula-block { background: var(--bg-deep); padding: 14px 18px; border-radius: 8px; border: 1px solid var(--line); font-family: ui-monospace, 'SF Mono', monospace; font-size: 12px; line-height: 1.8; white-space: pre; overflow-x: auto; color: var(--fg); }
+  .formula-block .accent { color: #fbbf24; font-weight: 700; }
+  .formula-block .var    { color: #a78bfa; }
+  .formula-block .comment{ color: var(--fg-muted); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+&nbsp; · &nbsp;
+<a href="framework-extended.html" style="font-size: 12px; color: var(--fg-muted);">← 设计完备模型总览</a>
+&nbsp; · &nbsp;
+<a href="modifier-driven-rogue-spec.html" style="font-size: 12px; color: var(--fg-muted);">← 修饰器构筑型白皮书</a>
+
+<div class="page-head">
+  <h1>新设计提案 · Multi-Line Video Poker Rogue（网格化）</h1>
+  <p class="lede">基于 <b>v5 完备模型 + 修饰器构筑型 Roguelike</b> 子品类规约，融合 <b>Cloverpit 网格思路</b> + <b>Video Poker 多线 hold 机制</b> 构建的爆款候选设计。题材：<b>高利贷地下赌场</b>。<b style="color:#fbbf24;">市场空白填补</b>——多线 VP roguelike 在 Steam 几乎无人开采。</p>
+  <p class="meta">基于 v5 完备模型 · 修饰器构筑型 Roguelike 子品类规约 · 150 charms 池设计 · A 级预测评分</p>
+</div>
+
+<div class="toc">
+  <a href="#s1">① 概念定位</a>
+  <a href="#s2">② 复杂度消除</a>
+  <a href="#s3">③ v5 结构指纹</a>
+  <a href="#s4">④ SVG 网格 UI</a>
+  <a href="#s5">⑤ 150 Charms 池</a>
+  <a href="#s6">⑥ 数学模型</a>
+  <a href="#s7">⑦ 风险与对策</a>
+  <a href="#s8">⑧ 开发路线图</a>
+</div>
+
+<!-- ============== ① 概念定位 ============== -->
+<h2 class="section-title" id="s1">① 概念定位 · 跟爆款的差异化</h2>
+<div class="card" style="padding: 18px 22px; margin-bottom: 16px;">
+  <div style="font-size: 14px; line-height: 1.8;">
+    <b>差异化卖点（3 条）</b>：
+    <ol style="margin: 8px 0; padding-left: 22px; line-height: 1.9;">
+      <li><b>多线杠杆决策</b>——一次 hold 决策放大 N 倍结果。决策密度 × 心理张力两者皆比 Balatro 高（决策更频繁，每次决策影响更大）</li>
+      <li><b>赌场原教旨主义</b>——video poker 是真实存在 50+ 年的赌博机经典玩法，玩家有"我在玩真实赌徒玩的游戏"的代入感</li>
+      <li><b>概率养成的"赌徒哲学"</b>——你不能换牌，只能改"运势" → 跟"还债 + 恐怖叙事"主题完美贴合</li>
+    </ol>
+  </div>
+</div>
+<div class="card" style="padding: 14px 18px; margin-bottom: 24px; overflow-x: auto;">
+  <table class="tbl" style="font-size: 12px;">
+    <thead><tr><th>维度</th><th>Balatro</th><th>Cloverpit</th><th>本提案（Multi-Line VP Rogue）</th></tr></thead>
+    <tbody>
+      <tr><td>装置类型</td><td>出牌型 + Joker 槽</td><td>slot 网格</td><td><b style="color:#fbbf24;">多线 hold-draw 网格 ⭐</b></td></tr>
+      <tr><td>基础池</td><td>52 张 + 塔罗可改</td><td>15-25 符号</td><td><b>52 张严格不改</b>（最纯粹）</td></tr>
+      <tr><td>put_form</td><td>manual_set</td><td>auto_place</td><td><b style="color:#fbbf24;">manual_set + 多线杠杆 ⭐</b></td></tr>
+      <tr><td>show_topology</td><td>0D_multiset</td><td>2D_grid</td><td><b>2D_grid（5 × M 网格 · Cloverpit 同构）</b></td></tr>
+      <tr><td>玩家决策密度</td><td>每局选 5 张出 × 4-5 次</td><td>拉杆 → 看 charm 触发</td><td><b>每局 hold 决策 × 多线倍率</b></td></tr>
+      <tr><td>牌型熟悉度</td><td>中</td><td>低</td><td><b>高（赌场玩家熟悉）</b></td></tr>
+      <tr><td>主题</td><td>桌游小丑</td><td>恐怖密室</td><td><b>高利贷地下赌场 / Vegas Noir</b></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============== ② 复杂度消除 ============== -->
+<h2 class="section-title" id="s2">② 复杂度消除 · 把"1D 顺子 + 独立多线"统一为"2D 网格 + 0D 牌型字典"</h2>
+
+<div class="card" style="padding: 18px 22px; margin-bottom: 16px;">
+  <div style="font-weight: 700; font-size: 15px; margin-bottom: 10px; color: #fbbf24;">关键洞察（来自用户对话精炼）</div>
+  <div class="formula-block">朴素 Video Poker 多线复杂度根源 = <span class="accent">「1D 顺子」</span> + <span class="accent">「独立多线 5 张完整牌型」</span> 两条同时叠加
+</div>
+  <div style="font-size: 13px; line-height: 1.7; margin-top: 14px;">
+    解决思路：<b>两个维度同时简化</b>，让每条 line 退回 0D 多重集，让多线统一为 2D 网格。
+  </div>
+</div>
+
+<div class="card" style="padding: 16px 18px; margin-bottom: 12px; border-left: 4px solid #34d399;">
+  <div style="font-weight: 700; margin-bottom: 8px; color: #34d399;">维度 ① 把"1D 序列"消除，变回"0D 多重集"</div>
+  <div style="font-size: 13px; line-height: 1.7;">顺子判定<b>让系统自动按点数内禀排序</b>——玩家永远不需要管顺序（跟 Balatro 同思路）。</div>
+  <ul style="font-size: 12px; line-height: 1.8; margin: 8px 0 0; padding-left: 22px;">
+    <li>玩家 hold 决策时，5 张牌按花色或点数<b>自动排</b>显示，不可拖动</li>
+    <li>系统判定顺子时按点数排序检查</li>
+    <li>顺子降级为 <code>type_dict</code> 的一个条目——「顺子也是一种类型」，跟"对子"、"同花"平级</li>
+    <li>→ <b>show_topology 单线内回到 0D_multiset</b>，put_form 维持 manual_set</li>
+  </ul>
+</div>
+
+<div class="card" style="padding: 16px 18px; margin-bottom: 24px; border-left: 4px solid #34d399;">
+  <div style="font-weight: 700; margin-bottom: 8px; color: #34d399;">维度 ② 把"独立多线 5 张牌"统一成"网格 line_complete"</div>
+  <div style="font-size: 13px; line-height: 1.7; margin-bottom: 8px;">借用 Cloverpit 的网格思路——5 × M 网格统一视觉舞台：</div>
+  <pre style="font-size: 11px; line-height: 1.7; margin: 8px 0; padding: 12px; background: var(--bg-deep); border-radius: 6px; overflow-x: auto;">
+   <span style="color:#94a3b8;">朴素 video poker 多线（视觉碎片化）：</span>
+      [♠A ♠K ♠Q ♠J ♠10]  ← line 1
+      [♥A ♥K ♥Q ♣J ♦10]  ← line 2
+      [♣A ♠K ♠2 ♣5 ♦7 ]  ← line 3   <span style="color:#f87171;">N 条独立 5 张牌区 → 复杂度爆炸</span>
+
+   <span style="color:#34d399;">改造后 video poker 网格（Cloverpit 风格）：</span>
+          col 1  col 2  col 3  col 4  col 5
+   row 1:  ♠A    ♠K    ♠Q    ♠J    ♠10      ← row 1 牌型评分
+   row 2:  ♠A    ♠K    ♠Q    ♣J    ♦10      ← row 2 牌型评分
+   row 3:  ♠A    ♠K    ♠2    ♣5    ♦7       ← row 3 牌型评分
+   row 4:  ♠A    ♠K    ♥Q    ♠4    ♣9       ← row 4 牌型评分
+   row 5:  ♠A    ♠K    ♦3    ♠7    ♥10      ← row 5 牌型评分
+
+   玩家 hold col 1, col 2  → 该列<b>全列</b>锁定 ♠A / ♠K
+   重抽 col 3-5            → 每行<b>独立</b>重抽这 3 列
+
+   <span style="color:#fbbf24;">★ 所有牌在一张 5×M 网格里，统一视觉</span></pre>
+  <div style="font-size: 12px; line-height: 1.7; margin-top: 8px;">
+    <b>结果</b>：show_topology = <code>2D_grid</code>（跟 Cloverpit 完全同构）；combo_predicate 复用 <code>line_complete + type_dict + cascade</code>。
+  </div>
+</div>
+
+<!-- ============== ③ v5 结构指纹 ============== -->
+<h2 class="section-title" id="s3">③ v5 Schema 结构指纹 + 预测评分</h2>
+<div class="card" style="padding: 18px 22px; margin-bottom: 16px; overflow-x: auto;">
+  <table class="tbl" style="font-size: 12px;">
+    <thead><tr><th style="width: 200px;">字段</th><th>值</th></tr></thead>
+    <tbody>
+      <tr><td><code>random_design</code></td><td>抽 5 张 + 在 M 条 line 复制；多线本身是 random 戏剧化的杠杆放大器</td></tr>
+      <tr><td><code>pool_base_desc</code></td><td><b>52 张标准扑克</b>（不允许 RPBD 修改 → 保持「养概率不养符号」纯粹）</td></tr>
+      <tr><td><code>show_topology</code></td><td><b>2D_grid</b>（5 列 × M 行）</td></tr>
+      <tr><td><code>put_form</code></td><td><b>manual_set</b>（玩家 hold/discard 选列）</td></tr>
+      <tr><td><code>combo_predicate</code></td><td><code>type_dict</code>（每行牌型）+ <code>line_complete</code>（列同色/同点 + 对角）+ <code>cascade</code>（行间引爆）+ <code>threshold</code>（多行同型联动）</td></tr>
+      <tr><td><code>combo_synergy</code></td><td>每行独立按牌型表赔付 + 多行同型联动加成 + 列方向连线加成</td></tr>
+      <tr><td><code>combo_modifier</code></td><td><b>150+ charms</b> 乘性链；分概率/赔付/结构/触发链/传奇 5 大类</td></tr>
+      <tr><td><code>pool_active_desc</code></td><td>100-200 charms，玩家身上可挂 5-8 个</td></tr>
+      <tr><td>combo2 typology</td><td><b>multiplicative_chain</b>（乘性链爆发族）</td></tr>
+      <tr><td><code>rpbd_construction</code></td><td>每轮还债后商店买 charms / 偶尔解锁新 line（5→10→25 line）；<b>不动扑克牌池</b></td></tr>
+      <tr><td><code>checkpoint_mechanism</code></td><td>还债 / 目标分递增 + 永久死亡叙事；M=6 / N=3 / T0=100 / r=2.0</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="card" style="padding: 14px 18px; margin-bottom: 24px; border-left: 3px solid #fbbf24;">
+  <div style="font-weight: 700; color: #fbbf24; margin-bottom: 8px;">预测评分（按 v5 4 维 scoring-rubric）</div>
+  <table class="tbl" style="font-size: 12px;">
+    <thead><tr><th>维度</th><th>估算分</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>random（表演）</td><td><b>8</b></td><td>多线视觉杠杆是强表演卖点；hold 决策提供"VR 触发"感</td></tr>
+      <tr><td>combo（结算）</td><td><b>9</b></td><td>多线 + multiplicative_chain + cascade 三层叠加，理论上比 Cloverpit 爆发更密</td></tr>
+      <tr><td>pool（双层）</td><td><b>8</b></td><td>52 牌基础池 + 150 charms 主动池，规模适中</td></tr>
+      <tr><td>structure（压力）</td><td><b>8-9</b></td><td>还债叙事 + 多线杠杆压力 + 永久毁灭</td></tr>
+      <tr><td><b>总分</b></td><td><b>33-34</b></td><td>A 级，接近 Cloverpit（33）/ Balatro（≥35）等爆款带</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============== ④ SVG 网格 UI ============== -->
+<h2 class="section-title" id="s4">④ 网格 UI 草图（决策 / 表演 / 结算 三阶段）</h2>
+<p class="muted" style="margin-bottom: 14px; font-size: 13px;">UI 信息密度通过<b>分阶段呈现</b>控制：决策阶段只见主行 5 张；表演阶段网格波浪展开；结算阶段逐行高亮 + charms 顺序触发。</p>
+
+<!-- 阶段 1：决策 -->
+<div class="card" style="padding: 18px 22px; margin-bottom: 14px;">
+  <div style="font-weight: 700; margin-bottom: 10px; color: #60a5fa;">阶段 1 · 决策 · 玩家只看主行 5 张做 hold 决策</div>
+  <svg viewBox="0 0 700 280" style="width: 100%; max-height: 260px; font-family: ui-monospace, monospace;">
+    <!-- charm 槽 -->
+    <rect x="20" y="10" width="660" height="42" rx="6" fill="rgba(251,191,36,0.05)" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4 2"/>
+    <text x="30" y="34" font-size="10" fill="#fbbf24" font-weight="700">💎 CHARMS</text>
+    <g>
+      <rect x="100" y="16" width="32" height="30" rx="4" fill="rgba(96,165,250,0.2)" stroke="#60a5fa"/>
+      <text x="116" y="36" text-anchor="middle" font-size="14">🍀</text>
+      <rect x="138" y="16" width="32" height="30" rx="4" fill="rgba(248,113,113,0.2)" stroke="#f87171"/>
+      <text x="154" y="36" text-anchor="middle" font-size="14">💀</text>
+      <rect x="176" y="16" width="32" height="30" rx="4" fill="rgba(167,139,250,0.2)" stroke="#a78bfa"/>
+      <text x="192" y="36" text-anchor="middle" font-size="14">⚡</text>
+      <rect x="214" y="16" width="32" height="30" rx="4" fill="rgba(52,211,153,0.2)" stroke="#34d399"/>
+      <text x="230" y="36" text-anchor="middle" font-size="14">♛</text>
+      <rect x="252" y="16" width="32" height="30" rx="4" fill="rgba(251,191,36,0.3)" stroke="#fbbf24" stroke-width="2"/>
+      <text x="268" y="36" text-anchor="middle" font-size="14">👑</text>
+    </g>
+    <!-- col labels -->
+    <text x="125" y="76" font-size="9" fill="var(--fg-muted)" text-anchor="middle">col 1</text>
+    <text x="195" y="76" font-size="9" fill="var(--fg-muted)" text-anchor="middle">col 2</text>
+    <text x="265" y="76" font-size="9" fill="var(--fg-muted)" text-anchor="middle">col 3</text>
+    <text x="335" y="76" font-size="9" fill="var(--fg-muted)" text-anchor="middle">col 4</text>
+    <text x="405" y="76" font-size="9" fill="var(--fg-muted)" text-anchor="middle">col 5</text>
+    <!-- 主行 row 1 (decision phase: only show row 1 prominently) -->
+    <g>
+      <rect x="90" y="84" width="70" height="92" rx="6" fill="rgba(34,40,55,0.95)" stroke="#fbbf24" stroke-width="2"/>
+      <text x="125" y="120" text-anchor="middle" font-size="22" font-weight="700" fill="#e0d8f5">A</text>
+      <text x="125" y="155" text-anchor="middle" font-size="22" fill="#94a3b8">♠</text>
+      <text x="125" y="170" text-anchor="middle" font-size="9" fill="#fbbf24" font-weight="700">🔒 HOLD</text>
+    </g>
+    <g>
+      <rect x="160" y="84" width="70" height="92" rx="6" fill="rgba(34,40,55,0.95)" stroke="#fbbf24" stroke-width="2"/>
+      <text x="195" y="120" text-anchor="middle" font-size="22" font-weight="700" fill="#e0d8f5">K</text>
+      <text x="195" y="155" text-anchor="middle" font-size="22" fill="#94a3b8">♠</text>
+      <text x="195" y="170" text-anchor="middle" font-size="9" fill="#fbbf24" font-weight="700">🔒 HOLD</text>
+    </g>
+    <g>
+      <rect x="230" y="84" width="70" height="92" rx="6" fill="rgba(34,40,55,0.95)" stroke="#fbbf24" stroke-width="2"/>
+      <text x="265" y="120" text-anchor="middle" font-size="22" font-weight="700" fill="#e0d8f5">Q</text>
+      <text x="265" y="155" text-anchor="middle" font-size="22" fill="#94a3b8">♠</text>
+      <text x="265" y="170" text-anchor="middle" font-size="9" fill="#fbbf24" font-weight="700">🔒 HOLD</text>
+    </g>
+    <g>
+      <rect x="300" y="84" width="70" height="92" rx="6" fill="rgba(34,40,55,0.95)" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <text x="335" y="120" text-anchor="middle" font-size="22" font-weight="700" fill="#94a3b8">?</text>
+      <text x="335" y="155" text-anchor="middle" font-size="22" fill="#475569">?</text>
+      <text x="335" y="170" text-anchor="middle" font-size="9" fill="#94a3b8">↻ DRAW</text>
+    </g>
+    <g>
+      <rect x="370" y="84" width="70" height="92" rx="6" fill="rgba(34,40,55,0.95)" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <text x="405" y="120" text-anchor="middle" font-size="22" font-weight="700" fill="#94a3b8">?</text>
+      <text x="405" y="155" text-anchor="middle" font-size="22" fill="#475569">?</text>
+      <text x="405" y="170" text-anchor="middle" font-size="9" fill="#94a3b8">↻ DRAW</text>
+    </g>
+    <!-- 背景行 hint -->
+    <rect x="90" y="184" width="350" height="14" rx="3" fill="rgba(94,108,135,0.15)"/>
+    <text x="450" y="194" font-size="10" fill="var(--fg-muted)">↓ +4 hidden lines</text>
+    <!-- DEAL button -->
+    <rect x="475" y="120" width="180" height="50" rx="8" fill="rgba(251,191,36,0.2)" stroke="#fbbf24" stroke-width="2"/>
+    <text x="565" y="146" text-anchor="middle" font-size="20" font-weight="700" fill="#fbbf24">🎲 DEAL</text>
+    <text x="565" y="160" text-anchor="middle" font-size="10" fill="var(--fg-muted)">5 lines × 重抽 2 列</text>
+    <!-- info row -->
+    <text x="100" y="225" font-size="11" fill="var(--fg-muted)">💰 累计：</text>
+    <text x="155" y="225" font-size="12" font-weight="700" fill="#fbbf24">320</text>
+    <text x="220" y="225" font-size="11" fill="var(--fg-muted)">本局目标：</text>
+    <text x="290" y="225" font-size="12" font-weight="700" fill="#f87171">1500</text>
+    <text x="365" y="225" font-size="11" fill="var(--fg-muted)">剩余 spin：</text>
+    <text x="430" y="225" font-size="12" font-weight="700" fill="#34d399">2 / 3</text>
+    <text x="100" y="250" font-size="11" fill="var(--fg-muted)" font-style="italic">💀 还债倒计时 · 第 4 周 · 高利贷主：「准时还，不然就埋了你」</text>
+  </svg>
+  <div class="muted" style="font-size: 11px; margin-top: 8px;">玩家心智负担：5 张主行牌 + hold 决策。决策聚焦，UI 不拥挤。</div>
+</div>
+
+<!-- 阶段 2：表演 -->
+<div class="card" style="padding: 18px 22px; margin-bottom: 14px;">
+  <div style="font-weight: 700; margin-bottom: 10px; color: #a78bfa;">阶段 2 · 表演 · 拉杆后多线波浪式展开（1-2s 戏剧化）</div>
+  <svg viewBox="0 0 700 280" style="width: 100%; max-height: 260px; font-family: ui-monospace, monospace;">
+    <!-- 5×5 网格 -->
+    <g id="grid">
+      <!-- row 1 hold -->
+      <g><rect x="90" y="20" width="60" height="48" rx="4" fill="rgba(34,40,55,0.95)" stroke="#fbbf24" stroke-width="1.5"/><text x="120" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#e0d8f5">A♠</text></g>
+      <g><rect x="155" y="20" width="60" height="48" rx="4" fill="rgba(34,40,55,0.95)" stroke="#fbbf24" stroke-width="1.5"/><text x="185" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#e0d8f5">K♠</text></g>
+      <g><rect x="220" y="20" width="60" height="48" rx="4" fill="rgba(34,40,55,0.95)" stroke="#fbbf24" stroke-width="1.5"/><text x="250" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#e0d8f5">Q♠</text></g>
+      <g><rect x="285" y="20" width="60" height="48" rx="4" fill="rgba(96,165,250,0.20)" stroke="#60a5fa"/><text x="315" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">J♠</text></g>
+      <g><rect x="350" y="20" width="60" height="48" rx="4" fill="rgba(96,165,250,0.20)" stroke="#60a5fa"/><text x="380" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">10♠</text></g>
+      <text x="430" y="50" font-size="11" fill="#fbbf24" font-weight="700">→ 皇家同花顺！</text>
+
+      <!-- row 2 -->
+      <g><rect x="90" y="72" width="60" height="40" rx="4" fill="rgba(34,40,55,0.7)" stroke="#fbbf24" stroke-width="1.5"/><text x="120" y="98" text-anchor="middle" font-size="13" fill="#e0d8f5">A♠</text></g>
+      <g><rect x="155" y="72" width="60" height="40" rx="4" fill="rgba(34,40,55,0.7)" stroke="#fbbf24" stroke-width="1.5"/><text x="185" y="98" text-anchor="middle" font-size="13" fill="#e0d8f5">K♠</text></g>
+      <g><rect x="220" y="72" width="60" height="40" rx="4" fill="rgba(34,40,55,0.7)" stroke="#fbbf24" stroke-width="1.5"/><text x="250" y="98" text-anchor="middle" font-size="13" fill="#e0d8f5">Q♠</text></g>
+      <g><rect x="285" y="72" width="60" height="40" rx="4" fill="rgba(96,165,250,0.15)" stroke="#60a5fa"/><text x="315" y="98" text-anchor="middle" font-size="13" fill="#fca5a5">J♥</text></g>
+      <g><rect x="350" y="72" width="60" height="40" rx="4" fill="rgba(96,165,250,0.15)" stroke="#60a5fa"/><text x="380" y="98" text-anchor="middle" font-size="13" fill="#fb923c">10♦</text></g>
+      <text x="430" y="98" font-size="10" fill="#94a3b8">→ 三条 A</text>
+
+      <!-- row 3 -->
+      <g><rect x="90" y="116" width="60" height="40" rx="4" fill="rgba(34,40,55,0.5)" stroke="#fbbf24" stroke-width="1"/><text x="120" y="142" text-anchor="middle" font-size="13" fill="#cbd5e1">A♠</text></g>
+      <g><rect x="155" y="116" width="60" height="40" rx="4" fill="rgba(34,40,55,0.5)" stroke="#fbbf24" stroke-width="1"/><text x="185" y="142" text-anchor="middle" font-size="13" fill="#cbd5e1">K♠</text></g>
+      <g><rect x="220" y="116" width="60" height="40" rx="4" fill="rgba(34,40,55,0.5)" stroke="#fbbf24" stroke-width="1"/><text x="250" y="142" text-anchor="middle" font-size="13" fill="#cbd5e1">Q♠</text></g>
+      <g><rect x="285" y="116" width="60" height="40" rx="4" fill="rgba(96,165,250,0.10)" stroke="#60a5fa"/><text x="315" y="142" text-anchor="middle" font-size="13" fill="#cbd5e1">2♣</text></g>
+      <g><rect x="350" y="116" width="60" height="40" rx="4" fill="rgba(96,165,250,0.10)" stroke="#60a5fa"/><text x="380" y="142" text-anchor="middle" font-size="13" fill="#cbd5e1">7♦</text></g>
+      <text x="430" y="142" font-size="10" fill="#94a3b8">→ 一对 K-Q-A 高牌</text>
+
+      <!-- row 4 (loading effect) -->
+      <g><rect x="90" y="160" width="60" height="40" rx="4" fill="rgba(34,40,55,0.3)" stroke="#fbbf24" stroke-width="1"/><text x="120" y="186" text-anchor="middle" font-size="12" fill="#94a3b8">A♠</text></g>
+      <g><rect x="155" y="160" width="60" height="40" rx="4" fill="rgba(34,40,55,0.3)" stroke="#fbbf24" stroke-width="1"/><text x="185" y="186" text-anchor="middle" font-size="12" fill="#94a3b8">K♠</text></g>
+      <g><rect x="220" y="160" width="60" height="40" rx="4" fill="rgba(34,40,55,0.3)" stroke="#fbbf24" stroke-width="1"/><text x="250" y="186" text-anchor="middle" font-size="12" fill="#94a3b8">Q♠</text></g>
+      <g><rect x="285" y="160" width="60" height="40" rx="4" fill="rgba(96,165,250,0.06)" stroke="#475569"/><text x="315" y="186" text-anchor="middle" font-size="12" fill="#475569">…</text></g>
+      <g><rect x="350" y="160" width="60" height="40" rx="4" fill="rgba(96,165,250,0.06)" stroke="#475569"/><text x="380" y="186" text-anchor="middle" font-size="12" fill="#475569">…</text></g>
+
+      <!-- row 5 -->
+      <g><rect x="90" y="204" width="60" height="40" rx="4" fill="rgba(34,40,55,0.15)" stroke="#94a3b8" stroke-width="0.5"/><text x="120" y="230" text-anchor="middle" font-size="12" fill="#475569">A♠</text></g>
+      <g><rect x="155" y="204" width="60" height="40" rx="4" fill="rgba(34,40,55,0.15)" stroke="#94a3b8" stroke-width="0.5"/><text x="185" y="230" text-anchor="middle" font-size="12" fill="#475569">K♠</text></g>
+      <g><rect x="220" y="204" width="60" height="40" rx="4" fill="rgba(34,40,55,0.15)" stroke="#94a3b8" stroke-width="0.5"/><text x="250" y="230" text-anchor="middle" font-size="12" fill="#475569">Q♠</text></g>
+      <g><rect x="285" y="204" width="60" height="40" rx="4" fill="rgba(96,165,250,0.04)" stroke="#475569" stroke-width="0.5"/><text x="315" y="230" text-anchor="middle" font-size="11" fill="#475569">↓</text></g>
+      <g><rect x="350" y="204" width="60" height="40" rx="4" fill="rgba(96,165,250,0.04)" stroke="#475569" stroke-width="0.5"/><text x="380" y="230" text-anchor="middle" font-size="11" fill="#475569">↓</text></g>
+    </g>
+    <!-- col annotations -->
+    <text x="120" y="265" font-size="9" fill="#fbbf24" text-anchor="middle">🔒 锁定（hold）</text>
+    <text x="185" y="265" font-size="9" fill="#fbbf24" text-anchor="middle">🔒 锁定（hold）</text>
+    <text x="250" y="265" font-size="9" fill="#fbbf24" text-anchor="middle">🔒 锁定（hold）</text>
+    <text x="315" y="265" font-size="9" fill="#60a5fa" text-anchor="middle">↻ 每行独立抽</text>
+    <text x="380" y="265" font-size="9" fill="#60a5fa" text-anchor="middle">↻ 每行独立抽</text>
+
+    <!-- 列连线提示 col 1 同色 -->
+    <line x1="120" y1="60" x2="120" y2="240" stroke="#fbbf24" stroke-width="2" stroke-dasharray="2 3" opacity="0.7"/>
+    <text x="540" y="160" font-size="10" fill="#fbbf24" font-weight="700">列同色 (♠×5) +200%</text>
+
+    <!-- 对角线提示 -->
+    <line x1="150" y1="60" x2="380" y2="220" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.5"/>
+    <text x="540" y="180" font-size="10" fill="#a78bfa">对角同色 +50%</text>
+  </svg>
+  <div class="muted" style="font-size: 11px; margin-top: 8px;">5 列 × 5 行网格统一视觉。锁定列波浪式展开（row 1 → row 5），可见列同色、对角线、单行牌型 3 种 line 同时触发。</div>
+</div>
+
+<!-- 阶段 3：结算 -->
+<div class="card" style="padding: 18px 22px; margin-bottom: 24px;">
+  <div style="font-weight: 700; margin-bottom: 10px; color: #fbbf24;">阶段 3 · 结算 · 逐行高亮 + charms 顺序触发（滚雪球）</div>
+  <svg viewBox="0 0 700 280" style="width: 100%; max-height: 260px; font-family: ui-monospace, monospace;">
+    <!-- 步骤数字 -->
+    <g>
+      <circle cx="40" cy="40" r="14" fill="#fbbf24"/>
+      <text x="40" y="45" text-anchor="middle" font-size="14" font-weight="700" fill="#1c1300">1</text>
+      <text x="65" y="36" font-size="11" fill="#fbbf24" font-weight="700">基础结算（combo1 加法）</text>
+      <text x="65" y="52" font-size="10" fill="var(--fg-muted)">row 1 皇家同花顺 = 250 + row 2 三条 = 30 + row 3 一对 = 5 = </text>
+      <text x="540" y="52" font-size="11" fill="#fbbf24" font-weight="700">285</text>
+    </g>
+    <!-- 触发 line_complete -->
+    <g>
+      <circle cx="40" cy="86" r="14" fill="#fbbf24"/>
+      <text x="40" y="91" text-anchor="middle" font-size="14" font-weight="700" fill="#1c1300">2</text>
+      <text x="65" y="82" font-size="11" fill="#fbbf24" font-weight="700">列连线加成（line_complete 触发）</text>
+      <text x="65" y="98" font-size="10" fill="var(--fg-muted)">col 1 全 A♠ +50%、col 1 同色 ×3 → 基础放大至</text>
+      <text x="540" y="98" font-size="11" fill="#fbbf24" font-weight="700">1280</text>
+    </g>
+    <!-- charms 乘性链 -->
+    <g>
+      <circle cx="40" cy="130" r="14" fill="#a78bfa"/>
+      <text x="40" y="135" text-anchor="middle" font-size="14" font-weight="700" fill="#1c1300">3</text>
+      <text x="65" y="126" font-size="11" fill="#a78bfa" font-weight="700">charms 乘性链（combo2 顺序触发）</text>
+    </g>
+    <!-- charm chain -->
+    <g transform="translate(80, 145)">
+      <rect x="0" y="0" width="80" height="34" rx="6" fill="rgba(96,165,250,0.18)" stroke="#60a5fa"/>
+      <text x="40" y="14" text-anchor="middle" font-size="11" fill="#93c5fd">🍀 幸运叶</text>
+      <text x="40" y="28" text-anchor="middle" font-size="10" fill="#fbbf24">×1.5</text>
+      <text x="40" y="48" text-anchor="middle" font-size="11" font-weight="700" fill="#fbbf24">1920</text>
+
+      <rect x="100" y="0" width="80" height="34" rx="6" fill="rgba(248,113,113,0.18)" stroke="#f87171"/>
+      <text x="140" y="14" text-anchor="middle" font-size="11" fill="#fca5a5">💀 死亡赌</text>
+      <text x="140" y="28" text-anchor="middle" font-size="10" fill="#fbbf24">×2</text>
+      <text x="140" y="48" text-anchor="middle" font-size="11" font-weight="700" fill="#fbbf24">3840</text>
+
+      <rect x="200" y="0" width="80" height="34" rx="6" fill="rgba(167,139,250,0.18)" stroke="#a78bfa"/>
+      <text x="240" y="14" text-anchor="middle" font-size="11" fill="#c4b5fd">⚡ 雷击运</text>
+      <text x="240" y="28" text-anchor="middle" font-size="10" fill="#fbbf24">×3</text>
+      <text x="240" y="48" text-anchor="middle" font-size="11" font-weight="700" fill="#fbbf24">11520</text>
+
+      <rect x="300" y="0" width="80" height="34" rx="6" fill="rgba(52,211,153,0.18)" stroke="#34d399"/>
+      <text x="340" y="14" text-anchor="middle" font-size="11" fill="#86efac">♛ 王者钱袋</text>
+      <text x="340" y="28" text-anchor="middle" font-size="10" fill="#fbbf24">×2.5</text>
+      <text x="340" y="48" text-anchor="middle" font-size="11" font-weight="700" fill="#fbbf24">28800</text>
+
+      <rect x="400" y="0" width="80" height="34" rx="6" fill="rgba(251,191,36,0.25)" stroke="#fbbf24" stroke-width="2"/>
+      <text x="440" y="14" text-anchor="middle" font-size="11" fill="#fde68a" font-weight="700">👑 传奇</text>
+      <text x="440" y="28" text-anchor="middle" font-size="10" fill="#fbbf24" font-weight="700">×5</text>
+      <text x="440" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="#fbbf24">144000</text>
+    </g>
+    <!-- final result -->
+    <g transform="translate(0, 220)">
+      <rect x="60" y="0" width="580" height="42" rx="8" fill="rgba(251,191,36,0.10)" stroke="#fbbf24" stroke-width="2"/>
+      <text x="80" y="20" font-size="12" font-weight="700" fill="#fbbf24">💰 本次产出</text>
+      <text x="80" y="36" font-size="11" fill="var(--fg-muted)">基础 285 → 列连线 1280 → 5 charms 乘性链 → </text>
+      <text x="540" y="28" font-size="22" font-weight="700" fill="#fbbf24" text-anchor="end">144,000</text>
+      <text x="615" y="28" font-size="11" fill="#34d399" font-weight="700">还债 ✓</text>
+    </g>
+  </svg>
+  <div class="muted" style="font-size: 11px; margin-top: 8px;">285 → 144,000 = <b>505 倍</b>放大。5 个 charms 的乘性链是核心爆发器。每个 charm 亮起 + 数字翻飞，复刻 Cloverpit 滚雪球节奏。</div>
+</div>
+
+<!-- ============== ⑤ 150 Charms 池 ============== -->
+<h2 class="section-title" id="s5">⑤ 150 Charms 池详细设计（5 类 × 30 个）</h2>
+<p class="muted" style="margin-bottom: 14px; font-size: 13px;">题材：<b>高利贷地下赌场 / 1980s Vegas Noir</b>。每个 charm 是赌徒护身符 / 黑帮赏赐 / 死亡纪念品。<br>稀有度梯度：<span class="rarity rar-c">普 60%</span> <span class="rarity rar-u">罕 25%</span> <span class="rarity rar-r">史 12%</span> <span class="rarity rar-l">传 3%</span>。</p>
+
+<div id="charms-root"></div>
+
+<!-- ============== ⑥ 数学模型 ============== -->
+<h2 class="section-title" id="s6">⑥ 数学模型 · 单 spin 产出公式</h2>
+<div class="card" style="padding: 18px 22px; margin-bottom: 24px;">
+  <div class="formula-block">Output_per_spin =
+  <span class="comment">// 第一层：每行牌型评分（加法）</span>
+  Σ_{row=1..M} HandRank(row) × payTable[handType]
+
+  <span class="comment">// 第二层：网格 line_complete 加成（加法）</span>
+  + Σ_{line ∈ {列, 对角, 多行同型}} lineBonus(line)
+
+  <span class="comment">// 第三层：charms 乘性链（乘法）</span>
+  × ∏_{i=1..n_charm} <span class="accent">(mᵢ × position_bonus_i)</span>
+
+<span class="comment">// 平衡约束</span>
+Target_per_round = T₀ × r<sup>round</sup>     <span class="comment">// r = 2.0（指数递增）</span>
+Player_capacity  = ∏ mᵢ ≈ Target              <span class="comment">// 平衡设计</span>
+
+<span class="comment">// 参数建议</span>
+M (line 数)   = 5 → 10 → 25  <span class="comment">// 跨局解锁</span>
+n_charm 槽     = 5 (起手) → 8 (后期解锁)
+mᵢ 范围        = [1.5, 10] (普到传)
+n_pool         = <span class="accent">150 charms</span></div>
+</div>
+
+<!-- ============== ⑦ 风险与对策 ============== -->
+<h2 class="section-title" id="s7">⑦ 主要风险 + 对策</h2>
+
+<div class="risk-card">
+  <div style="font-weight: 700; font-size: 14px;"><span class="risk-num">风险 1</span>跟 Balatro 的混淆（最大风险）</div>
+  <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">玩家第一反应可能是"这不就是 Balatro 吗"。</div>
+  <div class="muted" style="font-size: 12px; margin-top: 6px;"><b>对策</b>：宣传素材突出 hold 机制 + 多线视觉——展示 25 行同步翻牌的视觉爆炸 → 一句话差异化「Balatro 让你选 5 张出，本作让你选 5 张留——但你的留会被复制 25 倍」。</div>
+</div>
+
+<div class="risk-card">
+  <div style="font-weight: 700; font-size: 14px;"><span class="risk-num">风险 2</span>教学门槛（VP 在东亚陌生）</div>
+  <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">中国玩家不熟 video poker 规则。</div>
+  <div class="muted" style="font-size: 12px; margin-top: 6px;"><b>对策</b>：前 3 关教学化（1 line → 3 line → 5 line），每线扩展时新规则提示。</div>
+</div>
+
+<div class="risk-card">
+  <div style="font-weight: 700; font-size: 14px;"><span class="risk-num">风险 3</span>赌博争议</div>
+  <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">多线 VP 是真实赌博机机制。</div>
+  <div class="muted" style="font-size: 12px; margin-top: 6px;"><b>对策</b>：参考 Cloverpit「真实毁灭」叙事——把游戏定位为"反赌博的赌博恐怖游戏"，主题强调"赢的不是钱，是脱困"。</div>
+</div>
+
+<div class="risk-card">
+  <div style="font-weight: 700; font-size: 14px;"><span class="risk-num">风险 4</span>多线 UI 拥挤</div>
+  <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">10 line × 5 牌 = 50 张牌同屏。</div>
+  <div class="muted" style="font-size: 12px; margin-top: 6px;"><b>对策（已实施）</b>：本提案改造为<b>5×M 网格</b> + 分阶段呈现（决策 5 张 / 表演波浪 / 结算逐行）。复杂度从"独立 N 个 5 张牌区"降到"统一网格"。详见 §②、§④。</div>
+</div>
+
+<div class="risk-card" style="margin-bottom: 24px;">
+  <div style="font-weight: 700; font-size: 14px;"><span class="risk-num">风险 5</span>数学平衡难</div>
+  <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">M 条 line × 150+ charms × 修饰器叠乘 = 公式复杂度爆炸。</div>
+  <div class="muted" style="font-size: 12px; margin-top: 6px;"><b>对策</b>：参考 Balatro 团队「数值表 + 单元测试 + Mod 验证」方法论，需要数学 / 概率背景的设计师。</div>
+</div>
+
+<!-- ============== ⑧ 开发路线图 ============== -->
+<h2 class="section-title" id="s8">⑧ 推荐开发路线图</h2>
+
+<div class="phase-card">
+  <div style="font-weight: 700; color: #34d399;">阶段 1 · 原型验证（2-3 个月）</div>
+  <ul style="font-size: 12.5px; line-height: 1.8; margin: 8px 0 0; padding-left: 22px;">
+    <li>单 line / 5 line 切换</li>
+    <li>30 charm 池（从 150 中精选）</li>
+    <li>1 个角色 / 1 个主题</li>
+    <li>上 itch.io 试水 + Reddit r/roguelikes 收反馈</li>
+  </ul>
+</div>
+
+<div class="phase-card">
+  <div style="font-weight: 700; color: #34d399;">阶段 2 · Demo + Steam Next Fest（3 个月）</div>
+  <ul style="font-size: 12.5px; line-height: 1.8; margin: 8px 0 0; padding-left: 22px;">
+    <li>25-line 解锁系统</li>
+    <li>80 charm 池</li>
+    <li>3 个主题包装（密室 / Vegas / 老上海赌场）</li>
+    <li>关键参考：Cloverpit 的 Steam Next Fest 进路（demo → 100k 拷贝首日）</li>
+  </ul>
+</div>
+
+<div class="phase-card" style="margin-bottom: 32px;">
+  <div style="font-weight: 700; color: #34d399;">阶段 3 · 完整发售（6 个月）</div>
+  <ul style="font-size: 12.5px; line-height: 1.8; margin: 8px 0 0; padding-left: 22px;">
+    <li>150+ charm 池完整版（按本提案 §⑤）</li>
+    <li>多结局</li>
+    <li>跨局 meta-progression</li>
+  </ul>
+</div>
+
+<script>
+/* ============== ⑤ 150 charms 数据注入 ============== */
+const CHARMS = [
+  // ========== 类别 ① 概率类 30 个（增加某些牌出现频率/概率分布偏置）==========
+  { id:'P01', name:'裂红心', cat:'prob', rar:'c', effect:'♥ 出现率 +10%', lore:'某个赌徒撕烂的红心 J' },
+  { id:'P02', name:'锈黑桃', cat:'prob', rar:'c', effect:'♠ 出现率 +10%', lore:'生锈的扑克头饰' },
+  { id:'P03', name:'残方块', cat:'prob', rar:'c', effect:'♦ 出现率 +10%', lore:'破碎的钻戒残片' },
+  { id:'P04', name:'霉梅花', cat:'prob', rar:'c', effect:'♣ 出现率 +10%', lore:'发霉的三叶草' },
+  { id:'P05', name:'幼齿牙', cat:'prob', rar:'c', effect:'数字 2-5 出现率 +15%', lore:'高利贷主敲下的赌徒乳齿' },
+  { id:'P06', name:'图牌项链', cat:'prob', rar:'u', effect:'J/Q/K 出现率 +20%', lore:'三颗人头骨串成的项链' },
+  { id:'P07', name:'尖锋戒', cat:'prob', rar:'u', effect:'A 出现率 +25%', lore:'打磨成尖的金戒指' },
+  { id:'P08', name:'十寡妇', cat:'prob', rar:'u', effect:'10 出现率 +30%', lore:'10 位寡妇的合葬戒指' },
+  { id:'P09', name:'对位偏置', cat:'prob', rar:'u', effect:'若某行已有 1 对，重抽时该点数出现率 ×2', lore:'命运偏爱配对' },
+  { id:'P10', name:'同花种子', cat:'prob', rar:'u', effect:'若某行已 3 同花，重抽时该花色 ×3', lore:'同种酒杯里的同种毒' },
+  { id:'P11', name:'血色幸运', cat:'prob', rar:'r', effect:'♥ ♦ 出现率 +30%', lore:'用血染过的塔罗背面' },
+  { id:'P12', name:'夜行黑魂', cat:'prob', rar:'r', effect:'♠ ♣ 出现率 +30%', lore:'黑帮老大的指节铜环' },
+  { id:'P13', name:'高牌信徒', cat:'prob', rar:'r', effect:'10/J/Q/K/A 出现率 +35%（同时低牌 -20%）', lore:'宁可输也要赢得漂亮' },
+  { id:'P14', name:'金属共振', cat:'prob', rar:'r', effect:'每行已有 N 同色 → 第 N+1 列重抽时同色概率 ×N', lore:'吸金属体' },
+  { id:'P15', name:'数字回响', cat:'prob', rar:'r', effect:'每行已有 N 同点 → 第 N+1 列重抽时同点概率 ×N', lore:'记忆的牢笼' },
+  { id:'P16', name:'七的祝福', cat:'prob', rar:'c', effect:'数字 7 出现率 +40%', lore:'西方迷信的幸运数' },
+  { id:'P17', name:'十三厄运', cat:'prob', rar:'u', effect:'13 张图牌（J/Q/K）出现率 +30%；本局赔付 ×1.2', lore:'13 号牌桌的诅咒' },
+  { id:'P18', name:'断指收据', cat:'prob', rar:'c', effect:'初次 deal 时 1 张牌自动变为 A（每局 1 次）', lore:'用断指换来的开局保障' },
+  { id:'P19', name:'命运硬币', cat:'prob', rar:'u', effect:'每行 50% 概率第 1 列变为 ♥ 或 ♠', lore:'高利贷主抛出的"决定生死"硬币' },
+  { id:'P20', name:'倾家档案', cat:'prob', rar:'r', effect:'若手牌总点数 ≤ 20，自动加 1 张 K', lore:'记录每个破产赌徒的档案' },
+  { id:'P21', name:'红黑分裂', cat:'prob', rar:'u', effect:'红色 ♥♦ 与黑色 ♠♣ 出现率交替 ×1.5', lore:'两色不共存' },
+  { id:'P22', name:'高雅气质', cat:'prob', rar:'u', effect:'若 hold 全部为 J/Q/K → 重抽必出 A', lore:'高雅的赌徒必有 A 收尾' },
+  { id:'P23', name:'同花预兆', cat:'prob', rar:'r', effect:'若 hold ≥ 3 张同花 → 剩余列必出该花色', lore:'同花的执念会成真' },
+  { id:'P24', name:'倍率守卫', cat:'prob', rar:'u', effect:'若上一 spin 输（未达目标）→ 本 spin A/K 出现率 +50%', lore:'神明同情失败者' },
+  { id:'P25', name:'死神标记', cat:'prob', rar:'r', effect:'每张 ♠A 出现时，下一列必出 ♠K', lore:'死神在桌上画 X' },
+  { id:'P26', name:'连发福星', cat:'prob', rar:'r', effect:'连续 2 spin 都成牌型 → 第 3 spin 重抽全部牌 1 次', lore:'幸运是会传染的' },
+  { id:'P27', name:'同点连环', cat:'prob', rar:'l', effect:'若某行成对子 → 其他行该点数出现率 +80%', lore:'传奇 · 牌桌的因果律' },
+  { id:'P28', name:'万能拐杖', cat:'prob', rar:'l', effect:'每局 1 次：把任意 1 张牌变为 wild card（百搭）', lore:'传奇 · 拐杖刺穿规则' },
+  { id:'P29', name:'破局孪生', cat:'prob', rar:'l', effect:'hold 2 张同点 → 重抽时必出另 2 张同点（凑齐四条）', lore:'传奇 · 孪生的诅咒' },
+  { id:'P30', name:'命运调色板', cat:'prob', rar:'l', effect:'每行第 1 列必出玩家 hold 的最稀有花色', lore:'传奇 · 涂色者的画笔' },
+
+  // ========== 类别 ② 赔付倍率类 30 个 ==========
+  { id:'M01', name:'同花护符', cat:'pay', rar:'c', effect:'同花 ×1.5', lore:'同花色绑成的护符' },
+  { id:'M02', name:'对子之印', cat:'pay', rar:'c', effect:'任意对子 ×1.3', lore:'双子座符印' },
+  { id:'M03', name:'三条之星', cat:'pay', rar:'c', effect:'三条 ×1.5', lore:'天蝎三星' },
+  { id:'M04', name:'葫芦印', cat:'pay', rar:'u', effect:'葫芦 ×2', lore:'三花葫芦' },
+  { id:'M05', name:'四条铜环', cat:'pay', rar:'u', effect:'四条 ×3', lore:'四指铜环' },
+  { id:'M06', name:'顺子戒', cat:'pay', rar:'c', effect:'顺子 ×1.5', lore:'阶梯纹戒指' },
+  { id:'M07', name:'同花顺王座', cat:'pay', rar:'r', effect:'同花顺 ×4', lore:'王座头骨' },
+  { id:'M08', name:'皇冠遗物', cat:'pay', rar:'l', effect:'皇家同花顺 ×8（传奇）', lore:'传奇 · 国王的最后一搏' },
+  { id:'M09', name:'雷击运', cat:'pay', rar:'r', effect:'整体产出 ×3（任何牌型）', lore:'闪电烧焦的吊坠' },
+  { id:'M10', name:'死亡赌', cat:'pay', rar:'r', effect:'整体产出 ×2，若本 spin 不达 100 → 失血扣 1 HP', lore:'赌命之心' },
+  { id:'M11', name:'王者钱袋', cat:'pay', rar:'u', effect:'整体 ×2.5', lore:'国王金袋' },
+  { id:'M12', name:'幸运叶', cat:'pay', rar:'c', effect:'整体 ×1.5', lore:'晒干的四叶草' },
+  { id:'M13', name:'黑帮老大', cat:'pay', rar:'r', effect:'每张 K 在线 → 整体 ×1.3（叠加）', lore:'老大的雪茄烟头' },
+  { id:'M14', name:'女王之吻', cat:'pay', rar:'u', effect:'每张 Q 在线 → 整体 ×1.2', lore:'染唇钻戒' },
+  { id:'M15', name:'侍者笑容', cat:'pay', rar:'c', effect:'每张 J 在线 → 整体 ×1.1', lore:'侍者的牙齿' },
+  { id:'M16', name:'A 牌信徒', cat:'pay', rar:'u', effect:'每张 A 在线 → 整体 ×1.5（叠加）', lore:'破产 13 次的赌徒留下的护符' },
+  { id:'M17', name:'高赌客', cat:'pay', rar:'r', effect:'若本 spin 至少 1 行 ≥ 同花 → 整体 ×2.5', lore:'白手套 + 雪茄' },
+  { id:'M18', name:'连胜之翼', cat:'pay', rar:'r', effect:'连续 3 spin 均成牌型 → 第 4 spin ×5', lore:'天使的羽毛' },
+  { id:'M19', name:'最后一搏', cat:'pay', rar:'u', effect:'若剩余 spin ≤ 1 → 整体 ×3', lore:'临死前的鸡尾酒' },
+  { id:'M20', name:'血腥红利', cat:'pay', rar:'r', effect:'若上 spin HP -1 → 本 spin ×3', lore:'伤口换钱' },
+  { id:'M21', name:'银行家戒', cat:'pay', rar:'u', effect:'若本 spin 触发列同色 → ×2', lore:'1985 年金市崩盘那天的戒指' },
+  { id:'M22', name:'豪赌徽章', cat:'pay', rar:'r', effect:'×4，但下 spin -1 charm 槽', lore:'押上一切的勋章' },
+  { id:'M23', name:'破产换运', cat:'pay', rar:'u', effect:'若本周还债额 ≥ 上周 × 2 → 整体 ×3', lore:'高利贷主的"恭喜"礼物' },
+  { id:'M24', name:'罗马荣耀', cat:'pay', rar:'r', effect:'若 5 张全为同色 → ×6', lore:'古罗马凯撒勋章' },
+  { id:'M25', name:'七星连珠', cat:'pay', rar:'l', effect:'若至少 7 张牌为 7 → ×100（传奇）', lore:'传奇 · 七星之主' },
+  { id:'M26', name:'恶魔合约', cat:'pay', rar:'l', effect:'×10，但本局结束扣 50% 累计金额', lore:'传奇 · 魔鬼的承诺' },
+  { id:'M27', name:'高利贷反咒', cat:'pay', rar:'r', effect:'还债额 ÷ 2，但本 spin 产出 ×0.5（双向减半）', lore:'反向诅咒戒' },
+  { id:'M28', name:'天选之子', cat:'pay', rar:'l', effect:'本局首次同花顺 → ×30', lore:'传奇 · 上帝的标记' },
+  { id:'M29', name:'死亡螺旋', cat:'pay', rar:'r', effect:'每 cascade 触发一次 → 整体倍率 +0.5', lore:'地狱回旋楼梯' },
+  { id:'M30', name:'终极赌徒', cat:'pay', rar:'l', effect:'若所有 charms 都已挂满 → ×5（条件触发）', lore:'传奇 · 满载之心' },
+
+  // ========== 类别 ③ 结构改造类 30 个 ==========
+  { id:'S01', name:'第六行', cat:'struct', rar:'u', effect:'本局多 1 行（M+1）', lore:'多一行 = 多一次命运' },
+  { id:'S02', name:'第七行', cat:'struct', rar:'r', effect:'本局多 2 行', lore:'七层地狱' },
+  { id:'S03', name:'第八行', cat:'struct', rar:'l', effect:'本局多 3 行（传奇）', lore:'传奇 · 八方来财' },
+  { id:'S04', name:'额外 hold', cat:'struct', rar:'r', effect:'第 2 次 deal 可额外 hold 1 张', lore:'第二次机会' },
+  { id:'S05', name:'三次抽取', cat:'struct', rar:'r', effect:'本 spin 可重抽 1 次（discard 后重抽）', lore:'命运的回炉' },
+  { id:'S06', name:'换花色权', cat:'struct', rar:'u', effect:'每局 1 次：把 1 张牌的花色改成任意花色', lore:'伪造的花色印章' },
+  { id:'S07', name:'升级点数', cat:'struct', rar:'u', effect:'每局 1 次：把 1 张牌的点数 +1（K→A）', lore:'升级钳' },
+  { id:'S08', name:'多 1 槽', cat:'struct', rar:'r', effect:'charm 槽位 +1（永久 · 本局）', lore:'缝在外套里的密袋' },
+  { id:'S09', name:'付费抽卡', cat:'struct', rar:'c', effect:'商店刷新成本 -50%', lore:'熟客折扣' },
+  { id:'S10', name:'稀有偏置', cat:'struct', rar:'u', effect:'商店刷新出稀有 charm 概率 +30%', lore:'狡黠的商人' },
+  { id:'S11', name:'传奇先兆', cat:'struct', rar:'r', effect:'若本周还债成功 → 下周商店必含 1 个传奇 charm', lore:'天使的暗访' },
+  { id:'S12', name:'扑克升级', cat:'struct', rar:'l', effect:'每张 2-5 替换为 J-A 概率 +50%（传奇）', lore:'传奇 · 鄙视低牌' },
+  { id:'S13', name:'多线杠杆', cat:'struct', rar:'r', effect:'M 行 ×2（本局）', lore:'放大器' },
+  { id:'S14', name:'减线赌局', cat:'struct', rar:'u', effect:'M 行 -1，但 charm 乘性 ×2', lore:'专注就是力量' },
+  { id:'S15', name:'wild card 增生', cat:'struct', rar:'l', effect:'牌池中插入 4 张 wild card（任意点数任意花色）', lore:'传奇 · 万能符' },
+  { id:'S16', name:'地基重组', cat:'struct', rar:'r', effect:'本局每 spin 后 charm 槽位顺序自动重排（最优）', lore:'命运的洗牌' },
+  { id:'S17', name:'锁定费用 -1', cat:'struct', rar:'c', effect:'每次 hold 列额外得 1 金币', lore:'锁列拿小费' },
+  { id:'S18', name:'重抽不消耗', cat:'struct', rar:'r', effect:'本 spin discard 不扣抽次数', lore:'高利贷主的"恩典"' },
+  { id:'S19', name:'第 6 列', cat:'struct', rar:'l', effect:'每行 5 列 → 6 列（传奇，扑克手变 6 张）', lore:'传奇 · 加宽桌面' },
+  { id:'S20', name:'连环商店', cat:'struct', rar:'r', effect:'每周还债后开放 2 次商店（普通仅 1 次）', lore:'连环作案' },
+  { id:'S21', name:'缓刑令', cat:'struct', rar:'r', effect:'本局允许 1 次还债失败不死亡', lore:'高利贷主签字的缓刑令' },
+  { id:'S22', name:'重新分配', cat:'struct', rar:'u', effect:'重抽时所有未 hold 牌随机交换列', lore:'洗牌之灵' },
+  { id:'S23', name:'高利贷暴露', cat:'struct', rar:'l', effect:'本局还债 r 从 2.0 → 1.5（指数斜率降低，传奇）', lore:'传奇 · 揭穿高利贷阴谋' },
+  { id:'S24', name:'连抽通道', cat:'struct', rar:'r', effect:'连续 2 spin 不刷新 charm → 第 3 spin 免费抽 1 个 charm', lore:'忍者的耐心' },
+  { id:'S25', name:'扑克变奏', cat:'struct', rar:'u', effect:'本局 J/Q/K 算作 10/10/10（让所有顺子更易成）', lore:'变奏曲' },
+  { id:'S26', name:'失败保护', cat:'struct', rar:'r', effect:'本 spin 若 0 牌型 → 退还 50% 已下注', lore:'保险公司' },
+  { id:'S27', name:'强制成牌', cat:'struct', rar:'l', effect:'每行至少保证 1 对（传奇）', lore:'传奇 · 牌桌的怜悯' },
+  { id:'S28', name:'倍率组合', cat:'struct', rar:'r', effect:'charm 槽位每 2 个 → 额外触发 1 次乘性', lore:'双倍咒语' },
+  { id:'S29', name:'牌池克隆', cat:'struct', rar:'r', effect:'本局扑克池变 52 → 104（成对概率加倍）', lore:'山姆叔叔的双倍套牌' },
+  { id:'S30', name:'调和大师', cat:'struct', rar:'l', effect:'每张 ♥♦♠♣ 出现率自动平衡到 25%（传奇）', lore:'传奇 · 调和之主' },
+
+  // ========== 类别 ④ 触发链类 30 个（行/列/对角连锁、cascade）==========
+  { id:'T01', name:'行间共鸣', cat:'chain', rar:'u', effect:'若相邻 2 行同牌型 → ×1.5', lore:'鼓的共振' },
+  { id:'T02', name:'三连共振', cat:'chain', rar:'r', effect:'若连续 3 行同牌型 → ×3', lore:'三声号角' },
+  { id:'T03', name:'全行同型', cat:'chain', rar:'l', effect:'若所有行同牌型 → ×10（传奇）', lore:'传奇 · 大教堂钟声' },
+  { id:'T04', name:'列同色加成', cat:'chain', rar:'c', effect:'若 1 列全同色 → 该列 ×2', lore:'列旗' },
+  { id:'T05', name:'列同点加成', cat:'chain', rar:'u', effect:'若 1 列全同点 → 该列 ×3', lore:'列点阵' },
+  { id:'T06', name:'对角同色', cat:'chain', rar:'r', effect:'若对角线 5 张同色 → ×4', lore:'交叉天罚' },
+  { id:'T07', name:'对角同花顺', cat:'chain', rar:'l', effect:'若对角线 5 张同花顺 → ×20（传奇）', lore:'传奇 · 闪电梯' },
+  { id:'T08', name:'四角钩', cat:'chain', rar:'r', effect:'若 4 角同点 → ×6', lore:'四方钩' },
+  { id:'T09', name:'十字架', cat:'chain', rar:'r', effect:'若十字格（中心 + 4 边中）同点 → ×5', lore:'忏悔十字' },
+  { id:'T10', name:'cascade 引爆', cat:'chain', rar:'u', effect:'某行成牌型 → 下一行自动重抽 1 列', lore:'多米诺的第一块' },
+  { id:'T11', name:'连环爆破', cat:'chain', rar:'r', effect:'每行 cascade → 整体 +20%', lore:'连环爆破' },
+  { id:'T12', name:'cascade 终结', cat:'chain', rar:'r', effect:'若 ≥ 3 次 cascade 触发 → 本 spin ×5', lore:'连锁审判' },
+  { id:'T13', name:'同色之路', cat:'chain', rar:'u', effect:'若任 1 行有 5 张同色 → 解锁 1 个传奇加成（×3）', lore:'追色之路' },
+  { id:'T14', name:'位置链', cat:'chain', rar:'r', effect:'charm 槽 1→N 按序触发，每个 ×1.2', lore:'序列之链' },
+  { id:'T15', name:'反向链', cat:'chain', rar:'r', effect:'charm 槽 N→1 反向触发（玩家可选）', lore:'倒流之河' },
+  { id:'T16', name:'重连重生', cat:'chain', rar:'r', effect:'若同列 ≥ 4 张同点 → 重新抽该列', lore:'凤凰浴火' },
+  { id:'T17', name:'交叉触发', cat:'chain', rar:'r', effect:'若行 + 列同时成型 → 该格 ×8', lore:'十字爆破' },
+  { id:'T18', name:'梯子升级', cat:'chain', rar:'r', effect:'每 cascade 把当前最低牌点 +1', lore:'阶梯炼金' },
+  { id:'T19', name:'同点连珠', cat:'chain', rar:'u', effect:'若同点跨 ≥ 3 行 → 整体 ×2', lore:'同心圆' },
+  { id:'T20', name:'cascade 爆炸', cat:'chain', rar:'l', effect:'cascade 触发时所有同色牌 ×5（传奇）', lore:'传奇 · 终末连锁' },
+  { id:'T21', name:'孪生行', cat:'chain', rar:'u', effect:'若 2 行完全相同 → ×4', lore:'镜面' },
+  { id:'T22', name:'递增链', cat:'chain', rar:'r', effect:'若 5 行牌型递增（一对→两对→三条→葫芦→四条）→ ×15', lore:'阶梯王' },
+  { id:'T23', name:'金字塔', cat:'chain', rar:'l', effect:'若 5 行同花面值递增 → ×30（传奇）', lore:'传奇 · 古埃及金字塔' },
+  { id:'T24', name:'断裂链', cat:'chain', rar:'r', effect:'若某行 0 牌型 → 跳过该行，其他行 ×1.5', lore:'舍卒保车' },
+  { id:'T25', name:'放大器', cat:'chain', rar:'l', effect:'任何 charm 触发时额外触发 1 次（传奇）', lore:'传奇 · 双倍放大器' },
+  { id:'T26', name:'回声触发', cat:'chain', rar:'u', effect:'每 charm 触发后下 spin 该 charm 倍率 ×1.1', lore:'回声谷' },
+  { id:'T27', name:'触发分裂', cat:'chain', rar:'r', effect:'随机选 1 个已触发 charm 再触发 1 次', lore:'分裂幽魂' },
+  { id:'T28', name:'雷击连锁', cat:'chain', rar:'r', effect:'对角线触发后该对角线所有牌 ×2', lore:'雷击网' },
+  { id:'T29', name:'守护连接', cat:'chain', rar:'u', effect:'每 hold 列触发其上下行 ×1.3', lore:'锁链兄弟' },
+  { id:'T30', name:'终焉之链', cat:'chain', rar:'l', effect:'最后 1 spin 时所有 charm ×3（传奇）', lore:'传奇 · 末日链' },
+
+  // ========== 类别 ⑤ 传奇 / 颠覆规则类 30 个 ==========
+  { id:'L01', name:'万能 wild', cat:'legend', rar:'l', effect:'本局牌池含 4 张 wild card（百搭）', lore:'传奇 · 万能开关' },
+  { id:'L02', name:'牌型上溢', cat:'legend', rar:'l', effect:'所有牌型表 +1 档（对子→两对、四条→五条）', lore:'传奇 · 提升一档' },
+  { id:'L03', name:'第六张牌', cat:'legend', rar:'l', effect:'每行抽 6 张（多 1 张选 5 张组合）', lore:'传奇 · 第六感' },
+  { id:'L04', name:'五条降临', cat:'legend', rar:'l', effect:'解锁"五条"牌型（×100）', lore:'传奇 · 五位一体' },
+  { id:'L05', name:'同花极限', cat:'legend', rar:'l', effect:'若 25 张全同色 → 解锁"全同色"牌型（×500）', lore:'传奇 · 终极纯净' },
+  { id:'L06', name:'对角秘术', cat:'legend', rar:'l', effect:'本局对角线判定独立成结算（×2）', lore:'传奇 · 秘传几何' },
+  { id:'L07', name:'三维 line', cat:'legend', rar:'l', effect:'本局加入 Z 轴（多角度连线）', lore:'传奇 · 升维之钥' },
+  { id:'L08', name:'reroll 自由', cat:'legend', rar:'l', effect:'本 spin 可无限重抽（直到放弃）', lore:'传奇 · 时间停止' },
+  { id:'L09', name:'命运契约', cat:'legend', rar:'l', effect:'还债额翻倍，但产出 ×5', lore:'传奇 · 与魔鬼握手' },
+  { id:'L10', name:'扑克之神', cat:'legend', rar:'l', effect:'第 1 次 deal 必出皇家同花顺（每局 1 次）', lore:'传奇 · 神的眷顾' },
+  { id:'L11', name:'死神之吻', cat:'legend', rar:'l', effect:'本 spin 必有 1 行同花顺，但下 spin 失血 1 HP', lore:'传奇 · 死神交易' },
+  { id:'L12', name:'反规则', cat:'legend', rar:'l', effect:'本局 0 牌型也按 1 对计算', lore:'传奇 · 颠倒乾坤' },
+  { id:'L13', name:'记忆复制', cat:'legend', rar:'l', effect:'本 spin 复制上 spin 的最佳行 1 次', lore:'传奇 · 时空回放' },
+  { id:'L14', name:'cascade 元', cat:'legend', rar:'l', effect:'cascade 可触发其他 cascade（无限连锁）', lore:'传奇 · 元素裂变' },
+  { id:'L15', name:'扑克通胀', cat:'legend', rar:'l', effect:'牌池移除 2-5（只剩 6-A，强制高牌局）', lore:'传奇 · 牌池升级' },
+  { id:'L16', name:'权力反转', cat:'legend', rar:'l', effect:'本局 2 为最大牌、A 为最小', lore:'传奇 · 国王变奴隶' },
+  { id:'L17', name:'同色融合', cat:'legend', rar:'l', effect:'同色牌点数自动累加（4 张 ♥ 视为 1 张超大 ♥）', lore:'传奇 · 元素融合' },
+  { id:'L18', name:'阶梯之神', cat:'legend', rar:'l', effect:'若有任 1 顺子 → 整局所有 spin ×3', lore:'传奇 · 阶梯之主' },
+  { id:'L19', name:'平衡', cat:'legend', rar:'l', effect:'本 spin 全行牌型相等才结算（否则跳过）', lore:'传奇 · 强制完美' },
+  { id:'L20', name:'死亡彩票', cat:'legend', rar:'l', effect:'本局每 spin 5% 概率 ×100，95% 概率 ×0', lore:'传奇 · 高方差人生' },
+  { id:'L21', name:'最后审判', cat:'legend', rar:'l', effect:'本局还债成功 → 自动解锁下一关传奇 charm', lore:'传奇 · 大天使的批准' },
+  { id:'L22', name:'平方升级', cat:'legend', rar:'l', effect:'每 charm 倍率改为 mᵢ²（指数级）', lore:'传奇 · 数学升维' },
+  { id:'L23', name:'轮回赌注', cat:'legend', rar:'l', effect:'本局结束后所有 charm 倍率累加到下局', lore:'传奇 · 因果累积' },
+  { id:'L24', name:'阶梯 wild', cat:'legend', rar:'l', effect:'本局连续 5 张相邻数字自动视为顺子', lore:'传奇 · 弹性顺子' },
+  { id:'L25', name:'同色诅咒', cat:'legend', rar:'l', effect:'本局只接受同色牌组合，但同花 ×10', lore:'传奇 · 纯洁狂' },
+  { id:'L26', name:'图牌君王', cat:'legend', rar:'l', effect:'本局 J/Q/K/A 互相视为同点', lore:'传奇 · 贵族团结' },
+  { id:'L27', name:'恶魔变体', cat:'legend', rar:'l', effect:'本 spin 失败 → 自动重抽 1 次（每周 1 次）', lore:'传奇 · 撒旦的怜悯' },
+  { id:'L28', name:'七星汇聚', cat:'legend', rar:'l', effect:'若 5 张牌全为 7 → ×1000', lore:'传奇 · 北斗七星' },
+  { id:'L29', name:'命运回锅', cat:'legend', rar:'l', effect:'本 spin 重置所有 charm 顺序（玩家选最优）', lore:'传奇 · 命运回锅肉' },
+  { id:'L30', name:'终极赌徒之心', cat:'legend', rar:'l', effect:'本局还债成功 → 解锁结局 + 永久 charm 槽 +1', lore:'传奇 · 通关之心' }
+];
+
+const RAR_LABEL = { c:'普', u:'罕', r:'史', l:'传' };
+const CAT_LABEL = { prob:'概率', pay:'赔付倍率', struct:'结构改造', chain:'触发链', legend:'传奇颠覆' };
+const CAT_DESC = {
+  prob:   '增加某些牌出现频率 / 偏置概率分布——「养概率不养符号」哲学的最直接体现',
+  pay:    '某牌型出现时 ×N 倍率——乘性链的核心组件',
+  struct: '增加 hold 槽 / 增加 line 数 / 改变扑克池结构——升级游戏框架本身',
+  chain:  '相邻行/列/对角连锁触发——cascade 引爆 + 网格 line_complete',
+  legend: '颠覆规则的传奇修饰器——单局 30 个传奇之一登场创造高潮瞬间'
+};
+
+const grouped = {};
+for (const c of CHARMS) {
+  (grouped[c.cat] = grouped[c.cat] || []).push(c);
+}
+
+const root = document.querySelector('#charms-root');
+const order = ['prob', 'pay', 'struct', 'chain', 'legend'];
+const html = order.map((cat, idx) => {
+  const list = grouped[cat] || [];
+  const headerNum = ['①','②','③','④','⑤'][idx];
+  return `
+    <div class="card" style="padding: 16px 18px; margin-bottom: 16px;">
+      <div style="font-weight: 700; font-size: 15px; margin-bottom: 6px;">
+        ${headerNum} <span class="cat-${cat}" style="padding: 3px 10px; border-radius: 10px;">${CAT_LABEL[cat]}族</span> · ${list.length} 个
+      </div>
+      <div class="muted" style="font-size: 12px; line-height: 1.6; margin-bottom: 10px;">${CAT_DESC[cat]}</div>
+      <div style="max-height: 420px; overflow-y: auto; border: 1px solid var(--line); border-radius: 6px;">
+        <table class="charm-tbl">
+          <thead>
+            <tr><th style="width: 45px;">ID</th><th style="width: 110px;">名字</th><th style="width: 50px;">稀有</th><th style="width: 270px;">数学效果</th><th>叙事 lore</th></tr>
+          </thead>
+          <tbody>
+            ${list.map(c => `
+              <tr>
+                <td class="charm-id">${c.id}</td>
+                <td style="font-weight: 600;">${c.name}</td>
+                <td><span class="rarity rar-${c.rar}">${RAR_LABEL[c.rar]}</span></td>
+                <td>${c.effect}</td>
+                <td style="color: var(--fg-muted); font-style: italic;">${c.lore}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}).join('');
+
+// 总览统计
+const stats = {
+  total: CHARMS.length,
+  byCat: order.map(c => ({ cat: c, n: (grouped[c]||[]).length })),
+  byRar: { c: CHARMS.filter(c=>c.rar==='c').length, u: CHARMS.filter(c=>c.rar==='u').length, r: CHARMS.filter(c=>c.rar==='r').length, l: CHARMS.filter(c=>c.rar==='l').length }
+};
+root.innerHTML = `
+  <div class="card" style="padding: 14px 18px; margin-bottom: 14px; background: linear-gradient(90deg, rgba(251,191,36,0.06), rgba(167,139,250,0.04));">
+    <div style="font-weight: 700; font-size: 14px; margin-bottom: 8px;">📊 池子统计</div>
+    <div style="font-size: 12px; line-height: 1.7;">
+      总计 <b style="color: #fbbf24;">${stats.total}</b> 个 charms ·
+      分类：${stats.byCat.map(c => `<span class="cat-${c.cat}" style="padding: 1px 8px; border-radius: 8px;">${CAT_LABEL[c.cat]} ${c.n}</span>`).join(' ')}
+      <br>稀有度：<span class="rarity rar-c">普 ${stats.byRar.c}</span> <span class="rarity rar-u">罕 ${stats.byRar.u}</span> <span class="rarity rar-r">史 ${stats.byRar.r}</span> <span class="rarity rar-l">传 ${stats.byRar.l}</span>
+    </div>
+  </div>
+  ${html}
+`;
+</script>
+
+</div>
+</body>
+</html>

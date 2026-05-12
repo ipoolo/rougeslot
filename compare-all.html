@@ -1,0 +1,300 @@
+<!doctype html>
+<!--
+  R_RougeSlot · 34 款游戏横向比较（v5）
+  ==========================================
+  按 v5 完备模型的 7 个维度（random / put / @show_topology / combo1 / combo2 / pool / 压力）
+  做紧凑文本对比，让人一次扫完所有游戏在每个维度的设计。
+  v5 升级：show_topology 从 combo1 列剥离独立成列。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>34 款游戏横向比较 · R_RougeSlot</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  /* 紧凑对照表 */
+  .cmp-tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .cmp-tbl thead th {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--bg-card);
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 11px;
+    border-bottom: 2px solid var(--accent);
+    white-space: nowrap;
+  }
+  .cmp-tbl tbody td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    font-size: 11.5px;
+    line-height: 1.55;
+  }
+  .cmp-tbl tbody tr:hover { background: var(--bg-hover); }
+  .cmp-tbl .game-cell {
+    position: sticky; left: 0; z-index: 5;
+    background: var(--bg-card);
+    border-right: 1px solid var(--line);
+    min-width: 130px;
+    max-width: 150px;
+  }
+  .cmp-tbl tbody tr:hover .game-cell { background: var(--bg-hover); }
+  .cmp-tbl .game-cell a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 12px; }
+  .cmp-tbl .score-pill {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 1px 5px; border-radius: 8px;
+    background: var(--accent); color: #1c1300;
+    margin-left: 4px;
+  }
+  .cmp-tbl .topo-tag, .cmp-tbl .pred-tag, .cmp-tbl .pf-tag, .cmp-tbl .c2t-tag {
+    display: inline-block; font-size: 10px; padding: 1px 5px; border-radius: 6px;
+    margin: 1px 2px 1px 0; white-space: nowrap;
+  }
+  .cmp-tbl .topo-tag { background: rgba(96,165,250,0.18); color: #93c5fd; }
+  .cmp-tbl .pred-tag { background: rgba(167,139,250,0.18); color: #c4b5fd; }
+  .cmp-tbl .pf-tag { font-weight: 700; }
+  .cmp-tbl .c2t-tag { font-weight: 600; }
+  .cmp-tbl .key-text { color: var(--fg); font-size: 11px; line-height: 1.5; display: block; margin-top: 3px; }
+
+  /* sort header */
+  .cmp-tbl thead th[data-sort] { cursor: pointer; user-select: none; }
+  .cmp-tbl thead th[data-sort]:hover { color: var(--accent); }
+
+  /* tooltip 浮窗系统：层级最高，可越过 sticky 表头/列 */
+  .rr-help {
+    display: inline-block; margin-left: 3px;
+    width: 13px; height: 13px; line-height: 13px;
+    text-align: center; border-radius: 50%;
+    background: rgba(124, 58, 237, 0.35); color: #d8c5ff;
+    font-size: 9px; font-weight: 700;
+    cursor: help; vertical-align: middle; user-select: none;
+    transition: background 0.15s;
+  }
+  .rr-help:hover { background: rgba(124, 58, 237, 0.75); color: #fff; }
+  .rr-help-pop {
+    position: fixed;
+    background: #1a1825;
+    border: 1px solid rgba(124, 58, 237, 0.5);
+    color: #e0d8f5;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    line-height: 1.75;
+    font-weight: 400;
+    text-align: left;
+    white-space: pre-wrap;
+    max-width: 420px;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.7);
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .rr-help-pop.show { opacity: 1; }
+</style>
+<script>
+  /* tooltip 控制器：fixed + body 渲染 + z-index 99999，不被 sticky 容器裁剪 */
+  (function () {
+    let tipEl = null;
+    function show(target) {
+      const text = target.getAttribute('data-tooltip'); if (!text) return; hide();
+      tipEl = document.createElement('div'); tipEl.className = 'rr-help-pop'; tipEl.textContent = text;
+      document.body.appendChild(tipEl);
+      const r = target.getBoundingClientRect(); const tw = tipEl.offsetWidth; const th = tipEl.offsetHeight; const margin = 8;
+      let x = r.left + r.width / 2 - tw / 2; let y = r.top - th - margin;
+      if (y < margin) y = r.bottom + margin;
+      if (x < margin) x = margin;
+      if (x + tw > window.innerWidth - margin) x = window.innerWidth - tw - margin;
+      tipEl.style.left = x + 'px'; tipEl.style.top = y + 'px';
+      requestAnimationFrame(() => tipEl && tipEl.classList.add('show'));
+    }
+    function hide() { if (tipEl) { tipEl.remove(); tipEl = null; } }
+    document.addEventListener('mouseover', e => { const t = e.target.closest && e.target.closest('.rr-help'); if (t) show(t); });
+    document.addEventListener('mouseout', e => { const t = e.target.closest && e.target.closest('.rr-help'); if (t) hide(); });
+    document.addEventListener('scroll', hide, true);
+    window.addEventListener('blur', hide);
+  })();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div class="page-head">
+  <h1>34 款游戏横向比较（v5）</h1>
+  <p class="lede">按 v5 完备模型的 <b>7 个维度</b>（random / put / <b style="color:#a78bfa;">@show_topology</b> / combo1 / combo2 / pool / 压力）做紧凑文本对比——一次扫完所有游戏的设计指纹。<br><span style="color: #34d399; font-size:13px;">v5 升级：show_topology 从 combo1 列剥离，独立成列（put 与 combo 共享舞台）。</span></p>
+  <p class="meta" id="meta-info"></p>
+</div>
+
+<div id="root"></div>
+
+<script src="framework/v5/schema.js"></script>
+<script src="data/games.js"></script>
+<script src="lib/render.js"></script>
+<script src="lib/combo2-typology.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+  const fw = RR.getFramework();
+  const games = RR.getAllGames().filter(g => g.analysis && g.analysis.qualitative && g.analysis.qualitative.put_form);
+  const COMBO2_TAGS = window.RR_COMBO2_TAGS || {};
+  const COMBO2_TYPES = window.RR_COMBO2_TYPES || [];
+  const c2TypeMap = new Map(COMBO2_TYPES.map(t => [t.key, t]));
+  const escapeHtml = RR.escapeHtml;
+
+  const TOPO = fw.show_topology_enum || [];
+  const PRED = fw.combo_predicate_enum || [];
+  const PUT_TYPES = fw.put_form_enum || [];
+
+  const PUT_COLOR = { auto_place: '#60a5fa', manual_set: '#a78bfa', manual_place: '#fbbf24', auto_set: '#94a3b8' };
+  const PUT_GLYPH = { auto_place: '⚙', manual_set: '✋', manual_place: '🎯', auto_set: '∅' };
+
+  const topoName = k => TOPO.find(t => t.key === k)?.name || k;
+  const predName = k => PRED.find(p => p.key === k)?.name || k;
+  const putName  = k => PUT_TYPES.find(p => p.key === k)?.name || k;
+
+  // 生成 ? 号 + tooltip（仅文本被截断时附加）
+  const helpTip = (fullText) => {
+    if (!fullText) return '';
+    return ` <span class="rr-help" data-tooltip="${escapeHtml(fullText)}">?</span>`;
+  };
+  // 文本压缩：取前 N 字 + ?号 tooltip（截断时显示完整）
+  const compress = (s, n) => {
+    if (!s) return '—';
+    const full = String(s).replace(/\s+/g, ' ').trim();
+    if (full.length <= n) return escapeHtml(full);
+    return escapeHtml(full.slice(0, n) + '…') + helpTip(full);
+  };
+  // 提取首句（按 · / 。 / ；分隔）+ ?号 tooltip（截断时显示完整）
+  const firstClause = (s, n) => {
+    if (!s) return '—';
+    const full = String(s).replace(/\s+/g, ' ').trim();
+    const m = full.match(/^([^·。；]+)/);
+    const first = m ? m[1] : full;
+    let needTip = false;
+    let display = first;
+    // 长度截断
+    if (first.length > n) { display = first.slice(0, n) + '…'; needTip = true; }
+    // 首句不等于全文（被分隔符截掉了后续句子）
+    if (first !== full) needTip = true;
+    if (!needTip) return escapeHtml(display);
+    return escapeHtml(display) + helpTip(full);
+  };
+
+  // meta
+  document.querySelector('#meta-info').innerHTML =
+    `共 <b>${games.length}</b> 款样本 · 6 维度横向 · 框架 <b>${fw.version}</b>`;
+
+  // 排序：按总分降序
+  games.sort((a, b) => {
+    const sa = a.analysis.scores;
+    const sb = b.analysis.scores;
+    return (sb.random + sb.combo + sb.pool + sb.structure) - (sa.random + sa.combo + sa.pool + sa.structure);
+  });
+
+  /* === 渲染表格 === */
+  const rows = games.map(g => {
+    const q = g.analysis.qualitative;
+    const sc = g.analysis.scores;
+    const total = sc.random + sc.combo + sc.pool + sc.structure;
+
+    // 1. random 列
+    const randomCell = `
+      <span class="key-text">${firstClause(q.random_design, 50)}</span>
+      <span class="score-pill">R${sc.random}</span>
+    `;
+
+    // 2. put 列
+    const pf = q.put_form;
+    const pfColor = PUT_COLOR[pf] || '#888';
+    const putCell = `
+      <span class="pf-tag" style="background: ${pfColor}22; color: ${pfColor};">${PUT_GLYPH[pf]} ${escapeHtml(putName(pf))}</span>
+    `;
+
+    // 3. @show_topology 列（v5 新增独立列，从 combo1 剥离）
+    const stCell = `
+      <span class="topo-tag" title="${escapeHtml(q.show_topology)}">${escapeHtml(topoName(q.show_topology))}</span>
+    `;
+
+    // 4. combo1 列：仅 combo_predicate + combo_synergy（拓扑标签已剥离到 @show_topology 列）
+    const preds = (q.combo_predicate || []).map(p => `<span class="pred-tag" title="${escapeHtml(p)}">${escapeHtml(predName(p))}</span>`).join('');
+    const c1Cell = `
+      ${preds}
+      <span class="key-text">${firstClause(q.combo_synergy, 45)}</span>
+      <span class="score-pill">C${sc.combo}</span>
+    `;
+
+    // 5. combo2 列：typology + 1 句 combo_modifier
+    const c2tag = COMBO2_TAGS[g.slug];
+    const c2type = c2tag ? c2TypeMap.get(c2tag.primary) : null;
+    const c2TagHtml = c2type ? `<span class="c2t-tag" style="background: ${c2type.color}22; color: ${c2type.color};">${c2type.glyph} ${escapeHtml(c2type.short)}</span>` : '<span class="dim">—</span>';
+    const c2Cell = `
+      ${c2TagHtml}
+      <span class="key-text">${firstClause(q.combo_modifier, 45)}</span>
+    `;
+
+    // 6. pool 列：pool_base + pool_active 简短
+    const poolCell = `
+      <span class="key-text"><b>基</b>：${firstClause(q.pool_base_desc, 35)}</span>
+      <span class="key-text"><b>主</b>：${firstClause(q.pool_active_desc, 35)}</span>
+      <span class="score-pill">P${sc.pool}</span>
+    `;
+
+    // 7. 压力列
+    const pressureCell = `
+      <span class="key-text">${firstClause(q.checkpoint_mechanism, 45)}</span>
+      <span class="score-pill">S${sc.structure}</span>
+    `;
+
+    // game cell
+    const gameCell = `
+      <a href="analysis/${escapeHtml(g.slug)}.html">${escapeHtml(g.basic.name_cn)}</a>
+      <div style="font-size: 10px; color: var(--fg-muted); margin-top: 2px;">总 <b style="color: var(--accent);">${total}</b></div>
+    `;
+
+    return `
+      <tr>
+        <td class="game-cell">${gameCell}</td>
+        <td>${randomCell}</td>
+        <td>${putCell}</td>
+        <td>${stCell}</td>
+        <td>${c1Cell}</td>
+        <td>${c2Cell}</td>
+        <td>${poolCell}</td>
+        <td>${pressureCell}</td>
+      </tr>
+    `;
+  }).join('');
+
+  document.querySelector('#root').innerHTML = `
+    <p class="muted" style="font-size: 12px; margin-bottom: 12px;">
+      表头横向 7 维：random（抽取）/ <b>put</b>（v4 引入）/ <b style="color:#a78bfa;">@show_topology</b>（v5 独立列）/ combo1（符号协同）/ combo2（修饰协同）/ pool（双层池）/ 压力。
+      每格含关键词描述 + 评分小标（R/C/P/S）。游戏列固定 sticky。鼠标悬停 ? 号可见完整字段值。
+    </p>
+    <div style="overflow-x: auto; overflow-y: visible; max-height: 80vh;" class="card">
+      <table class="cmp-tbl">
+        <thead>
+          <tr>
+            <th class="game-cell" style="position: sticky; left: 0; top: 0; z-index: 11;">游戏（按总分排）</th>
+            <th>① random<br><span class="muted" style="font-size: 10px; font-weight: 400;">抽取机制</span></th>
+            <th>② put<br><span class="muted" style="font-size: 10px; font-weight: 400;">put_form</span></th>
+            <th style="background: rgba(167,139,250,0.10);">③ @show_topology<br><span class="muted" style="font-size: 10px; font-weight: 400;">舞台拓扑（v5）</span></th>
+            <th>④ combo1<br><span class="muted" style="font-size: 10px; font-weight: 400;">predicate + synergy</span></th>
+            <th>⑤ combo2<br><span class="muted" style="font-size: 10px; font-weight: 400;">typology + modifier</span></th>
+            <th>⑥ pool<br><span class="muted" style="font-size: 10px; font-weight: 400;">基础池 / 主动池</span></th>
+            <th>⑦ 压力<br><span class="muted" style="font-size: 10px; font-weight: 400;">checkpoint</span></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+})();
+</script>
+
+</div>
+</body>
+</html>

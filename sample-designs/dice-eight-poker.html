@@ -1,0 +1,443 @@
+<!doctype html>
+<!--
+  R_RougeSlot · 假设作品：骰子德州（Dice Eight Poker）完整设计提案
+  ===============================================================
+  v5 框架下的 sample-design 作品。掷 8 骰 × 3 色 + 德州扩展牌型 + 150 charms 乘性链。
+  首次填补 auto_set 结构性空类。基于 1M Monte Carlo 仿真。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>骰子德州 · 完整设计提案 · R_RougeSlot</title>
+<link rel="stylesheet" href="../lib/theme.css"/>
+<style>
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; padding: 14px 16px; background: var(--bg-card); border-radius: 8px; border-left: 3px solid #fbbf24; }
+  .toc a { padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); color: var(--fg); text-decoration: none; font-size: 12px; }
+  .toc a:hover { background: #fbbf24; color: #1c1300; }
+
+  .prob-tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .prob-tbl th { text-align: left; padding: 8px 10px; background: var(--bg-card); border-bottom: 2px solid var(--accent); }
+  .prob-tbl td { padding: 6px 10px; border-bottom: 1px solid var(--line); }
+  .prob-tbl tr.tier-1 { background: rgba(52,211,153,0.04); }
+  .prob-tbl tr.tier-2 { background: rgba(96,165,250,0.04); }
+  .prob-tbl tr.tier-3 { background: rgba(167,139,250,0.05); }
+  .prob-tbl tr.tier-4 { background: rgba(251,191,36,0.08); }
+  .prob-pill { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+  .tier-tag-1 { background: #34d399; color: #0a3324; }
+  .tier-tag-2 { background: #60a5fa; color: #0a1a33; }
+  .tier-tag-3 { background: #a78bfa; color: #1a0a33; }
+  .tier-tag-4 { background: #fbbf24; color: #3d2a00; }
+
+  .charm-card { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent); }
+  .charm-card .name { font-weight: 700; font-size: 13px; }
+  .charm-card .rarity { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 700; margin-left: 6px; }
+  .charm-card .effect { font-size: 12px; line-height: 1.6; margin-top: 4px; color: var(--fg-muted); }
+  .rarity-common { background: rgba(255,255,255,0.10); color: var(--fg); }
+  .rarity-rare { background: rgba(96,165,250,0.2); color: #60a5fa; }
+  .rarity-epic { background: rgba(167,139,250,0.2); color: #a78bfa; }
+  .rarity-legendary { background: rgba(251,191,36,0.25); color: #fbbf24; }
+
+  /* 骰子可视化 */
+  .die-vis { display: inline-block; width: 28px; height: 28px; border-radius: 4px; line-height: 28px; text-align: center; font-weight: 700; font-size: 14px; margin: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+  .die-R { background: #ef4444; color: white; }
+  .die-G { background: #10b981; color: white; }
+  .die-B { background: #3b82f6; color: white; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="../index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a> ·
+<a href="../modifier-driven-rogue-spec.html" style="font-size: 12px; color: #fbbf24;">📜 修饰器构筑型子品类白皮书</a>
+
+<div class="page-head">
+  <h1>骰子德州 · 完整设计提案 <span class="kbd" style="margin-left: 10px; font-size: 12px;">SAMPLE-DESIGN</span></h1>
+  <p class="lede">基于「<b>修饰器构筑型 Roguelike 子品类</b>」+「<b>Cloverpit 体验骨架</b>」的提案作品。掷 8 骰 × 3 色 + 德州扩展牌型字典 + 150 charms 乘性链 + 还债指数压力。<b style="color:#fbbf24;">首次填补 v5 框架的 auto_set 结构性空类</b>。</p>
+  <p class="meta" id="meta-info"></p>
+</div>
+
+<div class="toc">
+  <a href="#s1">① 核心创意</a>
+  <a href="#s2">② v5 字段</a>
+  <a href="#s-formula" style="background: rgba(251,191,36,0.18); color:#fbbf24;">★ 计分公式（v0.2 升级）</a>
+  <a href="#s3">③ 牌型概率 + 图形分</a>
+  <a href="#s4">④ 150 charms 池</a>
+  <a href="#s5">⑤ 压力曲线 + 平衡数学</a>
+  <a href="#s6">⑥ 跟邻近作品对比</a>
+  <a href="#s7">⑦ 题材建议</a>
+  <a href="#s8">⑧ 风险 + 对策</a>
+  <a href="#s9">⑨ 开发路线图</a>
+  <a href="#s10">⑩ 评分预测</a>
+</div>
+
+<div id="root"></div>
+
+<script src="../framework/v5/schema.js"></script>
+<script src="../data/games.js"></script>
+<script src="../lib/render.js"></script>
+<script src="../lib/combo2-typology.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+  const fw = RR.getFramework();
+  const escapeHtml = RR.escapeHtml;
+
+  document.querySelector('#meta-info').innerHTML =
+    `提案作品 · 框架 <b>${fw.version}</b> · 1M Monte Carlo 仿真 · 5 节核心设计`;
+
+  // 加载概率数据
+  let probData = null;
+  let charmData = null;
+  Promise.all([
+    fetch('../data/sample-designs/dice-eight-probability.json').then(r => r.json()),
+    fetch('../data/sample-designs/dice-eight-charms.json').then(r => r.json())
+  ]).then(([prob, charms]) => {
+    probData = prob;
+    charmData = charms;
+    render();
+  });
+
+  function render() {
+    /* === ① 核心创意 === */
+    const sec1 = `
+      <h2 class="section-title" id="s1">① 核心创意 · 一句话</h2>
+      <div class="card" style="padding: 22px 26px; margin-bottom: 24px; background: linear-gradient(180deg, rgba(251,191,36,0.08), rgba(167,139,250,0.04));">
+        <div style="font-size: 18px; line-height: 1.9; font-weight: 700; color: var(--fg); margin-bottom: 12px;">
+          保留 Cloverpit 的所有体验骨架（charms 乘性链 / 还债压力 / 双峰多巴胺），但<b style="color:#fbbf24;">装置层和判定层全换</b>——把 7 种符号 slot 改成 6 点数 × 3 颜色的 8 骰多重集，用德州扑克扩展牌型字典替代连线计分。
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin: 18px 0; flex-wrap: wrap;">
+          <div class="die-vis die-R">⚄</div>
+          <div class="die-vis die-G">⚂</div>
+          <div class="die-vis die-B">⚀</div>
+          <div class="die-vis die-R">⚅</div>
+          <div class="die-vis die-G">⚄</div>
+          <div class="die-vis die-B">⚂</div>
+          <div class="die-vis die-R">⚀</div>
+          <div class="die-vis die-G">⚃</div>
+          <span style="margin-left: 10px; font-size: 13px; color: var(--fg-muted);">8 颗骰子 × 3 色 → 德州牌型字典判定</span>
+        </div>
+        <div class="muted" style="font-size: 13px; line-height: 1.7;">
+          <b>设计指纹</b>：<code>0D_multiset × auto_set × type_dict + multiplicative_chain</code> ——
+          这是 v5 框架定义后首次被填补的 <b style="color:#fbbf24;">auto_set 空类</b>（34 已分析样本中无此格）。
+        </div>
+      </div>
+    `;
+
+    /* === ② v5 字段 === */
+    const proposal = RR.getAllGames().find(g => g.slug === 'dice-eight-poker-proposal');
+    const q = proposal.analysis.qualitative;
+    const sec2 = `
+      <h2 class="section-title" id="s2">② v5 框架字段</h2>
+      <div class="card" style="padding: 18px 22px; margin-bottom: 24px;">
+        <table class="tbl" style="font-size: 12.5px;">
+          <thead><tr><th style="width:170px;">字段</th><th>值 / 描述</th></tr></thead>
+          <tbody>
+            <tr><td><code>random_design</code></td><td>${escapeHtml(q.random_design)}</td></tr>
+            <tr><td><code>pool_base_desc</code></td><td>${escapeHtml(q.pool_base_desc)}</td></tr>
+            <tr><td><code>show_topology</code></td><td><span class="kbd">${escapeHtml(q.show_topology)}</span> · 0D 多重集</td></tr>
+            <tr><td><code>put_form</code></td><td><span class="kbd" style="background:#fbbf24; color:#1c1300;">${escapeHtml(q.put_form)}</span> ⭐ 首次填空</td></tr>
+            <tr><td><code>combo_predicate</code></td><td>${q.combo_predicate.map(p => `<span class="kbd">${escapeHtml(p)}</span>`).join(' ')}</td></tr>
+            <tr><td><code>combo_synergy</code></td><td>${escapeHtml(q.combo_synergy)}</td></tr>
+            <tr><td><code>combo_modifier</code></td><td>${escapeHtml(q.combo_modifier)}</td></tr>
+            <tr><td><code>pool_active_desc</code></td><td>${escapeHtml(q.pool_active_desc)}</td></tr>
+            <tr><td><code>rpbd_construction</code></td><td>${escapeHtml(q.rpbd_construction)}</td></tr>
+            <tr><td><code>checkpoint_mechanism</code></td><td>${escapeHtml(q.checkpoint_mechanism)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    /* === ★ 计分公式 · 4 乘性维度（v0.2 升级）=== */
+    const symbolValues = probData.symbol_values_by_point || { 1:2, 2:2, 3:3, 4:3, 5:5, 6:7 };
+    const symbolRows = Object.entries(symbolValues).map(([p, v]) => {
+      const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+      return `<tr><td style="text-align:center; font-size:18px;">${faces[parseInt(p)-1]}</td><td><b>${p} 点</b></td><td style="font-family: ui-monospace, monospace; color:#fbbf24; font-weight:700;">φ ${v}</td><td style="font-family: ui-monospace, monospace;">×1.0</td><td style="font-family: ui-monospace, monospace; color:#93c5fd;">16.7%</td></tr>`;
+    }).join('');
+
+    const secFormula = `
+      <h2 class="section-title" id="s-formula">★ 计分公式 · 4 乘性维度（v0.2 升级）</h2>
+      <div class="card" style="padding: 22px 26px; margin-bottom: 18px; background: linear-gradient(180deg, rgba(251,191,36,0.10), rgba(167,139,250,0.04));">
+        <div style="font-size: 14px; line-height: 1.8; margin-bottom: 14px;">
+          v0.2 把计分系统从「牌型 base_score 单一值」升级为<b style="color:#fbbf24;">4 乘性维度</b>——跟 Cloverpit 真实计分公式同构：
+        </div>
+        <div style="background: var(--bg-deep); padding: 18px 22px; border-radius: 8px; font-family: ui-monospace, 'SF Mono', monospace; font-size: 13px; line-height: 1.9; border: 1px solid rgba(251,191,36,0.3);">
+<span style="color:#34d399;">单牌型得分</span> = <span style="color:#93c5fd;">Σ(组成该牌型的骰子价值 × 符号倍率)</span> × <span style="color:#fbbf24;">图形分</span> × <span style="color:#a78bfa;">图形倍率</span>
+<span style="color: var(--fg-muted);">                 └─ 维度 1+2 ────────────────┘   └ 维度3 ┘   └ 维度4 ┘</span>
+
+<span style="color:#34d399;">单 spin 总分</span> = Σ <span style="color:#34d399;">单牌型得分</span> （所有触发的牌型独立累加）</div>
+        <div style="margin-top: 14px; font-size: 12px; line-height: 1.7;">
+          <b>关键变化</b>：旧公式「葫芦 = 40 分（固定）」→ 新公式「葫芦 = (3 个 6 + 2 个 4) × 倍率 × 图形分 × 图形倍率 = (3×7 + 2×3) × 1 × 1.5 × 1 = <b style="color:#fbbf24;">40.5 分</b>（同低点葫芦差异）」。
+          <b>意义</b>：让"凑高点数葫芦 vs 低点数葫芦"产生差异，charms 的"提高 6 点价值/倍率"路线变得有意义。
+        </div>
+      </div>
+
+      <h3 class="section-title" style="font-size: 14px; margin-top: 18px;">维度 1+2 · 符号价值表（决策 1A · 按点数 6 档 / Cloverpit 同构）</h3>
+      <div class="card" style="padding: 14px 18px; margin-bottom: 18px; overflow-x: auto;">
+        <table class="tbl" style="font-size: 13px;">
+          <thead><tr><th style="width:50px;">骰面</th><th style="width:60px;">点数</th><th>价值 (维度 1)</th><th>符号倍率 (维度 2，默认)</th><th>自然概率</th></tr></thead>
+          <tbody>${symbolRows}</tbody>
+        </table>
+        <div style="margin-top: 10px; padding: 8px 12px; background: rgba(96,165,250,0.06); border-radius: 4px; font-size: 12px; line-height: 1.7;">
+          <b>charms 可改</b>：① 概率类 charm 偏置出现率（如「幸运六」→ 6 点 +50% 概率） ② 符号倍率类 charm 抬升符号倍率（如「6 点高徒」→ 6 点 ×3）
+        </div>
+      </div>
+
+      <h3 class="section-title" style="font-size: 14px; margin-top: 18px;">维度 3+4 · 图形分表（决策 2 · 用户采纳建议值）</h3>
+      <p class="muted" style="margin-bottom: 10px; font-size: 12px;">下面 ③ 概率表的「图形分 figure_score」列就是维度 3 的具体值；图形倍率（维度 4）默认 ×1，charm 可改。</p>
+    `;
+
+    /* === ③ 概率表 === */
+    const TIER = (key) => {
+      const map = {
+        pair: 1, two_pair: 1, three_pair: 1, three_of_a_kind: 1,
+        full_house: 2, four_of_a_kind: 2, straight: 2, color_pair: 2, color_group_5: 2, rainbow_3color: 2,
+        big_straight: 3, double_full_house: 3, color_three_kind: 3, color_group_6: 3, five_of_a_kind: 3,
+        six_of_a_kind: 4, seven_of_a_kind: 4, eight_of_a_kind: 4,
+        color_four_kind: 3, color_five_kind: 4, color_group_7: 3,
+        all_same_color: 4, color_straight: 4, color_big_straight: 4
+      };
+      return map[key] || 2;
+    };
+    const tierName = ['', '基础', '进阶', '高级', '传奇'];
+    const tierColor = ['', '#34d399', '#60a5fa', '#a78bfa', '#fbbf24'];
+
+    const probRows = probData.patterns
+      .slice()
+      .sort((a, b) => (a.figure_score || 0) - (b.figure_score || 0))
+      .map(p => {
+        const tier = p.tier || TIER(p.key);
+        const fs = p.figure_score != null ? p.figure_score.toFixed(1) : '—';
+        return `
+          <tr class="tier-${tier}">
+            <td><b>${escapeHtml(p.name)}</b></td>
+            <td><span class="prob-pill tier-tag-${tier}">Tier ${tier} · ${tierName[tier]}</span></td>
+            <td style="font-family: ui-monospace, monospace;">${escapeHtml(p.prob_pct)}%</td>
+            <td style="font-family: ui-monospace, monospace; text-align: right; color: ${tierColor[tier]}; font-weight: 700;">×${fs}</td>
+          </tr>
+        `;
+      }).join('');
+
+    const sec3 = `
+      <h2 class="section-title" id="s3">③ 24 种牌型 · 概率 + 图形分（决策 2 采纳）</h2>
+      <p class="muted" style="margin-bottom: 14px; font-size: 13px;">
+        基于 ${probData.iterations.toLocaleString()} 次 Monte Carlo 模拟（v0.2 计分体系下，<code>figure_score</code> 是每种牌型的"图形分"基底，乘性链中的<b>第 3 维</b>）。表格按 figure_score 升序排——越靠后的牌型越罕见、回报越爆炸。
+      </p>
+      <div class="card" style="padding: 0; margin-bottom: 24px; overflow-x: auto;">
+        <table class="prob-tbl">
+          <thead>
+            <tr>
+              <th>牌型</th>
+              <th>层级</th>
+              <th>自然概率</th>
+              <th style="text-align: right;">图形分 figure_score</th>
+            </tr>
+          </thead>
+          <tbody>${probRows}</tbody>
+        </table>
+      </div>
+    `;
+
+    /* === ④ 150 charms 池 === */
+    const charmSections = charmData.categories.map(cat => {
+      const examples = cat.examples.map(c => `
+        <div class="charm-card">
+          <span class="name">${escapeHtml(c.name)}</span>
+          <span class="rarity rarity-${c.rarity}">${c.rarity.toUpperCase()}</span>
+          <div class="effect">${escapeHtml(c.effect)}</div>
+        </div>
+      `).join('');
+      return `
+        <div class="card" style="padding: 14px 18px; margin-bottom: 14px;">
+          <div style="font-weight: 700; font-size: 15px; color: var(--accent); margin-bottom: 6px;">${escapeHtml(cat.category)}</div>
+          <div class="muted" style="font-size: 11px; margin-bottom: 10px;">${escapeHtml(cat.purpose)}</div>
+          ${examples}
+          <div style="margin-top: 10px; padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: 4px; font-size: 11px; color: var(--fg-muted);">
+            <b>设计原则</b>：${escapeHtml(cat.design_principle)}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const sec4 = `
+      <h2 class="section-title" id="s4">④ 150 Charms 池（6 大类 · 部分例子）</h2>
+      <div class="card" style="padding: 14px 18px; margin-bottom: 14px; background: rgba(167,139,250,0.06);">
+        <div style="font-weight: 700; margin-bottom: 8px;">稀有度分布</div>
+        <ul style="margin: 0; padding-left: 22px; font-size: 13px; line-height: 1.7;">
+          <li><b>Common（普通）</b>：${escapeHtml(charmData.rarity_distribution.common)}</li>
+          <li><b>Rare（罕见）</b>：${escapeHtml(charmData.rarity_distribution.rare)}</li>
+          <li><b>Epic（史诗）</b>：${escapeHtml(charmData.rarity_distribution.epic)}</li>
+          <li><b>Legendary（传奇）</b>：${escapeHtml(charmData.rarity_distribution.legendary)}</li>
+        </ul>
+      </div>
+      ${charmSections}
+      <div class="card" style="padding: 14px 18px; margin-bottom: 24px; background: rgba(248,113,113,0.06); border-left: 3px solid #f87171;">
+        <div style="font-weight: 700; margin-bottom: 6px; color: #f87171;">⚙ 平衡注</div>
+        <ul style="margin: 0; padding-left: 22px; font-size: 12px; line-height: 1.7;">
+          ${charmData.balance_notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+
+    /* === ⑤ 压力曲线 === */
+    const T0 = parseFloat(proposal.analysis.pressure_params.T0);
+    const r = parseFloat(proposal.analysis.pressure_params.r);
+    const M = parseInt(proposal.analysis.pressure_params.M);
+    const N = parseInt(proposal.analysis.pressure_params.N);
+    let pressureRows = '';
+    for (let i = 1; i <= M; i++) {
+      const target = Math.round(T0 * Math.pow(r, i-1));
+      const perSpin = Math.round(target / N);
+      const buildMult = 2 + (i-1)*1.5; // 假设 charm 倍率随关数线性涨
+      const naturalBase = probData.expected_total_score;
+      const expectedSpin = naturalBase * buildMult;
+      const margin = expectedSpin >= perSpin ? '<span style="color:#34d399;">✓ 余裕</span>' : '<span style="color:#f87171;">⚠ 紧张</span>';
+      pressureRows += `
+        <tr>
+          <td>第 ${i} 周</td>
+          <td style="font-family: ui-monospace, monospace;">${target.toLocaleString()}</td>
+          <td style="font-family: ui-monospace, monospace;">${perSpin.toLocaleString()} / spin</td>
+          <td style="font-family: ui-monospace, monospace;">×${buildMult.toFixed(1)}</td>
+          <td style="font-family: ui-monospace, monospace;">${Math.round(expectedSpin).toLocaleString()}</td>
+          <td>${margin}</td>
+        </tr>
+      `;
+    }
+    const sec5 = `
+      <h2 class="section-title" id="s5">⑤ 压力曲线 + 平衡数学</h2>
+      <p class="muted" style="margin-bottom: 14px; font-size: 13px;">
+        基于 <code>T₀=${T0} / r=${r} / M=${M} / N=${N}</code> 的指数压力曲线。下表对比每周目标 vs 玩家期望产出（假设 charm 倍率线性增长）。
+      </p>
+      <div class="card" style="padding: 0; margin-bottom: 24px; overflow-x: auto;">
+        <table class="prob-tbl">
+          <thead>
+            <tr><th>周次</th><th>债务目标</th><th>每 spin 需达</th><th>玩家 charm 倍率</th><th>期望产出</th><th>状态</th></tr>
+          </thead>
+          <tbody>${pressureRows}</tbody>
+        </table>
+      </div>
+    `;
+
+    /* === ⑥ 邻近作品对比 === */
+    const sec6 = `
+      <h2 class="section-title" id="s6">⑥ 跟邻近作品的精确对比</h2>
+      <div class="card" style="padding: 14px 18px; margin-bottom: 24px; overflow-x: auto;">
+        <table class="tbl" style="font-size: 12px;">
+          <thead><tr><th>维度</th><th style="background: rgba(251,191,36,0.1);">★ 骰子德州</th><th>Cloverpit</th><th>Aotenjo</th><th>Balatro</th><th>Dice A Million</th></tr></thead>
+          <tbody>
+            <tr><td><b>装置</b></td><td>骰盅 8 骰</td><td>slot</td><td>麻将牌</td><td>扑克</td><td>骰子</td></tr>
+            <tr><td><b>颜色花色</b></td><td><b style="color:#fbbf24;">3 色 R/G/B ⭐</b></td><td>无</td><td>无</td><td>4 花色</td><td>无</td></tr>
+            <tr><td><b>show_topology</b></td><td>0D_multiset</td><td>2D_grid</td><td>0D_multiset</td><td>0D_multiset</td><td>0D_multiset</td></tr>
+            <tr><td><b>put_form</b></td><td><b style="color:#fbbf24;">auto_set ⭐</b></td><td>auto_place</td><td>manual_set</td><td>manual_set</td><td>manual_set</td></tr>
+            <tr><td><b>玩家 agency</b></td><td><b>无（最纯）</b></td><td>无</td><td>选 hand</td><td>选 hand</td><td>hold 决策</td></tr>
+            <tr><td><b>combo_predicate</b></td><td>type_dict</td><td>line + type + cascade</td><td>type_dict</td><td>type_dict + trigger</td><td>type_dict</td></tr>
+            <tr><td><b>combo2 typology</b></td><td>multiplicative_chain</td><td>multiplicative_chain</td><td>multiplicative_chain</td><td>multiplicative_chain</td><td>multiplicative_chain</td></tr>
+            <tr><td><b>题材</b></td><td>东方占卜/中式赌场</td><td>恐怖密室</td><td>麻将文化</td><td>桌游小丑</td><td>抽象</td></tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    /* === ⑦ 题材建议 === */
+    const sec7 = `
+      <h2 class="section-title" id="s7">⑦ 题材建议（4 个候选）</h2>
+      <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); margin-bottom: 24px;">
+        <div class="card" style="padding: 14px 16px; border-left: 3px solid #f87171;">
+          <div style="font-weight: 700; font-size: 14px;">🏚 赌场地下室·高利贷</div>
+          <div style="font-size: 12px; line-height: 1.7; margin-top: 6px;">恐怖、压力 · 还债主题贴合；骰子=黑帮信物 · <b>跟 Cloverpit 同路线</b></div>
+        </div>
+        <div class="card" style="padding: 14px 16px; border-left: 3px solid #a78bfa; background: rgba(167,139,250,0.06);">
+          <div style="font-weight: 700; font-size: 14px;">🔮 东方占卜师 ⭐ 推荐</div>
+          <div style="font-size: 12px; line-height: 1.7; margin-top: 6px;">神秘、宿命 · 骰子=命运/占卜符 · 颜色=五行/三才 · <b>跟 Cloverpit 西方恐怖完全错开</b></div>
+        </div>
+        <div class="card" style="padding: 14px 16px; border-left: 3px solid #60a5fa;">
+          <div style="font-weight: 700; font-size: 14px;">🤖 末日蒸汽朋克</div>
+          <div style="font-size: 12px; line-height: 1.7; margin-top: 6px;">颓废、科幻 · 骰盅=末世赌博机 · 颜色=能量类型</div>
+        </div>
+        <div class="card" style="padding: 14px 16px; border-left: 3px solid #fbbf24; background: rgba(251,191,36,0.06);">
+          <div style="font-weight: 700; font-size: 14px;">🐉 中式古风赌场 ⭐ 推荐</div>
+          <div style="font-size: 12px; line-height: 1.7; margin-top: 6px;">江湖、市井 · "摇骰子"东亚根深蒂固 · 颜色=门派 · <b>东方文化代入感强</b></div>
+        </div>
+      </div>
+    `;
+
+    /* === ⑧ 风险 === */
+    const sec8 = `
+      <h2 class="section-title" id="s8">⑧ 风险 + 对策（5 项）</h2>
+      ${[
+        { risk: '24 牌型心智负担', detail: '玩家可能不容易记住所有牌型', fix: '前 5 关只出 Tier 1（4 种），渐进解锁 Tier 2-4' },
+        { risk: '八条 / 同色八条自然不可能', detail: '0.0006% 几乎不会自然出现', fix: '这正是 wild dice / 牌型升档等传奇 charms 的存在意义——制造"我做到了"瞬间' },
+        { risk: '跟 Aotenjo 相似（0D + type_dict 牌型字典）', detail: '可能被市场比较', fix: '差异化：德州（西方易懂）vs 麻将（东方文化）+ 颜色维度 + 8 骰 vs 13 张' },
+        { risk: '概率平衡难', detail: '8 骰 × 3 色 × 24 牌型 × 150 charms 数值矩阵庞大', fix: 'Monte Carlo 仿真 + 单元测试 + 数学专长 designer' },
+        { risk: '第一峰戏剧化弱于物理类', detail: '相比弹珠 / 推币物理引擎，骰盅可能略平淡', fix: '骰盅震动 + 8 骰飞出 + 滚动 + 颜色高亮 + 音效，做足 1.5-2s 表演' }
+      ].map(r => `
+        <div class="card" style="padding: 14px 16px; margin-bottom: 10px; border-left: 3px solid #f87171;">
+          <div style="font-weight: 700; font-size: 13px;">⚠ ${escapeHtml(r.risk)}</div>
+          <div style="font-size: 12px; line-height: 1.7; margin-top: 4px; color: var(--fg-muted);">${escapeHtml(r.detail)}</div>
+          <div style="font-size: 12px; line-height: 1.7; margin-top: 6px; padding: 6px 10px; background: rgba(52,211,153,0.06); border-radius: 4px;">💡 ${escapeHtml(r.fix)}</div>
+        </div>
+      `).join('')}
+      <div style="margin-bottom: 14px;"></div>
+    `;
+
+    /* === ⑨ 开发路线图 === */
+    const sec9 = `
+      <h2 class="section-title" id="s9">⑨ 开发路线图（3 阶段）</h2>
+      <div class="card" style="padding: 18px 20px; margin-bottom: 14px; border-left: 4px solid #60a5fa;">
+        <div style="font-weight: 700; font-size: 15px; color: #60a5fa;">阶段 1 · 原型验证（2-3 个月）</div>
+        <ul style="font-size: 13px; line-height: 1.7; margin-top: 8px; padding-left: 22px;">
+          <li>单 line 5 骰 → 多 line 8 骰切换</li>
+          <li>30 charm 池（仅 common/rare）</li>
+          <li>1 个角色 / 1 个主题</li>
+          <li>上 Itch.io 试水 + r/roguelikes 收反馈</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 18px 20px; margin-bottom: 14px; border-left: 4px solid #a78bfa;">
+        <div style="font-weight: 700; font-size: 15px; color: #a78bfa;">阶段 2 · Demo + Steam Next Fest（3 个月）</div>
+        <ul style="font-size: 13px; line-height: 1.7; margin-top: 8px; padding-left: 22px;">
+          <li>完整 24 牌型字典 + 颜色花色</li>
+          <li>80 charm 池（含 epic）</li>
+          <li>2-3 个题材包装（占卜 / 中式 / 蒸汽）</li>
+          <li>关键参考：Cloverpit Steam Next Fest 进路</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 18px 20px; margin-bottom: 24px; border-left: 4px solid #fbbf24;">
+        <div style="font-weight: 700; font-size: 15px; color: #fbbf24;">阶段 3 · 完整发售（6 个月）</div>
+        <ul style="font-size: 13px; line-height: 1.7; margin-top: 8px; padding-left: 22px;">
+          <li>150 charm 池（含 4 个传奇）</li>
+          <li>多结局（3-5 个）</li>
+          <li>跨局 meta-progression + 多角色</li>
+          <li>对标销量：Cloverpit 100k 首日 / Raccoin 86% 好评</li>
+        </ul>
+      </div>
+    `;
+
+    /* === ⑩ 评分预测 === */
+    const s = proposal.analysis.scores;
+    const total = s.random + s.combo + s.pool + s.structure;
+    const sec10 = `
+      <h2 class="section-title" id="s10">⑩ 评分预测（按 v5 scoring-rubric）</h2>
+      <div class="card" style="padding: 22px 26px; margin-bottom: 24px;">
+        <table class="tbl" style="font-size: 13px;">
+          <thead><tr><th>维度</th><th style="text-align:center;">分数</th><th>评分理由</th></tr></thead>
+          <tbody>
+            <tr><td><b>random 表演</b></td><td style="text-align:center; font-size: 20px; color: #60a5fa;">${s.random}</td><td>骰盅戏剧化 + 8 骰同时落位 + 3 色视觉爆发 + 物理滚动音效</td></tr>
+            <tr><td><b>combo 表演</b></td><td style="text-align:center; font-size: 20px; color: #a78bfa;">${s.combo}</td><td>24 牌型字典 × 3 色花色扩展 × 乘性链 charms · 期望基础分 351 → 放大 ×100 至 35000</td></tr>
+            <tr><td><b>pool 设计</b></td><td style="text-align:center; font-size: 20px; color: #34d399;">${s.pool}</td><td>18 骰基础池 + 150 charms 主动池双层清晰；基础池稳定（不允许 RPBD 修改）</td></tr>
+            <tr><td><b>structure 压力</b></td><td style="text-align:center; font-size: 20px; color: #fbbf24;">${s.structure}</td><td>继承 Cloverpit 还债指数压力（r=2.0）+ 多结局叙事 + 永久死亡威胁</td></tr>
+            <tr style="border-top: 2px solid var(--accent);"><td><b>总分</b></td><td style="text-align:center; font-size: 28px; font-weight: 700; color: var(--accent);">${total}</td><td><b>A 级</b>，双 8 区间（表演 8.5 / 结构 8.5）· 接近 Cloverpit（33）/ Raccoin（32）等爆款带</td></tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    document.querySelector('#root').innerHTML =
+      sec1 + sec2 + secFormula + sec3 + sec4 + sec5 + sec6 + sec7 + sec8 + sec9 + sec10;
+  }
+})();
+</script>
+
+</div>
+</body>
+</html>

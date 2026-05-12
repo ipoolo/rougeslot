@@ -1,0 +1,42 @@
+{
+  "version": "v1",
+  "name": "RPB 装置类统一设计模型",
+  "updated_at": "2026-04-28",
+  "formula": "产出 = (基础池 × random) + (基础池 × 符号协同) × (主动池 × 规则修饰)",
+  "layers": {
+    "L0": "spin（自动）⇄ RPBD（玩家）的双循环",
+    "L1": "1.random 表演 → 2.combo（2.1 符号协同 + 2.2 规则修饰）→ 3.RPBD",
+    "L2": "combo 拆解 = 符号协同（元素间互动） + 规则修饰（全局修改器）",
+    "L3": "池映射：基础池 ⇒ random + 符号协同；主动池 ⇒ 规则修饰",
+    "L4": "完整产出公式：(基础池 × random) + (基础池 × 符号协同) × (主动池 × 规则修饰)"
+  },
+  "score_dimensions": [
+    { "key": "random",    "name": "random 表演",    "scale": [5, 10], "desc": "装置落位戏剧化、视觉爆发力" },
+    { "key": "combo",     "name": "combo 表演",     "scale": [5, 10], "desc": "组合反馈的戏剧性、连锁数值/动画" },
+    { "key": "pool",      "name": "pool 设计",      "scale": [5, 10], "desc": "双层池架构的清晰度与多样性" },
+    { "key": "structure", "name": "肉鸽底线/压力",  "scale": [5, 10], "desc": "checkpoint 节奏、目标分、波次设计" }
+  ],
+  "qualitative_fields": [
+    { "key": "pool_base_desc",      "name": "基础池描述",    "desc": "spin 中出现的元素池：内容、稀有度、规模" },
+    { "key": "pool_active_desc",    "name": "主动池描述",    "desc": "全局修饰器池：内容、稀有度、强度梯度" },
+    { "key": "random_design",       "name": "random 设计",   "desc": "落位机制 / 装置类型 / 节奏曲线" },
+    { "key": "combo_synergy",       "name": "符号协同",      "desc": "基础池内元素互动（邻接、链式、类别加成）" },
+    { "key": "combo_modifier",      "name": "规则修饰",      "desc": "主动池施加的全局修改器" },
+    { "key": "rpbd_construction",   "name": "RPBD 构筑",     "desc": "玩家在构筑阶段的决策维度（商店/选择/删除/升级）" },
+    { "key": "checkpoint_mechanism","name": "压力机制",      "desc": "目标分/血量/限时/资源/波次的具体形式" }
+  ],
+  "pressure_params": [
+    { "key": "M",      "name": "M",      "desc": "checkpoint 数量（一局内总关卡数）" },
+    { "key": "N",      "name": "N",      "desc": "每个 checkpoint 间的 spin 数（节奏）" },
+    { "key": "T0",     "name": "T₀",     "desc": "起始压力值（首关目标分/血量）" },
+    { "key": "r",      "name": "r",      "desc": "压力增长率（指数 / 线性 / 跳跃）" },
+    { "key": "m_boss", "name": "m_boss", "desc": "boss 关倍率（高于普通关的强度系数）" }
+  ],
+  "clustering": {
+    "single_dim": ["random", "combo", "pool", "structure"],
+    "cross_dim": "对所有 4 维评分组合做不平衡模式发现（如 random 高 combo 低 → 哪类游戏？）"
+  },
+  "thresholds": {
+    "blockbuster": "总分 ≥ 32 且 表演分 ≥ 8 且 结构分 ≥ 8（双 8 区间）"
+  }
+}

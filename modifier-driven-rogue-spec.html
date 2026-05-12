@@ -1,0 +1,455 @@
+<!doctype html>
+<!--
+  R_RougeSlot · 修饰器构筑型 Roguelike 子品类设定白皮书
+  =====================================================
+  Modifier-Driven Roguelike Subgenre Spec - 装置类 RPB 大范畴下的子品类。
+  核心识别：基础池稳定 + 主动池修饰器构筑 + 乘性链结算 + 装置型 random + 双峰多巴胺。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>修饰器构筑型 Roguelike · 子品类白皮书 · R_RougeSlot</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  /* 章节锚点 */
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; padding: 14px 16px; background: var(--bg-card); border-radius: 8px; border-left: 3px solid var(--accent); }
+  .toc a { padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); color: var(--fg); text-decoration: none; font-size: 12px; }
+  .toc a:hover { background: var(--accent); color: #1c1300; }
+
+  /* 必要条件项 */
+  .req-card { border-left: 4px solid #34d399; padding: 14px 18px; margin-bottom: 12px; background: rgba(52,211,153,0.04); border-radius: 0 8px 8px 0; }
+  .req-card .req-num { display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 50%; background: #34d399; color: #1c1300; font-weight: 700; margin-right: 8px; }
+
+  /* 反模式 */
+  .anti-card { border-left: 4px solid #f87171; padding: 14px 18px; margin-bottom: 12px; background: rgba(248,113,113,0.04); border-radius: 0 8px 8px 0; }
+  .anti-card .anti-num { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #f87171; color: #1c1300; font-weight: 700; font-size: 11px; margin-right: 8px; }
+
+  /* 加分项 */
+  .bonus-row { display: grid; grid-template-columns: 1fr 60px; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--line); align-items: center; }
+  .star { color: #fbbf24; font-size: 13px; }
+
+  /* 张力卡 */
+  .tension-card { padding: 16px 18px; border-radius: 8px; background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.2); margin-bottom: 12px; }
+  .tension-num { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #a78bfa; color: #1c1300; font-weight: 700; font-size: 11px; margin-right: 8px; }
+
+  /* 公式块 */
+  .formula-block {
+    background: var(--bg-deep); padding: 18px 20px; border-radius: 8px;
+    border: 1px solid var(--line); font-family: ui-monospace, 'SF Mono', monospace;
+    font-size: 12px; line-height: 1.8; white-space: pre; overflow-x: auto;
+    color: var(--fg);
+  }
+  .formula-block .accent { color: #fbbf24; font-weight: 700; }
+  .formula-block .var    { color: #a78bfa; }
+  .formula-block .comment{ color: var(--fg-muted); font-style: italic; }
+
+  /* 子族表 */
+  .subgenre-tbl td { vertical-align: top; }
+  .subgenre-tbl .star-badge { display: inline-block; padding: 0 6px; border-radius: 4px; background: rgba(251,191,36,0.2); color: #fbbf24; font-size: 10px; font-weight: 700; margin-left: 4px; }
+
+  /* cheat sheet */
+  .cheat-grid { display: grid; grid-template-columns: 40px 1fr; gap: 12px; padding: 10px 14px; border-bottom: 1px dashed var(--line); align-items: center; }
+  .cheat-num { font-size: 18px; font-weight: 700; color: var(--accent); text-align: center; }
+  .cheat-text { font-size: 13px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div class="page-head">
+  <h1>修饰器构筑型 Roguelike · 子品类设定白皮书</h1>
+  <p class="lede"><b>Modifier-Driven Roguelike</b> 是装置类 RPB 品类下的一支。核心识别：<b>基础池稳定 + 主动池修饰器构筑 + 乘性链结算</b>。这套设定整合了 Balatro / Cloverpit / 魔王终局等爆款的共有设计 DNA。</p>
+  <p class="meta" id="meta-info"></p>
+</div>
+
+<!-- 目录 -->
+<div class="toc">
+  <a href="#s1">① 精确定义</a>
+  <a href="#s2">② 邻近品类边界</a>
+  <a href="#s3">③ 五大必要条件</a>
+  <a href="#s4">④ 加分条件</a>
+  <a href="#s5">⑤ 数学模型</a>
+  <a href="#s6">⑥ 典型作品矩阵</a>
+  <a href="#s7">⑦ 神经心理学</a>
+  <a href="#s8">⑧ 5 个反模式</a>
+  <a href="#s9">⑨ v5 框架对应</a>
+  <a href="#s10">⑩ 设计师铁律</a>
+</div>
+
+<div id="root"></div>
+
+<script src="framework/v5/schema.js"></script>
+<script src="data/games.js"></script>
+<script src="lib/render.js"></script>
+<script src="lib/combo2-typology.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+  const fw = RR.getFramework();
+  const allGames = RR.getAllGames().filter(g => g.analysis && g.analysis.qualitative);
+  const TAGS = window.RR_COMBO2_TAGS || {};
+  const escapeHtml = RR.escapeHtml;
+
+  document.querySelector('#meta-info').innerHTML =
+    `框架 <b>${fw.version}</b> · 装置类 RPB 子品类规约 · 基于 ${allGames.length} 款样本归纳`;
+
+  /* ====== 章节 ① 精确定义 ====== */
+  const sec1 = `
+    <h2 class="section-title" id="s1">① 精确定义</h2>
+    <div class="card" style="padding: 22px 26px; margin-bottom: 24px; background: linear-gradient(180deg, rgba(124,58,237,0.08), rgba(96,165,250,0.04));">
+      <div style="font-size: 18px; line-height: 1.9; font-weight: 700; color: var(--fg); margin-bottom: 14px;">
+        基础池保持稳定，玩家的 RPBD 构筑全部投向<b style="color:#fbbf24;">修饰器（modifier）</b>——通过 charm / Joker / relic / artifact / Trinket / Glyph / Boon 这类道具改变触发条件、概率分布、倍率系数，而非直接增删基础池元素本身。
+      </div>
+      <div class="formula-block" style="margin: 14px 0;"><span class="comment">// 一句话识别</span>
+你能改的不是<span class="accent">「装置里出什么」</span>，
+而是<span class="accent">「装置出了 X 之后会发生什么」</span>。</div>
+      <div class="muted" style="font-size: 13px; line-height: 1.7; margin-top: 12px;">
+        这是把「装置类肉鸽」的随机性保留为体验核心，把「构筑深度」全部集中到主动池的设计哲学。<br>
+        市场代表：<b>Balatro</b>（5M+ 拷贝） / <b>Cloverpit</b>（首日 100k+） / <b>Raccoin</b>（86% 好评） / <b>Aotenjo: Infinite Hands</b>（96% 极好评）。
+      </div>
+    </div>
+  `;
+
+  /* ====== 章节 ② 邻近品类边界 ====== */
+  const sec2 = `
+    <h2 class="section-title" id="s2">② 跟相邻品类的边界（它不是什么）</h2>
+    <div class="card" style="padding: 16px; margin-bottom: 16px;">
+      <table class="tbl" style="font-size: 13px;">
+        <thead><tr><th style="width: 240px;">邻近品类</th><th>关键区别</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Slay the Spire 类牌组构筑</b></td>
+            <td>玩家在 RPBD 里<b>主要养牌组</b>（加卡 / 删卡 / 升级牌）；修饰器（遗物）是辅助</td>
+          </tr>
+          <tr>
+            <td><b>Hades 类技能 build</b></td>
+            <td>玩家通过"祝福槽位"养角色技能，<b>基础攻击/武器是固定模板</b>，比修饰器更接近"被动 buff"</td>
+          </tr>
+          <tr>
+            <td><b>Vampire Survivors 类自动战斗</b></td>
+            <td>修饰器有（武器进化 / 被动），但<b>基础池就是无限刷怪</b>，没有"装置 random"概念</td>
+          </tr>
+          <tr>
+            <td><b>Roguelite 平台跳跃</b>（Dead Cells / Hollow Knight）</td>
+            <td>没有装置 random，是动作技能型</td>
+          </tr>
+          <tr>
+            <td><b>构筑型 Drafting</b>（Loop Hero）</td>
+            <td>玩家从给定卡池<b>轮流抽</b>，是 drafting 不是 modifier-driven</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="padding: 18px 20px; margin-bottom: 24px;">
+      <div style="font-weight: 700; margin-bottom: 12px;">子品类位置图</div>
+      <pre style="font-size: 11px; line-height: 1.7; color: var(--fg); margin: 0; padding: 12px; background: var(--bg-deep); border-radius: 6px;">
+       roguelike 大范畴
+              ├─ 探索型（Spelunky）
+              ├─ 战斗型（Hades）
+              ├─ <span style="color:#fbbf24; font-weight:700;">装置类 RPB ← 你的研究品类</span>
+              │      ├─ 池构筑型（LBL / Slay the Spire）
+              │      ├─ <span style="color:#34d399; font-weight:700;">★ 修饰器构筑型（Balatro / Cloverpit）</span>
+              │      ├─ 位置构筑型（地牢掷骰 / 宾果贝蒂）
+              │      └─ 混合型（弹珠大亨 / Raccoin）
+              └─ Idle型（Cookie Clicker）</pre>
+    </div>
+  `;
+
+  /* ====== 章节 ③ 五大必要条件 ====== */
+  const sec3 = `
+    <h2 class="section-title" id="s3">③ 五大必要条件（缺一不可）</h2>
+    <p class="muted" style="margin-bottom: 14px; font-size: 13px;">满足以下 5 条才属于修饰器构筑型 Roguelike——任何一条不满足就归到其他子品类。</p>
+
+    <div class="req-card">
+      <div style="font-weight: 700; font-size: 15px;"><span class="req-num">1</span>装置型 Random（第一峰多巴胺前段）</div>
+      <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">必须有可视化的、戏剧化的随机过程——slot 转动 / 骰子摇 / 弹珠下落 / 抽牌 / 转盘旋。Random 一定要让玩家<b>看见</b>且产生 1-3s 的悬念。</div>
+      <div class="muted" style="font-size: 11px; margin-top: 6px;">反例：Vampire Survivors 没有显式 random 装置 → 不属于本子品类</div>
+    </div>
+
+    <div class="req-card">
+      <div style="font-weight: 700; font-size: 15px;"><span class="req-num">2</span>基础池稳定原则</div>
+      <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">玩家在一局内<b>不能或几乎不能修改基础池</b>。商店里不卖"新符号 / 新牌 / 新骰子"（或只是稀有例外）。</div>
+      <div class="muted" style="font-size: 11px; margin-top: 6px;">反例：LBL 商店三选一买符号是改基础池 → LBL 是混合型不是纯种修饰器构筑</div>
+    </div>
+
+    <div class="req-card">
+      <div style="font-weight: 700; font-size: 15px;"><span class="req-num">3</span>主动池规模 ≥ 100 个修饰器</div>
+      <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">充足的修饰器池才能撑起"每局都不一样"的重玩性。100 是经验阈值：低于此构筑组合空间不够，玩家几局就摸到上限。</div>
+      <div class="muted" style="font-size: 11px; margin-top: 6px;">范例：Balatro 150 Joker / Cloverpit 150 charms / Aotenjo 144 artifacts / Raccoin 150+ power-ups</div>
+    </div>
+
+    <div class="req-card">
+      <div style="font-weight: 700; font-size: 15px;"><span class="req-num">4</span>乘性叠加（multiplicative_chain）或至少"加→乘"混合</div>
+      <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">修饰器之间要能<b>累乘</b>，而不仅仅是各自加成。乘性叠加是"滚雪球"和"指数爆炸结算"的数学根源。</div>
+      <div class="muted" style="font-size: 11px; margin-top: 6px;">反例：纯加性修饰器 → 后期数值疲软，撑不起爆款体验</div>
+    </div>
+
+    <div class="req-card" style="margin-bottom: 24px;">
+      <div style="font-weight: 700; font-size: 15px;"><span class="req-num">5</span>目标分压力（checkpoint mechanism）</div>
+      <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">必须有<b>外部压力</b>驱使玩家不断构筑——还债 / Blind 目标 / 关卡分。压力曲线<b>指数递增</b>（r ≥ 1.5），让早期 charms 在后期失效，逼迫玩家继续构筑。</div>
+      <div class="muted" style="font-size: 11px; margin-top: 6px;">反例：纯 idle / 沙盒 → 没有压力 → 构筑没必要 → 不属于本品类</div>
+    </div>
+  `;
+
+  /* ====== 章节 ④ 加分条件 ====== */
+  const bonusItems = [
+    { stars: 3, name: '修饰器位置敏感（按 1→N 顺序触发）', ex: 'Balatro Joker 槽、Cloverpit charms 排序' },
+    { stars: 2, name: '修饰器之间产生 cascade 引爆', ex: '"X charm 触发后激活 Y charm 的额外效果"' },
+    { stars: 2, name: '稀有度梯度（普 / 罕 / 史 / 传 4 档）', ex: '传奇修饰器颠覆规则 → 创造"我抽到了"瞬间高潮' },
+    { stars: 2, name: '跨局 meta-progression', ex: '解锁新修饰器、新角色、新主题' },
+    { stars: 2, name: '多角色 / 多 deck', ex: '提供差异化起手 build 路径' },
+    { stars: 3, name: '强叙事氛围（恐怖 / 黑帮 / 末日）', ex: 'Cloverpit 恐怖 / Balatro 桌游 / 高利贷地下赌场' },
+    { stars: 1, name: '"颠覆规则"传奇修饰器', ex: '"wild card 出现率 +5%"、"全部 +1 档"' }
+  ];
+  const sec4 = `
+    <h2 class="section-title" id="s4">④ 可选加分条件（差异化空间）</h2>
+    <p class="muted" style="margin-bottom: 14px; font-size: 13px;">满足必要 5 条后，下表是"做得更好"的可选项。星数越多越关键。</p>
+    <div class="card" style="padding: 14px 18px; margin-bottom: 24px;">
+      ${bonusItems.map(b => `
+        <div class="bonus-row">
+          <div>
+            <div style="font-weight: 600; font-size: 13px;">${escapeHtml(b.name)}</div>
+            <div class="muted" style="font-size: 11px; margin-top: 2px;">${escapeHtml(b.ex)}</div>
+          </div>
+          <div class="star" style="text-align: right;">${'★'.repeat(b.stars)}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  /* ====== 章节 ⑤ 数学模型 ====== */
+  const sec5 = `
+    <h2 class="section-title" id="s5">⑤ 数学模型骨架</h2>
+    <div class="card" style="padding: 20px 22px; margin-bottom: 24px;">
+      <div style="font-weight: 700; margin-bottom: 10px;">单 spin 产出公式</div>
+      <div class="formula-block">Output_per_spin =
+  <span class="comment">// Random + Put（加法项基底）</span>
+  Σ_lines [   (BasePool_random × put_form_constraint)
+            + (BasePool_synergy <span class="var">@ show_topology</span>)   <span class="comment">// combo1 加法层</span>
+          ]
+  <span class="comment">// combo2 乘法层（乘性链）</span>
+  × ∏ᵢ (<span class="accent">mᵢ</span> × position_bonus_i)
+</div>
+
+      <div style="font-weight: 700; margin-top: 18px; margin-bottom: 8px;">关键变量</div>
+      <table class="tbl" style="font-size: 12px;">
+        <thead><tr><th>变量</th><th>含义</th><th>常见取值</th></tr></thead>
+        <tbody>
+          <tr><td><code>n_charm</code></td><td>同时挂载的修饰器数量</td><td>4-12</td></tr>
+          <tr><td><code>n_pool</code></td><td>修饰器池总规模</td><td>100-200</td></tr>
+          <tr><td><code>mᵢ</code></td><td>第 i 个修饰器的倍率系数</td><td>1.5-10×</td></tr>
+          <tr><td><code>position</code></td><td>修饰器在槽位中的位置（顺序敏感）</td><td>1-N</td></tr>
+          <tr><td><code>n_lines</code></td><td>同时结算的 line 数（多线 video poker 类）</td><td>1-50</td></tr>
+        </tbody>
+      </table>
+
+      <div style="font-weight: 700; margin-top: 18px; margin-bottom: 8px;">增长函数对比</div>
+      <div class="formula-block"><span class="comment">// 弱设计（避免）</span>
+线性叠加：    Output = base + n_charm × Δ        <span class="comment">// 后期数值疲软</span>
+
+<span class="comment">// 强设计（本品类的爆款公式）</span>
+指数叠加：    Output = base × ∏ mᵢ              <span class="accent">// ★ 滚雪球数学根源</span></div>
+
+      <div style="font-weight: 700; margin-top: 18px; margin-bottom: 8px;">平衡设计约束</div>
+      <div class="formula-block">Target_per_round = T₀ × r<sup>round</sup>     <span class="comment">// 目标压力指数曲线 (r ≈ 1.5-2.0)</span>
+Player_capacity = ∏ mᵢ ≈ T_target       <span class="comment">// 玩家构筑指数曲线</span>
+
+平衡设计 = <span class="accent">让两条指数曲线接近 ± 容错带</span></div>
+    </div>
+  `;
+
+  /* ====== 章节 ⑥ 典型作品矩阵（动态从 34 款读取）====== */
+  // 按 combo2 typology + show_topology 维度分组
+  const C2COLOR = {
+    multiplicative_chain: '#f87171',
+    hybrid_addmult: '#a78bfa',
+    additive_linear: '#60a5fa',
+    rule_rewrite: '#fbbf24',
+    status_condition: '#34d399'
+  };
+  // 修饰器构筑型最纯样本筛选：multiplicative_chain + base_pool 稳定
+  const POOL_MOD_KEYWORDS = ['买符号','加新符号','删符号','加入符号池','升级符号','增删符号','增删骰','改造卡','管理动物牌组','管理牌组','建造建筑','解锁瓷砖','获得新瓷砖','买瓷砖','换瓷砖','加新卡','选神器','加入骰子','骰子博物馆','解锁新骰','获得新动物','drafting'];
+  const purest = [];
+  const partial = [];
+  for (const g of allGames) {
+    const q = g.analysis.qualitative;
+    const c2 = TAGS[g.slug]?.primary;
+    const rpbd = q.rpbd_construction || '';
+    const poolMod = POOL_MOD_KEYWORDS.some(kw => rpbd.includes(kw));
+    if (c2 === 'multiplicative_chain' && !poolMod) {
+      purest.push(g);
+    } else if (c2 === 'multiplicative_chain' || (c2 === 'hybrid_addmult' && !poolMod)) {
+      partial.push(g);
+    }
+  }
+  purest.sort((a,b) => b.analysis.scores.combo - a.analysis.scores.combo);
+  partial.sort((a,b) => b.analysis.scores.combo - a.analysis.scores.combo);
+
+  const gameChip = g => `<a href="analysis/${escapeHtml(g.slug)}.html" style="display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:14px; background:rgba(255,255,255,0.06); margin:2px; text-decoration:none; font-size:11.5px;"><span style="color: var(--fg);">${escapeHtml(g.basic.name_cn)}</span><span style="opacity:.7; font-size:10px;">C${g.analysis.scores.combo}</span></a>`;
+
+  const sec6 = `
+    <h2 class="section-title" id="s6">⑥ 典型作品矩阵（按装置子族）</h2>
+    <p class="muted" style="margin-bottom: 14px; font-size: 13px;">市场上的修饰器构筑型 Roguelike 按"装置 random 形态"可分 6 个子族。每个子族都有头部爆款验证商业可行性。</p>
+    <div class="card" style="padding: 14px 16px; margin-bottom: 16px; overflow-x: auto;">
+      <table class="tbl subgenre-tbl" style="font-size: 12px;">
+        <thead>
+          <tr><th>子族</th><th>装置 random</th><th>代表作（★ = 头部爆款）</th><th>修饰器规模</th><th>combo2 typology</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>扑克 / 牌型</b></td><td>抽牌出 hand</td><td><b>Balatro</b><span class="star-badge">5M+</span> / Aotenjo<span class="star-badge">96% +</span> / Aces & Adventures</td><td>150 Joker / 144 artifacts</td><td><span style="color:${C2COLOR.multiplicative_chain};">multiplicative_chain</span></td></tr>
+          <tr><td><b>Slot</b></td><td>拉杆 / 多列落位</td><td><b>Cloverpit</b><span class="star-badge">100k 首日</span> / LBL（混合）/ Slots & Daggers / Runeborn</td><td>150 charms / 100 道具</td><td><span style="color:${C2COLOR.multiplicative_chain};">multiplicative_chain</span> / <span style="color:${C2COLOR.hybrid_addmult};">hybrid</span></td></tr>
+          <tr><td><b>骰子</b></td><td>摇骰子</td><td><b>Dice A Million</b> / 魔王终局 / Slice & Dice</td><td>rings / 201 财宝</td><td><span style="color:${C2COLOR.multiplicative_chain};">multiplicative_chain</span></td></tr>
+          <tr><td><b>弹珠</b></td><td>物理路径</td><td><b>Ballionaire</b> / Peglin / PiN / Cult of PiN</td><td>145+55 Triggers/Boons</td><td><span style="color:${C2COLOR.hybrid_addmult};">hybrid</span> / cascade</td></tr>
+          <tr><td><b>推币</b></td><td>物理推动</td><td><b>Raccoin</b><span class="star-badge">86%好评</span> / Coin Push RPG</td><td>150 coins + 150 power-ups</td><td><span style="color:${C2COLOR.hybrid_addmult};">hybrid</span></td></tr>
+          <tr><td><b>转盘</b></td><td>旋转停指针</td><td><b>Fortune Wheel</b> / Roulette Hero / Bingle Bingle</td><td>cards + relics</td><td><span style="color:${C2COLOR.hybrid_addmult};">hybrid</span> / additive</td></tr>
+          <tr><td><b>多线 VP</b></td><td>hold + draw 多线</td><td><b style="color:#fbbf24;">（市场空白 · 详见 Video Poker 提案）</b></td><td>—</td><td>（应为 <span style="color:${C2COLOR.multiplicative_chain};">multiplicative_chain</span>）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="padding: 14px 18px; margin-bottom: 12px; border-left: 3px solid #34d399;">
+      <div style="font-weight: 700; margin-bottom: 8px; color: #34d399;">🎯 34 款样本中最纯粹的修饰器构筑型（${purest.length} 款）</div>
+      <div style="font-size: 12px; line-height: 1.7; margin-bottom: 8px;">筛选条件：<code>combo2_typology = multiplicative_chain</code> + <code>rpbd_construction</code> 不含"买符号/删符号/增删骰"等基础池修改关键词。</div>
+      <div>${purest.map(gameChip).join('')}</div>
+    </div>
+
+    <div class="card" style="padding: 14px 18px; margin-bottom: 24px; border-left: 3px solid #a78bfa;">
+      <div style="font-weight: 700; margin-bottom: 8px; color: #a78bfa;">🎲 邻近族（${partial.length} 款）—— multiplicative_chain 或 hybrid_addmult，但基础池稳定</div>
+      <div>${partial.map(gameChip).join('')}</div>
+    </div>
+  `;
+
+  /* ====== 章节 ⑦ 神经心理学 ====== */
+  const sec7 = `
+    <h2 class="section-title" id="s7">⑦ 为什么沉迷（神经心理学三层张力）</h2>
+
+    <div class="tension-card">
+      <div style="font-weight: 700; font-size: 15px;"><span class="tension-num">张力 ①</span>双峰多巴胺</div>
+      <pre style="font-size: 11px; line-height: 1.7; margin: 10px 0 0; padding: 10px; background: var(--bg-deep); border-radius: 6px;">第一峰：装置 random（0.5-1.5s 悬念）→ 多巴胺释放
+              ↓
+第二峰：combo 乘性结算（1-2s 爆炸数字）→ 多巴胺再次释放
+              ↓
+       循环 N spin（每 spin 30s-1min）</pre>
+      <div class="muted" style="font-size: 12px; margin-top: 8px;">两个独立的多巴胺事件密集出现，制造"上瘾"的神经响应模式。</div>
+    </div>
+
+    <div class="tension-card">
+      <div style="font-weight: 700; font-size: 15px;"><span class="tension-num">张力 ②</span>概率模糊确定性</div>
+      <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">你<b>不能精确预测</b>下一 spin 会出什么——保留随机性。<br>但你<b>能确定地构筑</b>修饰器——给玩家控制感。<br>"我做对了选择 + 命运还是给我机会" → 双重正反馈。</div>
+    </div>
+
+    <div class="tension-card">
+      <div style="font-weight: 700; font-size: 15px;"><span class="tension-num">张力 ③</span>指数曲线追赶压力</div>
+      <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">目标分指数递增（房租 / Blind / 债务）；玩家构筑也指数递增（乘性链每多一个修饰器翻倍）。<b>两条指数曲线赛跑</b> → "我撑过这关吗"的紧迫感始终存在。</div>
+    </div>
+
+    <div class="tension-card" style="margin-bottom: 24px;">
+      <div style="font-weight: 700; font-size: 15px;"><span class="tension-num">张力 ④</span>抽卡瞬间高潮</div>
+      <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">修饰器商店刷新 → 抽到传奇 → 局势翻盘。这是赌博机制的"老虎机时刻"——同样的多巴胺机制。</div>
+    </div>
+  `;
+
+  /* ====== 章节 ⑧ 反模式 ====== */
+  const antiPatterns = [
+    {
+      title: '基础池太大 + 也允许玩家改',
+      detail: '300+ 符号 + 商店买符号 → <b>池过载</b>，新手前几局信息溢出而放弃',
+      example: '失败案例：幸运勇者 300+ 符号 + 修饰器双向构筑 → pool 评分 7（vs LBL 9）'
+    },
+    {
+      title: '修饰器只能加法叠加',
+      detail: '线性增长撑不住后期目标分的指数曲线 → 中后期数值疲软，玩家放弃',
+      example: '修复：至少 30% 的修饰器是乘性 × 类型'
+    },
+    {
+      title: '修饰器槽位过少（< 4）',
+      detail: '单局构筑空间不足，组合多样性下降，重玩性低',
+      example: '经验值：4-12 槽是甜区'
+    },
+    {
+      title: '没有压力曲线 / 压力曲线太平',
+      detail: '目标分 / 还债额不增长 → 玩家构筑没必要 → 失去驱动力',
+      example: '修复：r ≥ 1.5 的指数压力'
+    },
+    {
+      title: '教学过短，玩家不懂修饰器互动',
+      detail: '修饰器一开始全开 → 玩家挑花眼 → 单局体验混乱',
+      example: '修复：渐进解锁（前 5 关只见 30 个修饰器，之后逐步解锁）'
+    }
+  ];
+  const sec8 = `
+    <h2 class="section-title" id="s8">⑧ 设计反模式（5 个常见失败陷阱）</h2>
+    ${antiPatterns.map((a, i) => `
+      <div class="anti-card">
+        <div style="font-weight: 700; font-size: 14px;"><span class="anti-num">❌ 反模式 ${i+1}</span>${escapeHtml(a.title)}</div>
+        <div style="font-size: 13px; line-height: 1.7; margin-top: 8px;">${a.detail}</div>
+        <div class="muted" style="font-size: 11px; margin-top: 6px;">${escapeHtml(a.example)}</div>
+      </div>
+    `).join('')}
+    <div style="margin-bottom: 24px;"></div>
+  `;
+
+  /* ====== 章节 ⑨ v5 框架对应 ====== */
+  const sec9 = `
+    <h2 class="section-title" id="s9">⑨ 跟 v5 框架的对应（结构指纹）</h2>
+    <p class="muted" style="margin-bottom: 14px; font-size: 13px;">修饰器构筑型 = v5 schema 中满足以下结构指纹的游戏：</p>
+    <div class="card" style="padding: 18px 22px; margin-bottom: 16px;">
+      <div class="formula-block"><span class="comment"># v5 schema 结构指纹</span>
+random_design: 装置型随机（slot/弹珠/骰子/卡牌/转盘/推币）
+put_form: <span class="accent">auto_place</span> 或 <span class="accent">manual_set</span>
+  <span class="comment"># （manual_place 类通常偏向"位置构筑"而非修饰器构筑）</span>
+combo_predicate: 含 <span class="var">type_dict</span>（牌型/字典）或 <span class="var">path/cascade</span>（物理）
+combo_modifier_typology: <span class="accent">multiplicative_chain</span>   <span class="comment"># 强必要条件</span>
+pool_active_desc: 100-200 修饰器
+rpbd_construction:
+  - <span class="comment">禁止</span>: 「买符号」「删符号」「升级符号」
+  - <span class="comment">允许</span>: 「买 charm / relic / artifact / Joker」类
+checkpoint_mechanism: 含「目标分」「还债」「Blind」类，r ≥ 1.5</div>
+    </div>
+    <div class="card" style="padding: 14px 18px; margin-bottom: 24px; border-left: 3px solid #fbbf24;">
+      <div style="font-weight: 700; margin-bottom: 8px; color: #fbbf24;">📌 项目内 4 款最纯样本</div>
+      <div style="font-size: 13px; line-height: 1.8; margin-bottom: 8px;">按本指纹严格筛 34 款样本，最纯粹的修饰器构筑型有 4 款（按 combo 分降序）：</div>
+      <div>${purest.slice(0, 4).map(gameChip).join('')}</div>
+      <div class="muted" style="font-size: 11px; margin-top: 8px;">这 4 款是研究本子品类设计的核心锚点。</div>
+    </div>
+  `;
+
+  /* ====== 章节 ⑩ 设计师 cheat sheet ====== */
+  const rules = [
+    '<b>基础池稳定，主动池构筑</b> ← 总纲',
+    '装置型 random，第一峰多巴胺戏剧化 0.5-1.5s',
+    '乘性链结算，第二峰多巴胺爆炸',
+    '100-200 修饰器池，4-12 装备槽',
+    '位置敏感顺序触发，玩家可拖动排序',
+    '稀有度 4 档（普 60% / 罕 25% / 史 12% / 传 3%）',
+    '压力指数递增 r ∈ [1.5, 2.0]',
+    '强叙事氛围（恐怖 / 黑帮 / 末日 / 桌游怀旧）',
+    '跨局 meta-progression（解锁新修饰器 / 角色 / 难度）',
+    '教学渐进（前 5 关只显示 20% 修饰器池）'
+  ];
+  const sec10 = `
+    <h2 class="section-title" id="s10">⑩ 设计师 Cheat Sheet（10 条铁律）</h2>
+    <p class="muted" style="margin-bottom: 14px; font-size: 13px;">做这类游戏的 10 条铁律——按重要性排序，前 3 条是不可妥协的硬要求。</p>
+    <div class="card" style="padding: 8px 14px; margin-bottom: 24px;">
+      ${rules.map((r, i) => `
+        <div class="cheat-grid">
+          <div class="cheat-num">${(i+1).toString().padStart(2, '0')}</div>
+          <div class="cheat-text">${r}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  /* ====== 渲染 ====== */
+  document.querySelector('#root').innerHTML =
+    sec1 + sec2 + sec3 + sec4 + sec5 + sec6 + sec7 + sec8 + sec9 + sec10;
+})();
+</script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>跨维差察 · R_RougeSlot</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  .radar-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .radar-card .name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--fg);
+  }
+  .radar-card .imbalance-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .imbalance-tag.balanced { background: rgba(78, 184, 143, 0.15); color: var(--ok); }
+  .imbalance-tag.show-heavy { background: rgba(232, 168, 106, 0.15); color: var(--warn); }
+  .imbalance-tag.struct-heavy { background: rgba(110, 168, 255, 0.15); color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" style="font-size: 12px; color: var(--fg-muted);">← 返回总览</a>
+
+<div class="page-head">
+  <h1>跨维差察</h1>
+  <p class="lede">在 4 维评分上寻找不平衡模式 · 表演分（random+combo） vs 结构分（pool+structure）</p>
+  <p class="meta" id="meta-info"></p>
+</div>
+
+<h2 class="section-title">每款游戏的雷达分布</h2>
+<div class="game-grid" id="radar-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));"></div>
+
+<h2 class="section-title">不平衡模式（自动发现）</h2>
+<div id="patterns"></div>
+
+<div style="margin-top: 32px; padding: 16px; background: rgba(110, 168, 255, 0.06); border: 1px dashed var(--accent); border-radius: 8px;">
+  <p class="muted" style="font-size:13px;">
+    <b>当前是基础视图。</b>深度跨维差察（叙事性归因 / 设计模式总结 / 反例分析）由 session 增量补充。
+    在 session 中说：<span class="kbd">"跑一遍跨维差察"</span> 让 Claude 生成完整分析。
+  </p>
+</div>
+
+<script src="framework/v5/schema.js"></script>
+<script src="data/games.js"></script>
+<script src="lib/render.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+
+  const games = RR.getAllGames();
+  const analyzed = games.filter(g => g.analysis && g.analysis.scores);
+
+  document.querySelector('#meta-info').innerHTML =
+    `<b>${analyzed.length}</b> / ${games.length} 款已分析（仅已分析的参与差察）`;
+
+  /* ============ 雷达图 ============ */
+  function radarSvg(scores, size = 160) {
+    const cx = size / 2, cy = size / 2;
+    const r = size / 2 - 18;
+    const dims = [
+      { key: 'random',    label: 'random' },
+      { key: 'combo',     label: 'combo' },
+      { key: 'pool',      label: 'pool' },
+      { key: 'structure', label: '结构' }
+    ];
+    // 4 个维度对应 4 个角度（顶/右/底/左）
+    const angles = [-Math.PI/2, 0, Math.PI/2, Math.PI];
+    const points = dims.map((d, i) => {
+      const v = scores[d.key] || 5;
+      const ratio = (v - 5) / 5;  // 5-10 → 0-1
+      const x = cx + Math.cos(angles[i]) * r * ratio;
+      const y = cy + Math.sin(angles[i]) * r * ratio;
+      return `${x},${y}`;
+    }).join(' ');
+    const gridPoints = (rRatio) => angles.map(a => {
+      const x = cx + Math.cos(a) * r * rRatio;
+      const y = cy + Math.sin(a) * r * rRatio;
+      return `${x},${y}`;
+    }).join(' ');
+    const labels = dims.map((d, i) => {
+      const x = cx + Math.cos(angles[i]) * (r + 14);
+      const y = cy + Math.sin(angles[i]) * (r + 14) + 4;
+      return `<text x="${x}" y="${y}" text-anchor="middle" font-size="9" fill="var(--fg-dim)">${d.label}</text>`;
+    }).join('');
+    return `
+      <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+        <polygon points="${gridPoints(1)}"   fill="none" stroke="var(--line)" stroke-width="1"/>
+        <polygon points="${gridPoints(0.66)}" fill="none" stroke="var(--line)" stroke-width="0.5"/>
+        <polygon points="${gridPoints(0.33)}" fill="none" stroke="var(--line)" stroke-width="0.5"/>
+        ${angles.map(a => `<line x1="${cx}" y1="${cy}" x2="${cx + Math.cos(a)*r}" y2="${cy + Math.sin(a)*r}" stroke="var(--line)" stroke-width="0.5"/>`).join('')}
+        <polygon points="${points}" fill="var(--accent)" fill-opacity="0.25" stroke="var(--accent)" stroke-width="2"/>
+        ${labels}
+      </svg>
+    `;
+  }
+
+  function classifyImbalance(scores) {
+    const show = (scores.random + scores.combo) / 2;
+    const struct = (scores.pool + scores.structure) / 2;
+    const diff = show - struct;
+    if (Math.abs(diff) <= 0.5) return { tag: 'balanced', label: '⚖ 均衡' };
+    if (diff > 0.5) return { tag: 'show-heavy', label: '🎆 表演重' };
+    return { tag: 'struct-heavy', label: '🏗 结构重' };
+  }
+
+  const grid = document.querySelector('#radar-grid');
+  for (const g of analyzed) {
+    const card = document.createElement('div');
+    card.className = 'radar-card';
+    const cls = classifyImbalance(g.analysis.scores);
+    card.innerHTML = `
+      <div class="name">${RR.escapeHtml(g.basic.name_cn)}</div>
+      ${radarSvg(g.analysis.scores)}
+      <div><span class="imbalance-tag ${cls.tag}">${cls.label}</span></div>
+    `;
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+      location.href = `analysis/${encodeURIComponent(g.slug)}.html`;
+    });
+    grid.appendChild(card);
+  }
+
+  if (analyzed.length === 0) {
+    grid.innerHTML = '<p class="dim" style="font-size:13px; padding: 20px;">还没有任何游戏分析数据。先在 session 中执行 "分析 &lt;slug&gt;"。</p>';
+  }
+
+  /* ============ 不平衡模式聚合 ============ */
+  const buckets = { balanced: [], 'show-heavy': [], 'struct-heavy': [] };
+  for (const g of analyzed) {
+    const cls = classifyImbalance(g.analysis.scores);
+    buckets[cls.tag].push(g.basic.name_cn);
+  }
+  const patterns = document.querySelector('#patterns');
+  patterns.innerHTML = `
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-weight:700;">⚖ 均衡型（|表演 - 结构| ≤ 0.5）</div>
+      <div class="muted" style="margin-top:6px; font-size:13px;">${buckets.balanced.join('、') || '—'}</div>
+    </div>
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-weight:700; color: var(--warn);">🎆 表演重（表演 &gt; 结构 + 0.5）</div>
+      <div class="muted" style="margin-top:6px; font-size:13px;">${buckets['show-heavy'].join('、') || '—'}</div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700; color: var(--accent);">🏗 结构重（结构 &gt; 表演 + 0.5）</div>
+      <div class="muted" style="margin-top:6px; font-size:13px;">${buckets['struct-heavy'].join('、') || '—'}</div>
+    </div>
+  `;
+
+  RR.checkFrameworkConsistency();
+})();
+</script>
+
+</div>
+</body>
+</html>

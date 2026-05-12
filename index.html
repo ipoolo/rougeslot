@@ -1,0 +1,1538 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>R_RougeSlot · RPB 装置类分析系统</title>
+<link rel="stylesheet" href="lib/theme.css"/>
+<style>
+  /* 分布图卡片 hover 联动：底部 legend chip ⇄ 图中 dot 双向高亮 */
+  .rr-chart-wrapper [data-rr-game] {
+    transition: opacity 0.15s, transform 0.15s, filter 0.15s;
+  }
+  .rr-chart-wrapper.rr-chart-active [data-rr-game] {
+    opacity: 0.18;
+  }
+  .rr-chart-wrapper.rr-chart-active [data-rr-game].rr-game-active {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px currentColor);
+  }
+  /* 自定义 tooltip · 角标本体 */
+  .rr-help {
+    display: inline-block;
+    margin-left: 4px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(124, 58, 237, 0.30);
+    color: #d8c5ff;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: help;
+    vertical-align: middle;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .rr-help:hover { background: rgba(124, 58, 237, 0.65); color: #fff; }
+
+  /* 浮层（由 JS 动态 append 到 <body>，使用 position: fixed 脱离 overflow 容器裁剪）*/
+  .rr-help-pop {
+    position: fixed;
+    background: #1a1825;
+    border: 1px solid rgba(124, 58, 237, 0.5);
+    color: #e0d8f5;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.7;
+    font-weight: 400;
+    text-align: left;
+    white-space: pre-wrap;
+    max-width: 360px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .rr-help-pop.show { opacity: 1; }
+</style>
+<script>
+  /* 全局 tooltip 控制器：hover .rr-help 时把 data-tooltip 渲染到 body，避免被父容器 overflow 裁剪 */
+  (function () {
+    let tipEl = null;
+    let timer = null;
+    function show(target) {
+      const text = target.getAttribute('data-tooltip');
+      if (!text) return;
+      hide();
+      tipEl = document.createElement('div');
+      tipEl.className = 'rr-help-pop';
+      tipEl.textContent = text;
+      document.body.appendChild(tipEl);
+      const r = target.getBoundingClientRect();
+      const tw = tipEl.offsetWidth;
+      const th = tipEl.offsetHeight;
+      const margin = 8;
+      // 默认显示在角标正上方
+      let x = r.left + r.width / 2 - tw / 2;
+      let y = r.top - th - margin;
+      // 上方溢出 → 翻到下方
+      if (y < margin) y = r.bottom + margin;
+      // 左右防溢出
+      if (x < margin) x = margin;
+      if (x + tw > window.innerWidth - margin) x = window.innerWidth - tw - margin;
+      tipEl.style.left = x + 'px';
+      tipEl.style.top  = y + 'px';
+      requestAnimationFrame(() => tipEl && tipEl.classList.add('show'));
+    }
+    function hide() {
+      if (timer) { clearTimeout(timer); timer = null; }
+      if (tipEl) { tipEl.remove(); tipEl = null; }
+    }
+    document.addEventListener('mouseover', (e) => {
+      const t = e.target.closest && e.target.closest('.rr-help');
+      if (t) show(t);
+    });
+    document.addEventListener('mouseout', (e) => {
+      const t = e.target.closest && e.target.closest('.rr-help');
+      if (t) hide();
+    });
+    document.addEventListener('scroll', hide, true);
+    window.addEventListener('blur', hide);
+  })();
+
+  /* 分布图 hover 联动：hover 底部 legend chip 或图中 dot 时，所属游戏高亮，其他淡化 */
+  (function () {
+    document.addEventListener('mouseover', (e) => {
+      const target = e.target;
+      const el = target.closest && (target.closest ? target.closest('[data-rr-game]') : null);
+      if (!el) return;
+      const wrapper = el.closest('.rr-chart-wrapper');
+      if (!wrapper) return;
+      const game = el.getAttribute('data-rr-game');
+      wrapper.classList.add('rr-chart-active');
+      wrapper.querySelectorAll('[data-rr-game]').forEach(node => {
+        if (node.getAttribute('data-rr-game') === game) {
+          node.classList.add('rr-game-active');
+        } else {
+          node.classList.remove('rr-game-active');
+        }
+      });
+    });
+    document.addEventListener('mouseout', (e) => {
+      const target = e.target;
+      const el = target.closest && (target.closest ? target.closest('[data-rr-game]') : null);
+      if (!el) return;
+      const wrapper = el.closest('.rr-chart-wrapper');
+      if (!wrapper) return;
+      wrapper.classList.remove('rr-chart-active');
+      wrapper.querySelectorAll('[data-rr-game]').forEach(node => node.classList.remove('rr-game-active'));
+    });
+  })();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<div class="page-head">
+  <h1>R_RougeSlot · RPB 装置类分析系统</h1>
+  <p class="lede">基于 <b>RPB 装置类统一设计模型</b> 的个人分析工作台 · 单一事实源驱动 · session 增量分析</p>
+  <p class="meta" id="meta-info"></p>
+</div>
+
+<div class="warn-banner" id="warn-banner"></div>
+<div class="top-banner" id="dirty-banner">
+  ⚠ 你有未保存的内存改动 · 点开下方"管理面板"导出 JSON 持久化
+</div>
+
+<!-- 导航 tab -->
+<div class="tags-bar" style="justify-content:flex-start; margin-bottom: 20px;">
+  <button class="tag-btn active" data-tab="games" id="tab-games-btn">📦 游戏库</button>
+  <button class="tag-btn" data-tab="compare">📊 横向比较</button>
+  <button class="tag-btn" data-tab="design-pattern">🧠 设计模式</button>
+  <button class="tag-btn" data-tab="clusters">🎯 单维聚类</button>
+  <button class="tag-btn" data-tab="cross">⚡ 跨维差察</button>
+  <button class="tag-btn" data-tab="framework">📐 当前分析框架</button>
+  <button class="tag-btn" data-tab="combo-synergy">🧩 Random 舞台拓扑 × Combo 符号协同</button>
+  <button class="tag-btn" data-tab="insights">🧠 核心洞察</button>
+</div>
+
+<!-- 管理面板挂载点 -->
+<div id="admin-mount"></div>
+
+<!-- Tab: 游戏库 -->
+<section class="tab-panel" data-panel="games">
+  <h2 class="section-title" id="games-section-title">游戏库</h2>
+  <a href="compare-all.html" class="card" style="display:block; text-decoration:none; padding:14px 18px; margin-bottom:18px; border-left: 3px solid #c4956a; background: linear-gradient(90deg, rgba(196,149,106,0.08), rgba(255,255,255,0.02));">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="font-size:24px;">📊</span>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:14px;">→ 34 款横向比较 · 7 维度紧凑表（v5）</div>
+        <div class="muted" style="font-size:11px; margin-top:2px;">一张表扫完所有游戏在 random / put / @show_topology / combo1 / combo2 / pool / 压力 7 个维度的设计指纹</div>
+      </div>
+      <span style="color: var(--accent); font-size:18px;">›</span>
+    </div>
+  </a>
+  <div class="game-grid" id="game-grid"></div>
+</section>
+
+<!-- Tab: 横向比较（v5 新增 · cross-dim 风格的 panel + 大卡片跳转）-->
+<section class="tab-panel" data-panel="compare" hidden>
+  <h2 class="section-title">横向比较 · 7 维度紧凑表</h2>
+  <a href="compare-all.html" class="card" style="text-decoration:none; display:block; padding: 22px 24px; border-left: 4px solid #c4956a; background: linear-gradient(90deg, rgba(196,149,106,0.10), rgba(167,139,250,0.04));">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span style="font-size:36px;">📊</span>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:16px; color:#c4956a;">→ 34 款横向比较 · 7 维度紧凑表</div>
+        <div style="font-size:13px; line-height:1.6; margin-top:6px; color: var(--fg);">
+          按 v5 完备模型把 34 款游戏的设计指纹压成一张表：<br>
+          <span class="kbd" style="font-size:11px; margin-top:4px; display:inline-block;">random</span>
+          <span class="kbd" style="font-size:11px;">put</span>
+          <span class="kbd" style="font-size:11px; background:rgba(167,139,250,0.20); color:#c4b5fd;">@show_topology（v5 独立列）</span>
+          <span class="kbd" style="font-size:11px;">combo1</span>
+          <span class="kbd" style="font-size:11px;">combo2</span>
+          <span class="kbd" style="font-size:11px;">pool</span>
+          <span class="kbd" style="font-size:11px;">压力</span>
+        </div>
+        <div class="muted" style="font-size:12px; line-height:1.6; margin-top:8px;">每格含关键词 + 评分小标 + ? 号 tooltip 看完整字段值。游戏列固定，可一屏扫读。</div>
+      </div>
+      <span style="color: var(--accent); font-size:24px;">›</span>
+    </div>
+  </a>
+</section>
+
+<!-- Tab: 设计模式（研究 RPB 装置类的底层抽象方式）-->
+<section class="tab-panel" data-panel="design-pattern" hidden>
+  <h2 class="section-title">设计模式 · RPB 装置类的底层抽象方式（v4）</h2>
+  <p class="muted" style="margin-bottom: 20px; line-height: 1.7;">本系统研究的"装置类 RPB"（Random-Pool Builder Roguelike）品类，可以压缩成<b>一条公式 + 8 个核心概念 + 5 层递进推导</b>。每款游戏（无论 slot / 弹球 / 骰子 / 卡牌）都能映射到这个统一模型上。<br><span style="color: #34d399;">v4 升级</span>：在 <code>random</code> 与 <code>combo</code> 之间识别出独立的 <b>put</b> 步骤——把 random 结果安置进 combo 评估空间。详见 <a href="framework-extended.html" style="color: var(--accent); font-weight:700;">设计完备模型总览 →</a></p>
+
+  <!-- L4 完整产出公式（核心图）-->
+  <h3 class="section-title" style="font-size:16px;">L4 · 完整产出公式（最终形态）</h3>
+  <div class="card" style="padding: 28px 24px; margin-bottom: 24px; background: linear-gradient(180deg, rgba(124,58,237,0.06), rgba(96,165,250,0.04));">
+    <div style="text-align:center; font-size: 28px; line-height: 2.4; font-family: ui-monospace, 'SF Mono', monospace;">
+      <span style="display:inline-block; padding:6px 14px; border-radius:8px; background:#34d39922; color:#34d399;">💰 产出</span>
+      <span style="margin: 0 12px; color: var(--fg-dim);">=</span>
+      <span style="color: var(--fg-dim);">(</span>
+      <span style="display:inline-block; padding:4px 12px; border-radius:6px; background:#60a5fa22; color:#60a5fa; border: 1px solid #60a5fa44;">基础池</span>
+      <span style="margin: 0 6px; color: var(--fg-dim);">×</span>
+      <span style="display:inline-block; padding:4px 12px; border-radius:6px; background:#a3a3a322; color:#d4d4d8; border: 1px solid #71717a44;">random</span>
+      <span style="color: var(--fg-dim);">)</span>
+      <span style="margin: 0 8px; color: var(--fg-dim);">+</span>
+      <span style="color: var(--fg-dim);">(</span>
+      <span style="display:inline-block; padding:4px 12px; border-radius:6px; background:#60a5fa22; color:#60a5fa; border: 1px solid #60a5fa44;">基础池</span>
+      <span style="margin: 0 6px; color: var(--fg-dim);">×</span>
+      <span style="display:inline-block; padding:4px 12px; border-radius:6px; background:#a78bfa22; color:#a78bfa; border: 1px dashed #a78bfa66;">符号协同</span>
+      <span style="color: var(--fg-dim);">)</span>
+      <span style="margin: 0 8px; color: var(--accent);">×</span>
+      <span style="color: var(--fg-dim);">(</span>
+      <span style="display:inline-block; padding:4px 12px; border-radius:6px; background:#c4956a22; color:#c4956a; border: 1px solid #c4956a44;">主动池</span>
+      <span style="margin: 0 6px; color: var(--fg-dim);">×</span>
+      <span style="display:inline-block; padding:4px 12px; border-radius:6px; background:#fbbf2422; color:#fbbf24; border: 1px dashed #fbbf2466;">规则修饰</span>
+      <span style="color: var(--fg-dim);">)</span>
+    </div>
+    <div class="muted" style="text-align:center; font-size: 13px; line-height: 1.8; margin-top: 16px;">
+      📌 <span style="color:#60a5fa; font-weight:700;">基础池</span>在两个维度都起作用（提供 random 落位 + 提供符号协同的原材料）·
+      <span style="color:#c4956a; font-weight:700;">主动池</span>只在最后一步修饰（乘法效应是<b>双层池深度</b>的来源）
+    </div>
+    <div style="text-align:center; font-size: 12px; margin-top: 14px; padding: 10px 14px; background: rgba(52,211,153,0.06); border-radius: 6px; border: 1px dashed rgba(52,211,153,0.3); color: var(--fg);">
+      <b style="color: #34d399;">⚡ v5 完备模型</b> · 公式中"基础池 × random → 符号协同"之间隐藏一步 <b style="color: #34d399;">put</b>（把 random 结果安置进 combo 评估空间）；put 与 combo 共享同一个 <b style="color:#a78bfa;">show_topology</b>（舞台拓扑）：
+      <div style="font-family: ui-monospace, monospace; font-size: 12px; margin-top: 6px; padding: 6px 8px; background: rgba(0,0,0,0.2); border-radius: 4px; line-height: 1.6;">
+        spin[ <span style="color:#60a5fa;">random</span> → <span style="color:#34d399; font-weight:700;">put（自动|手动 × set|place）</span> → combo[ <span style="color:#a78bfa;">combo1</span> + <span style="color:#fbbf24;">combo2</span> ] ]_N → <span style="color:#ec4899;">RPBD</span> <span style="color: var(--fg-muted); font-size:10px;">@ show_topology</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 个核心概念（v4 含 put）-->
+  <h3 class="section-title" style="font-size:16px;">8 个核心概念（公式中的角色 · v4 含 put）</h3>
+  <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); margin-bottom: 24px;">
+
+    <div class="card" style="border-left: 3px solid #60a5fa;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="font-size:22px;">🎁</span>
+        <span style="font-weight:700; font-size:15px; color:#60a5fa;">基础池（pool_base）</span>
+      </div>
+      <div style="font-size:13px; line-height:1.7;">每次 spin 装置上随机落位的元素池——slot 的符号 / 扑克的牌 / 弹珠台的 trinket / 骰子的骰面字典。<b>关键</b>：基础池在公式中出现两次（提供 random 内容 + 提供协同原材料），所以容量和稀有度梯度直接决定 random 和 combo1 的天花板。</div>
+      <div class="muted" style="font-size:11px; margin-top:8px;">范例：LBL 200+ 符号（普 60% / 非 25% / 稀 12% / 极稀 3%）· Balatro 52 张扑克 · 弹珠大亨 145+ Triggers</div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #c4956a;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="font-size:22px;">⚙</span>
+        <span style="font-weight:700; font-size:15px; color:#c4956a;">主动池（pool_active）</span>
+      </div>
+      <div style="font-size:13px; line-height:1.7;">玩家通过 RPBD 阶段构筑的<b>修饰器池</b>——LBL 的 100+ 道具 / Balatro 的 150+ Joker / 弹珠大亨的 55+ Boons。永远生效，仅在最后一步修饰 combo1 产出。<b>乘法效应是双层池深度的来源</b>——基础池决定能产什么，主动池决定产多少倍。</div>
+      <div class="muted" style="font-size:11px; margin-top:8px;">威力梯度：普温和 / 非中等 / 稀强力 / 传颠覆 · 通过商店购买，可卖出换金币</div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #a3a3a3;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="font-size:22px;">🎲</span>
+        <span style="font-weight:700; font-size:15px; color:#d4d4d8;">random（spin 抽出）</span>
+      </div>
+      <div style="font-size:13px; line-height:1.7;">"装置怎么抽"——slot 转动 / 弹珠下落 / 骰子翻面 / 抽卡。这是<b>第一峰多巴胺前段</b>的来源（约 0.5-1.5s）。VR 触发（每次随机不可预测）+ 抽取戏剧化 + 视觉锁定（清晰可读）三要素决定 random 评分。<b>random 输出本质是一个多重集</b>（无序、不带位置；位置/顺序信息由 put 引入）。</div>
+      <div class="muted" style="font-size:11px; margin-top:8px;">v4 注：原来"落位"中的"放"语义被独立到 put 步骤；random 只负责"抽"。</div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #34d399;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="font-size:22px;">🎯</span>
+        <span style="font-weight:700; font-size:15px; color:#34d399;">put（v4 新增 · random→combo 映射）</span>
+      </div>
+      <div style="font-size:13px; line-height:1.7;">把 random 抽出的多重集<b>写入</b> show_topology（舞台拓扑）——<b>put 与 combo 共享同一个舞台</b>。装置自动落位（slot/物理）= auto_place；玩家手选子集（牌型）= manual_set；玩家放置/排序（棋盘/UNO 链）= manual_place。put 是<b>第一峰多巴胺后段</b>，也是 v3 漏掉的中间步骤。</div>
+      <div class="muted" style="font-size:11px; margin-top:8px;">v4 子项：put_form（4 枚举：auto_place 20 / manual_set 2 / manual_place 11 / auto_set 0 ‑ 结构性空类） · 详见 <a href="put-design-axis.html" style="color: var(--accent);">Put 维度详解 →</a></div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #a78bfa;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="font-size:22px;">🔗</span>
+        <span style="font-weight:700; font-size:15px; color:#a78bfa;">combo1 · 符号协同（基础池内元素互动）</span>
+      </div>
+      <div style="font-size:13px; line-height:1.7;">put 后的元素在<b>舞台拓扑</b>上触发互动规则——3 樱桃 → 丰收 +5 / 2 ⚡ 邻接 → 闪电链 +3 / 同花顺 → ×100。基础池的<b>固有规则</b>，无条件触发。是 combo 的<b>加法项</b>。</div>
+      <div class="muted" style="font-size:11px; margin-top:8px;">v4 子项：show_topology（=舞台拓扑，5 选 1）+ combo_predicate（多选 8 种判定：阈值 / 类型字典 / 邻接 / 连线 / 链式约束 / 触发链 / 物理路径 / 连锁反应）</div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #fbbf24;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="font-size:22px;">✨</span>
+        <span style="font-weight:700; font-size:15px; color:#fbbf24;">combo2 · 修饰协同（主动池施加的全局修改器）</span>
+      </div>
+      <div style="font-size:13px; line-height:1.7;">道具/Joker 对 combo1 结果做<b>全局倍率/加成</b>——水果 +50% / 每个 ⭐ ×2 / 玫瑰永不消失。是 combo 的<b>乘法项</b>。多道具叠乘的顺序和数量决定单局上限。</div>
+      <div class="muted" style="font-size:11px; margin-top:8px;">关键：combo2 不能改变基础池元素本身（那是 RPBD 的事），只能改变"怎么算"</div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #ec4899;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="font-size:22px;">🛒</span>
+        <span style="font-weight:700; font-size:15px; color:#ec4899;">RPBD · 玩家构筑决策</span>
+      </div>
+      <div style="font-size:13px; line-height:1.7;">玩家在 spin 之间的构筑阶段——商店三选一买符号/道具 / 付费删 / 升级。RPBD <b>不在公式中</b>但决定了下次 spin 的基础池和主动池参数，是双循环的关键节点。</div>
+      <div class="muted" style="font-size:11px; margin-top:8px;">决策周期：每 N spin 一次（LBL 5 spin/checkpoint）· 单局通常 8-24 次商店决策</div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #f87171;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="font-size:22px;">🎯</span>
+        <span style="font-weight:700; font-size:15px; color:#f87171;">checkpoint · 压力机制</span>
+      </div>
+      <div style="font-size:13px; line-height:1.7;">周期性检查产出是否达标——每 N spin 一关 / 每 Blind 目标分 / boss 关倍率加强。<b>压力来源</b>，逼迫玩家在 RPBD 阶段做优化决策。5 个量化参数：M（关数）/ N（节奏）/ T₀（起始压力）/ r（增长率）/ m_boss（boss 加强）。</div>
+      <div class="muted" style="font-size:11px; margin-top:8px;">最强结构：目标分数族（房租 / Blind / 还债指数）—— LBL 10 / Balatro 9 / 四叶草深渊 9 都是这族</div>
+    </div>
+  </div>
+
+  <!-- L0-L4 递进 -->
+  <h3 class="section-title" style="font-size:16px;">L0 → L4 · 模型递进推导</h3>
+  <div class="card" style="margin-bottom: 24px;" id="design-pattern-layers">
+    <!-- JS 注入：从 schema.layers 动态渲染 -->
+  </div>
+
+  <!-- 与 v4 schema 字段对应 -->
+  <h3 class="section-title" style="font-size:16px;">与 v4 schema 10 字段的对应</h3>
+  <div class="card">
+    <table class="tbl" style="font-size:13px;">
+      <thead>
+        <tr><th>核心概念</th><th>schema 字段</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span style="color:#60a5fa;">基础池</span></td><td><code>pool_base_desc</code></td><td>容量 + 每次抽 N + 稀有度梯度</td></tr>
+        <tr><td><span style="color:#c4956a;">主动池</span></td><td><code>pool_active_desc</code></td><td>道具数 + 作用范围 + 威力梯度</td></tr>
+        <tr><td><span style="color:#d4d4d8;">random</span></td><td><code>random_design</code></td><td>装置形式 + 抽取机制（自由文本，几何空间见 show_topology）</td></tr>
+        <tr style="background: rgba(52,211,153,0.06);"><td><span style="color:#34d399;">put（v4 新增）</span></td><td><code>put_form</code></td><td>random→combo 之间的安置/选择映射方式（4 枚举：auto_place / manual_set / manual_place / auto_set）</td></tr>
+        <tr><td><span style="color:#a78bfa;">combo1 符号协同</span></td><td><code>show_topology</code> + <code>combo_synergy</code> + <code>combo_predicate</code></td><td>舞台拓扑（v4 语义精确化）+ 自由文本描述 + 判定规则（多选数组）</td></tr>
+        <tr><td><span style="color:#fbbf24;">combo2 修饰协同</span></td><td><code>combo_modifier</code></td><td>倍率/加成数值 + 多道具叠乘</td></tr>
+        <tr><td><span style="color:#ec4899;">RPBD 构筑</span></td><td><code>rpbd_construction</code></td><td>商店刷新 + 增删成本 + 决策周期</td></tr>
+        <tr><td><span style="color:#f87171;">checkpoint</span></td><td><code>checkpoint_mechanism</code> + <code>pressure_params</code></td><td>触发周期 + 达标条件 + M/N/T₀/r/m_boss</td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="font-size: 11px; margin-top: 12px; padding: 8px 12px; background: rgba(52,211,153,0.04); border-radius: 4px; line-height: 1.7;">
+      <b>v4 关键变化</b>：① 新增 <code>put_form</code> 字段（10 字段了）；② <code>show_topology</code> 语义精确化为「<b>舞台拓扑</b>」（combo1 判定时所在的空间），manual_place 类游戏起点 ≠ 目标。
+    </p>
+  </div>
+</section>
+
+<!-- Tab: 单维聚类（v3 模型 5 维度）-->
+<section class="tab-panel" data-panel="clusters" hidden>
+  <h2 class="section-title">单维聚类</h2>
+  <p class="muted" style="margin-bottom: 16px;">按 v3 模型的 5 个维度对所有已分析游戏做独立聚类，看哪些游戏在该维度上属于同一档。combo1 和 combo2 共用 combo 综合评分（schema 单评分维度），但 qualitative 字段独立切分。</p>
+  <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
+    <a href="clusters/random.html" class="card" style="text-decoration:none;">
+      <div style="font-size:24px;">🎲</div>
+      <div style="font-weight:700; margin-top:8px;">random：舞台拓扑结构</div>
+      <div class="muted" style="font-size:12px;">装置落位戏剧化 · 含 show_topology 几何空间</div>
+    </a>
+    <a href="clusters/combo.html?layer=combo1" class="card" style="text-decoration:none;">
+      <div style="font-size:24px;">💥</div>
+      <div style="font-weight:700; margin-top:8px;">combo 1：符号协同规则</div>
+      <div class="muted" style="font-size:12px;">基础池内元素互动 · combo_synergy + combo_predicate</div>
+    </a>
+    <a href="clusters/combo.html?layer=combo2" class="card" style="text-decoration:none;">
+      <div style="font-size:24px;">✨</div>
+      <div style="font-weight:700; margin-top:8px;">combo 2：修饰协同规则</div>
+      <div class="muted" style="font-size:12px;">主动池对符号协同的强化 · combo_modifier</div>
+    </a>
+    <a href="combo2-modifier.html" class="card" style="text-decoration:none; border: 1px solid rgba(251,191,36,0.4);">
+      <div style="font-size:24px;">✖</div>
+      <div style="font-weight:700; margin-top:8px;">combo 2 深度分析（独立）</div>
+      <div class="muted" style="font-size:12px;">5 类修饰机制 typology · 跨拓扑矩阵 · 深度排名</div>
+    </a>
+    <a href="put-design-axis.html" class="card" style="text-decoration:none; border: 1px solid rgba(167,139,250,0.4);">
+      <div style="font-size:24px;">🎯</div>
+      <div style="font-weight:700; margin-top:8px;">Put 维度详解（v4 新增）</div>
+      <div class="muted" style="font-size:12px;">4 子类 · 起点→舞台拓扑映射 · 跨 predicate 解锁关系</div>
+    </a>
+    <a href="clusters/pool.html" class="card" style="text-decoration:none;">
+      <div style="font-size:24px;">🌊</div>
+      <div style="font-weight:700; margin-top:8px;">pool 设计</div>
+      <div class="muted" style="font-size:12px;">双层池架构清晰度</div>
+    </a>
+    <a href="clusters/pressure.html" class="card" style="text-decoration:none;">
+      <div style="font-size:24px;">📈</div>
+      <div style="font-weight:700; margin-top:8px;">压力曲线设计</div>
+      <div class="muted" style="font-size:12px;">checkpoint 节奏 · 目标分 · M/N/T₀/r/m_boss</div>
+    </a>
+    <a href="clusters/show-topology.html" class="card" style="text-decoration:none; border: 1px solid rgba(167,139,250,0.4);">
+      <div style="font-size:24px;">🎬</div>
+      <div style="font-weight:700; margin-top:8px;">show_topology · 舞台拓扑（v5 新增）</div>
+      <div class="muted" style="font-size:12px;">按 5 枚举值聚类（0D/1D 序/1D 环/2D 网格/2D 物理）· put⇄combo 共享舞台</div>
+    </a>
+  </div>
+  <p class="dim" style="font-size:12px; margin-top:16px;">提示：聚类页内容由 session 命令生成。说："重做 random 维度聚类"。combo1/combo2 都进入 <span class="kbd">clusters/combo.html</span>（页面会按 URL 的 ?layer=combo1/combo2 参数切换聚焦的 qualitative 切面）。</p>
+</section>
+
+<!-- Tab: 跨维差察 -->
+<section class="tab-panel" data-panel="cross" hidden>
+  <h2 class="section-title">跨维差察</h2>
+  <a href="cross-dim.html" class="card" style="text-decoration:none; display:block;">
+    <div style="font-size:24px;">⚡</div>
+    <div style="font-weight:700; margin-top:8px;">跨维不平衡发现</div>
+    <div class="muted" style="font-size:12px;">寻找 4 维评分组合的异常模式</div>
+  </a>
+  <p class="dim" style="font-size:12px; margin-top:16px;">提示：内容由 session 命令生成。说："跑一遍跨维差察"</p>
+</section>
+
+<!-- Tab: 框架 -->
+<section class="tab-panel" data-panel="framework" hidden>
+  <h2 class="section-title">当前分析框架</h2>
+  <a href="framework-extended.html" class="card" style="display:block; text-decoration:none; padding:18px 22px; margin-bottom:14px; border-left: 4px solid #34d399; background: linear-gradient(90deg, rgba(52,211,153,0.08), rgba(96,165,250,0.04));">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span style="font-size:32px;">🧠</span>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:16px; color:#34d399;">→ 设计完备模型总览（v5 因果推导）</div>
+        <div style="font-size:13px; line-height:1.6; margin-top:4px; color: var(--fg);">从「双峰多巴胺 + 前额叶 BD」体验层<b>因果推导</b>出 v5 完备模型 <code>random → put @ show_topology → combo @ show_topology → RPBD</code>；含手绘风 SVG 流程图 + combo2 typology 校准分析。</div>
+      </div>
+      <span style="color: var(--accent); font-size:24px;">›</span>
+    </div>
+  </a>
+
+  <a href="modifier-driven-rogue-spec.html" class="card" style="display:block; text-decoration:none; padding:18px 22px; margin-bottom:14px; border-left: 4px solid #fbbf24; background: linear-gradient(90deg, rgba(251,191,36,0.08), rgba(167,139,250,0.04));">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span style="font-size:32px;">📜</span>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:16px; color:#fbbf24;">→ 修饰器构筑型 Roguelike · 子品类设定白皮书</div>
+        <div style="font-size:13px; line-height:1.6; margin-top:4px; color: var(--fg);">Modifier-Driven Roguelike 子品类规约——精确定义 + 五大必要条件 + 数学模型 + 典型作品矩阵 + 神经心理学 + 反模式 + 设计师 10 条铁律。市场代表：Balatro / Cloverpit / Aotenjo / Raccoin。</div>
+      </div>
+      <span style="color: var(--accent); font-size:24px;">›</span>
+    </div>
+  </a>
+
+  <a href="sample-designs/dice-eight-poker.html" class="card" style="display:block; text-decoration:none; padding:18px 22px; margin-bottom:8px; border-left: 4px solid #a78bfa; background: linear-gradient(90deg, rgba(167,139,250,0.10), rgba(251,191,36,0.04));">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span style="font-size:32px;">🎲</span>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:16px; color:#a78bfa;">→ 假设作品 · 骰子德州 · 完整设计提案 <span class="kbd" style="background:#fbbf24; color:#1c1300; font-size:10px; margin-left:6px;">SAMPLE-DESIGN</span></div>
+        <div style="font-size:13px; line-height:1.6; margin-top:4px; color: var(--fg);">8 骰 × 3 色 + 德州扩展牌型 + 150 charms · <b>首次填补 auto_set 结构性空类</b>。含 1M Monte Carlo 概率表 / 24 牌型分级 / charms 6 类设计 / 压力平衡数学 / 题材建议 / 风险对策 / 开发路线图。</div>
+      </div>
+      <span style="color: var(--accent); font-size:24px;">›</span>
+    </div>
+  </a>
+
+  <a href="sample-designs/dice-eight-prototype.html" class="card" style="display:block; text-decoration:none; padding:14px 22px; margin-bottom:14px; border-left: 4px solid #ec4899; background: linear-gradient(90deg, rgba(236,72,153,0.10), rgba(167,139,250,0.04));">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span style="font-size:26px;">🎮</span>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:14px; color:#ec4899;">→ 骰子德州 · 交互原型 v0.1（可玩）</div>
+        <div style="font-size:12px; line-height:1.5; margin-top:2px; color: var(--fg-muted);">点击掷骰子 / 看牌型判定 / 商店买 charm / 6 周还债——体验提案的核心 spin 节奏</div>
+      </div>
+      <span style="color: var(--accent); font-size:20px;">▶</span>
+    </div>
+  </a>
+
+  <a href="design-proposal-vp.html" class="card" style="display:block; text-decoration:none; padding:18px 22px; margin-bottom:20px; border-left: 4px solid #c4956a; background: linear-gradient(90deg, rgba(196,149,106,0.10), rgba(248,113,113,0.04));">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span style="font-size:32px;">🎰</span>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:16px; color:#c4956a;">→ 新设计提案 · Multi-Line VP Rogue（网格化）</div>
+        <div style="font-size:13px; line-height:1.6; margin-top:4px; color: var(--fg);">基于 v5 完备模型 + 修饰器构筑型规约的爆款候选方案——用 Cloverpit 网格思路改造多线 Video Poker。<b>150 charms 池详细设计</b>（5 类 × 30 个）+ SVG 网格 UI 草图 + 数学模型 + 风险对策 + 路线图。题材：高利贷地下赌场。预测总分 33-34（A 级）。</div>
+      </div>
+      <span style="color: var(--accent); font-size:24px;">›</span>
+    </div>
+  </a>
+
+  <!-- 题材原型入口区（v5 完备模型的实战落地）-->
+  <h3 class="section-title" style="font-size:15px; margin-top: 24px;">🎮 题材原型 · 完备模型的实战落地</h3>
+  <p class="muted" style="font-size: 12px; margin-bottom: 14px; line-height: 1.7;">用「红绿灯堵车 + auto_place + 2D_grid」题材落地 v5 完备模型——验证公式能否承载具体玩法。</p>
+  <div class="game-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+    <a href="mockup-traffic-slot.html" class="card" style="text-decoration:none; padding: 16px 18px; border-left: 4px solid #c4956a; background: linear-gradient(135deg, rgba(196,149,106,0.08), rgba(251,191,36,0.04));">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 28px;">🚦</span>
+        <div style="flex: 1;">
+          <div style="font-weight: 700; font-size: 14px; color: #c4956a;">老虎机式红绿灯路口 · 视觉 Mockup</div>
+          <div class="muted" style="font-size: 11px; margin-top: 3px;">7 区块 · 路口布局 / spin 流程 / combo 触发 / 结算公式 / RPBD 商店 / 5 天压力曲线</div>
+        </div>
+      </div>
+    </a>
+    <a href="prototype-traffic-slot.html" class="card" style="text-decoration:none; padding: 16px 18px; border-left: 4px solid #fbbf24; background: linear-gradient(135deg, rgba(251,191,36,0.08), rgba(34,211,153,0.04));">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 28px;">🎰</span>
+        <div style="flex: 1;">
+          <div style="font-weight: 700; font-size: 14px; color: #fbbf24;">老虎机式红绿灯 · 可交互原型</div>
+          <div class="muted" style="font-size: 11px; margin-top: 3px;">真随机 / 真 combo 判定 / 真 combo2 修饰 / 商店购买 / localStorage 存档</div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div id="framework-info"></div>
+</section>
+
+<!-- Tab: Random 舞台拓扑 × Combo 符号协同（v3 横向分析） -->
+<section class="tab-panel" data-panel="combo-synergy" hidden>
+  <h2 class="section-title">Random 舞台拓扑 × Combo 符号协同 · 横向分析</h2>
+  <p class="muted" style="margin-bottom: 16px;">v3 把 spin 阶段的"舞台拓扑"和 combo 阶段的"符号协同判定"分别结构化，组成二维矩阵对所有已分析游戏做横向对比。同源：<span class="kbd">framework/v3/method-cluster.md</span> Step 5 + <span class="kbd">method-decompose.md</span> §3b/§4b。</p>
+  <div id="combo-synergy-mount"></div>
+</section>
+
+<!-- Tab: 核心洞察（v3 启发讨论型）-->
+<section class="tab-panel" data-panel="insights" hidden>
+  <h2 class="section-title">核心洞察 · 这个品类该怎么切入</h2>
+  <p class="muted" style="margin-bottom: 16px;">基于 34 款样本归纳 + Agent 调研，给出 5 条结构性事实 + 2 条切入路径（既有 R+C1 优化 vs 新 R+C1 范式）+ 反向警告 + 开放问题。<b>启发讨论型</b>，不下结论 —— 你看到的每条洞察都附"思考点"或"反例可能性"。</p>
+  <div id="insights-mount"></div>
+</section>
+
+<!-- 数据加载 -->
+<script src="framework/v5/schema.js"></script>
+<script src="data/games.js"></script>
+<script src="lib/render.js"></script>
+<script src="lib/admin.js"></script>
+<script src="lib/combo-synergy-clusters.js"></script>
+<script src="lib/insights-data.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const RR = window.RR;
+
+  /* ------ meta 信息 ------ */
+  const meta = document.querySelector('#meta-info');
+  const fw = RR.getFramework();
+  const games = RR.getAllGames();
+  const analyzed = games.filter(g => g.analysis && g.analysis.scores).length;
+  meta.innerHTML = `当前框架版本 <b>${fw ? fw.version : '?'}</b> · 共 <b>${games.length}</b> 款游戏 · 已分析 <b>${analyzed}</b> 款 · 数据更新 ${(window.GAMES && window.GAMES.updated_at) || '?'}`;
+
+  /* 动态填入"游戏库"标题与 tab 按钮的数量 */
+  const tabBtn = document.querySelector('#tab-games-btn');
+  if (tabBtn) tabBtn.innerHTML = `📦 ${games.length} 款游戏库`;
+  const sectionTitle = document.querySelector('#games-section-title');
+  if (sectionTitle) sectionTitle.textContent = `游戏库（${games.length} 款装置类 RPB）`;
+
+  /* ------ 一致性检查 ------ */
+  RR.checkFrameworkConsistency();
+
+  /* ------ 渲染游戏卡片 ------ */
+  function renderGameGrid() {
+    const grid = document.querySelector('#game-grid');
+    grid.innerHTML = '';
+    /* 按总分降序排（4 维之和），未分析放最后 */
+    const totalOf = (g) => g.analysis && g.analysis.scores
+      ? (g.analysis.scores.random + g.analysis.scores.combo + g.analysis.scores.pool + g.analysis.scores.structure)
+      : -1;
+    const sortedGames = [...RR.getAllGames()].sort((a, b) => totalOf(b) - totalOf(a));
+    for (const game of sortedGames) {
+      const card = RR.renderGameCard(game, {
+        baseHref: './analysis/',
+        onEdit: (slug) => {
+          RR.Admin.editScores(slug);
+          renderGameGrid();
+        },
+        onDelete: (slug) => {
+          if (RR.Admin.deleteGame(slug)) renderGameGrid();
+        }
+      });
+      grid.appendChild(card);
+    }
+  }
+  renderGameGrid();
+
+  /* ------ 管理面板 ------ */
+  RR.Admin.renderPanel(document.querySelector('#admin-mount'));
+  RR.Admin.onChange = renderGameGrid;
+
+  /* ------ 框架页 ------ */
+  function renderFrameworkInfo() {
+    if (!fw) return;
+    const el = document.querySelector('#framework-info');
+    const docs = [
+      { href: `framework/${fw.version}/README.md`,           name: 'README.md',           desc: '框架总述（先读这个）' },
+      { href: `framework/${fw.version}/scoring-rubric.md`,   name: 'scoring-rubric.md',   desc: '4 维评分校准（6 档锚点）' },
+      { href: `framework/${fw.version}/method-decompose.md`, name: 'method-decompose.md', desc: '7 字段定性拆解方法' },
+      { href: `framework/${fw.version}/method-cluster.md`,   name: 'method-cluster.md',   desc: '单维聚类方法' },
+      { href: `framework/${fw.version}/method-cross-dim.md`, name: 'method-cross-dim.md', desc: '跨维差察方法' },
+      { href: `framework/${fw.version}/prompts.md`,          name: 'prompts.md',          desc: '4 个 session prompt 模板' }
+    ];
+    el.innerHTML = `
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:14px; color: var(--fg-muted);">名称</div>
+        <div style="font-size:18px; font-weight:700; margin-top:4px;">${RR.escapeHtml(fw.name)} <span class="dim">· ${fw.version}</span></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:14px; color: var(--fg-muted); margin-bottom:8px;">📖 方法论文档（点击在浏览器打开 raw markdown）</div>
+        <table class="tbl">
+          <thead><tr><th style="width:200px">文件</th><th>内容</th></tr></thead>
+          <tbody>
+            ${docs.map(d => `
+              <tr>
+                <td><a href="${d.href}" target="_blank" rel="noopener"><span class="kbd">${RR.escapeHtml(d.name)}</span></a></td>
+                <td class="muted">${RR.escapeHtml(d.desc)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <p class="dim" style="font-size:11px; margin-top:8px;">⚠ 微调（措辞/锚点）直接改 .md 不动版本号；结构性变更新建 framework/v\<N+1\>/ + 改 framework/current.txt</p>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:14px; color: var(--fg-muted);">公式</div>
+        <div style="font-size:15px; font-family: ui-monospace, 'SF Mono', monospace; margin-top:8px; color: var(--accent);">${RR.escapeHtml(fw.formula)}</div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:14px; color: var(--fg-muted); margin-bottom:8px;">L0 → L4 递进</div>
+        ${Object.entries(fw.layers).map(([k, v]) => `
+          <div style="margin: 8px 0; font-size:13px;">
+            <span class="kbd">${k}</span> <span class="muted">${RR.escapeHtml(v)}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:14px; color: var(--fg-muted); margin-bottom:8px;">4 个评分维度</div>
+        <table class="tbl">
+          <thead><tr><th>key</th><th>名称</th><th>区间</th><th>含义</th></tr></thead>
+          <tbody>
+            ${fw.score_dimensions.map(d => `
+              <tr>
+                <td><span class="kbd">${d.key}</span></td>
+                <td><b>${RR.escapeHtml(d.name)}</b></td>
+                <td>${d.scale[0]} - ${d.scale[1]}</td>
+                <td class="muted">${RR.escapeHtml(d.desc)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:14px; color: var(--fg-muted); margin-bottom:8px;">7 个定性字段</div>
+        <table class="tbl">
+          <thead><tr><th>key</th><th>名称</th><th>含义</th></tr></thead>
+          <tbody>
+            ${fw.qualitative_fields.map(d => `
+              <tr>
+                <td><span class="kbd">${d.key}</span></td>
+                <td><b>${RR.escapeHtml(d.name)}</b></td>
+                <td class="muted">${RR.escapeHtml(d.desc)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div style="font-size:14px; color: var(--fg-muted); margin-bottom:8px;">5 个压力参数</div>
+        <table class="tbl">
+          <thead><tr><th>key</th><th>名称</th><th>含义</th></tr></thead>
+          <tbody>
+            ${fw.pressure_params.map(d => `
+              <tr>
+                <td><span class="kbd">${d.key}</span></td>
+                <td><b>${RR.escapeHtml(d.name)}</b></td>
+                <td class="muted">${RR.escapeHtml(d.desc)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+  renderFrameworkInfo();
+
+  /* ------ 设计模式 tab · L0-L4 递进推导（动态从 schema.layers 取） ------ */
+  function renderDesignPatternLayers() {
+    const mount = document.querySelector('#design-pattern-layers');
+    if (!mount || !fw || !fw.layers) return;
+    const layerColors = { L0: '#a78bfa', L1: '#60a5fa', L2: '#34d399', L3: '#fbbf24', L4: '#f87171' };
+    mount.innerHTML = Object.entries(fw.layers).map(([k, v]) => `
+      <div style="display:flex; gap:14px; align-items:flex-start; padding: 10px 0; border-bottom: 1px dashed var(--line);">
+        <span style="display:inline-block; min-width: 36px; font-weight:700; padding: 4px 10px; border-radius:6px; background: ${layerColors[k] || '#a3a3a3'}22; color: ${layerColors[k] || '#a3a3a3'}; font-size:12px; text-align:center;">${k}</span>
+        <span style="font-size:13px; line-height:1.7;">${RR.escapeHtml(v)}</span>
+      </div>
+    `).join('');
+  }
+  renderDesignPatternLayers();
+
+  /* ------ 协同结构横向分析（v2） ------ */
+  let comboSynergyRendered = false;
+  function renderComboSynergyTab() {
+    if (comboSynergyRendered) return;
+    const mount = document.querySelector('#combo-synergy-mount');
+    if (!mount || !fw || !window.RR_COMBO_CLUSTERS) return;
+
+    const allGames = RR.getAllGames().filter(g => g.analysis && g.analysis.qualitative);
+    const topologyEnum = fw.show_topology_enum || [];
+    const predicateEnum = fw.combo_predicate_enum || [];
+    const topologyName = (key) => {
+      const e = topologyEnum.find(x => x.key === key);
+      return e ? e.name : key;
+    };
+    const predicateName = (key) => {
+      const e = predicateEnum.find(x => x.key === key);
+      return e ? e.name : key;
+    };
+
+    /* 给每款游戏算主集群 */
+    const gameWithCluster = allGames.map(g => ({
+      game: g,
+      cluster: window.RR_findCluster(g.analysis.qualitative)
+    }));
+
+    /* ===== 区块 1：顶部统计 ===== */
+    const totalAnalyzed = allGames.length;
+    const clusterCount = {};
+    for (const x of gameWithCluster) {
+      const cid = x.cluster ? x.cluster.id : '_none';
+      clusterCount[cid] = (clusterCount[cid] || 0) + 1;
+    }
+    const usedClusters = window.RR_COMBO_CLUSTERS.filter(c => (clusterCount[c.id] || 0) > 0);
+    const emptyClusters = window.RR_COMBO_CLUSTERS.filter(c => !(clusterCount[c.id] > 0));
+
+    /* ===== 区块 2：6 集群卡片 ===== */
+    const clusterCards = window.RR_COMBO_CLUSTERS.map(c => {
+      const members = gameWithCluster.filter(x => x.cluster && x.cluster.id === c.id);
+      const memberChips = members.map(x => {
+        const sc = x.game.analysis.scores;
+        return `<a class="kbd" href="./analysis/${RR.escapeHtml(x.game.slug)}.html"
+                  style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:14px; background:rgba(255,255,255,0.06); margin:2px;"
+                  title="combo ${sc.combo}/10  总分 ${sc.random+sc.combo+sc.pool+sc.structure}">
+                  <span>${RR.escapeHtml(x.game.basic.name_cn)}</span>
+                  <span style="opacity:.7; font-size:11px;">C${sc.combo}</span>
+                </a>`;
+      }).join('');
+      const empty = members.length === 0;
+      return `
+        <div class="card" style="border-left: 3px solid ${c.color}; ${empty ? 'opacity:.55;' : ''}">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <span style="font-size:22px;">${c.glyph}</span>
+            <span style="font-weight:700; font-size:15px;">${RR.escapeHtml(c.name)}</span>
+            <span style="margin-left:auto; font-size:11px; padding:2px 8px; border-radius:10px; background:${c.color}33; color:${c.color};">${members.length} 款</span>
+          </div>
+          <div class="muted" style="font-size:11px; font-family: ui-monospace, monospace; margin-bottom:8px;">${RR.escapeHtml(c.pattern)} · combo 跨度 ${RR.escapeHtml(c.span)}</div>
+          <div style="font-size:12px; line-height:1.6; margin-bottom:10px; color: var(--fg);">${RR.escapeHtml(c.diagnosis)}</div>
+          <div style="margin-top:8px;">${memberChips || `<span class="dim" style="font-size:11px;">${RR.escapeHtml(c.empty_note || '当前数据中无成员')}</span>`}</div>
+        </div>
+      `;
+    }).join('');
+
+    /* ===== 区块 3：横向对照表（v3 列结构：游戏 / random+R分 / combo1+C分 / combo2+C分 / 集群 / 自由文本）===== */
+    const sorted = [...gameWithCluster].sort((a, b) => b.game.analysis.scores.combo - a.game.analysis.scores.combo);
+    const scorePill = (val, hint) => `<span title="${RR.escapeHtml(hint)}" style="display:inline-block; font-size:11px; font-weight:700; padding:1px 7px; border-radius:10px; background: var(--accent); color: #1c1300; margin-left:6px; vertical-align:middle;">${val}</span>`;
+    const tableRows = sorted.map(({game, cluster}) => {
+      const q = game.analysis.qualitative;
+      const sc = game.analysis.scores;
+      const topo = q.show_topology;
+      const preds = q.combo_predicate || [];
+      const cdotName = preds.map(p => `<span class="kbd" title="${RR.escapeHtml(p)}">${RR.escapeHtml(predicateName(p))}</span>`).join(' ');
+      const modShort = (q.combo_modifier || '').replace(/\s+/g, ' ').slice(0, 60) + ((q.combo_modifier || '').length > 60 ? '…' : '');
+      const clusterTag = cluster
+        ? `<span style="font-size:11px; padding:2px 8px; border-radius:10px; background:${cluster.color}22; color:${cluster.color};">${cluster.glyph} ${RR.escapeHtml(cluster.name)}</span>`
+        : '<span class="dim" style="font-size:11px;">未匹配</span>';
+      return `
+        <tr>
+          <td><a href="./analysis/${RR.escapeHtml(game.slug)}.html" style="text-decoration:none; color: var(--accent); font-weight:600;">${RR.escapeHtml(game.basic.name_cn)}</a></td>
+          <td><span class="kbd" title="${RR.escapeHtml(topo || '')}">${RR.escapeHtml(topologyName(topo))}</span>${scorePill(sc.random, 'random 评分 ' + sc.random + '/10')}</td>
+          <td>${cdotName || '<span class="dim">—</span>'}${scorePill(sc.combo, 'combo 评分 ' + sc.combo + '/10（combo1 + combo2 共用）')}</td>
+          <td class="muted" style="font-size:12px; line-height:1.5;">${RR.escapeHtml(modShort) || '<span class="dim">—</span>'}${scorePill(sc.combo, 'combo 评分 ' + sc.combo + '/10（combo1 + combo2 共用）')}</td>
+          <td>${clusterTag}</td>
+          <td class="muted" style="font-size:12px; line-height:1.5;">${RR.escapeHtml(q.combo_synergy || '')}</td>
+        </tr>
+      `;
+    }).join('');
+
+    /* ===== 区块 4：5×8 拓扑判定矩阵 ===== */
+    /* 把每款游戏拆到所有 (topology, predicate) 二元组里 */
+    const cellMembers = new Map(); // "topo|pred" -> [game...]
+    for (const g of allGames) {
+      const t = g.analysis.qualitative.show_topology;
+      const ps = g.analysis.qualitative.combo_predicate || [];
+      for (const p of ps) {
+        const key = `${t}|${p}`;
+        if (!cellMembers.has(key)) cellMembers.set(key, []);
+        cellMembers.get(key).push(g);
+      }
+    }
+    /* 矩阵 header / 行标题：中文 name 显示，加 ? 角标 hover 显示自定义 tooltip（schema enum.desc + 英文 key） */
+    const helpMark = (desc, keyHint) => {
+      const tip = `${desc}\n\n[英文 key] ${keyHint}`;
+      return `<span class="rr-help" data-tooltip="${RR.escapeHtml(tip)}">?</span>`;
+    };
+    const matrixHeader = `
+      <tr>
+        <th style="text-align:left; padding:8px;">拓扑 ＼ 判定</th>
+        ${predicateEnum.map(p => `<th style="text-align:center; font-size:11px; padding:6px 4px; vertical-align:middle;"><div>${RR.escapeHtml(p.name)}${helpMark(p.desc, p.key)}</div></th>`).join('')}
+      </tr>
+    `;
+    const matrixRows = topologyEnum.map(t => {
+      const cells = predicateEnum.map(p => {
+        const members = cellMembers.get(`${t.key}|${p.key}`) || [];
+        if (members.length > 0) {
+          const chips = members.map(g => `<a href="./analysis/${RR.escapeHtml(g.slug)}.html" style="display:inline-block; font-size:11px; padding:1px 5px; border-radius:6px; background: var(--accent); color: #1c1300; text-decoration:none; margin:1px;">${RR.escapeHtml(g.basic.name_cn)}</a>`).join('');
+          return `<td style="vertical-align:middle; text-align:center; padding:6px 4px; background: rgba(196,149,106,0.07); border:1px solid rgba(196,149,106,0.25);">${chips}</td>`;
+        } else {
+          const hint = (window.RR_DESIGN_SPACE_HINTS || {})[`${t.key}|${p.key}`];
+          const hintAttr = hint ? `title="潜在设计空间：${RR.escapeHtml(hint)}"` : '';
+          const style = hint
+            ? 'background: rgba(124,58,237,0.10); border:1px dashed rgba(124,58,237,0.4); cursor:help;'
+            : 'background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); opacity:.4;';
+          return `<td style="text-align:center; padding:6px 4px; ${style}" ${hintAttr}>${hint ? '<span style="color:#a78bfa; font-size:14px;">·</span>' : '<span class="dim" style="font-size:14px;">—</span>'}</td>`;
+        }
+      }).join('');
+      return `<tr><td style="padding:8px; font-weight:700; color: var(--accent); white-space:nowrap;"><span class="kbd">${RR.escapeHtml(t.name)}</span>${helpMark(t.desc, t.key)}</td>${cells}</tr>`;
+    }).join('');
+
+    /* ===== 区块 4.5：先验游戏聚类（v3 新增）—— 把每款 RPB roguelike 映射到它的现实/桌游/街机原型 ===== */
+    const priorClusters = window.RR_PRIOR_GAME_CLUSTERS || [];
+    const slugToGame = new Map(allGames.map(g => [g.slug, g]));
+    /* Q3 = 上四分位（第 75 百分位，线性插值）。N=1 时即该数值；N=2 取较大；N≥3 标准计算 */
+    const quartile3 = (arr) => {
+      const a = [...arr].filter(v => v != null).sort((x, y) => x - y);
+      if (a.length === 0) return null;
+      if (a.length === 1) return a[0];
+      const idx = (a.length - 1) * 0.75;
+      const lo = Math.floor(idx);
+      const hi = Math.ceil(idx);
+      if (lo === hi) return a[lo];
+      const v = a[lo] * (hi - idx) + a[hi] * (idx - lo);
+      return Math.round(v * 10) / 10;
+    };
+
+    /* SVG 4 维分布图：4 行 dot strip plot（横轴 5-10），每行一个维度。
+       items: [{ name: '游戏名', scores: {random,combo,pool,structure} }, ...]
+       options.predicted=true → 空心虚线圈（预测值）；否则实心圆（实测值）
+       v3 升级：N>1 时每款游戏分配独立 HSL 色相 + 底部 legend，方便区分同分堆叠的 dot 是哪款游戏
+       每个 dot 加 .rr-help + data-tooltip 用于 hover 显示"游戏名 + 该维度分数" */
+    const dimColors = { random: '#f87171', combo: '#a78bfa', pool: '#34d399', structure: '#fbbf24' };
+    const dimLabel  = { random: 'R', combo: 'C', pool: 'P', structure: 'S' };
+    const dimNameCN = { random: 'random（落位戏剧化）', combo: 'combo（连锁数值/动画）', pool: 'pool（双层池架构）', structure: 'structure（压力曲线）' };
+    const renderScoreDistChart = (items, options = {}) => {
+      const W = 260, H = 26, leftPad = 18, rightPad = 12;
+      const xOf = (s) => leftPad + (s - 5) / 5 * (W - leftPad - rightPad);
+      const dims = ['random', 'combo', 'pool', 'structure'];
+      /* N>1 且非预测时给每款游戏分配独立色相（黄金角分布避免相邻色冲突）*/
+      const useGameColor = items.length > 1 && !options.predicted;
+      if (useGameColor) {
+        items.forEach((it, i) => {
+          const hue = (i * 137.508) % 360; // 黄金角分布
+          it._color = `hsl(${hue.toFixed(0)}, 72%, 62%)`;
+        });
+      }
+      const rows = dims.map(d => {
+        const filtered = items.filter(it => it.scores && it.scores[d] != null);
+        const counts = {};
+        const dots = filtered.map(it => {
+          const v = it.scores[d];
+          counts[v] = (counts[v] || 0) + 1;
+          const offset = (counts[v] - 1) * 6;
+          const cx = xOf(v);
+          const cy = H - 10 - offset;
+          const tip = `${it.name}\n${dimNameCN[d]} = ${v}/10` + (options.predicted ? '（预测值）' : '');
+          const tipAttr = `class="rr-help" data-tooltip="${RR.escapeHtml(tip)}" style="cursor:help;"`;
+          const gameAttr = `data-rr-game="${RR.escapeHtml(it.name)}"`;
+          if (options.predicted) {
+            return `<circle cx="${cx}" cy="${cy}" r="4" fill="none" stroke="${dimColors[d]}" stroke-width="1.8" stroke-dasharray="2 1.5" ${gameAttr} ${tipAttr} style="color: ${dimColors[d]};"/>`;
+          }
+          const fillColor = useGameColor ? it._color : dimColors[d];
+          return `<circle cx="${cx}" cy="${cy}" r="4" fill="${fillColor}" stroke="rgba(0,0,0,0.4)" stroke-width="0.8" ${gameAttr} ${tipAttr} style="color: ${fillColor};"/>`;
+        }).join('');
+        const ticks = [5,6,7,8,9,10].map(s => `<line x1="${xOf(s)}" x2="${xOf(s)}" y1="${H-9}" y2="${H-5}" stroke="rgba(255,255,255,0.18)"/>`).join('');
+        return `
+          <div style="display:flex; align-items:center; gap:6px; font-size:10px; line-height:1; margin: 2px 0;">
+            <span style="color:${dimColors[d]}; font-weight:700; width:10px; text-align:right;">${dimLabel[d]}</span>
+            <svg width="${W}" height="${H}" style="flex-shrink:0; overflow: visible;">
+              <line x1="${leftPad}" x2="${W - rightPad}" y1="${H-7}" y2="${H-7}" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              ${ticks}
+              ${dots}
+            </svg>
+            <span class="muted" style="font-size:9px;">5—10</span>
+          </div>
+        `;
+      }).join('');
+      /* legend：N>1 时显示每款游戏对应的色块 + 名字，让用户能从 dot 颜色反查游戏 */
+      const legend = useGameColor ? `
+        <div style="display:flex; flex-wrap:wrap; gap: 3px 8px; padding: 4px 8px 2px; margin-top: 4px; border-top: 1px dashed rgba(255,255,255,0.08); font-size:10px;">
+          ${items.map(it => `
+            <span data-rr-game="${RR.escapeHtml(it.name)}" style="display:inline-flex; align-items:center; gap:4px; color: var(--fg-muted); cursor: pointer; padding: 2px 4px; border-radius: 4px;">
+              <span style="width:9px; height:9px; border-radius:50%; background:${it._color}; border: 0.5px solid rgba(0,0,0,0.4); display:inline-block; flex-shrink:0;"></span>
+              <span style="white-space:nowrap;">${RR.escapeHtml(it.name)}</span>
+            </span>
+          `).join('')}
+        </div>
+      ` : '';
+      return `<div style="margin: 8px 0; padding: 8px 8px 4px; background: rgba(0,0,0,0.18); border-radius: 6px;">
+        <div class="muted" style="font-size:10px; margin-bottom:4px; padding-left: 18px;">💡 悬停 dot / legend / 下方游戏标签 → 该游戏高亮，其他变淡</div>
+        ${rows}
+        ${legend}
+      </div>`;
+    };
+
+    /* === 先验 × 拓扑 概览矩阵（13 先验 × 5 拓扑 = 65 格）=== */
+    const priorTopoCells = new Map(); // "priorId|topoKey" -> [game...]
+    for (const c of priorClusters) {
+      for (const slug of c.members) {
+        const g = slugToGame.get(slug);
+        if (!g) continue;
+        const topo = g.analysis.qualitative.show_topology;
+        const k = `${c.id}|${topo}`;
+        if (!priorTopoCells.has(k)) priorTopoCells.set(k, []);
+        priorTopoCells.get(k).push(g);
+      }
+    }
+    const priorTopoHeader = `
+      <tr>
+        <th style="text-align:left; padding:8px; min-width: 220px; position: sticky; left: 0; background: var(--bg-card); z-index: 2;">先验 ＼ 拓扑</th>
+        ${topologyEnum.map(t => `<th style="text-align:center; font-size:11px; padding:6px 4px; vertical-align:middle;"><div>${RR.escapeHtml(t.name)}${helpMark(t.desc, t.key)}</div></th>`).join('')}
+        <th style="text-align:center; font-size:11px; padding:6px 4px; min-width:60px;">合计</th>
+      </tr>
+    `;
+    const priorTopoRows = priorClusters.map(c => {
+      const cells = topologyEnum.map(t => {
+        const members = priorTopoCells.get(`${c.id}|${t.key}`) || [];
+        if (members.length > 0) {
+          const chips = members.map(g => `<a href="./analysis/${RR.escapeHtml(g.slug)}.html" style="display:inline-block; font-size:11px; padding:1px 5px; border-radius:6px; background: var(--accent); color: #1c1300; text-decoration:none; margin:1px;">${RR.escapeHtml(g.basic.name_cn)}</a>`).join('');
+          return `<td style="vertical-align:middle; text-align:center; padding:6px 4px; background: rgba(196,149,106,0.07); border:1px solid rgba(196,149,106,0.25);">${chips}</td>`;
+        }
+        return `<td style="text-align:center; padding:6px 4px; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); opacity:.4;"><span class="dim" style="font-size:14px;">—</span></td>`;
+      }).join('');
+      return `<tr>
+        <td style="padding:8px; font-weight:700; color: var(--accent); white-space:nowrap; position: sticky; left: 0; background: var(--bg-card); z-index: 1;">
+          <span style="font-size:18px; margin-right:6px;">${c.glyph}</span>${RR.escapeHtml(c.name)}
+        </td>
+        ${cells}
+        <td style="text-align:center; padding:6px 4px; font-weight:700; color: var(--fg-muted);"><span class="kbd" style="font-size:11px;">${c.members.length}</span></td>
+      </tr>`;
+    }).join('');
+    /* 列汇总：每个拓扑跨先验的总成员数 */
+    const topoTotals = topologyEnum.map(t => {
+      let n = 0;
+      for (const c of priorClusters) {
+        n += (priorTopoCells.get(`${c.id}|${t.key}`) || []).length;
+      }
+      return n;
+    });
+    const priorTopoFooter = `
+      <tr style="border-top: 2px solid var(--line);">
+        <td style="padding:8px; font-weight:700; color: var(--fg-muted); position: sticky; left: 0; background: var(--bg-card); z-index: 1;">列合计 →</td>
+        ${topoTotals.map(n => `<td style="text-align:center; padding:6px 4px; color: var(--fg-muted);"><span class="kbd" style="font-size:11px;">${n}</span></td>`).join('')}
+        <td style="text-align:center; padding:6px 4px; font-weight:700; color: var(--accent);"><span class="kbd" style="font-size:11px;">${allGames.length}</span></td>
+      </tr>
+    `;
+    const priorTopoMatrix = `
+      <div style="margin-bottom: 14px;">
+        <h4 style="font-size:14px; margin: 0 0 6px; color: var(--fg);">📊 先验 × 拓扑 概览矩阵（${priorClusters.length} 先验 × ${topologyEnum.length} 拓扑 = ${priorClusters.length * topologyEnum.length} 格）</h4>
+        <p class="muted" style="font-size:11px; margin: 0 0 10px;">同一先验玩法可能落到不同拓扑（如 slot 老虎机族 9 款都在 2D 离散网格；Yahtzee 骰子族 5 款都在 0D 多重集；自走棋族通过 slot 出位映射到 2D 离散网格）。琥珀色格 = 已占领；灰色格 = 该先验下没有该拓扑实例。<b>表头 ❓</b> hover 看拓扑解释。</p>
+        <div class="card" style="overflow-x:auto;">
+          <table style="border-collapse:separate; border-spacing:2px; font-size:12px; min-width:100%;">
+            <thead>${priorTopoHeader}</thead>
+            <tbody>${priorTopoRows}${priorTopoFooter}</tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    /* === 拓扑 × 判定 → 先验原型矩阵（与 ⑧ 矩阵同布局，但内容是先验聚类）=== */
+    const cellPriorIds = new Map(); // "topo|pred" -> Set<priorId>
+    for (const c of priorClusters) {
+      for (const slug of c.members) {
+        const g = slugToGame.get(slug);
+        if (!g) continue;
+        const t = g.analysis.qualitative.show_topology;
+        const ps = g.analysis.qualitative.combo_predicate || [];
+        for (const p of ps) {
+          const k = `${t}|${p}`;
+          if (!cellPriorIds.has(k)) cellPriorIds.set(k, new Set());
+          cellPriorIds.get(k).add(c.id);
+        }
+      }
+    }
+    const priorMap = new Map(priorClusters.map(c => [c.id, c]));
+    /* 提取先验短名：去括号、取斜杠/空格前部分；用于矩阵 chip 内的紧凑显示 */
+    const shortPriorName = (name) => {
+      return name.replace(/[（(][^）)]*[）)]/g, '').split(/[\/、 ]/)[0].trim() || name;
+    };
+    const priorPredMatrixHeader = `
+      <tr>
+        <th style="text-align:left; padding:8px; min-width: 120px; position: sticky; left: 0; background: var(--bg-card); z-index: 2;">拓扑 ＼ 判定</th>
+        ${predicateEnum.map(p => `<th style="text-align:center; font-size:11px; padding:6px 4px; vertical-align:middle;"><div>${RR.escapeHtml(p.name)}${helpMark(p.desc, p.key)}</div></th>`).join('')}
+      </tr>
+    `;
+    const priorPredMatrixRows = topologyEnum.map(t => {
+      const cells = predicateEnum.map(p => {
+        const ids = cellPriorIds.get(`${t.key}|${p.key}`);
+        if (!ids || ids.size === 0) {
+          const hint = (window.RR_DESIGN_SPACE_HINTS || {})[`${t.key}|${p.key}`];
+          const hintAttr = hint ? `class="rr-help" data-tooltip="潜在设计空间：${RR.escapeHtml(hint)}"` : '';
+          const style = hint
+            ? 'background: rgba(124,58,237,0.10); border:1px dashed rgba(124,58,237,0.4); cursor:help;'
+            : 'background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); opacity:.4;';
+          return `<td style="text-align:center; padding:6px 4px; ${style}" ${hintAttr}>${hint ? '<span style="color:#a78bfa; font-size:14px;">·</span>' : '<span class="dim" style="font-size:14px;">—</span>'}</td>`;
+        }
+        const chips = [...ids].map(pid => {
+          const c = priorMap.get(pid);
+          const tip = `${c.name} · ${c.members.length} 款（${c.members.map(s => slugToGame.get(s)?.basic.name_cn).filter(Boolean).join(' / ')}）`;
+          return `<span class="rr-help" data-tooltip="${RR.escapeHtml(tip)}" style="display:inline-block; font-size:11px; padding:1px 5px; border-radius:6px; background: rgba(124,58,237,0.85); color: #fff; margin:1px; cursor:help;">${c.glyph}<span style="margin-left:2px;">${RR.escapeHtml(shortPriorName(c.name))}</span></span>`;
+        }).join('');
+        return `<td style="vertical-align:middle; text-align:center; padding:6px 4px; background: rgba(124,58,237,0.07); border:1px solid rgba(124,58,237,0.25);">${chips}</td>`;
+      }).join('');
+      return `<tr>
+        <td style="padding:8px; font-weight:700; color: var(--accent); white-space:nowrap; position: sticky; left: 0; background: var(--bg-card); z-index: 1;">
+          <span class="kbd">${RR.escapeHtml(t.name)}</span>${helpMark(t.desc, t.key)}
+        </td>${cells}
+      </tr>`;
+    }).join('');
+    const priorPredMatrix = `
+      <div style="margin-bottom: 14px;">
+        <h4 style="font-size:14px; margin: 0 0 6px; color: var(--fg);">📊 拓扑 × 判定 → 先验原型矩阵（${topologyEnum.length}×${predicateEnum.length} = ${topologyEnum.length * predicateEnum.length} 格 · 内容为先验聚类）</h4>
+        <p class="muted" style="font-size:11px; margin: 0 0 10px;">和 ⑧ 矩阵布局一致（行=拓扑 / 列=判定），但<b>每格内容是先验玩法原型而非具体游戏</b>。同一格可能含多个先验（如 0D × 类型字典 = 多个 0D 多重集系先验集中到同一判定）。chip 上 hover 看先验全名 + 该族成员列表。紫色 chip 与 ⑧ 矩阵的琥珀色 chip 视觉区分。</p>
+        <div class="card" style="overflow-x:auto;">
+          <table style="border-collapse:separate; border-spacing:2px; font-size:12px; min-width:100%;">
+            <thead>${priorPredMatrixHeader}</thead>
+            <tbody>${priorPredMatrixRows}</tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    const priorCards = priorClusters.map(c => {
+      const memberLinks = c.members.map(slug => {
+        const g = slugToGame.get(slug);
+        if (!g) return '';
+        const sc = g.analysis.scores;
+        const total = sc.random + sc.combo + sc.pool + sc.structure;
+        return `<a href="./analysis/${RR.escapeHtml(slug)}.html"
+                  data-rr-game="${RR.escapeHtml(g.basic.name_cn)}"
+                  title="总分 ${total}（random ${sc.random}/combo ${sc.combo}/pool ${sc.pool}/structure ${sc.structure}）"
+                  style="display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:14px; background:rgba(255,255,255,0.06); margin:2px; text-decoration:none;">
+                  <span style="color: var(--fg);">${RR.escapeHtml(g.basic.name_cn)}</span>
+                  <span style="opacity:.7; font-size:11px;">总${total}</span>
+                </a>`;
+      }).join('');
+      /* 4 维 Q3 + 总分 Q3 */
+      const memberItems = c.members.map(slug => {
+        const g = slugToGame.get(slug);
+        if (!g) return null;
+        return { name: g.basic.name_cn, scores: g.analysis.scores };
+      }).filter(Boolean);
+      const memberScores = memberItems.map(it => it.scores);
+      const qR = quartile3(memberScores.map(s => s.random));
+      const qC = quartile3(memberScores.map(s => s.combo));
+      const qP = quartile3(memberScores.map(s => s.pool));
+      const qS = quartile3(memberScores.map(s => s.structure));
+      const qT = quartile3(memberScores.map(s => s.random + s.combo + s.pool + s.structure));
+      const q3Note = c.members.length === 1 ? '（单成员族，Q3 = 该款值）' : (c.members.length === 2 ? '（双成员族，Q3 取较大值）' : `（${c.members.length} 款成员的 75% 分位）`);
+      /* 4 维 Q3 数字 + dot 分布图（实心点 = 实测，hover 看游戏名）*/
+      const q3Line = `
+        <div style="font-size:11px; margin:8px 0; padding:8px 10px; background: rgba(124,58,237,0.10); border-radius:6px; border-left: 2px solid #a78bfa; line-height:1.7;">
+          <div class="muted" style="font-size:10px; margin-bottom:3px;">📊 4 维 Q3 ${q3Note}</div>
+          <span style="color:#f87171;">R</span> <b>${qR}</b>
+          <span style="margin: 0 8px; opacity:.3;">·</span>
+          <span style="color:#a78bfa;">C</span> <b>${qC}</b>
+          <span style="margin: 0 8px; opacity:.3;">·</span>
+          <span style="color:#34d399;">P</span> <b>${qP}</b>
+          <span style="margin: 0 8px; opacity:.3;">·</span>
+          <span style="color:#fbbf24;">S</span> <b>${qS}</b>
+          <span style="margin: 0 8px; opacity:.3;">·</span>
+          <span class="muted">总分 Q3</span> <b style="color: var(--accent);">${qT}</b>
+        </div>
+        ${renderScoreDistChart(memberItems)}
+      `;
+      return `
+        <div class="card rr-chart-wrapper" style="margin-bottom:14px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <span style="font-size:22px;">${c.glyph}</span>
+            <span style="font-weight:700; font-size:15px;">${RR.escapeHtml(c.name)}</span>
+            <span class="kbd" style="margin-left:auto; font-size:11px;">${c.members.length} 款</span>
+          </div>
+          <div class="muted" style="font-size:12px; margin-bottom:6px; line-height:1.6;">${RR.escapeHtml(c.description)}</div>
+          ${q3Line}
+          <div>${memberLinks}</div>
+        </div>
+      `;
+    }).join('');
+
+    /* ===== 区块 4.6：潜在先验空间（v3 新增）—— 用数据数组 + SVG 预测分数图 ===== */
+    const potentialPriors = [
+      { glyph: '🃏', name: '21 点 Blackjack', color: '#a78bfa', pattern: '0维 多重集 × （阈值 + 类型字典）',
+        scores: { random: 7, combo: 9, pool: 9, structure: 8 },
+        body: '玩家抽牌凑总和 ≤21 但越接近越好。<b>RPB 化关键</b>：基础池=改造扑克牌（含修饰版本如"Ace 改 1.5"）；主动池=赌注修饰道具；checkpoint=庄家轮目标；指数倍率链 = 连续 21 点 → mult 累乘。<b>预测评分上沿</b>：与 Balatro 同集群。' },
+      { glyph: '🟦', name: '三消 Match-3 / 消除', color: '#60a5fa', pattern: '2维 离散网格 × （阈值 + 连锁反应）',
+        scores: { random: 7, combo: 9, pool: 8, structure: 8 },
+        body: '糖果传奇 / 宝石迷阵原型——3 同色相邻消除引发链式反应。<b>RPB 化关键</b>：基础池=符号种类（含特殊符号如炸弹/彩虹）；主动池=道具棋（永久修饰）；判定加 cascade 让多米诺爆炸成为分数源。<b>34 款空缺</b>：网格 × cascade 是矩阵已标注的"潜在设计空间"。' },
+      { glyph: '🧱', name: '俄罗斯方块 Tetris', color: '#34d399', pattern: '2维 离散网格 × （连线 + 连锁反应）',
+        scores: { random: 8, combo: 8, pool: 8, structure: 9 },
+        body: '方块池随机下落 + 玩家旋转/位移 + 行填满消除。<b>RPB 化关键</b>：基础池=方块形状池（标准 7+ 修饰版）；主动池=道具方块（炸弹/彩色万能/慢速）；连续消行 = 倍率链。<b>当前最像</b>：宾果贝蒂的 line_complete 是其简化版。方块下落的物理感比纯 slot 强。' },
+      { glyph: '🏎', name: '赛车 / 跑酷 Racing', color: '#fbbf24', pattern: '1维 线序 × （物理路径 + 链式约束）',
+        scores: { random: 8, combo: 7, pool: 7, structure: 8 },
+        body: '沿单向 1D 赛道前进，路径上的元素按序触发。<b>RPB 化关键</b>：基础池=赛车 / 角色池（不同基础属性）；主动池=赛道修饰道具（加速/护盾/弹簧）；checkpoint=分段终点。是<b>当前空集群</b>"1 维线序作为主装置"的潜在填补——34 款里此族成员为 0。' },
+      { glyph: '🎳', name: '保龄球 Bowling', color: '#f87171', pattern: '2维 连续物理 × （物理路径 + 阈值）',
+        scores: { random: 9, combo: 8, pool: 7, structure: 8 },
+        body: '投球击倒 10 瓶——已有"物理路径族"内容，但与弹珠 / 推币的差异是<b>定向投掷</b>而非自由弹跳。<b>RPB 化关键</b>：基础池=球种 / 瓶种修饰；主动池=旋转/曲率道具；连击 strike → 倍率链。可视化爆发不输弹珠大亨。' },
+      { glyph: '🎯', name: '飞镖 Darts', color: '#ec4899', pattern: '1维 圆环 × （物理路径 + 类型字典）',
+        scores: { random: 8, combo: 8, pool: 7, structure: 8 },
+        body: '投镖到圆环靶面（外圈/三倍/内圈/双倍/牛眼）。<b>RPB 化关键</b>：基础池=镖种（加成/穿透/分裂）；主动池=轨迹修饰；checkpoint=501 倒计分制。可填补<b>圆环复合族孤族</b>缺位，比转啊转更动态（每次投掷有物理偏差）。' },
+      { glyph: '🔫', name: '弹幕射击 Bullet Hell', color: '#06b6d4', pattern: '2维 连续物理 × （物理路径 + 触发链）',
+        scores: { random: 9, combo: 9, pool: 8, structure: 7 },
+        body: '东方/Vampire Survivors 等的 RPB 化——子弹池 + 弹道修饰 + 击中怪物的连锁。<b>RPB 化关键</b>：基础池=武器/子弹池；主动池=被动修饰（吸引/反弹/穿透）；触发链=连击 mult。<b>当前最像</b>：吸血鬼爬行者已沾边但还是回合制卡牌。实时弹幕 RPB 仍是空白。' },
+      { glyph: '🐍', name: '贪吃蛇 Snake / 吃豆人 Pac-Man', color: '#84cc16', pattern: '2维 离散网格 × （物理路径 + 阈值）',
+        scores: { random: 7, combo: 7, pool: 8, structure: 8 },
+        body: '在网格上吃食物增长身体（蛇）或躲幽灵（吃豆人）。<b>RPB 化关键</b>：基础池=食物种类（不同效果）；主动池=身体节段修饰（穿墙/分裂/护盾）；checkpoint=每段长度阈值。<b>当前最像</b>：右与下的 path 是其单方向极简版。' }
+    ];
+    const potentialPriorCards = potentialPriors.map(p => {
+      const total = p.scores.random + p.scores.combo + p.scores.pool + p.scores.structure;
+      return `
+        <div class="card" style="border-left: 3px solid ${p.color}; margin-bottom: 14px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <span style="font-size:22px;">${p.glyph}</span>
+            <span style="font-weight:700; font-size:15px;">${RR.escapeHtml(p.name)}</span>
+            <span class="kbd" style="margin-left:auto; font-size:11px;">预测总 ${total}</span>
+          </div>
+          <div class="muted" style="font-size:11px; margin-bottom:6px; font-family: ui-monospace, monospace;">${RR.escapeHtml(p.pattern)}</div>
+          <div style="font-size:12px; margin:8px 0; padding:6px 10px; background: rgba(124,58,237,0.08); border-radius:6px; border-left: 2px dashed ${p.color}; line-height:1.7;">
+            <div class="muted" style="font-size:10px; margin-bottom:2px;">🔮 预测 4 维分数（虚线圈 = 推测值）</div>
+            <span style="color:#f87171;">R</span> <b>${p.scores.random}</b>
+            <span style="margin: 0 6px; opacity:.3;">·</span>
+            <span style="color:#a78bfa;">C</span> <b>${p.scores.combo}</b>
+            <span style="margin: 0 6px; opacity:.3;">·</span>
+            <span style="color:#34d399;">P</span> <b>${p.scores.pool}</b>
+            <span style="margin: 0 6px; opacity:.3;">·</span>
+            <span style="color:#fbbf24;">S</span> <b>${p.scores.structure}</b>
+          </div>
+          ${renderScoreDistChart([{ name: p.name, scores: p.scores }], { predicted: true })}
+          <div style="font-size:13px; line-height:1.7; margin-top:8px;">${p.body}</div>
+        </div>
+      `;
+    }).join('');
+
+    /* ===== 区块 5：关键洞察 ===== */
+    const insights = [
+      { icon: '⚠', title: '多重集字典族是"高方差陷阱"', body: '10 款游戏在这个族里，combo 分跨度 5–10。如果团队选了这族，最大风险不是"族本身弱"，而是<b>没做数字爆炸设计</b>——同族能到 10 也能掉到 5。' },
+      { icon: '🎯', title: '网格邻接族下沿打开', body: 'v2 锚点期 LBL/地牢掷骰双双钉 8，但 34 款扩展后下沿被打开到 7（lucky-hero/轮盘英雄缺触发链），上沿打开到 9（狗与哥布林：slot×自走棋融合）。combo 跨度由"是否补 类型字典 + 触发链"决定。' },
+      { icon: '🔥', title: '物理路径族 = 8 分起步', body: '5 款都 ≥ 8 分。物理本身赋予了 combo 视觉，但开发成本指数级。新团队若没有物理引擎/美术储备，不要走这条路。' },
+      { icon: '🪜', title: '序列链式族无独立成员', body: '34 款里没有任何游戏的主装置层是 1 维线序——它必须依附于其他族（Balatro 的 Joker 是"附加层"叠在多重集字典族上）。1 维线序适合做"协同放大器"而非独立结构。' },
+      { icon: '🪐', title: '空集群 = 设计创新预留位', body: `5 拓扑 × 8 判定 = 40 格，已被占的 ${cellMembers.size} 格中只覆盖了 ${usedClusters.length} 个集群。剩余空格中有 ${Object.keys(window.RR_DESIGN_SPACE_HINTS || {}).length} 个被标注为"潜在设计空间"——hover 矩阵紫色虚线格查看。` }
+    ];
+    const insightCards = insights.map(i => `
+      <div class="card" style="display:flex; gap:14px; align-items:flex-start;">
+        <div style="font-size:24px; line-height:1;">${i.icon}</div>
+        <div>
+          <div style="font-weight:700; margin-bottom:4px;">${RR.escapeHtml(i.title)}</div>
+          <div class="muted" style="font-size:13px; line-height:1.6;">${i.body}</div>
+        </div>
+      </div>
+    `).join('');
+
+    /* ===== 区块 0：spin 流程解释（v3 新增） ===== */
+    const topologyEnumDef = topologyEnum.map(t => `<li><span class="kbd" title="${RR.escapeHtml(t.key)}">${RR.escapeHtml(t.name)}</span> · <span class="muted" style="font-size:12px;">${RR.escapeHtml(t.desc)}</span></li>`).join('');
+    const predicateEnumDef = predicateEnum.map(p => `<li><span class="kbd" title="${RR.escapeHtml(p.key)}">${RR.escapeHtml(p.name)}</span> · <span class="muted" style="font-size:12px;">${RR.escapeHtml(p.desc).split('；')[0].split('（')[0]}</span></li>`).join('');
+
+    /* ===== 拼装最终 HTML ===== */
+    mount.innerHTML = `
+      <!-- 区块 0a：spin 流程解释（v5 完备模型） -->
+      <h3 class="section-title" style="font-size:16px;">① spin 流程：random → put → combo → RPBD（v5 完备模型）</h3>
+      <div class="card" style="margin-bottom:20px; padding:18px;">
+        <p style="margin:0 0 10px; font-size:13px; line-height:1.7;">每一次 spin 三段：① <b>random</b> 抽出基础池元素（输出多重集，无序）；② <b>put</b> 把多重集<b>安置</b>到 <b>show_topology</b>（舞台拓扑）——put 与 combo 共享同一个舞台；③ <b>combo</b> 在 show_topology 上做判定（combo1 符号协同 + combo2 修饰协同）。</p>
+        <pre style="margin:8px 0 0; padding:12px; background: var(--bg-deep); border:1px solid var(--line); border-radius:6px; font-size:12px; line-height:1.6; color: var(--fg); overflow-x:auto;">spin[
+  <span style="color:#60a5fa;">1.random</span>: 装置抽出元素            ← 输出多重集（无序）
+  →
+  <span style="color:#34d399;">2.put</span>: 把多重集写入 show_topology  ← 自动|手动 × set|place（v4 引入）
+  →
+  combo[
+    <span style="color:#a78bfa;">combo1</span>: 符号协同规则             ← 在 show_topology 上做判定（多选 8 种）
+    <span style="color:#fbbf24;">combo2</span>: 修饰协同规则             ← 主动池施加的全局修饰
+  ] @ <span style="color: var(--fg-muted);">show_topology（共享舞台）</span>
+]_N → RPBD（玩家阶段）</pre>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">本 tab 聚焦「<b style="color:#60a5fa;">show_topology（舞台拓扑）</b>」 × 「<b style="color:#a78bfa;">combo1 符号协同判定</b>」二维矩阵。combo2 修饰协同（道具倍率/加成）由各游戏详情页的 <code>combo_modifier</code> 字段单独承载，不在本矩阵内。</p>
+        <p style="margin:8px 0 0; font-size:12px;">→ combo2 修饰协同有 <a href="combo2-modifier.html" style="color: #fbbf24; font-weight:700;">独立分析页</a>（5 类 modifier typology · 跨拓扑矩阵 · 深度排名）</p>
+      </div>
+
+      <!-- 区块 0b：Random 舞台拓扑 是什么 -->
+      <h3 class="section-title" style="font-size:16px;">② Random 舞台拓扑（show_topology · 5 选 1）</h3>
+      <div class="card" style="margin-bottom:20px; padding:18px; border-left: 3px solid #60a5fa;">
+        <p style="margin:0 0 8px; font-size:13px; line-height:1.7;">基础池符号在 random 阶段被摆放到的<b>几何空间</b>。这决定了符号之间"能不能产生位置关系"——0D 多重集就只看类型不看位置；2D 网格则有相邻概念；2D 物理则有连续坐标和碰撞。</p>
+        <ul style="margin:8px 0 0; padding-left:24px; font-size:13px; line-height:1.8;">${topologyEnumDef}</ul>
+      </div>
+
+      <!-- 区块 0c：Combo 符号协同 是什么 -->
+      <h3 class="section-title" style="font-size:16px;">③ Combo 符号协同（combo_predicate · 多选 8 种）</h3>
+      <div class="card" style="margin-bottom:20px; padding:18px; border-left: 3px solid #a78bfa;">
+        <p style="margin:0 0 8px; font-size:13px; line-height:1.7;">在 random 落位后的拓扑上做的<b>判定规则</b>——满足什么条件就触发协同加成。一款游戏通常有多个判定（如 LBL 同时有"3 樱桃 → 丰收"的<b>阈值</b>判定 + "邻位 ⚡ 闪电链"的<b>邻接</b>判定）。</p>
+        <ul style="margin:8px 0 0; padding-left:24px; font-size:13px; line-height:1.8;">${predicateEnumDef}</ul>
+      </div>
+
+      <!-- 区块 0d：两者组成的逻辑矩阵导引 -->
+      <h3 class="section-title" style="font-size:16px;">④ Random 舞台拓扑 × Combo 符号协同 = 逻辑矩阵</h3>
+      <div class="card" style="margin-bottom:20px; padding:18px; border-left: 3px solid #f87171;">
+        <p style="margin:0 0 8px; font-size:13px; line-height:1.7;">把 5 种拓扑（行）和 8 种判定（列）组合，得到一张 <b>5 × 8 = 40 格</b>的二维矩阵。每款已分析游戏的 <code>(show_topology, combo_predicate[])</code> 二元组都会落到这张图的 1 个或多个格子里。</p>
+        <p style="margin:0; font-size:13px; line-height:1.7;"><b>这张矩阵的诊断价值</b>：① 同一拓扑下不同判定的 combo 评分跨度（如<b>2 维离散网格</b>配<b>邻接</b>钉 7-9，配<b>连线</b>多在 7-8）；② 空格代表"暂无人占领的设计空间"——是潜在创新位。</p>
+      </div>
+
+      <!-- 区块 1：当前数据快照 -->
+      <h3 class="section-title" style="font-size:16px;">⑤ 当前数据快照</h3>
+      <div class="card" style="display:flex; gap:24px; flex-wrap:wrap; margin-bottom:20px;">
+        <div><div class="muted" style="font-size:11px;">已分析样本</div><div style="font-size:22px; font-weight:700;">${totalAnalyzed} <span class="dim" style="font-size:13px; font-weight:normal;">/ ${RR.getAllGames().length}</span></div></div>
+        <div><div class="muted" style="font-size:11px;">真实集群（被占用）</div><div style="font-size:22px; font-weight:700;">${usedClusters.length} <span class="dim" style="font-size:13px; font-weight:normal;">/ ${window.RR_COMBO_CLUSTERS.length}</span></div></div>
+        <div><div class="muted" style="font-size:11px;">已占用 (拓扑×判定) 格子</div><div style="font-size:22px; font-weight:700;">${cellMembers.size} <span class="dim" style="font-size:13px; font-weight:normal;">/ ${topologyEnum.length * predicateEnum.length}</span></div></div>
+        <div style="margin-left:auto;"><div class="muted" style="font-size:11px;">框架</div><div class="kbd" style="font-size:13px;">${fw.version} · show_topology + combo_predicate</div></div>
+      </div>
+
+      <!-- 区块 2：集群卡片 -->
+      <h3 class="section-title" style="font-size:16px; margin-top:8px;">⑥ 真实集群（${window.RR_COMBO_CLUSTERS.length} 个，按 combo 跨度诊断）</h3>
+      <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); margin-bottom:24px;">
+        ${clusterCards}
+      </div>
+
+      <!-- 区块 3：横向对照表 -->
+      <h3 class="section-title" style="font-size:16px;">⑦ 横向对照表（按 combo 分降序）</h3>
+      <p class="muted" style="font-size:11px; margin: 0 0 8px;">每个公式区块都附对应评分小标签（琥珀色）：random 列 = R 分；combo1 / combo2 列 = C 分（combo 评分覆盖整个 combo 阶段）。</p>
+      <div class="card" style="overflow-x:auto; margin-bottom:24px;">
+        <table class="tbl" style="font-size:13px;">
+          <thead>
+            <tr>
+              <th style="width:110px;">游戏</th>
+              <th style="width:170px;">random：舞台拓扑设计<br><span style="font-weight:400; font-size:10px; color: var(--fg-dim);">show_topology + R 分</span></th>
+              <th style="width:200px;">combo1：符号协同规则<br><span style="font-weight:400; font-size:10px; color: var(--fg-dim);">combo_predicate + C 分</span></th>
+              <th style="width:200px;">combo2：修饰协同规则<br><span style="font-weight:400; font-size:10px; color: var(--fg-dim);">combo_modifier 简述 + C 分</span></th>
+              <th style="width:170px;">所属集群</th>
+              <th>combo_synergy（自由文本）</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>
+
+      <!-- 5×8 矩阵 -->
+      <h3 class="section-title" style="font-size:16px;">⑧ Random 舞台拓扑 × Combo 符号协同 矩阵（${topologyEnum.length}×${predicateEnum.length} = ${topologyEnum.length * predicateEnum.length} 格）</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:12px;">琥珀色格 = 已被占领。紫色虚线格 = 标注的"潜在设计空间"，hover 看创新提示。其余空格 = 设计上不太成立或暂无想法。<b>表头与行标题旁的 ❓</b> hover 可看该枚举的 schema 解释。</p>
+      <div class="card" style="overflow-x:auto; margin-bottom:24px;">
+        <table style="border-collapse:separate; border-spacing:2px; font-size:12px; min-width:100%;">
+          <thead>${matrixHeader}</thead>
+          <tbody>${matrixRows}</tbody>
+        </table>
+      </div>
+
+      <!-- 先验游戏聚类（v3 新增） -->
+      <h3 class="section-title" style="font-size:16px;">⑨ 先验游戏聚类（每款 RPB roguelike 对应的现实/桌游/街机原型）</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:12px;">把 34 款 R_RougeSlot 游戏按"先验玩法原型"二次聚类——回答"这款游戏其实就是 X 加了 RPB 外壳"。如：<b>小丑牌</b> = 德州扑克、<b>幸运房东</b> = slot 老虎机、<b>吸血鬼爬行者</b> = UNO 卡牌战斗。每张卡片附 <b>4 维 Q3</b>（成员评分的 75% 分位）作为该族"上沿水平"参考。比"拓扑×判定"维度更直觉，对玩家更友好。</p>
+      ${priorTopoMatrix}
+      ${priorPredMatrix}
+      <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); margin-bottom:24px;">
+        ${priorCards}
+      </div>
+
+      <!-- 待开发的先验空间（v3 新增 · 数据驱动 + SVG 预测分布图） -->
+      <h3 class="section-title" style="font-size:16px;">⑩ 潜在先验空间（基于现有 13 族还可挖掘的方向）</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:12px;">现有 13 个先验玩法原型已被 34 款游戏覆盖，但符合 v3 公式（基础池 × random + 协同 + 修饰）的<b>现实/桌游/街机原型</b>还远未穷尽。下面是基于 5 拓扑 × 8 判定矩阵 + 玩法可行性筛选出的 8 个潜在新先验，每个含<b>预测 4 维分数 + 虚线 dot 分布图</b>（区别于实测的实心 dot）。</p>
+      <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); margin-bottom:24px;">
+        ${potentialPriorCards}
+      </div>
+
+      <!-- 关键洞察 -->
+      <h3 class="section-title" style="font-size:16px;">⑪ 关键洞察</h3>
+      <div class="game-grid" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));">
+        ${insightCards}
+      </div>
+    `;
+
+    comboSynergyRendered = true;
+  }
+
+  /* ------ tab 切换 ------ */
+  const tabBtns = document.querySelectorAll('.tags-bar .tag-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = btn.dataset.tab;
+      panels.forEach(p => {
+        p.hidden = p.dataset.panel !== target;
+      });
+      if (target === 'combo-synergy') renderComboSynergyTab();
+      if (target === 'insights') renderInsightsTab();
+    });
+  });
+
+  /* ------ 核心洞察 tab 渲染（v3 启发讨论型）------ */
+  let insightsRendered = false;
+  function renderInsightsTab() {
+    if (insightsRendered) return;
+    const mount = document.querySelector('#insights-mount');
+    if (!mount || !window.RR_INSIGHTS_DATA) return;
+    const D = window.RR_INSIGHTS_DATA;
+    const allGames = RR.getAllGames().filter(g => g.analysis);
+    const slugToGame = new Map(allGames.map(g => [g.slug, g]));
+
+    /* 渲染单款游戏 chip（链接 + 总分）*/
+    const gameChip = (slug) => {
+      const g = slugToGame.get(slug);
+      if (!g) return RR.escapeHtml(slug);
+      const sc = g.analysis.scores;
+      const total = sc.random + sc.combo + sc.pool + sc.structure;
+      return `<a href="./analysis/${RR.escapeHtml(slug)}.html" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:10px; background: rgba(255,255,255,0.06); margin:1px 2px; text-decoration:none; font-size:11px;">
+        <span style="color: var(--fg);">${RR.escapeHtml(g.basic.name_cn)}</span>
+        <span style="opacity:.7;">总${total}</span>
+      </a>`;
+    };
+
+    /* —— 区块 ① 5 条结构性事实 —— */
+    const factCards = D.structuralFacts.map((f, i) => `
+      <div class="card" style="margin-bottom:18px; border-left: 3px solid var(--accent); padding: 18px 20px;">
+        <div style="display:flex; align-items:baseline; gap:10px; margin-bottom: 10px;">
+          <span style="font-size:18px; color: var(--accent);">${f.icon}</span>
+          <span class="dim" style="font-size:11px; min-width:32px;">事实 ${i + 1}</span>
+          <span style="font-weight:700; font-size:16px;">${RR.escapeHtml(f.title)}</span>
+        </div>
+        <div style="margin: 10px 0; padding: 10px 14px; background: rgba(124,58,237,0.08); border-radius: 6px; font-size: 13px; line-height: 1.7;">
+          <span class="muted" style="font-size:11px; display:block; margin-bottom:4px;">📊 数据支撑</span>
+          ${f.evidence}
+        </div>
+        <div style="margin: 10px 0; font-size: 13px; line-height: 1.7;">
+          <span class="muted" style="font-size:11px; display:block; margin-bottom:4px;">⚙ 机制解释</span>
+          ${f.mechanism}
+        </div>
+        <div style="margin: 10px 0; padding: 10px 14px; background: rgba(248,113,113,0.06); border-left: 2px solid #f87171; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.7;">
+          <span style="color: #f87171; font-size: 11px; display:block; margin-bottom:4px;">🎯 设计含义</span>
+          ${f.implication}
+        </div>
+        <div style="margin-top: 10px; padding: 8px 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15); border-radius: 6px; font-size: 12px; line-height: 1.7; color: var(--fg-muted);">
+          <span style="color: #fbbf24;">💭 思考点：</span> ${f.thought}
+        </div>
+      </div>
+    `).join('');
+
+    /* —— 区块 ② 路径 1 · 4 集群细读 —— */
+    const path1Cards = D.path1Clusters.map(c => {
+      const memberChips = c.members.map(slug => gameChip(slug)).join('');
+      const subSection = (title, items, color, kind) => {
+        if (!items || items.length === 0) return '';
+        return `
+          <div style="margin: 12px 0; padding: 10px 14px; background: rgba(${kind === 'done' ? '52,211,153' : '251,191,36'},0.06); border-left: 2px solid ${color}; border-radius: 0 6px 6px 0;">
+            <div style="font-weight:700; font-size:12px; color:${color}; margin-bottom:6px;">${title}</div>
+            <ul style="margin:0; padding-left:18px; font-size:12px; line-height:1.8;">
+              ${items.map(it => `<li>${it}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      };
+      const themeBlocks = c.themeRecommendations.map(t => `
+        <div style="margin: 8px 0; padding: 10px 14px; background: rgba(124,58,237,0.06); border-left: 2px solid #a78bfa; border-radius: 0 6px 6px 0;">
+          <div style="font-weight:700; font-size:13px; color: #c4b5fd; margin-bottom:6px;">💡 ${RR.escapeHtml(t.theme)}</div>
+          <div style="font-size:12px; line-height:1.7; margin-bottom:6px;"><span class="muted" style="font-size:10px;">玩法映射：</span> ${RR.escapeHtml(t.mapping)}</div>
+          <div style="font-size:12px; line-height:1.7;"><span class="muted" style="font-size:10px;">填补的空白：</span> ${RR.escapeHtml(t.fillsGap)}</div>
+        </div>
+      `).join('');
+      return `
+        <div class="card" style="margin-bottom:18px; padding: 16px 18px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <span style="font-size:24px;">${c.glyph}</span>
+            <span style="font-weight:700; font-size:16px;">${RR.escapeHtml(c.name)}</span>
+            <span class="kbd" style="margin-left:auto; font-size:11px;">已验证最高总分 ${c.verifiedMaxTotal}</span>
+          </div>
+          <div class="muted" style="font-size:11px; margin-bottom:8px; font-family: ui-monospace, monospace;">${RR.escapeHtml(c.pattern)}</div>
+          <div style="font-size:13px; line-height:1.7; margin-bottom:10px; color: var(--fg);">${RR.escapeHtml(c.oneLiner)}</div>
+          <div style="margin-bottom:10px;">${memberChips}</div>
+          ${subSection(`✓ C2 已做（${c.c2Done.length} 条）`, c.c2Done, '#34d399', 'done')}
+          ${subSection(`✗ C2 留白（${c.c2Undone.length} 条）`, c.c2Undone, '#fbbf24', 'undone')}
+          ${subSection(`✓ pool 已做（${c.poolDone.length} 条）`, c.poolDone, '#34d399', 'done')}
+          ${subSection(`✗ pool 留白（${c.poolUndone.length} 条）`, c.poolUndone, '#fbbf24', 'undone')}
+          <div style="margin-top:12px;">
+            <div style="font-weight:700; font-size:13px; color: #c4b5fd; margin-bottom:8px;">🎨 题材换皮建议（${c.themeRecommendations.length} 个）</div>
+            ${themeBlocks}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    /* —— 区块 ③ 路径 2 · 8 个潜在先验 —— */
+    const recColor = { 'S': '#22c55e', 'A': '#34d399', 'B': '#fbbf24', 'C': '#f87171' };
+    const path2Cards = D.path2Priors.map(p => {
+      const rc = recColor[p.recommendation] || '#a3a3a3';
+      const existingItems = p.existingRpb.map(e => `
+        <li style="margin: 4px 0;">
+          <span style="font-size: 10px; padding: 1px 6px; border-radius: 8px; background: ${e.isTrueRpb ? 'rgba(52,211,153,0.15)' : 'rgba(248,113,113,0.15)'}; color: ${e.isTrueRpb ? '#34d399' : '#f87171'}; margin-right: 4px;">${e.isTrueRpb ? '真 RPB' : '非 RPB'}</span>
+          <b>${RR.escapeHtml(e.name)}</b>
+          ${e.steamUrl && e.steamUrl.startsWith('http') ? ` <a href="${RR.escapeHtml(e.steamUrl)}" target="_blank" rel="noopener" style="color: var(--accent); font-size: 10px;">↗</a>` : ''}
+          <span class="muted" style="font-size: 11px;"> · ${RR.escapeHtml(e.comment)}</span>
+        </li>
+      `).join('');
+      const ps = p.predictedScores;
+      return `
+        <div class="card" style="margin-bottom:18px; padding: 16px 18px; border-left: 3px solid ${rc};">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <span style="font-size:24px;">${p.glyph}</span>
+            <span style="font-weight:700; font-size:16px;">${RR.escapeHtml(p.name)}</span>
+            <span style="margin-left:auto; font-size:11px; padding: 2px 10px; border-radius: 12px; background: ${rc}22; color: ${rc}; font-weight: 700;">推荐度 ${p.recommendation}</span>
+          </div>
+          <div class="muted" style="font-size:11px; margin-bottom:10px; font-family: ui-monospace, monospace;">${RR.escapeHtml(p.patternLabel)} · 预测 R${ps.random} / C${ps.combo} / P${ps.pool} / S${ps.structure} = 总 ${ps.random + ps.combo + ps.pool + ps.structure}</div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
+            <div style="padding: 8px 10px; background: rgba(96,165,250,0.06); border-radius: 6px; font-size: 11px; line-height: 1.7;">
+              <div style="color: #60a5fa; font-weight: 700; margin-bottom: 4px;">🌐 现实玩法热度</div>
+              <div style="margin-bottom: 4px;"><b>Steam 标签：</b>${RR.escapeHtml(p.marketHeat.steamTagCount)}</div>
+              <div style="margin-bottom: 4px;"><b>知名作品：</b>${p.marketHeat.famousWorks.map(w => RR.escapeHtml(w)).join(' / ')}</div>
+              <div><b>玩家熟悉度：</b>${RR.escapeHtml(p.marketHeat.playerFamiliarity)}</div>
+            </div>
+            <div style="padding: 8px 10px; background: rgba(168,139,250,0.06); border-radius: 6px; font-size: 11px; line-height: 1.7;">
+              <div style="color: #a78bfa; font-weight: 700; margin-bottom: 4px;">📍 矩阵格子状态</div>
+              <div><b>34 款里同格成员：</b>${p.matrixState.membersIn34}</div>
+              <div><b>邻居：</b>${RR.escapeHtml(p.matrixState.neighbors)}</div>
+              <div><b>潜在设计空间：</b>${p.matrixState.isPotentialDesignSpace ? '✓' : '✗'}</div>
+            </div>
+          </div>
+
+          <div style="margin: 10px 0; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px; font-size: 11px; line-height: 1.7;">
+            <div style="color: var(--fg-muted); font-weight: 700; margin-bottom: 6px;">🎮 已有同类 RPB 化案例（${p.existingRpb.length} 个）</div>
+            <ul style="margin: 0; padding-left: 18px;">${existingItems}</ul>
+          </div>
+
+          <div style="margin: 10px 0; padding: 10px 14px; background: rgba(52,211,153,0.06); border-left: 2px solid #34d399; border-radius: 0 6px 6px 0; font-size: 12px; line-height: 1.7;">
+            <div style="color: #34d399; font-weight: 700; margin-bottom: 4px;">⚙ RPB 化关键设计点</div>
+            <div><b>基础池：</b>${RR.escapeHtml(p.rpbDesign.basePool)}</div>
+            <div><b>主动池：</b>${RR.escapeHtml(p.rpbDesign.activePool)}</div>
+            <div><b>checkpoint：</b>${RR.escapeHtml(p.rpbDesign.checkpoint)}</div>
+            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(248,113,113,0.4); color: #f87171;"><b>⚠ 最大风险：</b>${p.rpbDesign.biggestRisk}</div>
+          </div>
+
+          <div style="margin-top: 10px; padding: 8px 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15); border-radius: 6px; font-size: 11px;">
+            <span class="muted">置信度评估：</span>
+            评分 <b style="color: ${p.confidence.score === '高' ? '#34d399' : p.confidence.score === '中' ? '#fbbf24' : '#f87171'};">${p.confidence.score}</b>
+            <span style="margin: 0 6px; opacity:.3;">·</span>
+            市场 <b style="color: ${p.confidence.market === '高' ? '#34d399' : p.confidence.market === '中' ? '#fbbf24' : '#f87171'};">${p.confidence.market}</b>
+            <span style="margin: 0 6px; opacity:.3;">·</span>
+            综合推荐 <b style="color: ${rc};">${p.confidence.overall}</b>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    /* —— 区块 ④ 反向警告 —— */
+    const warnCards = D.reverseWarnings.map((w, i) => `
+      <div class="card" style="margin-bottom:14px; padding: 14px 16px; border-left: 3px solid #fbbf24;">
+        <div style="font-size:13px; line-height:1.7; margin-bottom:8px;">
+          <span style="color: #fbbf24; font-weight: 700;">🔍 观察 ${i + 1}：</span> ${w.observation}
+        </div>
+        <div style="font-size:12px; line-height:1.7; margin-bottom:8px; padding: 8px 12px; background: rgba(124,58,237,0.06); border-radius: 4px;">
+          <span style="color: #c4b5fd; font-weight: 700;">💡 假设性解释：</span> ${w.hypothesis}
+        </div>
+        <div style="font-size:12px; line-height:1.7; padding: 8px 12px; background: rgba(52,211,153,0.06); border-radius: 4px;">
+          <span style="color: #34d399; font-weight: 700;">🤔 反例可能性：</span> ${w.counterExample}
+        </div>
+      </div>
+    `).join('');
+
+    /* —— 区块 ⑤ 开放问题 —— */
+    const questionCards = D.openQuestions.map((q, i) => `
+      <div class="card" style="margin-bottom:14px; padding: 14px 16px; border-left: 3px solid #c4b5fd; background: rgba(196,181,253,0.04);">
+        <div style="font-weight:700; font-size:14px; color: #c4b5fd; margin-bottom:8px;">❓ 开放问题 ${i + 1}：${RR.escapeHtml(q.title)}</div>
+        <div style="font-size:13px; line-height:1.8; color: var(--fg);">${q.body}</div>
+      </div>
+    `).join('');
+
+    mount.innerHTML = `
+      <h3 class="section-title" style="font-size:16px; margin-top: 4px;">① 品类的 5 条结构性事实</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:14px;">从 34 款样本归纳出的"约束玩家的硬规律"——选某个维度时其实已经锁定了它的上限。</p>
+      ${factCards}
+
+      <h3 class="section-title" style="font-size:16px; margin-top: 28px;">② 路径 1 · 既有 R+C1 上的 C2 / pool 优化空间（细版）</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:14px;">在已被多款验证的 R+C1 集群上，<b>读 22 款的 qualitative 字段</b>归纳出"已做 / 未做"的设计动作清单。每个集群附 3 个题材换皮建议（避开已被占据的题材，明确填补哪条留白）。<b>适用于：</b>稳健落地 / 接受"题材换皮"标签的团队。</p>
+      ${path1Cards}
+
+      <h3 class="section-title" style="font-size:16px; margin-top: 28px;">③ 路径 2 · 8 个潜在先验严谨研究</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:14px;">每个先验做了：现实玩法热度 + Steam 已有 RPB 化案例（含真 RPB / 非 RPB 标记）+ 矩阵格子状态 + RPB 化关键设计点 + 评分置信度。<b>推荐度 S/A/B/C</b> 综合"赛道空白 + 玩法成立性 + 市场可行性"三个维度。<b>适用于：</b>旗舰 / 创业首作 / 高风险高收益。</p>
+      ${path2Cards}
+
+      <h3 class="section-title" style="font-size:16px; margin-top: 28px;">④ 反向警告（补充信息，不说死）</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:14px;">基于现有样本观察到的"看似硬天花板"现象。每条都附"假设性解释"和"反例可能性"——是基于归纳的猜测，不是定律。</p>
+      ${warnCards}
+
+      <h3 class="section-title" style="font-size:16px; margin-top: 28px;">⑤ 开放讨论问题</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:14px;">这些问题本 tab 不给答案，留作思考起点。</p>
+      ${questionCards}
+
+      <h3 class="section-title" style="font-size:16px; margin-top: 28px;">⑥ Put 维度 · v4 已正式纳入框架的独立设计轴</h3>
+      <p class="muted" style="font-size:12px; margin-bottom:14px;">v3 把 spin 流程写成 <code>random → combo</code> 直通——遗漏了 random 与 combo 之间的「<b>put</b>」步骤。<b>v4 已把 put 作为正式字段纳入 schema</b>（4 枚举：auto_place / manual_set / manual_place / auto_set），完备模型 <code>random@起点 → put(自动|手动 × set|place) → combo@目标</code>。下表验证 put 是<b>独立于 show_topology 的设计轴</b>，不是 topology 的派生属性。深度详解见 <a href="put-design-axis.html" style="color: var(--accent); font-weight:700;">put 维度独立详解页 →</a></p>
+      <div class="card" style="margin-bottom: 18px; padding: 18px 20px;">
+        <div style="font-weight:700; font-size:15px; margin-bottom: 10px;">put 与 show_topology 的强耦合（是相关，不是同一个东西）</div>
+        <div style="overflow-x:auto;">
+          <table class="tbl" style="font-size:13px;">
+            <thead>
+              <tr><th style="width:120px;">拓扑</th><th style="width:140px;">是否亲 put</th><th>原因</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>0D 多重集</b></td>
+                <td><span style="color:#34d399;">✅ 强亲（90%+）</span></td>
+                <td>集合无序，天然适合「选子集」——Balatro / 骰子族</td>
+              </tr>
+              <tr>
+                <td><b>2D 离散网格</b></td>
+                <td><span style="color:#34d399;">✅ 中亲（约 50%）</span></td>
+                <td>整数坐标天然适合「放到哪格」——地牢掷骰 / 宾果贝蒂；但 slot 类反 put（自动落位）</td>
+              </tr>
+              <tr>
+                <td><b>1D 圆环</b></td>
+                <td><span style="color:#f87171;">❌ 反 put</span></td>
+                <td>转盘位置自动——轮盘英雄 / 转啊转</td>
+              </tr>
+              <tr>
+                <td><b>2D 连续物理</b></td>
+                <td><span style="color:#f87171;">❌ 反 put</span></td>
+                <td>物理引擎主导——弹珠 / 推币（极少例外）</td>
+              </tr>
+              <tr>
+                <td><b>1D 线序</b></td>
+                <td><span style="color:#fbbf24;">△ 部分</span></td>
+                <td>Joker 槽顺序是 put 的弱形式</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top: 14px; padding: 10px 14px; background: rgba(248,113,113,0.06); border-left: 2px solid #f87171; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.7;">
+          <b style="color:#f87171;">关键结论：</b>put 不是 topology 的派生属性。<b>同一个 0D 多重集拓扑下，有 put（Balatro）和无 put（幸运市长 0D slot）共存</b>。这证明 put 是独立维度。
+        </div>
+        <div style="margin-top: 10px; padding: 8px 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15); border-radius: 6px; font-size: 11px; line-height: 1.7; color: var(--fg-muted);">
+          <span style="color: #fbbf24;">💭 思考点：</span>本表用旧表述「无 put / 反 put」做诊断；后续可能升级为「Put 自动 / Put 手动」普适模型——slot 自动落位也算 Put 自动。两种表述指向同一现象，区别在于是否把"机器替你 put"也算作一种 put。
+        </div>
+      </div>
+    `;
+
+    insightsRendered = true;
+  }
+
+  /* ------ 离开提示（防丢失改动） ------ */
+  window.addEventListener('beforeunload', (e) => {
+    if (RR.Admin.isDirty()) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+})();
+</script>
+
+</div>
+</body>
+</html>
