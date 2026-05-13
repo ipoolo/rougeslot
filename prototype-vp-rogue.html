@@ -393,6 +393,59 @@
   .shop-reroll:hover { background: rgba(251,191,36,0.25); }
   .shop-reroll:disabled { opacity: 0.4; cursor: not-allowed; }
 
+  /* v2.10 · 起手 charm picker（开局免费 3 选 1） */
+  .starter-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.94);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 10001;
+    backdrop-filter: blur(6px);
+  }
+  .starter-overlay.show { display: flex; }
+  .starter-box {
+    background: linear-gradient(180deg, #1e1530 0%, #261936 100%);
+    border: 2px solid #fbbf24;
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 720px;
+    width: 92vw;
+    box-shadow: 0 0 60px rgba(251,191,36,0.3);
+  }
+  .starter-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .starter-item {
+    border: 2px solid var(--rarity, #475569);
+    background: rgba(0,0,0,0.4);
+    border-radius: 10px;
+    padding: 18px 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .starter-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px rgba(251,191,36,0.4), 0 0 18px var(--rarity, #fbbf24);
+  }
+  .starter-item .si-glyph { font-size: 48px; line-height: 1; margin-bottom: 8px; }
+  .starter-item .si-name { font-weight: 800; font-size: 16px; color: var(--rarity, #eee); }
+  .starter-item .si-rarity { font-size: 9px; letter-spacing: 1px; opacity: 0.6; margin: 2px 0 10px; text-transform: uppercase; }
+  .starter-item .si-desc { font-size: 11px; color: #94a3b8; min-height: 38px; line-height: 1.4; }
+  .starter-item .si-cta {
+    margin-top: 12px;
+    background: rgba(251,191,36,0.12);
+    border: 1px solid #fbbf24;
+    color: #fde68a;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+
   /* v2.10 · 近输 · 屏幕震动 */
   @keyframes screenShake {
     0%, 100% { transform: translate(0); }
@@ -1500,6 +1553,15 @@
   </div>
 </div>
 
+<!-- v2.10 · 起手 charm 选择（开局免费 3 选 1） -->
+<div class="starter-overlay" id="starter-modal">
+  <div class="starter-box">
+    <h2 style="color:#fbbf24; letter-spacing:3px; text-align:center; margin-top:0;">🎴 起手 charm · 免费 3 选 1</h2>
+    <p style="text-align:center; color:#94a3b8; font-size:12px; letter-spacing:1px; margin: 6px 0 20px;">选定后自动装备进 charm 槽，其余的之后可在商店购买</p>
+    <div class="starter-items" id="starter-items"></div>
+  </div>
+</div>
+
 <!-- v2.10 · 周末商店 + 下周 spin 配置 -->
 <div class="shop-modal-overlay" id="shop-modal">
   <div class="shop-modal">
@@ -1892,8 +1954,8 @@ const state = {
   // v2.10 · 连胜计数（连续达标周数，失败重置）
   weekStreak: 0,
   streakBonusLuck: 0,
-  // v2.10 · 拥有的 charm（开局送 3 个，其余从商店收集；只能装备 owned 中的）
-  ownedCharms: ['c1', 'c5', 'c7']
+  // v2.10 · 拥有的 charm（开局空 · 通过起手 picker 免费 3 选 1，其余从商店收集）
+  ownedCharms: []
 };
 
 // v2.10 附魔类型定义
@@ -3111,6 +3173,60 @@ async function buildUpForBonus() {
   el.remove();
 }
 
+// v2.10 · 起手 charm picker · 从 charm 池随机抽 3 个让玩家免费选 1
+async function showStarterPickerModal() {
+  return new Promise(resolve => {
+    const overlay = document.querySelector('#starter-modal');
+    const itemsEl = document.querySelector('#starter-items');
+    // 候选池：所有 common + 部分 rare（让起手有 1-2 个亮眼选项）
+    const commonPool = CHARMS.filter(c => c.rarity === 'common');
+    const rarePool = CHARMS.filter(c => c.rarity === 'rare');
+    // 抽 2 common + 1 rare（如果池子够）
+    const pick = (pool, n) => {
+      const out = []; const used = new Set();
+      while (out.length < n && used.size < pool.length) {
+        const c = pool[Math.floor(Math.random() * pool.length)];
+        if (used.has(c.id)) continue;
+        used.add(c.id); out.push(c);
+      }
+      return out;
+    };
+    const picked = [...pick(commonPool, 2), ...pick(rarePool, 1)];
+    // 容错：不够 3 个就再补
+    while (picked.length < 3) {
+      const c = CHARMS[Math.floor(Math.random() * CHARMS.length)];
+      if (!picked.find(p => p.id === c.id)) picked.push(c);
+    }
+    itemsEl.innerHTML = picked.map(c => `
+      <div class="starter-item" data-id="${c.id}" style="--rarity:${RARITY_COLOR[c.rarity]||'#94a3b8'}" title="${c.effect}">
+        <div class="si-glyph">${c.glyph}</div>
+        <div class="si-name">${c.name}</div>
+        <div class="si-rarity">${c.rarity}</div>
+        <div class="si-desc">${c.effect}</div>
+        <div class="si-cta">免费选取 →</div>
+      </div>
+    `).join('');
+    itemsEl.querySelectorAll('.starter-item').forEach(el => {
+      el.onclick = () => {
+        const id = el.dataset.id;
+        state.ownedCharms = state.ownedCharms || [];
+        if (!state.ownedCharms.includes(id)) state.ownedCharms.push(id);
+        if (state.equippedCharms.length < 5 && !state.equippedCharms.includes(id)) {
+          state.equippedCharms.push(id);
+        }
+        recomputeCharmPassives();
+        renderCharms();
+        renderStatus();
+        const ch = CHARMS.find(c => c.id === id);
+        log(`✓ 起手 charm <b>${ch.name}</b> 选定并装备`, 'log-line-bonus');
+        overlay.classList.remove('show');
+        resolve();
+      };
+    });
+    overlay.classList.add('show');
+  });
+}
+
 // v2.10 · 商店 pool 构建（24 charm + 3 consumable + 3 enchant）
 // 价格分布 2-6 票（common 2 / rare 3 / epic 4 / legendary 6）—— 让初始 2 票
 // 至少能买到 1 件 common，开局有选择空间
@@ -3310,7 +3426,7 @@ function resetGame() {
   state.tickets = 2; // 开局送 2 票，让玩家在第 1 周开始前先逛商店
   state.weekStreak = 0;
   state.streakBonusLuck = 0;
-  state.ownedCharms = ['c1', 'c5', 'c7']; // 新 run 初始送 3 个
+  state.ownedCharms = []; // 新 run · 通过起手 picker 选 1 个
   state._pendingEnchant = [];
   state._extraSpinNext = 0;
   state._extraLuckNext = 0;
@@ -3765,11 +3881,14 @@ safeCall('renderCombo', renderCombo);
 setTimeout(() => { if (__dbgDiv.querySelectorAll('div').length && !__dbgDiv.textContent.includes('✗')) __dbgDiv.style.display = 'none'; }, 4000);
 log('💡 玩法：装备 charms → SPIN 摇骰 + 自动结算（一键拉杆）（看左侧符号价值 / 右侧图形分倍率）', 'log-base');
 
-// v2.10 · 启动新 run：弹首次商店让玩家用初始 2 票购物
+// v2.10 · 启动新 run：起手 charm 3 选 1 → 开局商店 → 进入 week 1
 async function startGame() {
-  log(`🎰 你被丢进赌场 · 6 周还债 · 初始 <b>2 票</b> 0 金币 · 先去商店看看`, 'log-line-bonus');
-  await sleep(400);
-  // 把 state.tickets 同步到 stat-bar（resetGame 之外的入口也要刷）
+  log(`🎰 你被丢进赌场 · 6 周还债 · 初始 <b>2 票</b> 0 金币`, 'log-line-bonus');
+  await sleep(300);
+  // 第 1 步：起手 charm 免费 3 选 1
+  await showStarterPickerModal();
+  await sleep(200);
+  // 第 2 步：开局商店 · 2 票购物
   renderStatus();
   await showShopModal(1, true);
   applyWeeklySpinCharms();
