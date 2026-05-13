@@ -1057,24 +1057,51 @@
     line-height: 1;
     opacity: 0.55;
   }
-  /* v2.10 · 附魔角标（左上角） */
+  /* v2.10 · 附魔角标（左上角）· v2.10.1 加脉动动画提升存在感 */
   .cell .enchant-badge {
     position: absolute;
     top: 2px; left: 4px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 900;
     line-height: 1;
-    filter: drop-shadow(0 0 5px currentColor) drop-shadow(0 0 10px currentColor);
+    filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px currentColor);
     z-index: 3;
     pointer-events: auto;
     cursor: help;
+    animation: enchantPulse 1.2s ease-in-out infinite alternate;
   }
   .cell .enchant-badge sub {
-    font-size: 10px;
+    font-size: 11px;
     vertical-align: super;
+    font-weight: 900;
+  }
+  @keyframes enchantPulse {
+    from { transform: scale(0.92); filter: drop-shadow(0 0 4px currentColor); }
+    to   { transform: scale(1.12); filter: drop-shadow(0 0 10px currentColor) drop-shadow(0 0 18px currentColor); }
   }
   .cell.enchanted {
-    box-shadow: inset 0 0 0 1px rgba(251,191,36,0.4), 0 0 10px rgba(251,191,36,0.2);
+    box-shadow: inset 0 0 0 1.5px rgba(251,191,36,0.55), 0 0 14px rgba(251,191,36,0.35);
+  }
+
+  /* v2.10.1 · 待激活附魔预告条（在 charms 下方） */
+  .pending-enchants {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 11px;
+    color: #c4b5fd;
+    letter-spacing: 1px;
+  }
+  .pending-enchants .pe-tag {
+    display: inline-block;
+    margin: 0 4px;
+    padding: 3px 10px;
+    border: 1px dashed currentColor;
+    border-radius: 12px;
+    background: rgba(167,139,250,0.08);
+  }
+  .pending-enchants .pe-tag b {
+    color: #fde68a;
+    margin-right: 4px;
   }
   /* 骰子按点数染色 */
   .cell.face-1 .suit, .cell.face-1 .rank { color: #f87171; }
@@ -1448,6 +1475,9 @@
     🎴 CHARMS · 点击装备（最多 5 个，按 1→5 顺序触发）
   </div>
   <div class="charms-row" id="charms-row"></div>
+
+  <!-- v2.10.1 · 待激活附魔预告（下次 spin 会注入的） -->
+  <div class="pending-enchants" id="pending-enchants" style="display:none;"></div>
 
   <!-- 动作按钮（v1.5: 上移到 charms 下方、网格上方 · v2.10 加提前完成）-->
   <div class="action-bar">
@@ -2061,6 +2091,8 @@ function renderCharms() {
   document.querySelectorAll('.charm-slot').forEach(el => {
     el.addEventListener('click', () => toggleCharm(el.dataset.charm));
   });
+  // v2.10.1 同步附魔预告
+  if (typeof renderPendingEnchants === 'function') renderPendingEnchants();
 }
 
 function toggleCharm(id) {
@@ -2349,6 +2381,7 @@ async function doSpin() {
       log(`🔮 商店附魔注入：(${r+1},${c+1}) <b>${ENCHANT_DEFS[pe.type].name}</b>`, 'log-charm');
     }
     state._pendingEnchant = [];
+    if (typeof renderPendingEnchants === 'function') renderPendingEnchants(); // v2.10.1 清空预告
   }
   // v2.10 · spin 前 charm 触发器：随机锁定 / 必中双倍 / 抽奖之神
   for (const id of state.equippedCharms) {
@@ -3149,6 +3182,36 @@ function checkWeekResult() {
   }
 }
 
+// v2.10.1 · 待激活附魔预告条（商店购买 + charm 触发 都会塞 _pendingEnchant）
+function renderPendingEnchants() {
+  const el = document.querySelector('#pending-enchants');
+  if (!el) return;
+  const pending = state._pendingEnchant || [];
+  // 同时显示 charm 类持续触发（c23 c24）的预告
+  const persistent = [];
+  for (const id of state.equippedCharms) {
+    const ch = CHARMS.find(c => c.id === id);
+    if (!ch) continue;
+    if (ch.kind === 'auto_golden') persistent.push({ type:'golden', n: ch.value, label:'⚡ charm 自动' });
+    if (ch.kind === 'auto_double') persistent.push({ type:'double', n: 1, label:'⚡ charm 自动' });
+  }
+  if (pending.length === 0 && persistent.length === 0) {
+    el.style.display = 'none';
+    el.innerHTML = '';
+    return;
+  }
+  el.style.display = 'block';
+  const tag = (p, sourceLabel) => {
+    const def = ENCHANT_DEFS[p.type];
+    return `<span class="pe-tag" style="color:${def.color}" title="${sourceLabel} · ${def.desc}">
+      <b>${def.glyph}</b>${def.name}${p.n > 1 ? ` ×${p.n}` : ''}
+    </span>`;
+  };
+  el.innerHTML = '🔮 下次 spin 注入：' +
+    pending.map(p => tag(p, '商店购买')).join('') +
+    persistent.map(p => tag(p, p.label)).join('');
+}
+
 // v2.10 · 屏幕震动（近输/事故反馈）
 function shakeScreen(ms = 700) {
   document.body.classList.add('shaking');
@@ -3389,6 +3452,8 @@ function applyShopPurchase(item) {
     if (item.id === 'ench-valueplus') state._pendingEnchant.push({ type:'value_plus', n:3 });
     log(`✓ 携带 <b>${item.name}</b>（下次 spin 起效）`, 'log-charm');
   }
+  // v2.10.1 同步附魔预告
+  if (typeof renderPendingEnchants === 'function') renderPendingEnchants();
 }
 
 function showModal(title, msg, fail, onContinue) {
