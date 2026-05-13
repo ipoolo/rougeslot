@@ -1303,6 +1303,20 @@
     from { box-shadow: 0 0 12px rgba(251,191,36,0.3); }
     to   { box-shadow: 0 0 24px rgba(251,191,36,0.7), 0 0 36px rgba(248,113,113,0.3); }
   }
+  /* 未达标时灰显但保留按钮位置（让玩家始终看到此机制存在）*/
+  .btn-early:disabled {
+    background: rgba(40,24,60,0.6);
+    color: #94a3b8;
+    border-color: #475569;
+    box-shadow: none;
+    animation: none;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  .btn-early:disabled .ticket-bonus {
+    background: rgba(40,24,60,0.6);
+    color: #64748b;
+  }
   .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(251,191,36,0.3); }
 
   /* 结算日志 */
@@ -1385,7 +1399,7 @@
   <!-- 动作按钮（v1.5: 上移到 charms 下方、网格上方 · v2.10 加提前完成）-->
   <div class="action-bar">
     <button class="btn btn-spin" id="btn-spin">🎰 SPIN</button>
-    <button class="btn btn-early" id="btn-early" title="本周已达标 · 提前结算并按剩余 spin 额外奖励票" style="display:none;">🏁 提前结算<span class="ticket-bonus" id="early-bonus">+0 票</span></button>
+    <button class="btn btn-early" id="btn-early" title="本周已达标时可点 · 按剩余 spin 额外奖励票">🏁 提前结算<span class="ticket-bonus" id="early-bonus">未达标</span></button>
     <button class="btn btn-cheat" id="btn-cheat" title="下一次 spin 整个网格 25 颗骰子同点（具体点数随机）">⭐ CHEAT</button>
     <button class="btn btn-reset" id="btn-reset">RESET</button>
   </div>
@@ -2229,15 +2243,24 @@ function renderButtons() {
   btn.disabled = state.drawn || state.gameOver;
   btn.classList.toggle('spinning', state.drawn);
   btn.textContent = state.drawn ? '🎲 SPINNING...' : '🎰 SPIN';
-  // v2.10 · 提前完成按钮：仅当 money >= target 且还有剩余 spin 时显示
+  // v2.10 · 提前完成按钮：常驻显示，未达标时 disabled 灰显
   const earlyBtn = document.querySelector('#btn-early');
   if (earlyBtn) {
     const target = WEEK_TARGETS[state.week-1];
-    const canEarly = !state.drawn && !state.gameOver && state.money >= target && state.spinLeft > 0;
-    earlyBtn.style.display = canEarly ? '' : 'none';
+    const reached = state.money >= target;
+    const canEarly = !state.drawn && !state.gameOver && reached && state.spinLeft > 0;
     earlyBtn.disabled = !canEarly;
     const bonusEl = document.querySelector('#early-bonus');
-    if (bonusEl) bonusEl.textContent = `+${getEarlyFinishBonus()} 票`;
+    if (bonusEl) {
+      if (!reached) {
+        const need = target - state.money;
+        bonusEl.textContent = `差 ${need}`;
+      } else if (state.spinLeft <= 0) {
+        bonusEl.textContent = '无剩余';
+      } else {
+        bonusEl.textContent = `+${getEarlyFinishBonus()} 票`;
+      }
+    }
   }
 }
 
@@ -3129,7 +3152,7 @@ function pickShopItems(n = 3) {
 }
 
 // 显示商店 modal · 返回 promise，玩家点"进入下周"后 resolve
-async function showShopModal(nextWeekNo) {
+async function showShopModal(nextWeekNo, isFirstWeek = false) {
   return new Promise(resolve => {
     const overlay = document.querySelector('#shop-modal');
     const itemsEl = document.querySelector('#shop-items');
@@ -3138,6 +3161,15 @@ async function showShopModal(nextWeekNo) {
     const spinOptsEl = document.querySelector('#shop-spin-opts');
     const rerollBtn = document.querySelector('#shop-reroll');
     const confirmBtn = document.querySelector('#shop-confirm');
+    // 文案随首次/周间变化
+    const titleEl = overlay.querySelector('h2');
+    if (titleEl) titleEl.textContent = isFirstWeek ? '🎰 开局准备 · 用初始 2 票购物' : '🏪 周末商店';
+    confirmBtn.textContent = isFirstWeek ? `开始第 ${nextWeekNo} 周 →` : '进入下周 →';
+    // 把"下周 spin 配置"小标题也跟着改
+    const titles = overlay.querySelectorAll('.shop-section-title');
+    if (titles && titles.length >= 2) {
+      titles[1].textContent = isFirstWeek ? '⚖ 本周 spin 配置 · 少 spin 多换票' : '⚖ 下周 spin 配置 · 少 spin 多换票';
+    }
 
     let items = pickShopItems(3);
     let chosenSpin = 3;
@@ -3267,7 +3299,7 @@ function resetGame() {
   state.forcedCellsCount = 5;
   // v2.10
   state.luck = 0;
-  state.tickets = 0;
+  state.tickets = 2; // 开局送 2 票，让玩家在第 1 周开始前先逛商店
   state.weekStreak = 0;
   state.streakBonusLuck = 0;
   state.ownedCharms = ['c1', 'c5', 'c7']; // 新 run 初始送 3 个
@@ -3280,11 +3312,15 @@ function resetGame() {
   recomputeCharmPassives(); // 空 charm 数组 → luck=0
   clearComboTimer();
   renderCombo();
-  document.querySelector('#log').innerHTML = '<div class="log-line log-base">[准备就绪] 点击 SPIN 开始第 1 周 · 目标 ' + WEEK_TARGETS[0] + ' 金币</div>';
+  document.querySelector('#log').innerHTML = '<div class="log-line log-base">[新 run] 重置完毕 · 准备开局商店…</div>';
   renderCharms();
   renderGrid();
   renderStatus();
   renderButtons();
+  // v2.10 · resetGame 时也走 startGame 流程（弹首次商店）
+  if (typeof startGame === 'function') {
+    setTimeout(() => startGame(), 400);
+  }
 }
 
 function highlightRow(r, ms) {
@@ -3720,6 +3756,25 @@ safeCall('renderCombo', renderCombo);
 // 3 秒后自动隐藏（如果一切 OK）
 setTimeout(() => { if (__dbgDiv.querySelectorAll('div').length && !__dbgDiv.textContent.includes('✗')) __dbgDiv.style.display = 'none'; }, 4000);
 log('💡 玩法：装备 charms → SPIN 摇骰 + 自动结算（一键拉杆）（看左侧符号价值 / 右侧图形分倍率）', 'log-base');
+
+// v2.10 · 启动新 run：弹首次商店让玩家用初始 2 票购物
+async function startGame() {
+  log(`🎰 你被丢进赌场 · 6 周还债 · 初始 <b>2 票</b> 0 金币 · 先去商店看看`, 'log-line-bonus');
+  await sleep(400);
+  // 把 state.tickets 同步到 stat-bar（resetGame 之外的入口也要刷）
+  renderStatus();
+  await showShopModal(1, true);
+  applyWeeklySpinCharms();
+  if (state._weekSpinChoice && state._weekSpinChoice < state.spinLeft) state.spinLeft = state._weekSpinChoice;
+  if (state._extraSpinNext) { state.spinLeft += state._extraSpinNext; state._extraSpinNext = 0; }
+  if (state._extraLuckNext) { state.luck += state._extraLuckNext; state._extraLuckNext = 0; }
+  state._weekSpinChoice = null;
+  renderStatus();
+  renderButtons();
+  log(`▼▼▼ 第 1 周 · 目标 ${WEEK_TARGETS[0]} 金币 · 本周 ${state.spinLeft} spin ▼▼▼`, 'log-line-bonus');
+}
+// 页面首次加载启动
+setTimeout(() => startGame(), 500);
 </script>
 
 </body>
