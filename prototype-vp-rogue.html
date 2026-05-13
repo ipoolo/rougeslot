@@ -59,15 +59,62 @@
     20%, 40%, 60%, 80% { box-shadow: 0 0 120px rgba(167, 139, 250, 0.9), inset 0 0 80px rgba(251, 191, 36, 0.4); transform: translate(4px, -2px); filter: hue-rotate(-30deg); }
   }
 
-  /* 三栏布局：左图鉴 / 中游戏 / 右图形表 */
+  /* 三栏布局：左图鉴 / 中游戏 / 右图形表 · v2.7 支持折叠
+     v2.8: 中间列固定宽度——左右折叠时省下的空间留为边距，不影响游戏区宽度 */
   .three-col {
     display: grid;
-    grid-template-columns: 200px 1fr 220px;
+    grid-template-columns: var(--left-w, 200px) var(--center-w, 540px) var(--right-w, 220px);
     gap: 14px;
     margin-bottom: 14px;
+    justify-content: center;
+    transition: grid-template-columns 0.3s ease;
   }
+  .three-col.left-collapsed  { --left-w: 36px; }
+  .three-col.right-collapsed { --right-w: 36px; }
   @media (max-width: 980px) {
     .three-col { grid-template-columns: 1fr; }
+  }
+  /* 折叠后的 panel：变细竖条 + 垂直标题 + 展开按钮 */
+  .panel { position: relative; transition: all 0.3s; }
+  .panel.collapsed { padding: 12px 4px; overflow: hidden; }
+  .panel.collapsed > *:not(.panel-collapse-btn):not(.panel-vertical-title) { display: none !important; }
+  .panel-vertical-title {
+    display: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fde68a;
+    letter-spacing: 4px;
+    margin: 40px auto 0;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .panel.collapsed .panel-vertical-title { display: block; }
+  .panel-collapse-btn {
+    position: absolute;
+    top: 6px;
+    width: 22px; height: 22px;
+    padding: 0;
+    font-size: 11px;
+    font-weight: 800;
+    border: 1px solid rgba(251,191,36,0.4);
+    background: rgba(251,191,36,0.15);
+    color: #fbbf24;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    z-index: 2;
+    line-height: 1;
+  }
+  .panel-collapse-btn:hover { background: rgba(251,191,36,0.35); }
+  .panel-left  .panel-collapse-btn { right: 6px; }
+  .panel-right .panel-collapse-btn { left: 6px; }
+  .panel.collapsed .panel-collapse-btn {
+    /* 折叠时按钮居中 */
+    top: 6px;
+    left: 50%; right: auto;
+    transform: translateX(-50%);
   }
   .panel {
     background: rgba(40, 24, 60, 0.4);
@@ -247,49 +294,195 @@
   .v-money { color: #34d399; }
   .v-spin { color: #a78bfa; }
 
-  /* COMBO 能量池 */
+  /* v2.2 COMBO 能量池（强化视觉版） */
   .combo-bar {
-    margin-bottom: 14px;
-    padding: 10px 14px;
-    background: linear-gradient(90deg, rgba(167,139,250,0.10), rgba(251,191,36,0.05));
-    border: 1px solid rgba(167,139,250,0.25);
-    border-radius: 10px;
+    margin-bottom: 16px;
+    padding: 16px 22px;
+    background: linear-gradient(135deg, rgba(167,139,250,0.15) 0%, rgba(251,191,36,0.08) 100%);
+    border: 2px solid rgba(167,139,250,0.35);
+    border-radius: 14px;
     transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
   }
-  .combo-bar.hot {
-    border-color: #fbbf24;
-    box-shadow: 0 0 16px rgba(251,191,36,0.4);
-  }
-  .combo-bar.almost { animation: comboPulse 0.5s infinite alternate; }
-  @keyframes comboPulse {
-    from { box-shadow: 0 0 8px rgba(251,191,36,0.4); }
-    to   { box-shadow: 0 0 24px rgba(251,191,36,0.8); }
+  .combo-bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(251,191,36,0.12), transparent 60%);
+    pointer-events: none;
   }
   .combo-row {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 12px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px;
+    position: relative;
   }
-  .combo-label { color: #c4b5fd; font-weight: 700; letter-spacing: 1px; }
-  .combo-num { font-size: 22px; font-weight: 700; color: #fbbf24; min-width: 30px; }
-  .combo-max { color: #94a3b8; font-size: 11px; }
-  .combo-timer-text { margin-left: auto; color: #94a3b8; font-family: ui-monospace, monospace; font-size: 11px; }
-  .combo-timer-text.warn { color: #f87171; font-weight: 700; }
-  .combo-progress {
-    height: 8px;
+  .combo-label {
+    color: #c4b5fd; font-weight: 800;
+    letter-spacing: 2px; font-size: 13px;
+    text-shadow: 0 0 8px rgba(167,139,250,0.5);
+  }
+  .combo-num {
+    font-size: 38px; font-weight: 900;
+    color: #fbbf24; min-width: 50px;
+    text-shadow: 0 0 14px rgba(251,191,36,0.6), 0 2px 0 rgba(0,0,0,0.5);
+    line-height: 1;
+    transition: all 0.2s;
+  }
+  .combo-max {
+    color: #fde68a; font-size: 14px; font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .combo-timer-text {
+    margin-left: auto; color: #94a3b8;
+    font-family: ui-monospace, monospace;
+    font-size: 14px; font-weight: 700;
+    padding: 4px 10px; border-radius: 8px;
     background: rgba(0,0,0,0.4);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 6px;
-    border: 1px solid rgba(167,139,250,0.15);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  /* v2.4 手动触发抽奖按钮 */
+  .combo-trigger-btn {
+    padding: 6px 14px;
+    margin-left: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    background: linear-gradient(180deg, #fbbf24, #d97706);
+    color: #1c1300;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    box-shadow: 0 0 14px rgba(251,191,36,0.45);
+    font-family: inherit;
+  }
+  .combo-trigger-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.6);
+    background: linear-gradient(180deg, #475569, #334155);
+    color: #94a3b8;
+    box-shadow: none;
+  }
+  .combo-trigger-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(251,191,36,0.7);
+  }
+  .combo-trigger-btn:not(:disabled):active { transform: translateY(0); }
+  .combo-bar.lvl-4 .combo-trigger-btn:not(:disabled) {
+    background: linear-gradient(180deg, #ec4899, #fbbf24);
+    animation: btnL4Pulse 0.4s infinite alternate;
+  }
+  @keyframes btnL4Pulse {
+    from { box-shadow: 0 0 14px rgba(236,72,153,0.7); }
+    to   { box-shadow: 0 0 28px rgba(251,191,36,1); }
+  }
+
+  .combo-timer-text.warn {
+    color: #fff; font-weight: 900;
+    background: rgba(248,113,113,0.4);
+    border-color: #f87171;
+    animation: timerWarn 0.4s infinite alternate;
+  }
+  @keyframes timerWarn {
+    from { box-shadow: 0 0 6px rgba(248,113,113,0.4); }
+    to   { box-shadow: 0 0 18px rgba(248,113,113,0.9); }
+  }
+  .combo-progress {
+    position: relative;
+    height: 22px;
+    background: rgba(0,0,0,0.55);
+    border-radius: 8px;
+    overflow: visible;
+    margin-top: 10px;
+    border: 1px solid rgba(167,139,250,0.2);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
   }
   .combo-fill {
     height: 100%;
     background: linear-gradient(90deg, #a78bfa 0%, #fbbf24 60%, #f87171 100%);
-    transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 0 8px rgba(251,191,36,0.4);
+    transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+    box-shadow: 0 0 16px rgba(251,191,36,0.6), inset 0 0 8px rgba(255,255,255,0.2);
+    border-radius: 7px;
+    position: relative;
+  }
+  .combo-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, transparent 50%);
+    border-radius: 7px;
+    pointer-events: none;
+  }
+  /* v2.1 进度条 marker（L1/L2/L3 阈值线 · 增强） */
+  .combo-marker {
+    position: absolute;
+    top: -5px;
+    width: 3px; height: 32px;
+    background: rgba(255,255,255,0.45);
+    pointer-events: none;
+    box-shadow: 0 0 4px rgba(255,255,255,0.5);
+  }
+  .combo-marker .lbl {
+    position: absolute;
+    top: 34px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 700;
+    color: #c4b5fd;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    padding: 1px 5px;
+    background: rgba(40,24,60,0.8);
+    border-radius: 4px;
+  }
+  /* 等级状态 · 边框颜色/发光/动画分级强化 */
+  .combo-bar.lvl-1 {
+    border-color: #fbbf24;
+    box-shadow: 0 0 20px rgba(251,191,36,0.4), inset 0 0 8px rgba(251,191,36,0.1);
+  }
+  .combo-bar.lvl-2 {
+    border-color: #fb923c;
+    box-shadow: 0 0 24px rgba(251,146,60,0.55), inset 0 0 14px rgba(251,146,60,0.15);
+    animation: comboPulse 0.75s infinite alternate;
+  }
+  .combo-bar.lvl-3 {
+    border-color: #f87171;
+    box-shadow: 0 0 32px rgba(248,113,113,0.65), inset 0 0 18px rgba(248,113,113,0.2);
+    animation: comboPulse 0.5s infinite alternate;
+  }
+  .combo-bar.lvl-3 .combo-num { color: #fb923c; text-shadow: 0 0 18px rgba(248,113,113,0.8); }
+  .combo-bar.lvl-4 {
+    border-color: #ec4899;
+    border-width: 3px;
+    box-shadow: 0 0 50px rgba(236,72,153,0.85), inset 0 0 30px rgba(251,191,36,0.25);
+    animation: comboPulseL4 0.3s infinite alternate;
+  }
+  .combo-bar.lvl-4 .combo-num {
+    color: #fde68a;
+    text-shadow: 0 0 20px #ec4899, 0 0 35px #fbbf24, 0 2px 0 rgba(0,0,0,0.6);
+    animation: numShake 0.15s infinite alternate;
+  }
+  @keyframes comboPulseL4 {
+    from { box-shadow: 0 0 30px rgba(236,72,153,0.6), inset 0 0 20px rgba(251,191,36,0.15); filter: hue-rotate(0deg); }
+    to   { box-shadow: 0 0 60px rgba(251,191,36,0.95), inset 0 0 40px rgba(236,72,153,0.3); filter: hue-rotate(25deg); }
+  }
+  @keyframes numShake {
+    from { transform: translate(-1px, -1px) scale(1); }
+    to   { transform: translate(1px, 1px) scale(1.08); }
+  }
+  /* 数字 +1 跳动 */
+  .combo-num.bump {
+    animation: numBump 0.32s ease-out;
+  }
+  @keyframes numBump {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.4); color: #fff; }
+    100% { transform: scale(1); }
   }
   .combo-extra {
-    font-size: 11px; margin-top: 6px; color: #fde68a;
+    font-size: 11px; margin-top: 22px; color: #fde68a;
     min-height: 14px;
   }
   /* v1.9 抽奖特效开关 */
@@ -372,6 +565,78 @@
   .lottery-box h2 { color: #fbbf24; font-size: 22px; margin-bottom: 16px; }
   .lottery-box .effect-name { font-size: 18px; color: #fde68a; margin: 12px 0; font-weight: 700; }
   .lottery-box .effect-desc { font-size: 13px; color: #c4b5fd; line-height: 1.8; margin-bottom: 18px; }
+  /* v2.3 圆盘抽奖 */
+  .wheel-container {
+    position: relative;
+    width: 280px; height: 280px;
+    margin: 20px auto;
+  }
+  .wheel-pointer {
+    position: absolute;
+    top: -18px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 38px;
+    z-index: 10;
+    color: #fbbf24;
+    text-shadow: 0 0 12px #fbbf24, 0 0 20px rgba(251,191,36,0.7);
+    animation: pointerPulse 0.8s infinite alternate;
+  }
+  @keyframes pointerPulse {
+    from { transform: translateX(-50%) translateY(0); }
+    to   { transform: translateX(-50%) translateY(3px); }
+  }
+  .wheel {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 4px solid #fbbf24;
+    box-shadow: 0 0 36px rgba(251,191,36,0.6), inset 0 0 30px rgba(0,0,0,0.4);
+    position: relative;
+    /* transition 在 JS 中动态设置 */
+  }
+  .wheel-labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .wheel-segment-label {
+    position: absolute;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(0,0,0,0.85), 0 0 4px rgba(0,0,0,1);
+    pointer-events: none;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+  }
+  .wheel-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fbbf24, #d97706);
+    box-shadow: 0 0 20px rgba(251,191,36,0.8), inset 0 -3px 0 rgba(0,0,0,0.3);
+    z-index: 5;
+  }
+  .wheel-center::after {
+    content: '🎰';
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  /* 揭晓结果切换 */
+  .lottery-result {
+    transition: opacity 0.5s, transform 0.5s;
+    transform: translateY(8px);
+  }
+  .lottery-result.show {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateY(0);
+  }
 
   /* 高利贷叙事 */
   .lore {
@@ -477,6 +742,71 @@
     0% { transform: rotateY(90deg); opacity: 0; }
     100% { transform: rotateY(0deg); opacity: 1; }
   }
+  /* v2.8: 老虎机式上下滚动 · 启动时整条 strip 从顶部向下流，停下时冲过头再回弹
+     v2.8.3: 改用 JS 显式设置 px 高度（避免 % 在 flex column 内的解析歧义）+ 两段 transition */
+  .cell.reeling {
+    overflow: hidden;
+    padding: 0;
+    transition: none;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+  }
+  .cell.reeling .reel-strip {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* height / transform 全部由 JS 用 px 显式设置 */
+    transform: translateY(0);
+    will-change: transform;
+  }
+  .cell.reeling .reel-cell {
+    /* height / flex-basis 由 JS 注入 px */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-family: Georgia, serif;
+    box-sizing: border-box;
+  }
+  /* v2.8.4: reel-cell 内字号 / 阴影 / 位置 严格对齐普通 cell，避免移除 reeling class 时
+     被 .cell 的 transition: all .4s cubic-bezier(.34,1.56,.64,1) 当作变化触发 overshoot */
+  .cell.reeling .reel-cell .suit {
+    font-size: 56px;
+    line-height: 0.85;
+    margin: 0;
+    text-shadow: 0 0 8px currentColor, 0 0 14px rgba(255,255,255,0.12);
+  }
+  .cell.reeling .reel-cell .rank {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0.55;
+  }
+  /* reel-cell 按 face 染色 · 复用 cell.face-N 同色系 */
+  .reel-cell.face-1 .suit, .reel-cell.face-1 .rank { color: #f87171; }
+  .reel-cell.face-2 .suit, .reel-cell.face-2 .rank { color: #fb923c; }
+  .reel-cell.face-3 .suit, .reel-cell.face-3 .rank { color: #fbbf24; }
+  .reel-cell.face-4 .suit, .reel-cell.face-4 .rank { color: #34d399; }
+  .reel-cell.face-5 .suit, .reel-cell.face-5 .rank { color: #60a5fa; }
+  .reel-cell.face-6 .suit, .reel-cell.face-6 .rank { color: #a78bfa; }
+  /* 滚动时 cell 边框淡化 */
+  .cell.reeling { border-color: rgba(71,85,105,0.5); }
+  /* v2.8.7: 疑似大奖 · 后 2 列金色 pulse 提示悬念 */
+  .cell.reeling.teasing {
+    border-color: #fbbf24 !important;
+    box-shadow: 0 0 14px rgba(251,191,36,0.55), inset 0 0 8px rgba(251,191,36,0.25) !important;
+    animation: teasePulse 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes teasePulse {
+    from { box-shadow: 0 0 12px rgba(251,191,36,0.45), inset 0 0 6px rgba(251,191,36,0.18); }
+    to   { box-shadow: 0 0 26px rgba(251,191,36,1), 0 0 40px rgba(248,113,113,0.5), inset 0 0 14px rgba(251,191,36,0.4); }
+  }
   .cell .suit {
     font-size: 56px;
     line-height: 0.85;
@@ -505,13 +835,150 @@
     border-color: #fbbf24;
     box-shadow: 0 0 16px rgba(251,191,36,0.6);
   }
-  /* 图形结算时被组成的骰子高亮（v0.4 关键 UX）*/
+  /* 图形结算时被组成的骰子高亮（v2.5 加弹跳 + 多次区分色）*/
   .cell.scoring-shape {
     background: linear-gradient(180deg, rgba(251,191,36,0.5) 0%, rgba(248,113,113,0.4) 100%) !important;
     border-color: #fde68a !important;
     box-shadow: 0 0 24px rgba(251,191,36,0.9), inset 0 0 8px rgba(255,255,255,0.3) !important;
-    transform: scale(1.15);
     z-index: 5;
+    animation: cellBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes cellBounce {
+    0%   { transform: scale(1); }
+    45%  { transform: scale(1.32); }
+    100% { transform: scale(1.15); }
+  }
+  /* 多倍结算时不同 rep 的颜色梯度 */
+  .cell.scoring-rep-1 { background: linear-gradient(180deg, rgba(251,191,36,0.55), rgba(248,113,113,0.4)) !important; }
+  .cell.scoring-rep-2 { background: linear-gradient(180deg, rgba(251,146,60,0.55), rgba(248,113,113,0.5)) !important; border-color: #fb923c !important; box-shadow: 0 0 28px rgba(251,146,60,0.95) !important; }
+  .cell.scoring-rep-3 { background: linear-gradient(180deg, rgba(248,113,113,0.55), rgba(236,72,153,0.55)) !important; border-color: #f87171 !important; box-shadow: 0 0 32px rgba(248,113,113,1) !important; }
+  .cell.scoring-rep-4 { background: linear-gradient(180deg, rgba(236,72,153,0.6), rgba(167,139,250,0.5)) !important; border-color: #ec4899 !important; box-shadow: 0 0 36px rgba(236,72,153,1), inset 0 0 12px #fbbf24 !important; }
+  .cell.scoring-rep-5 { background: linear-gradient(180deg, rgba(167,139,250,0.65), rgba(251,191,36,0.55)) !important; border-color: #a78bfa !important; box-shadow: 0 0 40px rgba(167,139,250,1), inset 0 0 16px #fbbf24 !important; }
+
+  /* 飘字（结算时图形中心向上飘出的得分）*/
+  .score-float {
+    position: fixed;
+    font-size: 28px;
+    font-weight: 900;
+    color: #fbbf24;
+    text-shadow: 0 0 12px #fbbf24, 0 2px 0 rgba(0,0,0,0.7), 0 0 24px rgba(248,113,113,0.6);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    animation: scoreFloat 0.95s cubic-bezier(0.34, 0, 0.64, 1) forwards;
+    white-space: nowrap;
+  }
+  .score-float.rep-2 { color: #fb923c; }
+  .score-float.rep-3 { color: #f87171; }
+  .score-float.rep-4 { color: #ec4899; }
+  .score-float.rep-5 { color: #a78bfa; }
+  /* v2.8.1: 大分数加点光晕（让 64px 那档更壮观）*/
+  .score-float.big {
+    text-shadow:
+      0 0 16px #fbbf24,
+      0 0 32px #f87171,
+      0 0 48px rgba(248,113,113,0.6),
+      0 3px 0 rgba(0,0,0,0.8);
+  }
+  .score-float.mega {
+    text-shadow:
+      0 0 20px #fde68a,
+      0 0 40px #fbbf24,
+      0 0 70px #f87171,
+      0 0 100px rgba(167,139,250,0.7),
+      0 4px 0 rgba(0,0,0,0.85);
+    letter-spacing: 2px;
+  }
+  @keyframes scoreFloat {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+    25%  { opacity: 1; transform: translate(-50%, -90%) scale(1.25); }
+    100% { opacity: 0; transform: translate(-50%, -180%) scale(0.95); }
+  }
+  /* 屏幕中央 ×N 大字闪现 */
+  .combo-mult-flash {
+    position: fixed;
+    top: 38%; left: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    animation: multFlash 0.55s ease-out forwards;
+    text-align: center;
+  }
+  .combo-mult-flash .mult-main {
+    font-size: 84px;
+    font-weight: 900;
+    color: #fbbf24;
+    text-shadow: 0 0 40px #fbbf24, 0 0 80px #f87171, 0 4px 0 rgba(0,0,0,0.5);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+  .combo-mult-flash .mult-sub {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fde68a;
+    text-shadow: 0 0 12px rgba(248,113,113,0.7), 0 2px 0 rgba(0,0,0,0.5);
+    margin-top: 10px;
+    letter-spacing: 2px;
+  }
+  .combo-mult-flash .mult-dot {
+    color: #475569;
+    font-size: 18px;
+    margin: 0 1px;
+    text-shadow: none;
+    transition: color 0.15s;
+  }
+  .combo-mult-flash .mult-dot.on {
+    color: #fbbf24;
+    text-shadow: 0 0 10px #fbbf24;
+  }
+  @keyframes multFlash {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(-12deg); }
+    25%  { opacity: 1; transform: translate(-50%, -50%) scale(1.3) rotate(0deg); }
+    75%  { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -85%) scale(1) rotate(8deg); }
+  }
+  /* v2.8: 结算结束 · 屏幕中央总分爆发 */
+  .score-total-flash {
+    position: fixed; top: 42%; left: 50%;
+    pointer-events: none;
+    z-index: 10001;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    animation: scoreTotalFlash 1.5s cubic-bezier(.2, .8, .3, 1) forwards;
+  }
+  .score-total-flash .stf-label {
+    font-size: 16px;
+    color: #fde68a;
+    letter-spacing: 6px;
+    text-shadow: 0 0 12px rgba(251,191,36,0.6);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .score-total-flash .stf-num {
+    font-size: 120px;
+    font-weight: 900;
+    background: linear-gradient(180deg, #fde68a 0%, #fbbf24 45%, #f87171 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 50px rgba(251,191,36,0.85), 0 0 100px rgba(248,113,113,0.5);
+    letter-spacing: 4px;
+    line-height: 1;
+    filter: drop-shadow(0 6px 0 rgba(0,0,0,0.35));
+  }
+  .score-total-flash .stf-sub {
+    font-size: 14px;
+    color: #c4b5fd;
+    margin-top: 8px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px rgba(167,139,250,0.6);
+  }
+  @keyframes scoreTotalFlash {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.25); }
+    14%  { opacity: 1; transform: translate(-50%, -50%) scale(1.25); }
+    26%  { opacity: 1; transform: translate(-50%, -50%) scale(1.0); }
+    74%  { opacity: 1; transform: translate(-50%, -52%) scale(1.0); }
+    100% { opacity: 0; transform: translate(-50%, -88%) scale(0.9); }
   }
   /* shape-row 大奖样式 */
   .shape-row.bonus {
@@ -699,7 +1166,9 @@
   <!-- 三栏布局：左 符号图鉴 / 中 游戏区 / 右 图形计分表 -->
   <div class="three-col">
     <!-- 左：符号图鉴 -->
-    <aside class="panel panel-left">
+    <aside class="panel panel-left" id="panel-left">
+      <button class="panel-collapse-btn" id="toggle-left" title="折叠/展开符号图鉴">◀</button>
+      <div class="panel-vertical-title">📖 符号图鉴</div>
       <div class="panel-head">📖 符号图鉴</div>
       <div id="symbol-codex"></div>
       <div class="panel-foot">
@@ -711,23 +1180,15 @@
     <!-- 中：游戏区 -->
     <div class="game-center">
       <div class="grid-wrap">
-        <div class="row-tags" id="row-tags">
-          <div class="row-tag" data-row="0"><div class="rt-name">row 1</div><div class="rt-mul">—</div></div>
-          <div class="row-tag" data-row="1"><div class="rt-name">row 2</div><div class="rt-mul">—</div></div>
-          <div class="row-tag" data-row="2"><div class="rt-name">row 3</div><div class="rt-mul">—</div></div>
-          <div class="row-tag" data-row="3"><div class="rt-name">row 4</div><div class="rt-mul">—</div></div>
-          <div class="row-tag" data-row="4"><div class="rt-name">row 5</div><div class="rt-mul">—</div></div>
-        </div>
         <div class="grid" id="grid"></div>
       </div>
     </div>
 
-    <!-- 右：图形计分表（含 toggle 开关） -->
-    <aside class="panel panel-right">
-      <div class="panel-head with-toggle">
-        <span>🎯 图形计分</span>
-        <button class="panel-toggle" id="toggle-shapes" title="隐藏/显示规则">收起 ▴</button>
-      </div>
+    <!-- 右：图形计分表 -->
+    <aside class="panel panel-right" id="panel-right">
+      <button class="panel-collapse-btn" id="toggle-right" title="折叠/展开图形计分">▶</button>
+      <div class="panel-vertical-title">🎯 图形计分</div>
+      <div class="panel-head">🎯 图形计分</div>
       <div class="panel-collapsible" id="shape-content">
         <div id="shape-table"></div>
         <div class="panel-foot">
@@ -743,9 +1204,15 @@
       <span class="combo-label">🔥 COMBO</span>
       <span class="combo-num" id="combo-num">0</span>
       <span class="combo-max" id="combo-max">/ 10</span>
+      <button class="combo-trigger-btn" id="combo-trigger" title="提前结束倒计时 · 按当前等级触发抽奖（L0 仅清零不抽奖）">🔒 未达 L1</button>
       <span class="combo-timer-text" id="combo-timer">⏱ —</span>
     </div>
-    <div class="combo-progress"><div class="combo-fill" id="combo-fill" style="width:0%;"></div></div>
+    <div class="combo-progress">
+      <div class="combo-fill" id="combo-fill" style="width:0%;"></div>
+      <div class="combo-marker" style="left: 10%;"><span class="lbl">⭐ L1</span></div>
+      <div class="combo-marker" style="left: 25%;"><span class="lbl">⭐⭐ L2</span></div>
+      <div class="combo-marker" style="left: 50%;"><span class="lbl">⭐⭐⭐ L3</span></div>
+    </div>
     <div class="combo-extra" id="combo-extra"></div>
     <div class="combo-effects-toggle">
       <span class="ce-label">抽奖池：</span>
@@ -764,13 +1231,22 @@
   <div class="footer">DESIGN PROTOTYPE · 仅用于验证核心循环 · R_RougeSlot v5</div>
 </div>
 
-<!-- 抽奖弹窗（v1.4） -->
+<!-- 抽奖弹窗（v2.3 圆盘抽奖） -->
 <div class="lottery-overlay" id="lottery">
   <div class="lottery-box">
-    <h2>🎁 能量池触发抽奖！</h2>
-    <div class="effect-name" id="lottery-name">…</div>
-    <div class="effect-desc" id="lottery-desc">…</div>
-    <button class="btn btn-deal" id="lottery-btn">领取效果 ✨</button>
+    <h2 id="lottery-title">🎁 COMBO 抽奖</h2>
+    <div class="wheel-container">
+      <div class="wheel-pointer">▼</div>
+      <div class="wheel" id="wheel">
+        <div class="wheel-labels" id="wheel-labels"></div>
+        <div class="wheel-center"></div>
+      </div>
+    </div>
+    <div class="lottery-result" id="lottery-result" style="opacity:0; pointer-events:none;">
+      <div class="effect-name" id="lottery-name">…</div>
+      <div class="effect-desc" id="lottery-desc">…</div>
+      <button class="btn btn-deal" id="lottery-btn">领取效果 ✨</button>
+    </div>
   </div>
 </div>
 
@@ -974,6 +1450,37 @@ const GRID_BONUS = {
 };
 // v0.5: 5×5 模式下行/列/对角统一用 HAND_PAY 规则，删除独立的列同点/对角同点
 
+// v2.8.7: 老虎机式 spin 的"悬念预判"——
+// 当 grid 已 roll 完但还在滚动中时，检查"前 3 列（c≤2）已经包含的子集"是否对上某个 GRID_BONUS
+// 的左半边形状。若是 → spin 后 2 列（c=3,4）减速延长，制造"差几格就中大奖"的悬念。
+// 返回首个匹配的 bonus key，或 null。
+function detectLeftHalfTease(g) {
+  if (!g || !g[0] || !g[0][0]) return null;
+  // four_corners: [0,0],[2,2],[4,0] 同点（缺右 2 角）
+  const fc = [g[0][0].r, g[2][2].r, g[4][0].r];
+  if (fc.every(f => f === fc[0])) return 'four_corners';
+  // diamond_cross: [0,0],[1,1],[2,2],[3,1],[4,0] 同点（缺右半 4 格）
+  const dc = [g[0][0].r, g[1][1].r, g[2][2].r, g[3][1].r, g[4][0].r];
+  if (dc.every(f => f === dc[0])) return 'diamond_cross';
+  // yahtzee_plus: 列 0 五颗同点（缺行 0 后 4 格 + 主对角后 2 格）
+  const col0 = [g[0][0].r, g[1][0].r, g[2][0].r, g[3][0].r, g[4][0].r];
+  if (col0.every(f => f === col0[0])) return 'yahtzee_plus';
+  // cross_plus: 列 2 五颗同点 + 行 2 左半 [2,0][2,1] 同色（缺 [2,3][2,4]）
+  const col2 = [g[0][2].r, g[1][2].r, g[2][2].r, g[3][2].r, g[4][2].r];
+  if (col2.every(f => f === col2[0]) && g[2][0].r === col2[0] && g[2][1].r === col2[0]) return 'cross_plus';
+  // diamond_plus: [0,2],[2,0],[2,2],[4,2] 同点（缺 [2,4]）
+  const dp = [g[0][2].r, g[2][0].r, g[2][2].r, g[4][2].r];
+  if (dp.every(f => f === dp[0])) return 'diamond_plus';
+  // mega_yahtzee: 前 3 列（15 格）全同点（缺右 10 格）
+  const first = g[0][0].r;
+  let allSame = true;
+  for (let r = 0; r < 5 && allSame; r++)
+    for (let c = 0; c < 3 && allSame; c++)
+      if (g[r][c].r !== first) allSame = false;
+  if (allSame) return 'mega_yahtzee';
+  return null;
+}
+
 // Charms（骰子版 · 6 个代表性）
 const CHARMS = [
   { id:'c1', name:'幸运叶',     glyph:'🍀', kind:'multi',         value:1.5, effect:'整体 ×1.5' },
@@ -1005,18 +1512,35 @@ const state = {
   gameOver: false,
   disabledShapes: new Set(),
   cheatNextFace: null,
-  // v1.4 combo + 能量池
+  // v1.4 combo + 能量池 · v2.1 多等级
   combo: 0,
-  comboMax: 10,
   comboTimer: null,
-  comboDeadline: 0, // timestamp 即将过期
+  comboDeadline: 0,
   comboTickTimer: null,
+  doubleScoreMult: 1,    // v2.1: 双倍特效的倍数（按 level 缩放：2/3/5/10）
+  rerollLosersTimes: 0,  // v2.1: 重摇特效次数（按 level：1/2/3/5）
+  forcedCellsCount: 5,   // v2.1: 固定格子数量（按 level：5/8/13/20）
   forcedCells: null,
   autoSpinsLeft: 0,
   rerollLosersNext: false,
   doubleScoreNext: false, // v2.0: 下次 spin 每个图形结算 2 次
   enabledEffects: new Set(['auto_spin', 'forced_cells', 'reroll_losers', 'double_score'])
 };
+// v2.1 COMBO 等级配置
+const COMBO_LEVELS = [
+  { threshold: 0,   level: 0, name: 'L0', glyph: '',     multiplier: 0,   color: '#a78bfa' },
+  { threshold: 10,  level: 1, name: 'L1', glyph: '⭐',   multiplier: 1.0, color: '#fbbf24' },
+  { threshold: 25,  level: 2, name: 'L2', glyph: '⭐⭐', multiplier: 1.5, color: '#fb923c' },
+  { threshold: 50,  level: 3, name: 'L3', glyph: '⭐⭐⭐', multiplier: 2.0, color: '#f87171' },
+  { threshold: 100, level: 4, name: 'L4', glyph: '💫',   multiplier: 3.0, color: '#ec4899' }
+];
+const COMBO_MAX_VISUAL = 100; // 进度条 100% 对应 100 combo
+function getComboLevel(combo) {
+  for (let i = COMBO_LEVELS.length - 1; i >= 0; i--)
+    if (combo >= COMBO_LEVELS[i].threshold) return COMBO_LEVELS[i];
+  return COMBO_LEVELS[0];
+}
+
 // 从 localStorage 恢复
 try {
   const saved = localStorage.getItem('vp-rogue-disabled-shapes');
@@ -1107,29 +1631,134 @@ function renderGrid(animate = false) {
   updateLiveHints();
 }
 
-function updateLiveHints() {
-  // 每行牌型实时显示
-  const filled = state.grid[0][0] !== null;
-  for (let r = 0; r < 5; r++) {
-    const tag = document.querySelector(`.row-tag[data-row="${r}"]`);
-    if (!filled) {
-      tag.classList.remove('has-hand');
-      tag.querySelector('.rt-name').textContent = `row ${r+1}`;
-      tag.querySelector('.rt-mul').textContent = '—';
-      continue;
-    }
-    const handType = classifyHand(state.grid[r]);
-    const hand = HAND_PAY[handType];
-    const disabled = state.disabledShapes.has(handType);
-    tag.classList.toggle('has-hand', handType !== 'high' && !disabled);
-    tag.querySelector('.rt-name').innerHTML = `${hand.glyph} ${hand.name}${disabled ? ' <span style="opacity:.5;">⊘</span>' : ''}`;
-    // 预估得分（disabled 视为不计分）
-    const maxV = Math.max(...state.grid[r].map(d => SYMBOL_TABLE[d.r].value));
-    const preview = (handType === 'high' || disabled) ? 0 : maxV * SYMBOL_BASE_MUL * hand.score * hand.mul;
-    tag.querySelector('.rt-mul').textContent = preview > 0 ? `+${preview}` : '+0';
+// v2.8.7: 老虎机式上下滚动
+//   · 显式 px 高度 + 两段 transition（冲过头 → 明显回弹）
+//   · 5 列从左到右依次停止：620 / 760 / 900 / 1040 / 1180 ms
+//   · 疑似大奖时（左半边已对齐某 GRID_BONUS 的子集）后 2 列改 1700 / 2400 ms 渐慢拖延悬念
+async function renderReelSpin() {
+  const g = document.querySelector('#grid');
+  g.innerHTML = '';
+  const REEL_COUNT = 12;
+  const BACK_MS = 220;
+  const OVERSHOOT_RATIO = 0.18;
+  const strips = [];
+
+  // —— 悬念预判：grid 已 roll 完，可静态计算左半边是否对上某大奖子集 ——
+  const teaseKey = detectLeftHalfTease(state.grid);
+  const teasing = !!teaseKey;
+  const colTotalMs = teasing
+    ? [620, 760, 900, 1700, 2400]  // 后 2 列大幅延长
+    : [620, 760, 900, 1040, 1180]; // 正常
+  // 阶段 A 缓动：正常列快冲，悬念列起步快后段拖
+  const NORMAL_EASE = 'cubic-bezier(.16, .82, .28, 1)';
+  const TEASE_EASE  = 'cubic-bezier(.05, .9, .1, 1)';
+  const colEase = teasing
+    ? [NORMAL_EASE, NORMAL_EASE, NORMAL_EASE, TEASE_EASE, TEASE_EASE]
+    : [NORMAL_EASE, NORMAL_EASE, NORMAL_EASE, NORMAL_EASE, NORMAL_EASE];
+  if (teasing) {
+    const bn = (GRID_BONUS[teaseKey] && GRID_BONUS[teaseKey].name) || teaseKey;
+    log(`✨ <b>左半边对齐</b>…疑似 <b>${bn}</b> 大奖，后 2 列减速观察`, 'log-line-bonus');
   }
-  // 5×5 模式：行/列/对角统一用 hand 规则，预览不再做额外高亮
-  // v1.4 同时更新 forcedCells 预提示
+
+  // 1) 构建 25 个 reel cell（此时还没设 px 尺寸）
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 5; c++) {
+      const finalDie = state.grid[r][c];
+      const cell = document.createElement('div');
+      cell.className = 'cell reeling face-' + (finalDie ? finalDie.r : '1');
+      const strip = document.createElement('div');
+      strip.className = 'reel-strip';
+      let html = '';
+      for (let i = 0; i < REEL_COUNT - 1; i++) {
+        const f = FACES[Math.floor(Math.random() * 6)];
+        html += `<div class="reel-cell face-${f}"><div class="suit">${FACE_GLYPH[f]}</div><div class="rank">${f}</div></div>`;
+      }
+      if (finalDie) {
+        html += `<div class="reel-cell face-${finalDie.r}"><div class="suit">${FACE_GLYPH[finalDie.r]}</div><div class="rank">${finalDie.r}</div></div>`;
+      } else {
+        html += `<div class="reel-cell"><div class="suit">?</div></div>`;
+      }
+      strip.innerHTML = html;
+      cell.appendChild(strip);
+      g.appendChild(cell);
+      strips.push({ strip, cell, finalDie, r, c });
+    }
+  }
+
+  // 2) 等 layout 完成（两个 rAF 保证读到最终尺寸）
+  await new Promise(rs => requestAnimationFrame(() => requestAnimationFrame(rs)));
+
+  // 3) 读 cell 真实高度，给每个 strip / reel-cell 注入显式 px
+  // v2.8.6: 用 cell **content area** 高度，不是 boundingRect 总高 ——
+  //   总高包含 border(1.5+1.5) + padding(0 in reeling, 2+2 in normal)。
+  //   reel-cell 在 cell content area 内、普通 .suit 也在 content area 内居中，
+  //   两者参考系必须一致；否则 emoji 中心会差 ~1.5px 看得见的垂直位移。
+  const cs = getComputedStyle(strips[0].cell);
+  const trim = parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth)
+             + parseFloat(cs.paddingTop)    + parseFloat(cs.paddingBottom);
+  const cellH = strips[0].cell.getBoundingClientRect().height - trim;
+  const finalY = -(REEL_COUNT - 1) * cellH;
+  const overshootY = finalY - cellH * OVERSHOOT_RATIO;
+  strips.forEach(({ strip }) => {
+    strip.style.height = (REEL_COUNT * cellH) + 'px';
+    strip.querySelectorAll('.reel-cell').forEach(rc => {
+      rc.style.height = cellH + 'px';
+      rc.style.flex = '0 0 ' + cellH + 'px';
+    });
+    strip.style.transform = 'translateY(0px)';
+    strip.style.transition = 'none';
+  });
+
+  // 4) 再等一帧，让 transition:none 的初始位置生效，再启动动画
+  await new Promise(rs => requestAnimationFrame(() => requestAnimationFrame(rs)));
+
+  // 5) 启动滚动 · 阶段 A：冲到 overshoot 位置（每列各自 totalMs - BACK_MS，bezier 按列）
+  if (teasing) {
+    strips.filter(s => s.c >= 3).forEach(({ cell }) => cell.classList.add('teasing'));
+  }
+  strips.forEach(({ strip, c }) => {
+    const dashMs = colTotalMs[c] - BACK_MS;
+    strip.style.transition = `transform ${dashMs}ms ${colEase[c]}`;
+    strip.style.transform = `translateY(${overshootY}px)`;
+  });
+
+  // 6) 滚动 tick 音（循环）
+  let stopTick = false;
+  (async () => {
+    let i = 0;
+    while (!stopTick) {
+      playTone(220 + (i % 5) * 25, 35, 'sine', 0.05);
+      i++;
+      await sleep(80);
+    }
+  })();
+
+  // 7) 每列在 dashMs 时切到阶段 B：明显回弹到 finalY + 咔哒音
+  for (let c = 0; c < 5; c++) {
+    const dashMs = colTotalMs[c] - BACK_MS;
+    setTimeout(() => {
+      strips.filter(s => s.c === c).forEach(({ strip }) => {
+        strip.style.transition = `transform ${BACK_MS}ms cubic-bezier(.34, 0, .42, 1)`;
+        strip.style.transform = `translateY(${finalY}px)`;
+      });
+      playTone(680 - c * 30, 60, 'square', 0.2);
+    }, dashMs);
+  }
+
+  // 8) 等最长列完整结束
+  const maxMs = Math.max(...colTotalMs);
+  await sleep(maxMs + 80);
+  stopTick = true;
+
+  // 9) 还原成普通 cell——v2.8.5: 直接重新渲染整个 grid，
+  //    确保 reel 末态与 scoring 阶段用完全相同的 DOM/样式（之前用 innerHTML 替换的方式
+  //    保留了 reel-cell 的高度参考系，导致 emoji 视觉位置偏下 ~10px）。
+  //    renderGrid 会完全重建 25 个 .cell，无 reeling class、无 inline 残差。
+  renderGrid(false);
+}
+
+function updateLiveHints() {
+  // v2.2: 已移除 row-tags 预览（视觉简化）
   renderForcedHints();
 }
 
@@ -1188,47 +1817,48 @@ async function doSpin() {
   } else {
     log(`🎰 第 ${4 - state.spinLeft} 次 spin · 摇出 25 颗骰子（5×5）`, 'log-base');
   }
-  renderGrid(true);
   renderButtons();
+  // v2.8: 改成老虎机式上下滚动（5 列错开停止 + overshoot 回弹）
+  await renderReelSpin();
+  // 给玩家看清最终骰面的小停顿
+  await sleep(220);
 
-  // 2) 短暂停顿让翻牌动画完成 + 玩家看清骰子
-  await sleep(700);
-
-  // 2b) v1.8 reroll_losers 特效 · 重摇未参与图形的格子
+  // 2b) v1.8 / v2.1 reroll_losers 特效 · 重摇未参与图形的格子（多次按 level）
   if (state.rerollLosersNext) {
     state.rerollLosersNext = false;
-    const winners = getParticipatingCells(state.grid);
-    const losers = [];
-    for (let r = 0; r < 5; r++)
-      for (let c = 0; c < 5; c++)
-        if (!winners.has(r*5+c)) losers.push({r, c});
-    if (losers.length > 0) {
-      log(`🎲 <b>特效 ③ 触发</b>：${winners.size} 格中奖保留，重摇 ${losers.length} 格...`, 'log-line-bonus');
-      flashScreen(1);
+    const times = state.rerollLosersTimes || 1;
+    state.rerollLosersTimes = 0;
+    log(`🎲 <b>特效 ③ 触发</b>：连续重摇未中奖格 × ${times} 轮`, 'log-line-bonus');
+    flashScreen(1);
+    for (let round = 1; round <= times; round++) {
+      const winners = getParticipatingCells(state.grid);
+      const losers = [];
+      for (let r = 0; r < 5; r++)
+        for (let c = 0; c < 5; c++)
+          if (!winners.has(r*5+c)) losers.push({r, c});
+      if (losers.length === 0) {
+        log(`✨ 第 ${round} 轮 · 25 格全部已参与，提前结束重摇`, 'log-base');
+        break;
+      }
+      log(`▸ 第 ${round}/${times} 轮 · ${winners.size} 中奖保留 / 重摇 ${losers.length}`, 'log-base');
       const cells = document.querySelectorAll('.grid .cell');
       losers.forEach(({r,c}) => cells[r*5+c].classList.add('loser-reroll'));
-      await sleep(600);
-      // 只重摇 loser 格子（保留中奖格子原状，不重建整个 grid）
-      playSweep(300, 900, 350);
+      await sleep(450);
+      playSweep(300, 900, 320);
       losers.forEach(({r,c}, i) => {
         state.grid[r][c] = rollDie();
         const cellEl = cells[r*5+c];
         cellEl.classList.remove('loser-reroll', 'flipped');
         const die = state.grid[r][c];
-        // 保留 forced 等额外 class 不破坏
         cellEl.classList.remove('face-1','face-2','face-3','face-4','face-5','face-6','empty');
         cellEl.classList.add('face-' + die.r);
         cellEl.innerHTML = `<div class="suit">${FACE_GLYPH[die.r]}</div><div class="rank">${die.r}</div>`;
-        // force reflow 重新触发动画
         void cellEl.offsetWidth;
-        cellEl.style.animationDelay = (i * 0.05) + 's';
+        cellEl.style.animationDelay = (i * 0.04) + 's';
         cellEl.classList.add('flipped');
       });
-      // 刷新 row-tag 预估得分（不重建 grid）
       updateLiveHints();
-      await sleep(700);
-    } else {
-      log(`✨ 25 格全部已参与图形 · 无需重摇`, 'log-line-bonus');
+      await sleep(550);
     }
     renderCombo();
   }
@@ -1310,18 +1940,19 @@ async function doScore() {
 
   // ② 逐图形顺序结算：高亮 + 音效 + 加速节奏 + combo 累加
   const doubleScore = state.doubleScoreNext;
+  const dMult = state.doubleScoreMult || 2;
   state.doubleScoreNext = false; // 一次性
-  if (doubleScore) log(`×2 <b>双倍结算激活</b>：每个图形将结算 2 次`, 'log-line-bonus');
+  state.doubleScoreMult = 1;      // 重置
+  if (doubleScore) log(`×${dMult} <b>双倍结算激活</b>：每个图形将结算 ${dMult} 次`, 'log-line-bonus');
   log(`▸ 检测到 <b>${shapes.length}</b> 个触发图形`, 'log-base');
   let baseTotal = 0;
-  let pendingLotteries = 0;
   for (let i = 0; i < shapes.length; i++) {
     const sh = shapes[i];
     const maxValue = Math.max(...sh.cells.map(c => SYMBOL_TABLE[c.face].value));
     const shapeScore = sh.def.score;
     const shapeMul = sh.def.mul;
     const got = maxValue * SYMBOL_BASE_MUL * shapeScore * shapeMul;
-    const repeats = doubleScore ? 2 : 1;
+    const repeats = doubleScore ? dMult : 1;
     for (let rep = 0; rep < repeats; rep++) {
       baseTotal += got;
       let hlDur;
@@ -1332,7 +1963,11 @@ async function doScore() {
       } else {
         hlDur = Math.max(80, 380 - i * 50);
       }
-      await highlightShape(sh.cells, hlDur);
+      // v2.5: 多倍结算时屏幕中央闪现 ×N 大字（从第 2 次起）
+      if (doubleScore && rep > 0) showMultFlash(rep + 1, repeats);
+      // v2.8.8: 飘字 + 高亮同帧触发（之前 await 在前 → 飘字要等格子熄灭后才出）
+      showFloatScore(sh.cells, got, rep + 1);      // 1) 同步弹飘字
+      await highlightShape(sh.cells, hlDur, rep + 1); // 2) 同步加 scoring class（亮起） + 等待 hlDur 后熄灭
       // 音效
       if (sh.isBonus) {
         if (sh.type === 'mega_yahtzee') await sfxBonusMega();
@@ -1343,20 +1978,15 @@ async function doScore() {
       } else {
         playTone(440 * Math.pow(1.12, i + (rep ? 7 : 0)), 130);
       }
-      const repLabel = doubleScore ? ` <span style="color:#fbbf24;">×2 第 ${rep+1}/2 次</span>` : '';
+      const repLabel = doubleScore ? ` <span style="color:#fbbf24;">×${repeats} 第 ${rep+1}/${repeats} 次</span>` : '';
       log(
         `${sh.def.glyph} ${sh.label}${repLabel} · <b>${sh.def.name}</b> · max(${maxValue}) × 基倍率(${SYMBOL_BASE_MUL}) × 图形分(${shapeScore}) × 图形倍率(${shapeMul}) = <b>+${got}</b>`,
         'log-line-bonus'
       );
-      // combo +1 + 重置 10s 倒计时
+      // v2.1: combo +1 + 重置 10s 倒计时（不再立即触发抽奖；归零时按等级抽）
       state.combo++;
       renderCombo();
       startComboTimer();
-      if (state.combo >= state.comboMax) {
-        state.combo -= state.comboMax;
-        pendingLotteries++;
-        renderCombo();
-      }
     }
   }
   total = baseTotal;
@@ -1395,17 +2025,18 @@ async function doScore() {
     }
   }
 
+  // v2.8: 总分爆发（在 money 累加之前给玩家一个高光时刻）
+  if (total > 0) {
+    const charmNote = state.equippedCharms.length > 0 ? ` · 含 ${state.equippedCharms.length} Charms` : '';
+    await showTotalFlash(total, `本次结算${charmNote}`);
+  }
   state.money += total;
   log(`<b>💰 本次产出 = ${total} 金币（累计 ${state.money}）</b>`, 'log-final');
 
-  // v1.6: 抽奖处理（spin 结算时 combo 已逐个累加）
+  // v2.1: spin 结束后不再立即触发抽奖（改为倒计时归零时按等级触发）
   if (shapes.length > 0) {
-    log(`🔥 本次 spin 累加 combo · 当前池 ${state.combo}/${state.comboMax}` + (pendingLotteries > 0 ? ` · 触发 ${pendingLotteries} 次抽奖！` : ''), 'log-line-bonus');
-  }
-  // 触发所有累积的抽奖
-  while (pendingLotteries-- > 0) {
-    await sleep(400);
-    await triggerLottery();
+    const lv = getComboLevel(state.combo);
+    log(`🔥 spin 累加完成 · 当前 ${state.combo} combo · ${lv.glyph || 'L0'}${lv.glyph ? ' ' + lv.name : ''}${lv.level > 0 ? `（×${lv.multiplier} 奖励，10s 后归零触发）` : '（< 10 未达 L1）'}`, 'log-line-bonus');
   }
   renderCombo();
 
@@ -1433,34 +2064,71 @@ function renderEffectToggles() {
 
 function renderCombo() {
   const el = document.querySelector('#combo-bar');
-  document.querySelector('#combo-num').textContent = state.combo;
-  document.querySelector('#combo-max').textContent = '/ ' + state.comboMax;
-  const pct = Math.min(100, (state.combo / state.comboMax) * 100);
-  document.querySelector('#combo-fill').style.width = pct + '%';
-  el.classList.toggle('hot', state.combo >= 5);
-  el.classList.toggle('almost', state.combo >= 8);
+  const lv = getComboLevel(state.combo);
+  const pct = Math.min(100, (state.combo / COMBO_MAX_VISUAL) * 100);
+  const numEl = document.querySelector('#combo-num');
+  const prev = parseInt(numEl.textContent) || 0;
+  numEl.textContent = state.combo;
+  // 数字增加时触发 bump 动画
+  if (state.combo > prev) {
+    numEl.classList.remove('bump');
+    void numEl.offsetWidth;
+    numEl.classList.add('bump');
+  }
+  // 手动触发按钮状态
+  const triggerBtn = document.querySelector('#combo-trigger');
+  if (triggerBtn) {
+    triggerBtn.disabled = lv.level === 0;
+    triggerBtn.textContent = lv.level === 0
+      ? `🔒 ${state.combo}/10 未达 L1`
+      : `🎰 立即抽 ${lv.glyph} ×${lv.multiplier}`;
+  }
+  document.querySelector('#combo-max').textContent = lv.level > 0
+    ? `· ${lv.glyph} ${lv.name} (×${lv.multiplier})`
+    : `/ 10（未达 L1）`;
+  const fill = document.querySelector('#combo-fill');
+  fill.style.width = pct + '%';
+  fill.style.background = lv.level === 0
+    ? 'linear-gradient(90deg, #a78bfa 0%, #c4b5fd 100%)'
+    : lv.level === 1 ? 'linear-gradient(90deg, #fbbf24 0%, #fde68a 100%)'
+    : lv.level === 2 ? 'linear-gradient(90deg, #fb923c 0%, #fbbf24 100%)'
+    : lv.level === 3 ? 'linear-gradient(90deg, #f87171 0%, #fb923c 100%)'
+    : 'linear-gradient(90deg, #ec4899 0%, #f87171 50%, #fbbf24 100%)';
+  el.classList.remove('lvl-0','lvl-1','lvl-2','lvl-3','lvl-4');
+  el.classList.add('lvl-' + lv.level);
+
   // 额外信息（特效激活状态）
   let extra = '';
   if (state.autoSpinsLeft > 0) extra += `⚡ 免费 spin 剩 ${state.autoSpinsLeft} 次　`;
   if (state.forcedCells) extra += `✦ 下次 spin ${state.forcedCells.length} 格固定 💰　`;
-  if (state.rerollLosersNext) extra += `🎲 下次 spin 重摇未中奖格　`;
-  if (state.doubleScoreNext) extra += `×2 下次 spin 双倍结算`;
+  if (state.rerollLosersNext) extra += `🎲 下次 spin 重摇 ×${state.rerollLosersTimes || 1}　`;
+  if (state.doubleScoreNext) extra += `×${state.doubleScoreMult || 2} 下次 spin 多倍结算`;
   document.querySelector('#combo-extra').innerHTML = extra;
 }
 
 function startComboTimer() {
   clearComboTimer();
   state.comboDeadline = Date.now() + 10000;
-  // 主超时
-  state.comboTimer = setTimeout(() => {
-    if (state.combo > 0) {
-      log(`⏰ COMBO 超时（10s 无新 combo）· 池清零 ×${state.combo} → 0`, 'log-base');
-    }
-    state.combo = 0;
-    renderCombo();
+  // v2.1: 主超时改为"按等级触发抽奖或耗散"
+  state.comboTimer = setTimeout(async () => {
     state.comboTimer = null;
+    const lv = getComboLevel(state.combo);
+    const accumulated = state.combo;
+    if (lv.level === 0) {
+      // L0：未达 L1，只清零不抽奖
+      if (accumulated > 0) log(`⏰ COMBO 倒计时归零 · 未达 L1（${accumulated}/10）· 池耗散`, 'log-base');
+      state.combo = 0;
+      clearComboTimer();
+      renderCombo();
+    } else {
+      // L1+：清零并按等级触发抽奖
+      log(`⏰ COMBO 倒计时归零 · ${lv.glyph} <b>${lv.name}</b> 触发抽奖（×${lv.multiplier} 奖励 · 累积 ${accumulated} combo）`, 'log-line-bonus');
+      state.combo = 0;
+      clearComboTimer();
+      renderCombo();
+      await triggerLottery(lv);
+    }
   }, 10000);
-  // 每 0.25s 刷新倒计时显示
   state.comboTickTimer = setInterval(updateComboTimerUI, 250);
   updateComboTimerUI();
 }
@@ -1478,25 +2146,118 @@ function updateComboTimerUI() {
   el.classList.toggle('warn', remain < 3000);
 }
 
-async function triggerLottery() {
-  log(`🎁 <b>能量池满！抽奖触发！</b>`, 'log-line-bonus');
-  flashScreen(3);
-  await sfxBonusEpic();
-  // v1.9 / v2.0: 只在玩家启用的特效池里随机
+// 圆盘抽奖配置
+const EFFECT_VISUAL = {
+  auto_spin:     { color: '#fbbf24', label: '⚡\n自动 spin' },
+  forced_cells:  { color: '#34d399', label: '✦\n固定格子' },
+  reroll_losers: { color: '#60a5fa', label: '🎲\n重摇' },
+  double_score:  { color: '#ec4899', label: '×N\n多倍结算' }
+};
+
+function setupWheel(pool, selectedIdx) {
+  const wheel = document.querySelector('#wheel');
+  const labels = document.querySelector('#wheel-labels');
+  const segments = pool.length;
+  const segAngle = 360 / segments;
+  // conic-gradient: 从 -segAngle/2 开始，让 segment 0 中心在 12 点
+  const startOffset = -segAngle / 2;
+  const stops = pool.map((e, i) => {
+    const from = startOffset + i * segAngle;
+    const to = from + segAngle;
+    return `${EFFECT_VISUAL[e].color} ${from}deg ${to}deg`;
+  }).join(', ');
+  wheel.style.background = `conic-gradient(from 0deg, ${stops})`;
+  // 标签
+  labels.innerHTML = '';
+  pool.forEach((e, i) => {
+    const angle = i * segAngle; // 扇形中心角度（顶部 = 0°）
+    const radius = 36; // % from center
+    const x = 50 + radius * Math.sin(angle * Math.PI / 180);
+    const y = 50 - radius * Math.cos(angle * Math.PI / 180);
+    const lbl = document.createElement('div');
+    lbl.className = 'wheel-segment-label';
+    lbl.style.left = x + '%';
+    lbl.style.top = y + '%';
+    lbl.style.transform = `translate(-50%, -50%)`;
+    lbl.innerHTML = EFFECT_VISUAL[e].label.replace('\n', '<br>');
+    labels.appendChild(lbl);
+  });
+}
+
+function spinWheel(pool, selectedIdx) {
+  return new Promise(resolve => {
+    const wheel = document.querySelector('#wheel');
+    const segments = pool.length;
+    const segAngle = 360 / segments;
+    // 先重置（无 transition）
+    wheel.style.transition = 'none';
+    wheel.style.transform = 'rotate(0deg)';
+    void wheel.offsetWidth; // reflow
+    // 计算目标：让选中扇形旋转到 12 点（顶部，指针处）
+    // wheel 旋转角度（顺时针为正）需让 selectedIdx 扇形中心从 idx*segAngle 旋到 0
+    // 所以最终角度 = -idx*segAngle + 完整圈数
+    const turns = 6 + Math.floor(Math.random() * 3); // 6-8 圈
+    // 加小幅度随机偏移让"看起来不是绝对完美对准"
+    const wobble = (Math.random() - 0.5) * (segAngle * 0.4);
+    const finalAngle = turns * 360 - selectedIdx * segAngle + wobble;
+    // 启动旋转
+    wheel.style.transition = 'transform 3.4s cubic-bezier(0.17, 0.85, 0.32, 1)';
+    wheel.style.transform = `rotate(${finalAngle}deg)`;
+    setTimeout(resolve, 3500);
+  });
+}
+
+async function triggerLottery(level) {
+  level = level || COMBO_LEVELS[1];
+  log(`🎁 <b>${level.glyph} ${level.name} 抽奖触发！</b>（奖励 ×${level.multiplier}）`, 'log-line-bonus');
+  flashScreen(level.level >= 3 ? 3 : (level.level >= 2 ? 2 : 1));
   const pool = ['auto_spin', 'forced_cells', 'reroll_losers', 'double_score'].filter(e => state.enabledEffects.has(e));
   if (pool.length === 0) {
     log(`⚠ 所有抽奖特效已关闭 · 跳过本次抽奖`, 'log-base');
     return;
   }
   const effect = pool[Math.floor(Math.random() * pool.length)];
+  const selectedIdx = pool.indexOf(effect);
+
+  // 显示弹窗 + 圆盘开始转
   const overlay = document.querySelector('#lottery');
+  const result = document.querySelector('#lottery-result');
+  const title = document.querySelector('#lottery-title');
+  title.textContent = `🎁 ${level.glyph} ${level.name} 抽奖（×${level.multiplier}）`;
+  result.classList.remove('show');
+  setupWheel(pool, selectedIdx);
+  overlay.classList.add('show');
+
+  // 转盘音效循环（短促 tick × N 次）
+  let ticking = true;
+  (async () => {
+    for (let i = 0; ticking && i < 28; i++) {
+      playTone(440 + i * 30, 50, 'square', 0.06);
+      await sleep(80 + i * 8); // 越来越慢
+    }
+  })();
+
+  await spinWheel(pool, selectedIdx);
+  ticking = false;
+  await sfxBonusEpic(); // 揭晓音效
   const name = document.querySelector('#lottery-name');
   const desc = document.querySelector('#lottery-desc');
   const btn = document.querySelector('#lottery-btn');
+
+  // v2.1 等级缩放（按等级显式查表，避免浮点偏差）
+  const lvIdx = level.level; // 1-4
+  const scale = {
+    auto_spin:     { 1: [2,3], 2: [4,5], 3: [6,8], 4: [10,15] },
+    forced_cells:  { 1: 5,     2: 8,     3: 13,    4: 20 },
+    reroll_losers: { 1: 1,     2: 2,     3: 3,     4: 5 },
+    double_score:  { 1: 2,     2: 3,     3: 5,     4: 10 }
+  };
+
   if (effect === 'auto_spin') {
-    const n = 2 + Math.floor(Math.random() * 2); // 2 或 3
-    name.textContent = `⚡ 特效 ①  自动免费 ${n} 次 spin`;
-    desc.innerHTML = `接下来 ${n} 次 spin <b>不消耗 spin 数</b>，且全自动连续摇骰结算。<br>用来再叠 charms 链或冲下一次大奖。`;
+    const [lo, hi] = scale.auto_spin[lvIdx];
+    const n = lo + Math.floor(Math.random() * (hi - lo + 1));
+    name.textContent = `⚡ ${level.glyph} 特效 ①  自动免费 ${n} 次 spin`;
+    desc.innerHTML = `接下来 <b>${n}</b> 次 spin <b>不消耗 spin 数</b>，全自动连续摇骰结算。<br>${level.name} 加成（基础 2-3，×${level.multiplier.toFixed(1)}）→ <b>${n}</b> 次`;
     btn.onclick = async () => {
       overlay.classList.remove('show');
       state.autoSpinsLeft = n;
@@ -1505,41 +2266,45 @@ async function triggerLottery() {
       await runAutoSpins();
     };
   } else if (effect === 'forced_cells') {
-    const n = 5;
-    // 随机选 N 个格子位置 + 固定为 💰6
+    const n = Math.min(25, scale.forced_cells[lvIdx]);
     const positions = [];
     while (positions.length < n) {
       const r = Math.floor(Math.random() * 5);
       const c = Math.floor(Math.random() * 5);
       if (!positions.some(p => p.r === r && p.c === c)) positions.push({r, c, face: '6'});
     }
-    name.textContent = `✦ 特效 ②  固定 ${n} 个格子`;
-    desc.innerHTML = `下次 spin 这 <b>${n}</b> 个格子直接出 💰 6（价值 13），其余 20 个格子正常摇骰。<br>下方网格里这些格子<b>金光预提示</b>。`;
+    name.textContent = `✦ ${level.glyph} 特效 ②  固定 ${n} 个格子`;
+    desc.innerHTML = `下次 spin <b>${n}</b> 个格子直接出 💰 6（价值 13），其余 ${25-n} 个正常摇骰。<br>${level.name} 加成 → ${n} 格（基础 5，按等级 5/8/13/20）`;
     btn.onclick = () => {
       overlay.classList.remove('show');
       state.forcedCells = positions;
+      state.forcedCellsCount = n;
       renderForcedHints();
       renderCombo();
     };
   } else if (effect === 'reroll_losers') {
-    name.textContent = `🎲 特效 ③  重摇未中奖`;
-    desc.innerHTML = `下次 spin 摇完骰子后，<b>没参与任何图形的格子全部重摇一次</b>，再结算。<br>给平庸 spin 一次翻盘机会，常能逼出隐藏大奖。`;
+    const n = scale.reroll_losers[lvIdx];
+    name.textContent = `🎲 ${level.glyph} 特效 ③  重摇未中奖 ×${n}`;
+    desc.innerHTML = `下次 spin 摇完骰子后，没参与任何图形的格子<b>连续重摇 ${n} 次</b>，每次后重新扫描判定，最终再正式结算。<br>${level.name} 加成 → ${n} 次（基础 1，按等级 1/2/3/5）`;
     btn.onclick = () => {
       overlay.classList.remove('show');
       state.rerollLosersNext = true;
+      state.rerollLosersTimes = n;
       renderCombo();
     };
   } else {
-    // v2.0 特效 ④ 双倍结算
-    name.textContent = `×2 特效 ④  双倍结算`;
-    desc.innerHTML = `下次 spin <b>每个图形被结算 2 次</b>——动画 + 音效 + COMBO 都重复一遍。<br>等同于翻倍 spin 产出 + 翻倍 combo 累积（可叠加抽奖触发）。`;
+    const m = scale.double_score[lvIdx];
+    name.textContent = `×${m} ${level.glyph} 特效 ④  ${m}倍结算`;
+    desc.innerHTML = `下次 spin <b>每个图形被结算 ${m} 次</b>——动画 + 音效 + COMBO 都重复 ${m} 遍。<br>${level.name} 加成 → ×${m}（基础 ×2，按等级 ×2/×3/×5/×10）`;
     btn.onclick = () => {
       overlay.classList.remove('show');
       state.doubleScoreNext = true;
+      state.doubleScoreMult = m;
       renderCombo();
     };
   }
-  overlay.classList.add('show');
+  // 转盘已停 → 揭晓结果
+  result.classList.add('show');
 }
 
 async function runAutoSpins() {
@@ -1652,7 +2417,10 @@ function resetGame() {
   state.forcedCells = null;
   state.autoSpinsLeft = 0;
   state.rerollLosersNext = false;
+  state.rerollLosersTimes = 0;
   state.doubleScoreNext = false;
+  state.doubleScoreMult = 1;
+  state.forcedCellsCount = 5;
   clearComboTimer();
   renderCombo();
   document.querySelector('#log').innerHTML = '<div class="log-line log-base">[准备就绪] 点击 SPIN 开始第 1 周 · 目标 100 金币</div>';
@@ -1673,16 +2441,111 @@ function highlightRow(r, ms) {
   });
 }
 
-// 高亮组成图形的骰子集合（v0.4 新增）
-function highlightShape(cellList, ms) {
+// 高亮组成图形的骰子集合（v0.4 / v2.5 加 rep 参数 + 弹跳重启）
+function highlightShape(cellList, ms, rep = 1) {
   return new Promise(resolve => {
     const cells = document.querySelectorAll('.grid .cell');
-    cellList.forEach(({r, c}) => cells[r*5+c].classList.add('scoring-shape'));
+    const repClass = 'scoring-rep-' + Math.min(5, rep);
+    cellList.forEach(({r, c}) => {
+      const cell = cells[r*5+c];
+      // force restart animation
+      cell.classList.remove('scoring-shape','scoring-rep-1','scoring-rep-2','scoring-rep-3','scoring-rep-4','scoring-rep-5');
+      void cell.offsetWidth;
+      cell.classList.add('scoring-shape', repClass);
+    });
     setTimeout(() => {
-      cellList.forEach(({r, c}) => cells[r*5+c].classList.remove('scoring-shape'));
+      cellList.forEach(({r, c}) => {
+        cells[r*5+c].classList.remove('scoring-shape','scoring-rep-1','scoring-rep-2','scoring-rep-3','scoring-rep-4','scoring-rep-5');
+      });
       resolve();
     }, ms);
   });
+}
+
+// v2.5: 飘字 +N（图形中心向上飘出）
+// v2.8.1: 飘字字号与分数 log-正相关，夹紧到 [MIN_PX, MAX_PX]
+function calcFloatFontSize(score, rep = 1) {
+  const MIN_PX = 22, MAX_PX = 64;
+  const MIN_S = 25, MAX_S = 8000;
+  const s = Math.max(1, score);
+  // log 映射 → 小数值梯度不被大数值压扁
+  const t = Math.max(0, Math.min(1,
+    (Math.log(s) - Math.log(MIN_S)) / (Math.log(MAX_S) - Math.log(MIN_S))
+  ));
+  const base = MIN_PX + (MAX_PX - MIN_PX) * t;
+  const repBoost = Math.max(0, rep - 1) * 3; // 多倍击轻微加成
+  return Math.round(Math.min(MAX_PX, base + repBoost));
+}
+
+function showFloatScore(cellList, score, rep = 1) {
+  const cells = document.querySelectorAll('.grid .cell');
+  let totalX = 0, totalY = 0;
+  cellList.forEach(({r, c}) => {
+    const rect = cells[r*5+c].getBoundingClientRect();
+    totalX += rect.left + rect.width / 2;
+    totalY += rect.top + rect.height / 2;
+  });
+  const cx = totalX / cellList.length;
+  const cy = totalY / cellList.length;
+  const el = document.createElement('div');
+  const fontPx = calcFloatFontSize(score, rep);
+  // 视觉档位：≥ 48px 加强光晕，≥ 60px 顶配光晕
+  const sizeClass = fontPx >= 60 ? ' mega' : fontPx >= 48 ? ' big' : '';
+  el.className = 'score-float rep-' + Math.min(5, rep) + sizeClass;
+  el.textContent = (rep > 1 ? `第${rep}击 ` : '') + `+${score.toLocaleString()}`;
+  el.style.left = cx + 'px';
+  el.style.top = cy + 'px';
+  el.style.fontSize = fontPx + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 950);
+}
+
+// v2.8: 全部结算结束 · 屏幕中央总分爆发（数字滚动 + 大字闪现）
+async function showTotalFlash(total, breakdown) {
+  if (!total || total <= 0) return;
+  const el = document.createElement('div');
+  el.className = 'score-total-flash';
+  el.innerHTML = `
+    <div class="stf-label">TOTAL SCORE</div>
+    <div class="stf-num">+0</div>
+    <div class="stf-sub">${breakdown || ''}</div>
+  `;
+  document.body.appendChild(el);
+  const numEl = el.querySelector('.stf-num');
+  // 数字滚动 0 → total
+  const start = performance.now();
+  const dur = 800;
+  await new Promise(rs => {
+    function tick(now) {
+      const t = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3);
+      numEl.textContent = '+' + Math.round(total * eased).toLocaleString();
+      if (t < 1) requestAnimationFrame(tick);
+      else rs();
+    }
+    requestAnimationFrame(tick);
+  });
+  // 爆发音 ding
+  playChord && playChord([523, 659, 784, 1047], 280, 'triangle', 0.18);
+  // 让数字停留并完成 CSS 动画
+  await sleep(700);
+  el.remove();
+}
+
+// v2.5: 屏幕中央 ×N 大字闪现（多倍结算时每次触发）
+function showMultFlash(rep, total) {
+  const el = document.createElement('div');
+  el.className = 'combo-mult-flash';
+  // v2.6: "5/5" 易误解为除法，改成进度点 + "第 N 击"
+  const dots = Array.from({length: total}, (_, i) =>
+    `<span class="mult-dot ${i < rep ? 'on' : ''}">●</span>`
+  ).join('');
+  el.innerHTML = `
+    <div class="mult-main">×${total} 倍</div>
+    <div class="mult-sub">${dots} <b>第 ${rep} 击</b></div>
+  `;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 600);
 }
 
 // Web Audio API 音效（无外部资源）· v1.3 大奖音效梯度增强
@@ -1794,6 +2657,50 @@ async function sfxBonusMega() {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // ============ 事件绑定 ============
+// v2.7 左右 panel 折叠
+function setupPanelCollapse(side) {
+  const threeCol = document.querySelector('.three-col');
+  const panel = document.querySelector('#panel-' + side);
+  const btn = document.querySelector('#toggle-' + side);
+  if (!panel || !btn || !threeCol) {
+    console.warn('[panel-collapse] DOM not found for side:', side);
+    return;
+  }
+  const KEY = 'vp-rogue-panel-' + side + '-collapsed';
+  const APPLY = (collapsed) => {
+    panel.classList.toggle('collapsed', collapsed);
+    threeCol.classList.toggle(side + '-collapsed', collapsed);
+    // 按钮箭头方向
+    if (side === 'left')  btn.textContent = collapsed ? '▶' : '◀';
+    if (side === 'right') btn.textContent = collapsed ? '◀' : '▶';
+  };
+  // 恢复
+  let collapsed = false;
+  try { collapsed = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  APPLY(collapsed);
+  btn.addEventListener('click', () => {
+    collapsed = !collapsed;
+    APPLY(collapsed);
+    try { localStorage.setItem(KEY, collapsed ? '1' : '0'); } catch (e) {}
+  });
+}
+try { setupPanelCollapse('left'); } catch (e) { console.warn(e); }
+try { setupPanelCollapse('right'); } catch (e) { console.warn(e); }
+
+// v2.4 手动触发抽奖
+async function manualTriggerCombo() {
+  if (state.combo === 0 || state.drawn) return; // spin 中或无 combo 不响应
+  const lv = getComboLevel(state.combo);
+  if (lv.level === 0) return; // L0 按钮已 disabled
+  const accumulated = state.combo;
+  log(`🎰 <b>玩家手动触发抽奖</b> · ${lv.glyph} ${lv.name}（累积 ${accumulated} combo）`, 'log-line-bonus');
+  state.combo = 0;
+  clearComboTimer();
+  renderCombo();
+  await triggerLottery(lv);
+}
+document.querySelector('#combo-trigger').addEventListener('click', manualTriggerCombo);
+
 // 抽奖特效开关
 document.querySelectorAll('.ce-toggle').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1828,22 +2735,7 @@ document.querySelector('#btn-cheat').addEventListener('click', () => {
     log(`⭐ <b>CHEAT armed</b> · 下次 spin 全 ${FACE_GLYPH[face]} ${face}（价值 ${SYMBOL_TABLE[face].value}）`, 'log-line-bonus');
   }
 });
-// 右侧图形规则 toggle
-document.querySelector('#toggle-shapes').addEventListener('click', () => {
-  const content = document.querySelector('#shape-content');
-  const btn = document.querySelector('#toggle-shapes');
-  const collapsed = content.classList.toggle('collapsed');
-  btn.textContent = collapsed ? '展开 ▾' : '收起 ▴';
-  // 持久化到 localStorage
-  try { localStorage.setItem('vp-rogue-shapes-collapsed', collapsed ? '1' : '0'); } catch (e) {}
-});
-// 初始状态从 localStorage 恢复
-try {
-  if (localStorage.getItem('vp-rogue-shapes-collapsed') === '1') {
-    document.querySelector('#shape-content').classList.add('collapsed');
-    document.querySelector('#toggle-shapes').textContent = '展开 ▾';
-  }
-} catch (e) {}
+// 右侧图形规则 toggle 已由 setupPanelCollapse('right') 接管（#toggle-right），此处旧绑定已移除
 
 // ============ 渲染图鉴 + 图形表 ============
 function renderSymbolCodex() {
@@ -1919,14 +2811,34 @@ function renderShapeTable() {
   });
 }
 
-// ============ 初始化 ============
-renderCharms();
-renderGrid();
-renderStatus();
-renderButtons();
-renderSymbolCodex();
-renderShapeTable();
-renderCombo();
+// ============ 初始化（加诊断 log + 屏幕显示）============
+const __dbgDiv = document.createElement('div');
+__dbgDiv.id = '__init_dbg';
+__dbgDiv.style.cssText = 'position:fixed;top:8px;right:8px;background:#1a0e1f;border:2px solid #f87171;padding:8px 12px;font-family:ui-monospace,monospace;font-size:11px;line-height:1.6;z-index:99999;max-width:380px;color:#fde68a;border-radius:6px;';
+document.body.appendChild(__dbgDiv);
+function __dbgLog(s, isErr) {
+  const line = document.createElement('div');
+  line.textContent = s;
+  if (isErr) line.style.color = '#f87171';
+  else line.style.color = '#34d399';
+  __dbgDiv.appendChild(line);
+}
+function safeCall(name, fn) {
+  try { fn(); __dbgLog('✓ ' + name); }
+  catch (e) {
+    __dbgLog('✗ ' + name + ' · ' + e.message, true);
+    console.error('[init FAIL]', name, e);
+  }
+}
+safeCall('renderCharms', renderCharms);
+safeCall('renderGrid', renderGrid);
+safeCall('renderStatus', renderStatus);
+safeCall('renderButtons', renderButtons);
+safeCall('renderSymbolCodex', renderSymbolCodex);
+safeCall('renderShapeTable', renderShapeTable);
+safeCall('renderCombo', renderCombo);
+// 3 秒后自动隐藏（如果一切 OK）
+setTimeout(() => { if (__dbgDiv.querySelectorAll('div').length && !__dbgDiv.textContent.includes('✗')) __dbgDiv.style.display = 'none'; }, 4000);
 log('💡 玩法：装备 charms → SPIN 摇骰 + 自动结算（一键拉杆）（看左侧符号价值 / 右侧图形分倍率）', 'log-base');
 </script>
 
