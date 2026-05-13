@@ -1508,7 +1508,7 @@
     <div class="shop-section">
       <div class="shop-section-header">
         <div class="shop-section-title">🛒 本周供应（点击购买）</div>
-        <button class="shop-reroll" id="shop-reroll" title="花 2 票重抽 3 个商品">🔄 重抽 (2 票)</button>
+        <button class="shop-reroll" id="shop-reroll" title="花 1 票重抽 3 个商品">🔄 重抽 (1 票)</button>
       </div>
       <div class="shop-items" id="shop-items"></div>
     </div>
@@ -3111,16 +3111,24 @@ async function buildUpForBonus() {
   el.remove();
 }
 
-// v2.10 · 商店 pool 构建（24 charm + 3 consumable + 3 enchant，价格按 ticket 计）
+// v2.10 · 商店 pool 构建（24 charm + 3 consumable + 3 enchant）
+// 价格分布 2-6 票（common 2 / rare 3 / epic 4 / legendary 6）—— 让初始 2 票
+// 至少能买到 1 件 common，开局有选择空间
+const RARITY_PRICE = { common: 2, rare: 3, epic: 4, legendary: 6 };
 function buildShopPool() {
   return [
-    ...CHARMS.map(c => ({ kind:'charm', id:c.id, name:c.name, glyph:c.glyph, desc:c.effect, price: Math.max(3, Math.round(c.price/15)), rarity:c.rarity })),
-    { kind:'consumable', id:'cons-spin1',       name:'额外 Spin',   glyph:'🎲', desc:'本周 spin +1（消耗品）',         price:5, rarity:'common' },
-    { kind:'consumable', id:'cons-luck3',       name:'幸运膏',     glyph:'🍃', desc:'本周开始 luck 临时 +5',          price:4, rarity:'common' },
-    { kind:'consumable', id:'cons-doubleNext',  name:'双倍祝福',   glyph:'⊗', desc:'下次 spin 必发 double_score',    price:8, rarity:'rare' },
-    { kind:'enchant',    id:'ench-double',      name:'附魔·双倍',  glyph:'✦', desc:'下次 spin 随机 1 颗 double',     price:6, rarity:'common' },
-    { kind:'enchant',    id:'ench-golden',      name:'附魔·金袋',  glyph:'💰', desc:'下次 spin 随机 1 颗 golden(+5)', price:5, rarity:'common' },
-    { kind:'enchant',    id:'ench-valueplus',   name:'附魔·+值',   glyph:'➕', desc:'下次 spin 随机 1 颗 value(+3)',  price:5, rarity:'common' }
+    ...CHARMS.map(c => ({
+      kind:'charm', id:c.id, name:c.name, glyph:c.glyph, desc:c.effect,
+      price: RARITY_PRICE[c.rarity] || 3,
+      rarity:c.rarity
+    })),
+    // consumable / enchant 直接定档
+    { kind:'consumable', id:'cons-spin1',       name:'额外 Spin',   glyph:'🎲', desc:'本周 spin +1（消耗品）',         price:3, rarity:'common' },
+    { kind:'consumable', id:'cons-luck3',       name:'幸运膏',     glyph:'🍃', desc:'本周开始 luck 临时 +5',          price:2, rarity:'common' },
+    { kind:'consumable', id:'cons-doubleNext',  name:'双倍祝福',   glyph:'⊗', desc:'下次 spin 必发 double_score',    price:4, rarity:'rare' },
+    { kind:'enchant',    id:'ench-double',      name:'附魔·双倍',  glyph:'✦', desc:'下次 spin 随机 1 颗 double',     price:3, rarity:'common' },
+    { kind:'enchant',    id:'ench-golden',      name:'附魔·金袋',  glyph:'💰', desc:'下次 spin 随机 1 颗 golden(+5)', price:2, rarity:'common' },
+    { kind:'enchant',    id:'ench-valueplus',   name:'附魔·+值',   glyph:'➕', desc:'下次 spin 随机 1 颗 value(+3)',  price:2, rarity:'common' }
   ];
 }
 
@@ -3184,7 +3192,7 @@ async function showShopModal(nextWeekNo, isFirstWeek = false) {
     function refresh() {
       ticketsEl.textContent = state.tickets;
       moneyEl.textContent = state.money;
-      rerollBtn.disabled = state.tickets < 2;
+      rerollBtn.disabled = state.tickets < 1;
       itemsEl.innerHTML = items.map((it, idx) => {
         const sold = it._sold ? 'sold' : '';
         const unaffordable = !it._sold && state.tickets < it.price ? 'unaffordable' : '';
@@ -3221,8 +3229,8 @@ async function showShopModal(nextWeekNo, isFirstWeek = false) {
     }
 
     rerollBtn.onclick = () => {
-      if (state.tickets < 2) return;
-      state.tickets -= 2;
+      if (state.tickets < 1) return;
+      state.tickets -= 1;
       items = pickShopItems(3);
       refresh();
     };
