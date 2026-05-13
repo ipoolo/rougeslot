@@ -1083,6 +1083,48 @@
     box-shadow: inset 0 0 0 1.5px rgba(251,191,36,0.55), 0 0 14px rgba(251,191,36,0.35);
   }
 
+  /* v2.10.2 · 顶部全局开关 */
+  .global-toggles {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    background: rgba(40,24,60,0.4);
+    border: 1px dashed rgba(167,139,250,0.4);
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+  .gt-switch {
+    display: inline-flex; align-items: center; gap: 10px;
+    cursor: pointer; user-select: none;
+    font-size: 13px; color: #c4b5fd;
+  }
+  .gt-switch input { display: none; }
+  .gt-track {
+    display: inline-block; position: relative;
+    width: 38px; height: 20px;
+    background: #1e1530; border: 1.5px solid #475569;
+    border-radius: 12px; transition: all 0.2s;
+  }
+  .gt-thumb {
+    position: absolute; top: 1px; left: 2px;
+    width: 14px; height: 14px;
+    background: #94a3b8; border-radius: 50%;
+    transition: all 0.2s;
+  }
+  .gt-switch input:checked ~ .gt-track {
+    background: rgba(167,139,250,0.3);
+    border-color: #a78bfa;
+    box-shadow: 0 0 10px rgba(167,139,250,0.5);
+  }
+  .gt-switch input:checked ~ .gt-track .gt-thumb {
+    left: 19px; background: #ec4899;
+    box-shadow: 0 0 8px #ec4899;
+  }
+  .gt-switch input:checked ~ .gt-label { color: #fde68a; font-weight: 700; }
+  .gt-hint { font-size: 11px; color: #64748b; }
+
   /* v2.10.1 · 待激活附魔预告条（在 charms 下方） */
   .pending-enchants {
     text-align: center;
@@ -1452,6 +1494,15 @@
 <body>
 
 <div class="game-frame">
+  <!-- v2.10.2 · 顶部全局开关 -->
+  <div class="global-toggles">
+    <label class="gt-switch" title="开启后每次 spin 时 25 个 cell 都从 4 种附魔池随机注入一个（测试 / 开挂模式）">
+      <input type="checkbox" id="toggle-all-enchant"/>
+      <span class="gt-track"><span class="gt-thumb"></span></span>
+      <span class="gt-label">🔮 全网附魔模式 <span class="gt-hint">（每个 cell 随机一个附魔）</span></span>
+    </label>
+  </div>
+
   <div class="title">
     <h1>🎲 CLOVERPIT 骰子版 · 5×5 全网格</h1>
     <div class="sub">5×5  DICE  ROGUE  ·  v0.5  ·  12  LINES</div>
@@ -1985,7 +2036,9 @@ const state = {
   weekStreak: 0,
   streakBonusLuck: 0,
   // v2.10 · 拥有的 charm（开局空 · 通过起手 picker 免费 3 选 1，其余从商店收集）
-  ownedCharms: []
+  ownedCharms: [],
+  // v2.10.2 · 全网附魔模式开关（顶部 toggle）· 开启时每次 spin 25 个 cell 都随机附魔
+  allSymbolEnchant: false
 };
 
 // v2.10 附魔类型定义
@@ -2032,6 +2085,10 @@ try {
     const arr = JSON.parse(savedEffects);
     state.enabledEffects = new Set(arr);
   }
+} catch (e) {}
+// v2.10.2 · 全网附魔模式开关
+try {
+  state.allSymbolEnchant = localStorage.getItem('vp-rogue-all-enchant') === '1';
 } catch (e) {}
 
 // ============ 工具 ============
@@ -2373,6 +2430,17 @@ async function doSpin() {
   // v2.10 · 附魔仅持续 1 spin（每次 spin 开始时清空，charm/商店再注入）
   // 注：先清空 spin 内消耗式附魔。"永久附魔"未来用单独的 perm-enchants 集合实现。
   clearEnchants();
+  // v2.10.2 · 全网附魔模式：每个 cell 都从 4 种附魔池随机选一个
+  if (state.allSymbolEnchant) {
+    const types = Object.keys(ENCHANT_DEFS);
+    const defaultN = { double:1, value_plus:3, combo_plus:2, golden:5 };
+    for (let r = 0; r < 5; r++)
+      for (let c = 0; c < 5; c++) {
+        const t = types[Math.floor(Math.random() * types.length)];
+        setEnchant(r, c, t, defaultN[t] || 1);
+      }
+    log(`🔮 <b>全网附魔模式</b>：25 个 cell 已注入随机附魔`, 'log-charm');
+  }
   // v2.10 · 商店购买的 pendingEnchant 注入到随机 cell（消耗一次）
   if (state._pendingEnchant && state._pendingEnchant.length > 0) {
     for (const pe of state._pendingEnchant) {
@@ -3798,6 +3866,20 @@ renderEffectToggles();
 document.querySelector('#btn-spin').addEventListener('click', doSpin);
 // v2.10 · 提前完成按钮
 document.querySelector('#btn-early').addEventListener('click', triggerEarlyFinish);
+
+// v2.10.2 · 全网附魔模式 toggle
+(function bindAllEnchantToggle() {
+  const cb = document.querySelector('#toggle-all-enchant');
+  if (!cb) return;
+  cb.checked = !!state.allSymbolEnchant;
+  cb.addEventListener('change', (ev) => {
+    state.allSymbolEnchant = ev.target.checked;
+    try { localStorage.setItem('vp-rogue-all-enchant', ev.target.checked ? '1' : '0'); } catch (e) {}
+    log(state.allSymbolEnchant
+      ? '🔮 <b>全网附魔模式已开启</b> · 下次 spin 起 25 cell 都会随机附魔'
+      : '⚪ 全网附魔模式已关闭', 'log-line-bonus');
+  });
+})();
 
 // v2.10 · dev 测试快捷键 ——
 //   按 E：给随机 1 颗骰子加随机附魔（验证附魔效果）
