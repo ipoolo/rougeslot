@@ -1280,6 +1280,29 @@
   /* 兼容旧 modal 按钮颜色 */
   .btn-deal { background: linear-gradient(180deg, #34d399 0%, #059669 100%); color: #064e3b; }
   .btn-reset { background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid #f87171; }
+  /* v2.10 · 提前结算按钮 · 仅当 money >= target 时显示 */
+  .btn-early {
+    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+    color: #1e1530;
+    font-weight: 900;
+    letter-spacing: 1px;
+    border: 2px solid #fde68a;
+    box-shadow: 0 0 16px rgba(251,191,36,0.4);
+    animation: earlyPulse 1.4s ease-in-out infinite alternate;
+  }
+  .btn-early .ticket-bonus {
+    display: inline-block;
+    margin-left: 8px;
+    background: rgba(30,21,48,0.7);
+    color: #fde68a;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+  }
+  @keyframes earlyPulse {
+    from { box-shadow: 0 0 12px rgba(251,191,36,0.3); }
+    to   { box-shadow: 0 0 24px rgba(251,191,36,0.7), 0 0 36px rgba(248,113,113,0.3); }
+  }
   .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(251,191,36,0.3); }
 
   /* 结算日志 */
@@ -1359,9 +1382,10 @@
   </div>
   <div class="charms-row" id="charms-row"></div>
 
-  <!-- 动作按钮（v1.5: 上移到 charms 下方、网格上方）-->
+  <!-- 动作按钮（v1.5: 上移到 charms 下方、网格上方 · v2.10 加提前完成）-->
   <div class="action-bar">
     <button class="btn btn-spin" id="btn-spin">🎰 SPIN</button>
+    <button class="btn btn-early" id="btn-early" title="本周已达标 · 提前结算并按剩余 spin 额外奖励票" style="display:none;">🏁 提前结算<span class="ticket-bonus" id="early-bonus">+0 票</span></button>
     <button class="btn btn-cheat" id="btn-cheat" title="下一次 spin 整个网格 25 颗骰子同点（具体点数随机）">⭐ CHEAT</button>
     <button class="btn btn-reset" id="btn-reset">RESET</button>
   </div>
@@ -2192,6 +2216,12 @@ function renderStatus() {
   document.querySelector('#lore-text').textContent = LORE_TEXTS[state.week-1];
 }
 
+// v2.10 · 提前完成奖励配方：剩余 spin × EARLY_TICKET_PER_SPIN
+const EARLY_TICKET_PER_SPIN = 3;
+function getEarlyFinishBonus() {
+  return state.spinLeft * EARLY_TICKET_PER_SPIN;
+}
+
 function renderButtons() {
   const btn = document.querySelector('#btn-spin');
   if (!btn) return;
@@ -2199,6 +2229,16 @@ function renderButtons() {
   btn.disabled = state.drawn || state.gameOver;
   btn.classList.toggle('spinning', state.drawn);
   btn.textContent = state.drawn ? '🎲 SPINNING...' : '🎰 SPIN';
+  // v2.10 · 提前完成按钮：仅当 money >= target 且还有剩余 spin 时显示
+  const earlyBtn = document.querySelector('#btn-early');
+  if (earlyBtn) {
+    const target = WEEK_TARGETS[state.week-1];
+    const canEarly = !state.drawn && !state.gameOver && state.money >= target && state.spinLeft > 0;
+    earlyBtn.style.display = canEarly ? '' : 'none';
+    earlyBtn.disabled = !canEarly;
+    const bonusEl = document.querySelector('#early-bonus');
+    if (bonusEl) bonusEl.textContent = `+${getEarlyFinishBonus()} 票`;
+  }
 }
 
 function log(html, cls='log-base') {
@@ -2927,6 +2967,26 @@ function renderForcedHints() {
   }
 }
 
+// v2.10 · 提前完成 · 跳过剩余 spin，按剩余次数奖励额外票
+function triggerEarlyFinish() {
+  if (state.drawn || state.gameOver) return;
+  const target = WEEK_TARGETS[state.week-1];
+  if (state.money < target) return;
+  const remaining = state.spinLeft;
+  const bonus = getEarlyFinishBonus();
+  if (remaining <= 0) {
+    checkWeekResult();
+    return;
+  }
+  state.tickets += bonus;
+  log(`🏁 <b>提前结算第 ${state.week} 周</b> · 跳过 ${remaining} spin · 额外 +${bonus} 票（累计 ${state.tickets}）`, 'log-charm');
+  flashScreen(2);
+  renderStatus();
+  // 保留 state.spinLeft 让 checkWeekResult 内的 unused_to_money charm 仍生效；
+  // 但 success 分支结尾会重置（applyWeeklySpinCharms）。
+  checkWeekResult();
+}
+
 function checkWeekResult() {
   // v2.10 · 周末 charm 触发：c14 unused_to_money（剩余 spin 折算金币）
   let unusedBonus = 0;
@@ -3511,6 +3571,8 @@ document.querySelectorAll('.ce-toggle').forEach(btn => {
 renderEffectToggles();
 
 document.querySelector('#btn-spin').addEventListener('click', doSpin);
+// v2.10 · 提前完成按钮
+document.querySelector('#btn-early').addEventListener('click', triggerEarlyFinish);
 
 // v2.10 · dev 测试快捷键 ——
 //   按 E：给随机 1 颗骰子加随机附魔（验证附魔效果）
