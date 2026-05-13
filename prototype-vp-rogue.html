@@ -801,16 +801,26 @@
 
   /* charms 槽 */
   .charms-row {
+    display: block;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .charms-grid {
     display: flex; justify-content: center; gap: 8px;
-    margin-bottom: 18px; flex-wrap: wrap;
+    flex-wrap: wrap;
   }
   .charm-slot {
     width: 90px; padding: 8px; border-radius: 8px;
-    background: rgba(40, 24, 60, 0.5); border: 2px solid #475569;
+    background: rgba(40, 24, 60, 0.5);
+    border: 2px solid var(--rarity, #475569);
     text-align: center; cursor: pointer; transition: all 0.2s;
     position: relative;
   }
-  .charm-slot.equipped { border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+  .charm-slot.equipped {
+    border-color: #fbbf24 !important;
+    background: rgba(251, 191, 36, 0.12);
+    box-shadow: 0 0 12px rgba(251,191,36,0.3);
+  }
   .charm-slot:hover { transform: translateY(-2px); }
   .charm-slot .glyph { font-size: 22px; line-height: 1; margin-bottom: 4px; }
   .charm-slot .cname { font-size: 11px; font-weight: 700; color: #fde68a; }
@@ -1843,7 +1853,9 @@ const state = {
   tickets: 0,
   // v2.10 · 连胜计数（连续达标周数，失败重置）
   weekStreak: 0,
-  streakBonusLuck: 0
+  streakBonusLuck: 0,
+  // v2.10 · 拥有的 charm（开局送 3 个，其余从商店收集；只能装备 owned 中的）
+  ownedCharms: ['c1', 'c5', 'c7']
 };
 
 // v2.10 附魔类型定义
@@ -1924,18 +1936,28 @@ function classifyHand(row) {
 // ============ 渲染 ============
 function renderCharms() {
   const row = document.querySelector('#charms-row');
-  row.innerHTML = CHARMS.map(c => {
+  const owned = state.ownedCharms || [];
+  if (owned.length === 0) {
+    row.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:14px; font-size:12px; width:100%;">尚未拥有任何 charm · 周末商店中购买</div>';
+    return;
+  }
+  // 同时显示一个"槽位 X/5"提示
+  const slotInfo = `<div style="font-size:10px; color:#fde68a; letter-spacing:2px; margin-bottom:6px;">已装备 ${state.equippedCharms.length} / 5 · 拥有 ${owned.length}</div>`;
+  row.innerHTML = slotInfo + '<div class="charms-grid">' + owned.map(id => {
+    const c = CHARMS.find(x => x.id === id);
+    if (!c) return '';
     const idx = state.equippedCharms.indexOf(c.id);
     const equipped = idx >= 0;
+    const rarityColor = RARITY_COLOR[c.rarity] || '#475569';
     return `
-      <div class="charm-slot ${equipped ? 'equipped' : ''}" data-charm="${c.id}">
+      <div class="charm-slot ${equipped ? 'equipped' : ''}" data-charm="${c.id}" style="--rarity:${rarityColor}" title="${c.effect}">
         <div class="pos">${equipped ? (idx+1) : ''}</div>
         <div class="glyph">${c.glyph}</div>
         <div class="cname">${c.name}</div>
         <div class="ceff">${c.effect}</div>
       </div>
     `;
-  }).join('');
+  }).join('') + '</div>';
   document.querySelectorAll('.charm-slot').forEach(el => {
     el.addEventListener('click', () => toggleCharm(el.dataset.charm));
   });
@@ -1943,6 +1965,11 @@ function renderCharms() {
 
 function toggleCharm(id) {
   if (state.drawn) return; // 抽牌后不能换 charm
+  // v2.10 · 必须 owned 才能装备
+  if (!(state.ownedCharms || []).includes(id)) {
+    log('⚠ 未拥有此 charm · 请在周末商店购买', 'log-base');
+    return;
+  }
   const idx = state.equippedCharms.indexOf(id);
   if (idx >= 0) state.equippedCharms.splice(idx, 1);
   else if (state.equippedCharms.length < 5) state.equippedCharms.push(id);
@@ -3016,9 +3043,10 @@ function buildShopPool() {
 
 // 按 rarity 权重抽 n 个不重复的商品（已装备的 charm 自动排除）
 function pickShopItems(n = 3) {
+  // v2.10 · 排除已 owned 的 charm（避免重复购买）
+  const owned = new Set(state.ownedCharms || []);
   const pool = buildShopPool().filter(it => {
-    if (it.kind === 'charm' && state.equippedCharms.includes(it.id)) return false;
-    if (it.kind === 'charm' && (state._charmsInventory || []).includes(it.id)) return false;
+    if (it.kind === 'charm' && owned.has(it.id)) return false;
     return true;
   });
   const weights = { common:5, rare:2.5, epic:1, legendary:0.25 };
@@ -3122,16 +3150,17 @@ async function showShopModal(nextWeekNo) {
 // 应用商店购买
 function applyShopPurchase(item) {
   if (item.kind === 'charm') {
-    if (state.equippedCharms.length < 5) {
+    // v2.10 · 商店购买 → 加入 owned 池；若装备槽有空位则同时装备
+    state.ownedCharms = state.ownedCharms || [];
+    if (!state.ownedCharms.includes(item.id)) state.ownedCharms.push(item.id);
+    if (state.equippedCharms.length < 5 && !state.equippedCharms.includes(item.id)) {
       state.equippedCharms.push(item.id);
-      recomputeCharmPassives();
-      renderCharms();
-      log(`✓ 装备 charm <b>${item.name}</b>`, 'log-charm');
+      log(`✓ 拥有并装备 charm <b>${item.name}</b>`, 'log-charm');
     } else {
-      state._charmsInventory = state._charmsInventory || [];
-      state._charmsInventory.push(item.id);
-      log(`✓ 买入 charm <b>${item.name}</b>（槽满 · 入背包）`, 'log-charm');
+      log(`✓ 拥有 charm <b>${item.name}</b>（装备槽满 · 进入 charm 库 · 卸下其它后可换装）`, 'log-charm');
     }
+    recomputeCharmPassives();
+    renderCharms();
   } else if (item.kind === 'consumable') {
     if (item.id === 'cons-spin1')      state._extraSpinNext = (state._extraSpinNext || 0) + 1;
     if (item.id === 'cons-luck3')      state._extraLuckNext = (state._extraLuckNext || 0) + 5;
@@ -3181,6 +3210,7 @@ function resetGame() {
   state.tickets = 0;
   state.weekStreak = 0;
   state.streakBonusLuck = 0;
+  state.ownedCharms = ['c1', 'c5', 'c7']; // 新 run 初始送 3 个
   state._pendingEnchant = [];
   state._extraSpinNext = 0;
   state._extraLuckNext = 0;
