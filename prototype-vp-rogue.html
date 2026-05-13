@@ -1584,15 +1584,49 @@ function detectLeftHalfTease(g) {
   return null;
 }
 
-// Charms（骰子版 · 6 个代表性）
+// Charms · v2.10 扩展到 24 个，含 7 个 rarity 标签 + 触发类型
+// rarity: common / rare / epic / legendary，主要影响商店出现概率与价格
+// kind: 触发器类型，对应 doScore 内的 charm 处理逻辑
 const CHARMS = [
-  { id:'c1', name:'幸运叶',     glyph:'🍀', kind:'multi',         value:1.5, effect:'整体 ×1.5' },
-  { id:'c2', name:'王者钱袋',   glyph:'♛',  kind:'multi',         value:2,   effect:'整体 ×2' },
-  { id:'c3', name:'雷击运',     glyph:'⚡', kind:'multi',         value:3,   effect:'整体 ×3' },
-  // v2.10: c4 顺子护符已删除（顺子概念全面移除）
-  { id:'c5', name:'金袋之神',   glyph:'💰', kind:'six_bonus',     value:0.3, effect:'每颗 💰 (6 点) +30% 倍率' },
-  { id:'c6', name:'死亡赌',     glyph:'💀', kind:'multi',         value:5,   effect:'整体 ×5（传奇）' }
+  // ── A. 乘性 Multi（最稳定） ─────────────────────────────────
+  { id:'c1',  name:'幸运叶',     glyph:'🍀', kind:'multi',         value:1.5, effect:'整体 ×1.5',                    rarity:'common',    price:50  },
+  { id:'c2',  name:'王者钱袋',   glyph:'♛',  kind:'multi',         value:2,   effect:'整体 ×2',                      rarity:'rare',      price:120 },
+  { id:'c3',  name:'雷击运',     glyph:'⚡', kind:'multi',         value:3,   effect:'整体 ×3',                      rarity:'epic',      price:280 },
+  { id:'c6',  name:'死亡赌',     glyph:'💀', kind:'multi',         value:5,   effect:'整体 ×5（传奇）',              rarity:'legendary', price:600 },
+  // ── B. 条件乘法 ConditionalMult ─────────────────────────────
+  { id:'c7',  name:'三条专家',   glyph:'🎯', kind:'three_bonus',   value:1.3, effect:'每个三条整体 ×1.3',            rarity:'common',    price:60  },
+  { id:'c8',  name:'四条专家',   glyph:'💎', kind:'four_bonus',    value:1.6, effect:'每个四条整体 ×1.6',            rarity:'rare',      price:140 },
+  { id:'c4',  name:'五条专家',   glyph:'🔥', kind:'five_kind_bonus',value:2,   effect:'每个五条整体 ×2',              rarity:'epic',      price:210 },
+  { id:'c9',  name:'大奖回响',   glyph:'🔔', kind:'bonus_echo',    value:2,   effect:'本次有任一大奖时整体 ×2',      rarity:'rare',      price:160 },
+  { id:'c10', name:'单图大师',   glyph:'🎴', kind:'solo_mult',     value:3,   effect:'仅触发 1 个图形时整体 ×3',     rarity:'rare',      price:180 },
+  // ── C. 充能 Charging ────────────────────────────────────────
+  { id:'c11', name:'连击增幅器', glyph:'🔋', kind:'combo_boost',   value:5,   effect:'每 spin 结束 combo +5',        rarity:'common',    price:70  },
+  { id:'c12', name:'连击留存',   glyph:'⏳', kind:'combo_timer',   value:5000,effect:'combo 倒计时 +5s（基础 10s）', rarity:'rare',      price:150 },
+  { id:'c13', name:'Spin 银行', glyph:'🏦', kind:'spin_plus',     value:1,   effect:'每周开始 spin +1（共 4 次）',  rarity:'epic',      price:220 },
+  { id:'c14', name:'Spin 储蓄', glyph:'🪙', kind:'unused_to_money',value:30,  effect:'每多余 spin 周末换 +30 金币',  rarity:'common',    price:65  },
+  // ── D. 触发 Trigger（带随机性） ─────────────────────────────
+  { id:'c15', name:'随机重摇',   glyph:'🎲', kind:'rand_reroll',   value:0.25,effect:'spin 后 25% 概率重摇未中奖格', rarity:'common',    price:80  },
+  { id:'c16', name:'随机锁定',   glyph:'📌', kind:'rand_forced',   value:0.15,effect:'spin 前 15% 概率固定 1 格为 6',rarity:'rare',      price:170 },
+  { id:'c17', name:'双倍号角',   glyph:'📯', kind:'last_double',   value:1,   effect:'每周第 3 spin 必发 double_score',rarity:'epic',    price:240 },
+  { id:'c18', name:'抽奖之神',   glyph:'🎰', kind:'lottery_god',   value:1,   effect:'COMBO 抽奖必中 double_score',  rarity:'epic',      price:260 },
+  // ── E. 数值 Value ──────────────────────────────────────────
+  { id:'c5',  name:'金袋之神',   glyph:'💰', kind:'six_bonus',     value:0.3, effect:'每颗 💰(6点) +30% 倍率',       rarity:'common',    price:50  },
+  { id:'c19', name:'五星增幅',   glyph:'🍉', kind:'five_bonus',    value:0.2, effect:'每颗 🍉(5点) +20% 倍率',       rarity:'common',    price:55  },
+  { id:'c20', name:'低面翻盘',   glyph:'🍒', kind:'all_ones_bonus',value:10,  effect:'grid 全 1 时整体 ×10',         rarity:'rare',      price:130 },
+  // ── F. 幸运 Luck ───────────────────────────────────────────
+  { id:'c21', name:'四叶幸运',   glyph:'🌿', kind:'luck_plus',     value:5,   effect:'luck +5（持续整局）',          rarity:'common',    price:60  },
+  { id:'c22', name:'七星之运',   glyph:'⭐', kind:'luck_plus_cost',value:15,  effect:'luck +15 但每周 spin -1',      rarity:'rare',      price:150 },
+  // ── G. 附魔 Enchant ─────────────────────────────────────────
+  { id:'c23', name:'黄金触媒',   glyph:'🌟', kind:'auto_golden',   value:5,   effect:'每 spin 一颗 6 点变 golden(+5)',rarity:'epic',     price:230 },
+  { id:'c24', name:'双倍铃',     glyph:'🎁', kind:'auto_double',   value:1,   effect:'每 spin 随机 1 颗加 double 附魔',rarity:'epic',    price:250 }
 ];
+// charm rarity → 颜色（商店 + 装备槽用）
+const RARITY_COLOR = {
+  common:    '#94a3b8',
+  rare:      '#60a5fa',
+  epic:      '#a78bfa',
+  legendary: '#f59e0b'
+};
 
 const WEEK_TARGETS = [50, 120, 250, 500, 1200, 3000]; // v2.10 平衡：配合 mega 起步 50 整体压缩
 const LORE_TEXTS = [
@@ -1736,7 +1770,35 @@ function toggleCharm(id) {
   const idx = state.equippedCharms.indexOf(id);
   if (idx >= 0) state.equippedCharms.splice(idx, 1);
   else if (state.equippedCharms.length < 5) state.equippedCharms.push(id);
+  // v2.10 · 持续效果 charm（luck/spin_plus 等）一装备就要重算
+  recomputeCharmPassives();
   renderCharms();
+  renderStatus();
+}
+
+// v2.10 · 重新计算装备 charms 给的"持续型"加成（luck 总值、本周 spinLeft）
+function recomputeCharmPassives() {
+  let baseLuck = 0;
+  // 把所有 luck_plus / luck_plus_cost 加起来
+  for (const id of state.equippedCharms) {
+    const ch = CHARMS.find(c => c.id === id);
+    if (!ch) continue;
+    if (ch.kind === 'luck_plus' || ch.kind === 'luck_plus_cost') baseLuck += ch.value;
+  }
+  state.luck = baseLuck;
+  // spinLeft 在每周开始时重算（在 checkWeekResult 进入新周或 resetGame）
+}
+
+// v2.10 · 周开始时根据 charm 决定本周 spin 数（含 spin_plus / luck_plus_cost）
+function applyWeeklySpinCharms() {
+  let base = 3;
+  for (const id of state.equippedCharms) {
+    const ch = CHARMS.find(c => c.id === id);
+    if (!ch) continue;
+    if (ch.kind === 'spin_plus') base += ch.value;
+    if (ch.kind === 'luck_plus_cost') base -= 1; // 七星之运代价
+  }
+  state.spinLeft = Math.max(1, base);
 }
 
 function renderGrid(animate = false) {
@@ -1945,6 +2007,22 @@ async function doSpin() {
   // v2.10 · 附魔仅持续 1 spin（每次 spin 开始时清空，charm/商店再注入）
   // 注：先清空 spin 内消耗式附魔。"永久附魔"未来用单独的 perm-enchants 集合实现。
   clearEnchants();
+  // v2.10 · spin 前 charm 触发器：随机锁定 / 必中双倍 / 抽奖之神
+  for (const id of state.equippedCharms) {
+    const ch = CHARMS.find(c => c.id === id);
+    if (!ch) continue;
+    if (ch.kind === 'rand_forced' && Math.random() < ch.value) {
+      // 15% 概率固定 1 格为 6
+      const r = Math.floor(Math.random()*5), c = Math.floor(Math.random()*5);
+      state.forcedCells = [{ r, c, face: '6' }];
+      log(`📌 <b>随机锁定</b> 触发：本 spin 锁 (${r+1},${c+1}) 为 6 点`, 'log-charm');
+    }
+    if (ch.kind === 'last_double' && state.spinLeft === 1) {
+      state.doubleScoreNext = true;
+      state.doubleScoreMult = 2;
+      log(`📯 <b>双倍号角</b> 触发：第 3 spin 必发 ×2 结算`, 'log-charm');
+    }
+  }
   // 1) 摇 25 颗骰子（优先级：forcedCells > cheat > 随机）
   const cheat = state.cheatNextFace;
   state.cheatNextFace = null;
@@ -1976,6 +2054,37 @@ async function doSpin() {
   await renderReelSpin();
   // 给玩家看清最终骰面的小停顿
   await sleep(220);
+
+  // v2.10 · spin 后 charm 触发器：auto_golden / auto_double / rand_reroll
+  for (const id of state.equippedCharms) {
+    const ch = CHARMS.find(c => c.id === id);
+    if (!ch) continue;
+    if (ch.kind === 'auto_golden') {
+      // 把任意一颗 6 点骰子加 golden 附魔
+      const sixes = [];
+      for (let r = 0; r < 5; r++)
+        for (let c = 0; c < 5; c++)
+          if (state.grid[r][c].r === '6') sixes.push({r, c});
+      if (sixes.length > 0) {
+        const pick = sixes[Math.floor(Math.random()*sixes.length)];
+        setEnchant(pick.r, pick.c, 'golden', ch.value);
+        log(`🌟 <b>黄金触媒</b> 触发：(${pick.r+1},${pick.c+1}) 6 点 → golden(+${ch.value})`, 'log-charm');
+      }
+    }
+    if (ch.kind === 'auto_double') {
+      // 随机一颗加 double 附魔
+      const r = Math.floor(Math.random()*5), c = Math.floor(Math.random()*5);
+      setEnchant(r, c, 'double', 1);
+      log(`🎁 <b>双倍铃</b> 触发：(${r+1},${c+1}) → double`, 'log-charm');
+    }
+    if (ch.kind === 'rand_reroll' && Math.random() < ch.value) {
+      state.rerollLosersNext = true;
+      state.rerollLosersTimes = 1;
+      log(`🎲 <b>随机重摇</b> 触发：本 spin 将重摇未中奖格`, 'log-charm');
+    }
+  }
+  // 应用上述附魔后重新渲染（让 badge 显示）
+  if (state.enchants.size > 0) renderGrid(false);
 
   // 2b) v1.8 / v2.1 reroll_losers 特效 · 重摇未参与图形的格子（多次按 level）
   if (state.rerollLosersNext) {
@@ -2164,28 +2273,69 @@ async function doScore() {
   total = baseTotal;
   log(`▸ 图形结算总分 = <b>${total}</b>`, 'log-base');
 
-  // ③ Charms 乘性链
+  // ③ Charms 乘性链 · v2.10 支持 24 种 charm 的所有 kind
   if (state.equippedCharms.length > 0 && total > 0) {
     log(`▸ Charms 乘性链触发：`, 'log-charm');
+    // 预计算这次 spin 的统计量（多个 charm 可能共用）
+    let sixCount = 0, fiveCount = 0, allOnes = true;
+    for (let r = 0; r < 5; r++)
+      for (let c = 0; c < 5; c++) {
+        const f = state.grid[r][c].r;
+        if (f === '6') sixCount++;
+        if (f === '5') fiveCount++;
+        if (f !== '1') allOnes = false;
+      }
+    const threeCount = shapes.filter(s => s.type === 'three_kind').length;
+    const fourCount  = shapes.filter(s => s.type === 'four_kind').length;
+    const bonusCount = shapes.filter(s => s.isBonus).length;
     for (let i = 0; i < state.equippedCharms.length; i++) {
       const charm = CHARMS.find(c => c.id === state.equippedCharms[i]);
+      if (!charm) continue;
       let mult = 1;
       let triggerNote = '';
-      if (charm.kind === 'multi') {
-        mult = charm.value;
-        triggerNote = `整体 ×${mult}`;
-      // v2.10: straight_bonus 分支已删除（顺子概念全面移除）
-      } else if (charm.kind === 'six_bonus') {
-        // 数 6 点骰子数量
-        let sixCount = 0;
-        for (let r = 0; r < 5; r++)
-          for (let c = 0; c < 5; c++)
-            if (state.grid[r][c].r === '6') sixCount++;
-        mult = 1 + charm.value * sixCount;
-        triggerNote = `6 点 ${sixCount} 颗 → ×${mult.toFixed(2)}`;
+      switch (charm.kind) {
+        case 'multi':
+          mult = charm.value; triggerNote = `整体 ×${mult}`; break;
+        case 'six_bonus':
+          mult = 1 + charm.value * sixCount;
+          triggerNote = `6 点 ${sixCount} 颗 → ×${mult.toFixed(2)}`; break;
+        case 'five_bonus':
+          mult = 1 + charm.value * fiveCount;
+          triggerNote = `5 点 ${fiveCount} 颗 → ×${mult.toFixed(2)}`; break;
+        case 'three_bonus':
+          mult = threeCount > 0 ? Math.pow(charm.value, threeCount) : 1;
+          triggerNote = `三条 ${threeCount} 个 → ×${mult.toFixed(2)}`; break;
+        case 'four_bonus':
+          mult = fourCount > 0 ? Math.pow(charm.value, fourCount) : 1;
+          triggerNote = `四条 ${fourCount} 个 → ×${mult.toFixed(2)}`; break;
+        case 'five_kind_bonus': {
+          const fk = shapes.filter(s => s.type === 'five_kind').length;
+          mult = fk > 0 ? Math.pow(charm.value, fk) : 1;
+          triggerNote = `五条 ${fk} 个 → ×${mult.toFixed(2)}`; break;
+        }
+        case 'bonus_echo':
+          mult = bonusCount > 0 ? charm.value : 1;
+          triggerNote = bonusCount > 0 ? `有大奖 → ×${mult}` : '无大奖 · 跳过'; break;
+        case 'solo_mult':
+          mult = shapes.length === 1 ? charm.value : 1;
+          triggerNote = shapes.length === 1 ? `单图 → ×${mult}` : '非单图 · 跳过'; break;
+        case 'all_ones_bonus':
+          mult = allOnes ? charm.value : 1;
+          triggerNote = allOnes ? `全 1 翻盘 → ×${mult}` : '非全 1 · 跳过'; break;
+        // ── 以下为非乘法 charm，乘性链阶段不参与（在其它流程触发） ──
+        case 'combo_boost': case 'combo_timer': case 'spin_plus':
+        case 'unused_to_money': case 'rand_reroll': case 'rand_forced':
+        case 'last_double': case 'lottery_god': case 'luck_plus':
+        case 'luck_plus_cost': case 'auto_golden': case 'auto_double':
+          continue; // 跳过 log，不参与乘法
+        default:
+          triggerNote = `(${charm.kind} 未实装)`;
+      }
+      if (mult === 1 && !triggerNote.includes('跳过')) {
+        // mult=1 没意义，不显示
       }
       total = Math.round(total * mult);
-      await sleep(220);
+      await sleep(180);
       log(`  ${i+1}. ${charm.glyph} <b>${charm.name}</b> · ${triggerNote} → <span class="multi">${total}</span>`, 'log-charm');
     }
   }
@@ -2197,6 +2347,15 @@ async function doScore() {
   }
   state.money += total;
   log(`<b>💰 本次产出 = ${total} 金币（累计 ${state.money}）</b>`, 'log-final');
+
+  // v2.10 · combo_boost charm：每 spin 末端给 combo + N（无视 shapes 是否触发）
+  for (const id of state.equippedCharms) {
+    const ch = CHARMS.find(c => c.id === id);
+    if (ch && ch.kind === 'combo_boost' && ch.value > 0) {
+      state.combo += ch.value;
+      log(`🔋 <b>连击增幅器</b> 触发：combo +${ch.value}`, 'log-charm');
+    }
+  }
 
   // v2.1: spin 结束后不再立即触发抽奖（改为倒计时归零时按等级触发）
   if (shapes.length > 0) {
@@ -2273,7 +2432,13 @@ function renderCombo() {
 
 function startComboTimer() {
   clearComboTimer();
-  state.comboDeadline = Date.now() + 10000;
+  // v2.10 · c12 combo_timer charm 延长倒计时
+  let extra = 0;
+  for (const id of state.equippedCharms) {
+    const ch = CHARMS.find(c => c.id === id);
+    if (ch && ch.kind === 'combo_timer') extra += ch.value;
+  }
+  state.comboDeadline = Date.now() + 10000 + extra;
   // v2.1: 主超时改为"按等级触发抽奖或耗散"
   state.comboTimer = setTimeout(async () => {
     state.comboTimer = null;
@@ -2381,7 +2546,18 @@ async function triggerLottery(level) {
     log(`⚠ 所有抽奖特效已关闭 · 跳过本次抽奖`, 'log-base');
     return;
   }
-  const effect = pool[Math.floor(Math.random() * pool.length)];
+  // v2.10 · c18 lottery_god：必中 double_score（若启用且在 pool 内）
+  const hasLotteryGod = state.equippedCharms.some(id => {
+    const ch = CHARMS.find(c => c.id === id);
+    return ch && ch.kind === 'lottery_god';
+  });
+  let effect;
+  if (hasLotteryGod && pool.includes('double_score')) {
+    effect = 'double_score';
+    log(`🎰 <b>抽奖之神</b> 触发：本次必中 double_score`, 'log-charm');
+  } else {
+    effect = pool[Math.floor(Math.random() * pool.length)];
+  }
   const selectedIdx = pool.indexOf(effect);
 
   // 显示弹窗 + 圆盘开始转
@@ -2530,6 +2706,20 @@ function renderForcedHints() {
 }
 
 function checkWeekResult() {
+  // v2.10 · 周末 charm 触发：c14 unused_to_money（剩余 spin 折算金币）
+  let unusedBonus = 0;
+  for (const id of state.equippedCharms) {
+    const ch = CHARMS.find(c => c.id === id);
+    if (ch && ch.kind === 'unused_to_money' && state.spinLeft > 0) {
+      unusedBonus += state.spinLeft * ch.value;
+    }
+  }
+  if (unusedBonus > 0) {
+    state.money += unusedBonus;
+    log(`🪙 <b>Spin 储蓄</b> 触发：剩 ${state.spinLeft} spin × ${unusedBonus/state.spinLeft} = +${unusedBonus} 金币`, 'log-charm');
+    renderStatus();
+  }
+
   const target = WEEK_TARGETS[state.week-1];
   if (state.money >= target) {
     if (state.week === 6) {
@@ -2543,9 +2733,10 @@ function checkWeekResult() {
         () => {
           state.money -= target;
           state.week++;
-          state.spinLeft = 3;
+          // v2.10 · 进入新周时按 charm 决定 spin 数（spin_plus / luck_plus_cost）
+          applyWeeklySpinCharms();
           renderStatus();
-          log(`▼▼▼ 第 ${state.week} 周 · 新目标 ${WEEK_TARGETS[state.week-1]} ▼▼▼`, 'log-base');
+          log(`▼▼▼ 第 ${state.week} 周 · 新目标 ${WEEK_TARGETS[state.week-1]} · 本周 ${state.spinLeft} spin ▼▼▼`, 'log-base');
         }
       );
     }
@@ -2589,6 +2780,7 @@ function resetGame() {
   state.luck = 0;
   state.tickets = 0;
   clearEnchants();
+  recomputeCharmPassives(); // 空 charm 数组 → luck=0
   clearComboTimer();
   renderCombo();
   document.querySelector('#log').innerHTML = '<div class="log-line log-base">[准备就绪] 点击 SPIN 开始第 1 周 · 目标 ' + WEEK_TARGETS[0] + ' 金币</div>';
