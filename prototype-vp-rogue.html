@@ -807,6 +807,24 @@
     from { box-shadow: 0 0 12px rgba(251,191,36,0.45), inset 0 0 6px rgba(251,191,36,0.18); }
     to   { box-shadow: 0 0 26px rgba(251,191,36,1), 0 0 40px rgba(248,113,113,0.5), inset 0 0 14px rgba(251,191,36,0.4); }
   }
+  /* v2.10: 列 5 在列 4 停下前的"等待揭晓"状态——隐藏内部 strip，仅保留金色脉动边框 */
+  .cell.reeling.waiting .reel-strip { opacity: 0; }
+  .cell.reeling.waiting::after {
+    content: '?';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    font-weight: 900;
+    color: #fbbf24;
+    text-shadow: 0 0 12px rgba(251,191,36,0.9);
+    animation: waitMarkPulse 0.7s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes waitMarkPulse {
+    from { opacity: 0.5; transform: translate(-50%, -50%) scale(0.95); }
+    to   { opacity: 1;   transform: translate(-50%, -50%) scale(1.1); }
+  }
   .cell .suit {
     font-size: 56px;
     line-height: 0.85;
@@ -1690,45 +1708,53 @@ function renderGrid(animate = false) {
   updateLiveHints();
 }
 
-// v2.8.7: 老虎机式上下滚动
+// v2.10: 老虎机式上下滚动
 //   · 显式 px 高度 + 两段 transition（冲过头 → 明显回弹）
-//   · 5 列从左到右依次停止：620 / 760 / 900 / 1040 / 1180 ms
-//   · 疑似大奖时（左半边已对齐某 GRID_BONUS 的子集）后 2 列改 1700 / 2400 ms 渐慢拖延悬念
+//   · 5 列从左到右依次停止
+//   · 疑似大奖时（左半边已对齐某 GRID_BONUS 子集）：
+//      - 列 4 REEL 加长（12→16）+ 正常速度，转更多 face
+//      - 列 5 等列 4 停下后 +300ms 才启动（"逐个揭晓"节奏），同样正常速度
 async function renderReelSpin() {
   const g = document.querySelector('#grid');
   g.innerHTML = '';
-  const REEL_COUNT = 12;
+  const REEL_NORMAL = 12;
+  const REEL_TEASE  = 16;
   const BACK_MS = 220;
   const OVERSHOOT_RATIO = 0.18;
+  const NORMAL_EASE = 'cubic-bezier(.16, .82, .28, 1)';
   const strips = [];
 
   // —— 悬念预判：grid 已 roll 完，可静态计算左半边是否对上某大奖子集 ——
   const teaseKey = detectLeftHalfTease(state.grid);
   const teasing = !!teaseKey;
+  // 5 列时长（正常 / 悬念）
   const colTotalMs = teasing
-    ? [620, 760, 900, 1700, 2400]  // 后 2 列大幅延长
-    : [620, 760, 900, 1040, 1180]; // 正常
-  // 阶段 A 缓动：正常列快冲，悬念列起步快后段拖
-  const NORMAL_EASE = 'cubic-bezier(.16, .82, .28, 1)';
-  const TEASE_EASE  = 'cubic-bezier(.05, .9, .1, 1)';
-  const colEase = teasing
-    ? [NORMAL_EASE, NORMAL_EASE, NORMAL_EASE, TEASE_EASE, TEASE_EASE]
-    : [NORMAL_EASE, NORMAL_EASE, NORMAL_EASE, NORMAL_EASE, NORMAL_EASE];
+    ? [620, 760, 900, 1200, 1100]   // 列 4 略长（多转一会，仍正常速度）/ 列 5 等 delay 后启动
+    : [620, 760, 900, 1040, 1180];
+  // 5 列 REEL_COUNT
+  const colReelN = teasing
+    ? [REEL_NORMAL, REEL_NORMAL, REEL_NORMAL, REEL_TEASE, REEL_TEASE]
+    : [REEL_NORMAL, REEL_NORMAL, REEL_NORMAL, REEL_NORMAL, REEL_NORMAL];
+  // 5 列启动延迟（仅 teasing 列 5 = 列 4 总时长 + 300ms gap）
+  const colStartDelay = teasing
+    ? [0, 0, 0, 0, colTotalMs[3] + 300]
+    : [0, 0, 0, 0, 0];
   if (teasing) {
     const bn = (GRID_BONUS[teaseKey] && GRID_BONUS[teaseKey].name) || teaseKey;
-    log(`✨ <b>左半边对齐</b>…疑似 <b>${bn}</b> 大奖，后 2 列减速观察`, 'log-line-bonus');
+    log(`✨ <b>左半边对齐</b>…疑似 <b>${bn}</b> 大奖，列 4 加长 + 列 5 延后揭晓`, 'log-line-bonus');
   }
 
-  // 1) 构建 25 个 reel cell（此时还没设 px 尺寸）
+  // 1) 构建 25 个 reel cell（按列决定 REEL_COUNT；teasing 列 4/5 用更长的 strip）
   for (let r = 0; r < 5; r++) {
     for (let c = 0; c < 5; c++) {
       const finalDie = state.grid[r][c];
+      const N = colReelN[c];
       const cell = document.createElement('div');
       cell.className = 'cell reeling face-' + (finalDie ? finalDie.r : '1');
       const strip = document.createElement('div');
       strip.className = 'reel-strip';
       let html = '';
-      for (let i = 0; i < REEL_COUNT - 1; i++) {
+      for (let i = 0; i < N - 1; i++) {
         const f = FACES[Math.floor(Math.random() * 6)];
         html += `<div class="reel-cell face-${f}"><div class="suit">${FACE_GLYPH[f]}</div><div class="rank">${f}</div></div>`;
       }
@@ -1740,48 +1766,55 @@ async function renderReelSpin() {
       strip.innerHTML = html;
       cell.appendChild(strip);
       g.appendChild(cell);
-      strips.push({ strip, cell, finalDie, r, c });
+      strips.push({ strip, cell, finalDie, r, c, N });
     }
   }
 
   // 2) 等 layout 完成（两个 rAF 保证读到最终尺寸）
   await new Promise(rs => requestAnimationFrame(() => requestAnimationFrame(rs)));
 
-  // 3) 读 cell 真实高度，给每个 strip / reel-cell 注入显式 px
-  // v2.8.6: 用 cell **content area** 高度，不是 boundingRect 总高 ——
-  //   总高包含 border(1.5+1.5) + padding(0 in reeling, 2+2 in normal)。
-  //   reel-cell 在 cell content area 内、普通 .suit 也在 content area 内居中，
-  //   两者参考系必须一致；否则 emoji 中心会差 ~1.5px 看得见的垂直位移。
+  // 3) 读 cell 真实高度，给每个 strip / reel-cell 注入显式 px（按列 N 各自算 finalY/overshootY）
   const cs = getComputedStyle(strips[0].cell);
   const trim = parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth)
              + parseFloat(cs.paddingTop)    + parseFloat(cs.paddingBottom);
   const cellH = strips[0].cell.getBoundingClientRect().height - trim;
-  const finalY = -(REEL_COUNT - 1) * cellH;
-  const overshootY = finalY - cellH * OVERSHOOT_RATIO;
-  strips.forEach(({ strip }) => {
-    strip.style.height = (REEL_COUNT * cellH) + 'px';
-    strip.querySelectorAll('.reel-cell').forEach(rc => {
+  strips.forEach(s => {
+    s.finalY = -(s.N - 1) * cellH;
+    s.overshootY = s.finalY - cellH * OVERSHOOT_RATIO;
+    s.strip.style.height = (s.N * cellH) + 'px';
+    s.strip.querySelectorAll('.reel-cell').forEach(rc => {
       rc.style.height = cellH + 'px';
       rc.style.flex = '0 0 ' + cellH + 'px';
     });
-    strip.style.transform = 'translateY(0px)';
-    strip.style.transition = 'none';
+    s.strip.style.transform = 'translateY(0px)';
+    s.strip.style.transition = 'none';
   });
 
   // 4) 再等一帧，让 transition:none 的初始位置生效，再启动动画
   await new Promise(rs => requestAnimationFrame(() => requestAnimationFrame(rs)));
 
-  // 5) 启动滚动 · 阶段 A：冲到 overshoot 位置（每列各自 totalMs - BACK_MS，bezier 按列）
+  // 5) 启动滚动（按列错开 + 列 5 可能延迟启动）+ 阶段 A
   if (teasing) {
     strips.filter(s => s.c >= 3).forEach(({ cell }) => cell.classList.add('teasing'));
+    // 列 5 启动前先隐藏（waiting）—— 列 4 停下后再揭晓出现
+    strips.filter(s => s.c === 4).forEach(({ cell }) => cell.classList.add('waiting'));
   }
-  strips.forEach(({ strip, c }) => {
+  for (let c = 0; c < 5; c++) {
+    const startDelay = colStartDelay[c];
     const dashMs = colTotalMs[c] - BACK_MS;
-    strip.style.transition = `transform ${dashMs}ms ${colEase[c]}`;
-    strip.style.transform = `translateY(${overshootY}px)`;
-  });
+    setTimeout(() => {
+      // teasing 列 5 启动时把 waiting 移除（揭晓出现）
+      if (teasing && c === 4) {
+        strips.filter(s => s.c === 4).forEach(({ cell }) => cell.classList.remove('waiting'));
+      }
+      strips.filter(s => s.c === c).forEach(s => {
+        s.strip.style.transition = `transform ${dashMs}ms ${NORMAL_EASE}`;
+        s.strip.style.transform = `translateY(${s.overshootY}px)`;
+      });
+    }, startDelay);
+  }
 
-  // 6) 滚动 tick 音（循环）
+  // 6) 滚动 tick 音（循环到最长列结束）
   let stopTick = false;
   (async () => {
     let i = 0;
@@ -1792,20 +1825,21 @@ async function renderReelSpin() {
     }
   })();
 
-  // 7) 每列在 dashMs 时切到阶段 B：明显回弹到 finalY + 咔哒音
+  // 7) 每列在 (startDelay + dashMs) 时切到阶段 B：明显回弹到 finalY + 咔哒音
   for (let c = 0; c < 5; c++) {
+    const startDelay = colStartDelay[c];
     const dashMs = colTotalMs[c] - BACK_MS;
     setTimeout(() => {
-      strips.filter(s => s.c === c).forEach(({ strip }) => {
-        strip.style.transition = `transform ${BACK_MS}ms cubic-bezier(.34, 0, .42, 1)`;
-        strip.style.transform = `translateY(${finalY}px)`;
+      strips.filter(s => s.c === c).forEach(s => {
+        s.strip.style.transition = `transform ${BACK_MS}ms cubic-bezier(.34, 0, .42, 1)`;
+        s.strip.style.transform = `translateY(${s.finalY}px)`;
       });
       playTone(680 - c * 30, 60, 'square', 0.2);
-    }, dashMs);
+    }, startDelay + dashMs);
   }
 
-  // 8) 等最长列完整结束
-  const maxMs = Math.max(...colTotalMs);
+  // 8) 等最长列完整结束（含启动延迟）
+  const maxMs = Math.max(...colTotalMs.map((t, c) => t + colStartDelay[c]));
   await sleep(maxMs + 80);
   stopTick = true;
 
