@@ -393,6 +393,61 @@
   .shop-reroll:hover { background: rgba(251,191,36,0.25); }
   .shop-reroll:disabled { opacity: 0.4; cursor: not-allowed; }
 
+  /* v2.10 · 近输 · 屏幕震动 */
+  @keyframes screenShake {
+    0%, 100% { transform: translate(0); }
+    10% { transform: translate(-10px, 5px); }
+    20% { transform: translate(9px, -4px); }
+    30% { transform: translate(-8px, 6px); }
+    40% { transform: translate(10px, -3px); }
+    50% { transform: translate(-6px, 5px); }
+    60% { transform: translate(7px, -3px); }
+    70% { transform: translate(-5px, 3px); }
+    80% { transform: translate(4px, -2px); }
+    90% { transform: translate(-2px, 1px); }
+  }
+  body.shaking { animation: screenShake 0.7s cubic-bezier(.36, .07, .19, .97) both; }
+  /* v2.10 · 近输全屏血光 */
+  .near-miss-overlay {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle, transparent 30%, rgba(220,38,38,0.5) 80%, rgba(127,29,29,0.9) 100%);
+    pointer-events: none;
+    z-index: 9990;
+    animation: nearMissPulse 0.8s ease-out forwards;
+  }
+  @keyframes nearMissPulse {
+    0% { opacity: 0; }
+    40% { opacity: 1; }
+    100% { opacity: 0.4; }
+  }
+  /* v2.10 · 大奖 build-up · 触发前短暂全屏闭气 */
+  .bonus-buildup {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(251,191,36,0.4) 50%, rgba(0,0,0,0.85) 100%);
+    z-index: 9500;
+    pointer-events: none;
+    animation: bonusBuildup 0.42s cubic-bezier(.45,.05,.55,.95) forwards;
+  }
+  @keyframes bonusBuildup {
+    0%   { opacity: 0; backdrop-filter: blur(0); }
+    50%  { opacity: 1; backdrop-filter: blur(2px); }
+    100% { opacity: 0; backdrop-filter: blur(0); }
+  }
+  /* v2.10 · 连胜 badge（status-bar 中显示） */
+  .streak-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #fbbf24, #f87171);
+    color: #1e1530;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 1px 6px;
+    border-radius: 8px;
+    margin-left: 4px;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    text-shadow: none;
+  }
+
   /* v2.2 COMBO 能量池（强化视觉版） */
   .combo-bar {
     margin-bottom: 16px;
@@ -1785,7 +1840,10 @@ const state = {
   // v2.10 · Symbol 附魔（key = "r,c"，val = { type, n }），每 spin 开始时清空（持续 1 spin）
   enchants: new Map(),
   // v2.10 · 票（商店货币，与金币独立）
-  tickets: 0
+  tickets: 0,
+  // v2.10 · 连胜计数（连续达标周数，失败重置）
+  weekStreak: 0,
+  streakBonusLuck: 0
 };
 
 // v2.10 附魔类型定义
@@ -1903,7 +1961,8 @@ function recomputeCharmPassives() {
     if (!ch) continue;
     if (ch.kind === 'luck_plus' || ch.kind === 'luck_plus_cost') baseLuck += ch.value;
   }
-  state.luck = baseLuck;
+  // 加上连胜累积奖励
+  state.luck = baseLuck + (state.streakBonusLuck || 0);
   // spinLeft 在每周开始时重算（在 checkWeekResult 进入新周或 resetGame）
 }
 
@@ -2092,7 +2151,10 @@ function updateLiveHints() {
 }
 
 function renderStatus() {
-  document.querySelector('#stat-week').textContent = state.week + ' / 6';
+  // v2.10 · 连胜 badge
+  const weekEl = document.querySelector('#stat-week');
+  const streakBadge = state.weekStreak >= 2 ? `<span class="streak-badge" title="连胜 ${state.weekStreak} 周 · 累计 luck +${state.streakBonusLuck}">🔥${state.weekStreak}</span>` : '';
+  weekEl.innerHTML = `${state.week} / 6${streakBadge}`;
   document.querySelector('#stat-target').textContent = WEEK_TARGETS[state.week-1];
   document.querySelector('#stat-money').textContent = state.money;
   document.querySelector('#stat-spin').textContent = state.spinLeft + ' / 3';
@@ -2373,6 +2435,10 @@ async function doScore() {
       }
       // v2.5: 多倍结算时屏幕中央闪现 ×N 大字（从第 2 次起）
       if (doubleScore && rep > 0) showMultFlash(rep + 1, repeats);
+      // v2.10 · 大奖 build-up：score≥10 的 GRID_BONUS 在第 1 次触发前给一个屏息瞬间
+      if (sh.isBonus && rep === 0 && sh.def.score >= 10) {
+        await buildUpForBonus();
+      }
       // v2.8.8: 飘字 + 高亮同帧触发（之前 await 在前 → 飘字要等格子熄灭后才出）
       showFloatScore(sh.cells, got, rep + 1);      // 1) 同步弹飘字
       await highlightShape(sh.cells, hlDur, rep + 1); // 2) 同步加 scoring class（亮起） + 等待 hlDur 后熄灭
@@ -2851,13 +2917,22 @@ function checkWeekResult() {
 
   const target = WEEK_TARGETS[state.week-1];
   if (state.money >= target) {
+    // v2.10 · 连胜递增 · 达标后 streak +1，达 2 周起每次 +3 luck（永久累积）
+    state.weekStreak = (state.weekStreak || 0) + 1;
+    let streakMsg = '';
+    if (state.weekStreak >= 2) {
+      state.streakBonusLuck = (state.streakBonusLuck || 0) + 3;
+      recomputeCharmPassives();
+      streakMsg = `<br>🔥 连胜 ${state.weekStreak} 周 · luck +3（累计 streak luck = ${state.streakBonusLuck}）`;
+      log(`🔥 连胜 ${state.weekStreak} 周 · luck +3（累计 ${state.luck}）`, 'log-charm');
+    }
     if (state.week === 6) {
-      showModal('🎉 通关 · 你逃出了赌场！', `最终累计 ${state.money} 金币（目标 ${target}）。<br>幸运回归你身，活了下来。`, false, () => {
+      showModal('🎉 通关 · 你逃出了赌场！', `最终累计 ${state.money} 金币（目标 ${target}）${streakMsg}。<br>幸运回归你身，活了下来。`, false, () => {
         resetGame();
       });
     } else {
       showModal(`✓ 第 ${state.week} 周还债成功`,
-        `你交了 ${target} 金币，剩 <b>${state.money - target}</b> 金币进入下周。<br>下周目标：<b>${WEEK_TARGETS[state.week]}</b>`,
+        `你交了 ${target} 金币，剩 <b>${state.money - target}</b> 金币进入下周。${streakMsg}<br>下周目标：<b>${WEEK_TARGETS[state.week]}</b>`,
         false,
         async () => {
           state.money -= target;
@@ -2880,9 +2955,50 @@ function checkWeekResult() {
       );
     }
   } else {
-    showModal('💀 还债失败 · GAME OVER',
-      `本周仅赚 ${state.money} 金币（目标 ${WEEK_TARGETS[state.week-1]}）<br>高利贷主把你埋了。<br>点击重开。`, true, () => resetGame());
+    // v2.10 · 近输反馈（70-100% 区间触发血光 + 震屏）
+    const ratio = state.money / target;
+    const isNearMiss = ratio >= 0.7;
+    state.weekStreak = 0;
+    state.streakBonusLuck = 0;
+    if (isNearMiss) {
+      const missAmount = target - state.money;
+      shakeScreen(700);
+      showNearMissOverlay();
+      flashScreen(3);
+      log(`🩸 <b>差 ${missAmount} 金币</b>（完成 ${Math.round(ratio*100)}%）· 高利贷主露出鄙夷的笑容`, 'log-final');
+      setTimeout(() => {
+        showModal('🩸 还差一点 · GAME OVER',
+          `本周仅赚 <b>${state.money}</b> 金币（差 <b>${missAmount}</b> 达标）<br>完成度 <b>${Math.round(ratio*100)}%</b> · 高利贷主露出鄙夷的笑容。<br>点击重开。`, true, () => resetGame());
+      }, 800);
+    } else {
+      showModal('💀 还债失败 · GAME OVER',
+        `本周仅赚 ${state.money} 金币（目标 ${WEEK_TARGETS[state.week-1]}）<br>高利贷主把你埋了。<br>点击重开。`, true, () => resetGame());
+    }
   }
+}
+
+// v2.10 · 屏幕震动（近输/事故反馈）
+function shakeScreen(ms = 700) {
+  document.body.classList.add('shaking');
+  setTimeout(() => document.body.classList.remove('shaking'), ms);
+}
+
+// v2.10 · 近输全屏血光（破产时 money 接近 target 触发）
+function showNearMissOverlay() {
+  const el = document.createElement('div');
+  el.className = 'near-miss-overlay';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+// v2.10 · 大奖 build-up（触发前 350ms 全屏屏息感）
+async function buildUpForBonus() {
+  const el = document.createElement('div');
+  el.className = 'bonus-buildup';
+  document.body.appendChild(el);
+  playSweep(220, 880, 380);
+  await sleep(380);
+  el.remove();
 }
 
 // v2.10 · 商店 pool 构建（24 charm + 3 consumable + 3 enchant，价格按 ticket 计）
@@ -3063,6 +3179,8 @@ function resetGame() {
   // v2.10
   state.luck = 0;
   state.tickets = 0;
+  state.weekStreak = 0;
+  state.streakBonusLuck = 0;
   state._pendingEnchant = [];
   state._extraSpinNext = 0;
   state._extraLuckNext = 0;
