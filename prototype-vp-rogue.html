@@ -287,6 +287,7 @@
     margin-bottom: 18px;
   }
   .status-bar.status-bar-5 { grid-template-columns: repeat(5, 1fr); }
+  .status-bar.status-bar-6 { grid-template-columns: repeat(6, 1fr); }
   .stat { text-align: center; }
   .stat .label { font-size: 10px; color: #94a3b8; letter-spacing: 1px; margin-bottom: 4px; }
   .stat .value { font-size: 22px; font-weight: 700; }
@@ -295,6 +296,102 @@
   .v-money { color: #34d399; }
   .v-spin { color: #a78bfa; }
   .v-luck { color: #4ade80; cursor: help; }
+  .v-ticket { color: #fde68a; cursor: help; }
+
+  /* v2.10 · 周末商店 modal */
+  .shop-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    display: none;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .shop-modal-overlay.show { display: flex; }
+  .shop-modal {
+    width: 720px; max-width: 92vw;
+    max-height: 90vh; overflow-y: auto;
+    background: linear-gradient(180deg, #1e1530 0%, #261936 100%);
+    border: 2px solid #fbbf24;
+    border-radius: 12px;
+    padding: 24px 28px;
+    color: #eee;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(251,191,36,0.2);
+  }
+  .shop-modal h2 { font-size: 22px; }
+  .shop-section { margin-bottom: 22px; }
+  .shop-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .shop-section-title { font-size: 11px; color: #fde68a; letter-spacing: 3px; }
+  .shop-currency { font-size: 13px; color: #fde68a; text-align: center; margin: 10px 0 16px; letter-spacing: 1px; }
+  .shop-currency b { font-size: 18px; color: #fbbf24; padding: 0 4px; }
+  .shop-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .shop-item {
+    border: 1.5px solid var(--rarity, #475569);
+    background: rgba(0,0,0,0.35);
+    border-radius: 8px;
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-align: center;
+    position: relative;
+  }
+  .shop-item:hover:not(.sold):not(.unaffordable) {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(251,191,36,0.25), 0 0 14px var(--rarity, #fbbf24);
+  }
+  .shop-item.sold { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+  .shop-item.unaffordable { opacity: 0.55; cursor: not-allowed; }
+  .shop-item .si-glyph { font-size: 32px; line-height: 1; margin-bottom: 6px; }
+  .shop-item .si-name { font-weight: 700; font-size: 14px; color: var(--rarity, #eee); }
+  .shop-item .si-rarity { font-size: 9px; color: var(--rarity, #94a3b8); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+  .shop-item .si-desc { font-size: 10px; color: #94a3b8; min-height: 30px; margin: 6px 0; line-height: 1.3; }
+  .shop-item .si-price { color: #fde68a; font-weight: 700; font-size: 13px; margin-top: 6px; }
+  .shop-spin-options { display: flex; gap: 12px; justify-content: center; }
+  .shop-spin-opt {
+    flex: 1;
+    border: 1.5px solid #475569;
+    border-radius: 8px;
+    padding: 12px 10px;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(0,0,0,0.3);
+    transition: all 0.15s;
+  }
+  .shop-spin-opt:hover { border-color: #fde68a; }
+  .shop-spin-opt.selected {
+    border-color: #fbbf24;
+    background: rgba(251,191,36,0.15);
+    box-shadow: 0 0 14px rgba(251,191,36,0.4);
+  }
+  .shop-spin-opt .sso-spins { font-size: 18px; font-weight: 900; color: #fbbf24; }
+  .shop-spin-opt .sso-reward { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+  .shop-confirm {
+    display: block;
+    margin: 18px auto 0;
+    padding: 12px 36px;
+    background: linear-gradient(180deg, #fbbf24, #f59e0b);
+    color: #1e1530;
+    font-weight: 900;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: transform 0.1s;
+  }
+  .shop-confirm:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(251,191,36,0.5); }
+  .shop-reroll {
+    font-size: 10px;
+    color: #fde68a;
+    cursor: pointer;
+    background: rgba(251,191,36,0.1);
+    border: 1px solid #fbbf24;
+    border-radius: 4px;
+    padding: 4px 10px;
+    letter-spacing: 1px;
+  }
+  .shop-reroll:hover { background: rgba(251,191,36,0.25); }
+  .shop-reroll:disabled { opacity: 0.4; cursor: not-allowed; }
 
   /* v2.2 COMBO 能量池（强化视觉版） */
   .combo-bar {
@@ -1181,13 +1278,14 @@
   <!-- 高利贷叙事 -->
   <div class="lore" id="lore-text">💀 高利贷主：「准时还，不然就埋了你。」</div>
 
-  <!-- 状态栏 v2.10: 加 luck -->
-  <div class="status-bar status-bar-5">
+  <!-- 状态栏 v2.10: luck + tickets -->
+  <div class="status-bar status-bar-6">
     <div class="stat"><div class="label">📅 周</div><div class="value v-week" id="stat-week">1 / 6</div></div>
     <div class="stat"><div class="label">🎯 本周目标</div><div class="value v-target" id="stat-target">50</div></div>
     <div class="stat"><div class="label">💰 累计金币</div><div class="value v-money" id="stat-money">0</div></div>
     <div class="stat"><div class="label">🎲 剩余 spin</div><div class="value v-spin" id="stat-spin">3 / 3</div></div>
     <div class="stat"><div class="label">🍀 幸运</div><div class="value v-luck" id="stat-luck" title="每点 +0.2% 6 点 face 概率">0</div></div>
+    <div class="stat"><div class="label">🎫 票</div><div class="value v-ticket" id="stat-ticket" title="商店专用货币 · 周间换票">0</div></div>
   </div>
 
   <!-- charms 槽（玩家点击装备/卸下） -->
@@ -1296,6 +1394,26 @@
     <h2 id="modal-title">恭喜还债成功！</h2>
     <p id="modal-msg"></p>
     <button class="btn btn-deal" id="modal-btn">继续下一周 →</button>
+  </div>
+</div>
+
+<!-- v2.10 · 周末商店 + 下周 spin 配置 -->
+<div class="shop-modal-overlay" id="shop-modal">
+  <div class="shop-modal">
+    <h2 style="text-align:center; color:#fbbf24; letter-spacing:4px; margin-top:0;">🏪 周末商店</h2>
+    <div class="shop-currency">🎫 持有：<b id="shop-tickets">0</b> 票 · 💰 <b id="shop-money">0</b> 金币</div>
+    <div class="shop-section">
+      <div class="shop-section-header">
+        <div class="shop-section-title">🛒 本周供应（点击购买）</div>
+        <button class="shop-reroll" id="shop-reroll" title="花 2 票重抽 3 个商品">🔄 重抽 (2 票)</button>
+      </div>
+      <div class="shop-items" id="shop-items"></div>
+    </div>
+    <div class="shop-section">
+      <div class="shop-section-title">⚖ 下周 spin 配置 · 少 spin 多换票</div>
+      <div class="shop-spin-options" id="shop-spin-opts"></div>
+    </div>
+    <button class="shop-confirm" id="shop-confirm">进入下周 →</button>
   </div>
 </div>
 
@@ -1980,6 +2098,8 @@ function renderStatus() {
   document.querySelector('#stat-spin').textContent = state.spinLeft + ' / 3';
   const luckEl = document.querySelector('#stat-luck');
   if (luckEl) luckEl.textContent = state.luck || 0;
+  const tEl = document.querySelector('#stat-ticket');
+  if (tEl) tEl.textContent = state.tickets || 0;
   document.querySelector('#lore-text').textContent = LORE_TEXTS[state.week-1];
 }
 
@@ -2007,6 +2127,15 @@ async function doSpin() {
   // v2.10 · 附魔仅持续 1 spin（每次 spin 开始时清空，charm/商店再注入）
   // 注：先清空 spin 内消耗式附魔。"永久附魔"未来用单独的 perm-enchants 集合实现。
   clearEnchants();
+  // v2.10 · 商店购买的 pendingEnchant 注入到随机 cell（消耗一次）
+  if (state._pendingEnchant && state._pendingEnchant.length > 0) {
+    for (const pe of state._pendingEnchant) {
+      const r = Math.floor(Math.random()*5), c = Math.floor(Math.random()*5);
+      setEnchant(r, c, pe.type, pe.n);
+      log(`🔮 商店附魔注入：(${r+1},${c+1}) <b>${ENCHANT_DEFS[pe.type].name}</b>`, 'log-charm');
+    }
+    state._pendingEnchant = [];
+  }
   // v2.10 · spin 前 charm 触发器：随机锁定 / 必中双倍 / 抽奖之神
   for (const id of state.equippedCharms) {
     const ch = CHARMS.find(c => c.id === id);
@@ -2730,11 +2859,21 @@ function checkWeekResult() {
       showModal(`✓ 第 ${state.week} 周还债成功`,
         `你交了 ${target} 金币，剩 <b>${state.money - target}</b> 金币进入下周。<br>下周目标：<b>${WEEK_TARGETS[state.week]}</b>`,
         false,
-        () => {
+        async () => {
           state.money -= target;
+          renderStatus();
+          // v2.10 · 弹周末商店 + 下周 spin 配置
+          await showShopModal(state.week + 1);
           state.week++;
-          // v2.10 · 进入新周时按 charm 决定 spin 数（spin_plus / luck_plus_cost）
+          // 进入新周：先 charm spin_plus 算基础，再叠加玩家选择 (_weekSpinChoice 来自商店)
           applyWeeklySpinCharms();
+          if (state._weekSpinChoice && state._weekSpinChoice < state.spinLeft) {
+            state.spinLeft = state._weekSpinChoice;
+          }
+          // 商店买的消耗品额外加成
+          if (state._extraSpinNext) { state.spinLeft += state._extraSpinNext; state._extraSpinNext = 0; }
+          if (state._extraLuckNext) { state.luck += state._extraLuckNext; state._extraLuckNext = 0; }
+          state._weekSpinChoice = null;
           renderStatus();
           log(`▼▼▼ 第 ${state.week} 周 · 新目标 ${WEEK_TARGETS[state.week-1]} · 本周 ${state.spinLeft} spin ▼▼▼`, 'log-base');
         }
@@ -2743,6 +2882,151 @@ function checkWeekResult() {
   } else {
     showModal('💀 还债失败 · GAME OVER',
       `本周仅赚 ${state.money} 金币（目标 ${WEEK_TARGETS[state.week-1]}）<br>高利贷主把你埋了。<br>点击重开。`, true, () => resetGame());
+  }
+}
+
+// v2.10 · 商店 pool 构建（24 charm + 3 consumable + 3 enchant，价格按 ticket 计）
+function buildShopPool() {
+  return [
+    ...CHARMS.map(c => ({ kind:'charm', id:c.id, name:c.name, glyph:c.glyph, desc:c.effect, price: Math.max(3, Math.round(c.price/15)), rarity:c.rarity })),
+    { kind:'consumable', id:'cons-spin1',       name:'额外 Spin',   glyph:'🎲', desc:'本周 spin +1（消耗品）',         price:5, rarity:'common' },
+    { kind:'consumable', id:'cons-luck3',       name:'幸运膏',     glyph:'🍃', desc:'本周开始 luck 临时 +5',          price:4, rarity:'common' },
+    { kind:'consumable', id:'cons-doubleNext',  name:'双倍祝福',   glyph:'⊗', desc:'下次 spin 必发 double_score',    price:8, rarity:'rare' },
+    { kind:'enchant',    id:'ench-double',      name:'附魔·双倍',  glyph:'✦', desc:'下次 spin 随机 1 颗 double',     price:6, rarity:'common' },
+    { kind:'enchant',    id:'ench-golden',      name:'附魔·金袋',  glyph:'💰', desc:'下次 spin 随机 1 颗 golden(+5)', price:5, rarity:'common' },
+    { kind:'enchant',    id:'ench-valueplus',   name:'附魔·+值',   glyph:'➕', desc:'下次 spin 随机 1 颗 value(+3)',  price:5, rarity:'common' }
+  ];
+}
+
+// 按 rarity 权重抽 n 个不重复的商品（已装备的 charm 自动排除）
+function pickShopItems(n = 3) {
+  const pool = buildShopPool().filter(it => {
+    if (it.kind === 'charm' && state.equippedCharms.includes(it.id)) return false;
+    if (it.kind === 'charm' && (state._charmsInventory || []).includes(it.id)) return false;
+    return true;
+  });
+  const weights = { common:5, rare:2.5, epic:1, legendary:0.25 };
+  const result = [];
+  const seen = new Set();
+  for (let attempt = 0; attempt < 200 && result.length < n; attempt++) {
+    const item = pool[Math.floor(Math.random() * pool.length)];
+    if (seen.has(item.id)) continue;
+    if (Math.random() < (weights[item.rarity] || 1) / 5) {
+      seen.add(item.id);
+      result.push(item);
+    }
+  }
+  // 兜底
+  for (const item of pool) {
+    if (result.length >= n) break;
+    if (!seen.has(item.id)) { seen.add(item.id); result.push(item); }
+  }
+  return result;
+}
+
+// 显示商店 modal · 返回 promise，玩家点"进入下周"后 resolve
+async function showShopModal(nextWeekNo) {
+  return new Promise(resolve => {
+    const overlay = document.querySelector('#shop-modal');
+    const itemsEl = document.querySelector('#shop-items');
+    const ticketsEl = document.querySelector('#shop-tickets');
+    const moneyEl = document.querySelector('#shop-money');
+    const spinOptsEl = document.querySelector('#shop-spin-opts');
+    const rerollBtn = document.querySelector('#shop-reroll');
+    const confirmBtn = document.querySelector('#shop-confirm');
+
+    let items = pickShopItems(3);
+    let chosenSpin = 3;
+
+    // 少 spin 多换票 · 总量克制
+    const SPIN_OPTIONS = [
+      { spins: 3, ticketBonus: 0, label: '标准',  desc: '0 票补偿' },
+      { spins: 2, ticketBonus: 2, label: '节俭',  desc: '+2 票补偿' },
+      { spins: 1, ticketBonus: 5, label: '极简',  desc: '+5 票补偿' }
+    ];
+
+    function refresh() {
+      ticketsEl.textContent = state.tickets;
+      moneyEl.textContent = state.money;
+      rerollBtn.disabled = state.tickets < 2;
+      itemsEl.innerHTML = items.map((it, idx) => {
+        const sold = it._sold ? 'sold' : '';
+        const unaffordable = !it._sold && state.tickets < it.price ? 'unaffordable' : '';
+        const color = RARITY_COLOR[it.rarity] || '#475569';
+        return `<div class="shop-item ${sold} ${unaffordable}" data-idx="${idx}" style="--rarity:${color}" title="${it.desc.replace(/"/g,'&quot;')}">
+          <div class="si-glyph">${it.glyph}</div>
+          <div class="si-name">${it.name}</div>
+          <div class="si-rarity">${it.rarity}</div>
+          <div class="si-desc">${it.desc}</div>
+          <div class="si-price">🎫 ${it.price}${it._sold ? ' · 已购' : ''}</div>
+        </div>`;
+      }).join('');
+      itemsEl.querySelectorAll('.shop-item').forEach(el => {
+        if (el.classList.contains('sold') || el.classList.contains('unaffordable')) return;
+        el.onclick = () => {
+          const idx = +el.dataset.idx;
+          const it = items[idx];
+          if (state.tickets < it.price) return;
+          state.tickets -= it.price;
+          applyShopPurchase(it);
+          it._sold = true;
+          refresh();
+        };
+      });
+      spinOptsEl.innerHTML = SPIN_OPTIONS.map(opt => `
+        <div class="shop-spin-opt ${opt.spins === chosenSpin ? 'selected' : ''}" data-spins="${opt.spins}">
+          <div class="sso-spins">${opt.spins} spin</div>
+          <div class="sso-reward">${opt.label} · ${opt.desc}</div>
+        </div>
+      `).join('');
+      spinOptsEl.querySelectorAll('.shop-spin-opt').forEach(el => {
+        el.onclick = () => { chosenSpin = +el.dataset.spins; refresh(); };
+      });
+    }
+
+    rerollBtn.onclick = () => {
+      if (state.tickets < 2) return;
+      state.tickets -= 2;
+      items = pickShopItems(3);
+      refresh();
+    };
+    confirmBtn.onclick = () => {
+      const opt = SPIN_OPTIONS.find(o => o.spins === chosenSpin);
+      state.tickets += opt.ticketBonus;
+      state._weekSpinChoice = chosenSpin;
+      if (opt.ticketBonus > 0) log(`🎫 选择 ${chosenSpin} spin · +${opt.ticketBonus} 票 (累计 ${state.tickets})`, 'log-charm');
+      overlay.classList.remove('show');
+      resolve();
+    };
+    refresh();
+    overlay.classList.add('show');
+  });
+}
+
+// 应用商店购买
+function applyShopPurchase(item) {
+  if (item.kind === 'charm') {
+    if (state.equippedCharms.length < 5) {
+      state.equippedCharms.push(item.id);
+      recomputeCharmPassives();
+      renderCharms();
+      log(`✓ 装备 charm <b>${item.name}</b>`, 'log-charm');
+    } else {
+      state._charmsInventory = state._charmsInventory || [];
+      state._charmsInventory.push(item.id);
+      log(`✓ 买入 charm <b>${item.name}</b>（槽满 · 入背包）`, 'log-charm');
+    }
+  } else if (item.kind === 'consumable') {
+    if (item.id === 'cons-spin1')      state._extraSpinNext = (state._extraSpinNext || 0) + 1;
+    if (item.id === 'cons-luck3')      state._extraLuckNext = (state._extraLuckNext || 0) + 5;
+    if (item.id === 'cons-doubleNext') { state.doubleScoreNext = true; state.doubleScoreMult = 2; }
+    log(`✓ 使用 <b>${item.name}</b>`, 'log-charm');
+  } else if (item.kind === 'enchant') {
+    state._pendingEnchant = state._pendingEnchant || [];
+    if (item.id === 'ench-double')    state._pendingEnchant.push({ type:'double',     n:1 });
+    if (item.id === 'ench-golden')    state._pendingEnchant.push({ type:'golden',     n:5 });
+    if (item.id === 'ench-valueplus') state._pendingEnchant.push({ type:'value_plus', n:3 });
+    log(`✓ 携带 <b>${item.name}</b>（下次 spin 起效）`, 'log-charm');
   }
 }
 
@@ -2779,6 +3063,11 @@ function resetGame() {
   // v2.10
   state.luck = 0;
   state.tickets = 0;
+  state._pendingEnchant = [];
+  state._extraSpinNext = 0;
+  state._extraLuckNext = 0;
+  state._weekSpinChoice = null;
+  state._charmsInventory = [];
   clearEnchants();
   recomputeCharmPassives(); // 空 charm 数组 → luck=0
   clearComboTimer();
