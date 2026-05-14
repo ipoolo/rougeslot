@@ -2303,30 +2303,27 @@ async function renderReelSpin() {
       cell.className = 'cell reeling face-' + (finalDie ? finalDie.r : '1');
       const strip = document.createElement('div');
       strip.className = 'reel-strip';
+      // v2.10.5 · 附魔 badge 嵌入每一个 reel-cell 内，与 face 一起滚动（"一体"）
+      const enc = getEnchant(r, c);
+      let encHTML = '';
+      if (enc) {
+        const def = ENCHANT_DEFS[enc.type];
+        const tip = `${def.name}（${enc.n>1?'×'+enc.n:'1'}）· ${def.desc}`.replace(/"/g,'&quot;');
+        encHTML = `<div class="enchant-badge" style="color:${def.color}" data-tip="${tip}">${def.glyph}${enc.n>1?`<sub>${enc.n}</sub>`:''}</div>`;
+        cell.classList.add('enchanted');
+      }
       let html = '';
       for (let i = 0; i < N - 1; i++) {
         const f = FACES[Math.floor(Math.random() * 6)];
-        html += `<div class="reel-cell face-${f}"><div class="suit">${FACE_GLYPH[f]}</div><div class="rank">${f}</div></div>`;
+        html += `<div class="reel-cell face-${f}">${encHTML}<div class="suit">${FACE_GLYPH[f]}</div><div class="rank">${f}</div></div>`;
       }
       if (finalDie) {
-        html += `<div class="reel-cell face-${finalDie.r}"><div class="suit">${FACE_GLYPH[finalDie.r]}</div><div class="rank">${finalDie.r}</div></div>`;
+        html += `<div class="reel-cell face-${finalDie.r}">${encHTML}<div class="suit">${FACE_GLYPH[finalDie.r]}</div><div class="rank">${finalDie.r}</div></div>`;
       } else {
         html += `<div class="reel-cell"><div class="suit">?</div></div>`;
       }
       strip.innerHTML = html;
       cell.appendChild(strip);
-      // v2.10.3 · 附魔 badge 作为 cell 的直接子元素（与 strip 同级，不随 strip 滚动）
-      const enc = getEnchant(r, c);
-      if (enc) {
-        const def = ENCHANT_DEFS[enc.type];
-        const badge = document.createElement('div');
-        badge.className = 'enchant-badge';
-        badge.style.color = def.color;
-        badge.dataset.tip = `${def.name}（${enc.n>1?'×'+enc.n:'1'}）· ${def.desc}`;
-        badge.innerHTML = def.glyph + (enc.n > 1 ? `<sub>${enc.n}</sub>` : '');
-        cell.appendChild(badge);
-        cell.classList.add('enchanted');
-      }
       g.appendChild(cell);
       strips.push({ strip, cell, finalDie, r, c, N });
     }
