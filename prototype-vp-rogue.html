@@ -2274,7 +2274,7 @@ const CHARMS = [
   { id:'c22', name:'七星之运',   glyph:'⭐', kind:'luck_plus_cost',value:15,  effect:'luck +15 但每周 spin -1',      rarity:'rare',      price:150 },
   // ── G. 附魔 Enchant ─────────────────────────────────────────
   // v2.10.15: c23 黄金触媒已删除（golden 附魔整体移除）
-  { id:'c24', name:'双倍铃',     glyph:'🎁', kind:'auto_double',   value:1,   effect:'每 spin 随机 1 颗加 double 附魔',rarity:'epic',    price:250 }
+  { id:'c24', name:'重触铃',     glyph:'🎁', kind:'auto_double',   value:1,   effect:'每 spin 随机 1 颗加 double 附魔（让首个图形再多结算 1 次）',rarity:'epic',    price:250 }
 ];
 // charm rarity → 颜色（商店 + 装备槽用）
 const RARITY_COLOR = {
@@ -2354,11 +2354,11 @@ const ENCHANT_DEFS = {
   },
   value_plus: {
     name:'加值', glyph:'➕', color:'#34d399',
-    desc:'本格 face 数值 +N，影响图形 maxValue 选取（同图形多颗仅取最高那颗生效）'
+    desc:'spin 后立即把"该格 face 类型"的全网价值 +N，所有同 face 的 cell 都受益；多颗 value_plus 累加（不同 face 独立计算），符号图鉴实时刷新'
   },
   combo_plus: {
     name:'连击', glyph:'⚡', color:'#a78bfa',
-    desc:'本格参与图形触发时 combo 额外 +N（基础每图形 +1）'
+    desc:'本格参与的"首个图形"结算时给 combo +N（每个附魔每 spin 只触发 1 次，不论该 cell 跨多少图形）'
   }
   // v2.10.15: golden 附魔已删除
 };
@@ -3908,9 +3908,10 @@ function buildShopPool() {
     { kind:'consumable', id:'cons-spin1',       name:'额外 Spin',   glyph:'🎲', desc:'本周 spin +1（消耗品）',         price:3, rarity:'common' },
     { kind:'consumable', id:'cons-luck3',       name:'幸运膏',     glyph:'🍃', desc:'本周开始 luck 临时 +5',          price:2, rarity:'common' },
     { kind:'consumable', id:'cons-doubleNext',  name:'双倍祝福',   glyph:'⊗', desc:'下次 spin 必发 double_score',    price:4, rarity:'rare' },
-    { kind:'enchant',    id:'ench-double',      name:'附魔·双倍',  glyph:'✦', desc:'下次 spin 随机 1 颗 double',     price:3, rarity:'common' },
+    { kind:'enchant',    id:'ench-double',      name:'附魔·重触',  glyph:'✦', desc:'下次 spin 随机 1 颗 double：让所在图形再多结算 1 次', price:3, rarity:'common' },
     // v2.10.15: ench-golden 商品已删除
-    { kind:'enchant',    id:'ench-valueplus',   name:'附魔·+值',   glyph:'➕', desc:'下次 spin 随机 1 颗 value(+3)',  price:2, rarity:'common' }
+    { kind:'enchant',    id:'ench-valueplus',   name:'附魔·加值',  glyph:'➕', desc:'下次 spin 随机 1 颗 value_plus：该 face 全网 +3',     price:2, rarity:'common' },
+    { kind:'enchant',    id:'ench-comboplus',   name:'附魔·连击',  glyph:'⚡', desc:'下次 spin 随机 1 颗 combo_plus：图形触发时 combo +2', price:2, rarity:'common' }
   ];
 }
 
@@ -4054,6 +4055,7 @@ function applyShopPurchase(item) {
     if (item.id === 'ench-double')    state._pendingEnchant.push({ type:'double',     n:1 });
     // v2.10.15: ench-golden 购买分支已删除
     if (item.id === 'ench-valueplus') state._pendingEnchant.push({ type:'value_plus', n:3 });
+    if (item.id === 'ench-comboplus') state._pendingEnchant.push({ type:'combo_plus', n:2 });
     log(`✓ 携带 <b>${item.name}</b>（下次 spin 起效）`, 'log-charm');
   }
   // v2.10.1 同步附魔预告
