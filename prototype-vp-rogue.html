@@ -2187,9 +2187,9 @@ const CHARMS = [
   { id:'c3',  name:'雷击运',     glyph:'⚡', kind:'multi',         value:3,   effect:'整体 ×3',                      rarity:'epic',      price:280 },
   { id:'c6',  name:'死亡赌',     glyph:'💀', kind:'multi',         value:5,   effect:'整体 ×5（传奇）',              rarity:'legendary', price:600 },
   // ── B. 条件乘法 ConditionalMult ─────────────────────────────
-  { id:'c7',  name:'三条专家',   glyph:'🎯', kind:'three_bonus',   value:1.3, effect:'每个三条整体 ×1.3',            rarity:'common',    price:60  },
-  { id:'c8',  name:'四条专家',   glyph:'💎', kind:'four_bonus',    value:1.6, effect:'每个四条整体 ×1.6',            rarity:'rare',      price:140 },
-  { id:'c4',  name:'五条专家',   glyph:'🔥', kind:'five_kind_bonus',value:2,   effect:'每个五条整体 ×2',              rarity:'epic',      price:210 },
+  { id:'c7',  name:'三条专家',   glyph:'🎯', kind:'three_bonus',   value:1,   effect:'每个三条整体 +1',              rarity:'common',    price:60  },
+  { id:'c8',  name:'四条专家',   glyph:'💎', kind:'four_bonus',    value:1,   effect:'每个四条整体 +1',              rarity:'rare',      price:140 },
+  { id:'c4',  name:'五条专家',   glyph:'🔥', kind:'five_kind_bonus',value:1,   effect:'每个五条整体 +1',              rarity:'epic',      price:210 },
   { id:'c9',  name:'大奖回响',   glyph:'🔔', kind:'bonus_echo',    value:2,   effect:'本次有任一大奖时整体 ×2',      rarity:'rare',      price:160 },
   { id:'c10', name:'单图大师',   glyph:'🎴', kind:'solo_mult',     value:3,   effect:'仅触发 1 个图形时整体 ×3',     rarity:'rare',      price:180 },
   // ── C. 充能 Charging ────────────────────────────────────────
@@ -3028,20 +3028,21 @@ async function doScore() {
           triggerNote = triggered ? `5 点 ${fiveCount} 颗 → ×${mult.toFixed(2)}` : '无 5 点骰子';
           break;
         case 'three_bonus':
+          // v2.10.12 · 线性：mult = 1 + value × count （value=1 时即"每个 +1"）
           triggered = threeCount > 0;
-          mult = triggered ? Math.pow(charm.value, threeCount) : 1;
-          triggerNote = triggered ? `三条 ${threeCount} 个 → ×${mult.toFixed(2)}` : '本次无三条';
+          mult = triggered ? 1 + charm.value * threeCount : 1;
+          triggerNote = triggered ? `三条 ${threeCount} 个 (+${charm.value}×${threeCount}) → ×${mult.toFixed(2)}` : '本次无三条';
           break;
         case 'four_bonus':
           triggered = fourCount > 0;
-          mult = triggered ? Math.pow(charm.value, fourCount) : 1;
-          triggerNote = triggered ? `四条 ${fourCount} 个 → ×${mult.toFixed(2)}` : '本次无四条';
+          mult = triggered ? 1 + charm.value * fourCount : 1;
+          triggerNote = triggered ? `四条 ${fourCount} 个 (+${charm.value}×${fourCount}) → ×${mult.toFixed(2)}` : '本次无四条';
           break;
         case 'five_kind_bonus': {
           const fk = shapes.filter(s => s.type === 'five_kind').length;
           triggered = fk > 0;
-          mult = triggered ? Math.pow(charm.value, fk) : 1;
-          triggerNote = triggered ? `五条 ${fk} 个 → ×${mult.toFixed(2)}` : '本次无五条';
+          mult = triggered ? 1 + charm.value * fk : 1;
+          triggerNote = triggered ? `五条 ${fk} 个 (+${charm.value}×${fk}) → ×${mult.toFixed(2)}` : '本次无五条';
           break;
         }
         case 'bonus_echo':
