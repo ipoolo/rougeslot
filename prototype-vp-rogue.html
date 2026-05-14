@@ -207,6 +207,12 @@
   .codex-row .cx-glyph { font-size: 16px; text-align: center; }
   .codex-row .cx-val { color: #fbbf24; font-weight: 700; }
   .codex-row .cx-prob { color: #94a3b8; font-size: 10px; text-align: right; }
+  /* v2.10.17 · face 有 value_plus 时整行加绿光提示 */
+  .codex-row.has-vp {
+    background: rgba(52,211,153,0.08);
+    box-shadow: inset 0 0 0 1px rgba(52,211,153,0.25);
+    border-radius: 4px;
+  }
   /* 图形计分表行（含开关 + mini-grid 示意图）*/
   .shape-row {
     display: grid; grid-template-columns: 50px 1fr auto auto 28px;
@@ -1190,6 +1196,17 @@
     animation: retriggerPulse 0.4s ease-out;
     border-color: #fbbf24 !important;
     z-index: 4;
+  }
+  /* v2.10.17 · value_plus Phase B 单 cell 绿色 pulse */
+  .cell.value-plus-pulse {
+    animation: valuePlusPulse 0.38s ease-out;
+    border-color: #34d399 !important;
+    z-index: 4;
+  }
+  @keyframes valuePlusPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(52,211,153,0); transform: scale(1); }
+    40%  { box-shadow: 0 0 26px 6px rgba(52,211,153,0.85), 0 0 40px rgba(74,222,128,0.55); transform: scale(1.06); }
+    100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); transform: scale(1); }
   }
   @keyframes retriggerPulse {
     0%   { box-shadow: 0 0 0 0 rgba(251,191,36,0); transform: scale(1); }
@@ -2306,6 +2323,8 @@ const state = {
   streakBonusLuck: 0,
   // v2.10 · 拥有的 charm（开局空 · 通过起手 picker 免费 3 选 1，其余从商店收集）
   ownedCharms: [],
+  // v2.10.17 · face-level 加值（value_plus 附魔生效后累计到此表 · 每 spin 清零）
+  faceValuePlus: { '1':0, '2':0, '3':0, '4':0, '5':0, '6':0 },
   // v2.10.2 · 全网附魔模式开关（顶部 toggle）· 开启时每次 spin 25 个 cell 都随机附魔
   allSymbolEnchant: false,
   // v2.10.9 · 100% 触发概率开关（调试用）· 开启时 rand_reroll / rand_forced 必发
@@ -2337,11 +2356,17 @@ const ENCHANT_DEFS = {
 function getEnchant(r, c) { return state.enchants.get(r + ',' + c) || null; }
 function setEnchant(r, c, type, n) { state.enchants.set(r + ',' + c, { type, n: n || 1 }); }
 function clearEnchants() { state.enchants.clear(); }
+
+// v2.10.17 · face-level 加值 helpers
+function clearFaceValuePlus() {
+  for (const f of FACES) state.faceValuePlus[f] = 0;
+}
+function getFaceEffectiveValue(face) {
+  return SYMBOL_TABLE[face].value + (state.faceValuePlus[face] || 0);
+}
+// 旧 API 保留兼容（cell 级查询，现在改成 face-level lookup）
 function getEffectiveFaceValue(r, c, face) {
-  const e = getEnchant(r, c);
-  const base = SYMBOL_TABLE[face].value;
-  if (e && e.type === 'value_plus') return base + (e.n || 3);
-  return base;
+  return getFaceEffectiveValue(face);
 }
 // v2.1 COMBO 等级配置
 const COMBO_LEVELS = [
@@ -2741,9 +2766,10 @@ function log(html, cls='log-base') {
 // ============ 游戏动作（v0.6: SPIN 单按钮 = 摇骰 + 自动结算）============
 async function doSpin() {
   state.drawn = true;
-  // v2.10 · 附魔仅持续 1 spin（每次 spin 开始时清空，charm/商店再注入）
-  // 注：先清空 spin 内消耗式附魔。"永久附魔"未来用单独的 perm-enchants 集合实现。
+  // v2.10 · 附魔仅持续 1 spin
   clearEnchants();
+  // v2.10.17 · face-level 加值也清零
+  clearFaceValuePlus();
   // v2.10.2 · 全网附魔模式：每个 cell 都从勾选的附魔池随机选一个
   // v2.10.13 · 池子由调试区 4 个 checkbox 决定（默认 4 种全开）
   if (state.allSymbolEnchant) {
@@ -2872,8 +2898,56 @@ async function doSpin() {
     renderCombo();
   }
 
+  // v2.10.17 · Phase B · 应用 value_plus 附魔（face-level 加值 + 逐个动画 + 图鉴刷新）
+  await applyValuePlusPhase();
+
   // 3) 进入结算（原 doScore 逻辑）
   await doScore();
+}
+
+// v2.10.17 · Phase B：遍历 state.enchants 找到所有 value_plus 类型，
+//                    逐个 cell 触发"+N 给 face X"动画，累计到 state.faceValuePlus，刷新图鉴。
+async function applyValuePlusPhase() {
+  const cells = document.querySelectorAll('.grid .cell');
+  // 收集所有 value_plus cell（按 r,c 顺序）
+  const list = [];
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 5; c++) {
+      const e = getEnchant(r, c);
+      if (e && e.type === 'value_plus') list.push({ r, c, n: e.n, face: state.grid[r][c].r });
+    }
+  }
+  if (list.length === 0) return;
+  log(`🔮 <b>Phase B</b> · 应用 ${list.length} 个 value_plus 附魔（face 级加值）`, 'log-charm');
+  for (const it of list) {
+    // ① 该 cell 绿色 pulse
+    const cell = cells[it.r * 5 + it.c];
+    if (cell) {
+      cell.classList.add('value-plus-pulse');
+      setTimeout(() => cell.classList.remove('value-plus-pulse'), 380);
+    }
+    // ② 飘字 "🔮 face X +N"
+    const rect = cell ? cell.getBoundingClientRect() : null;
+    if (rect) {
+      const el = document.createElement('div');
+      el.className = 'score-float';
+      el.style.color = '#34d399';
+      el.style.fontSize = '20px';
+      el.innerHTML = `🔮 ${FACE_GLYPH[it.face]}${it.face} +${it.n}`;
+      el.style.left = (rect.left + rect.width/2) + 'px';
+      el.style.top  = (rect.top + rect.height/2) + 'px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 950);
+    }
+    // ③ 累计 face-level 加值
+    state.faceValuePlus[it.face] = (state.faceValuePlus[it.face] || 0) + it.n;
+    // ④ 图鉴实时刷新（高亮该 face 行）
+    renderSymbolCodex();
+    playTone(520 + Math.random() * 80, 70, 'triangle', 0.16);
+    // ⑤ 等待下一颗
+    await sleep(260);
+  }
+  log(`  ↳ 累计：${FACES.map(f => state.faceValuePlus[f] > 0 ? `${FACE_GLYPH[f]}${f}+${state.faceValuePlus[f]}` : '').filter(Boolean).join(' / ')}`, 'log-charm');
 }
 
 async function doScore() {
@@ -4458,24 +4532,29 @@ document.querySelector('#btn-cheat').addEventListener('click', () => {
 // 右侧图形规则 toggle 已由 setupPanelCollapse('right') 接管（#toggle-right），此处旧绑定已移除
 
 // ============ 渲染图鉴 + 图形表 ============
-// v2.10.6 · 符号图鉴渲染动态 prob（响应 luck 变化：6 点概率会随 luck 上升）
+// v2.10.6/.17 · 符号图鉴动态 prob（luck）+ 动态价值（value_plus face-level 加值）
 function renderSymbolCodex() {
   const root = document.querySelector('#symbol-codex');
   if (!root) return;
-  // 与 rollDie 相同公式：luckBoost 区间直接给 6 点，其余按 (1-luckBoost) 折扣
   const luckBoost = Math.min(0.4, (state.luck || 0) * 0.002);
   root.innerHTML = FACES.map(f => {
     const s = SYMBOL_TABLE[f];
     let effProb;
     if (f === '6') effProb = s.prob * (1 - luckBoost) + luckBoost;
     else effProb = s.prob * (1 - luckBoost);
-    const boostTag = (f === '6' && luckBoost > 0)
+    const probBoost = (f === '6' && luckBoost > 0)
       ? ` <span style="color:#4ade80; font-size:9px; font-weight:700;">+${(luckBoost*100).toFixed(1)}%</span>`
       : '';
-    return `<div class="codex-row face-${f}">
+    // v2.10.17 · face-level value_plus 加值显示
+    const vp = state.faceValuePlus && state.faceValuePlus[f] || 0;
+    const effVal = s.value + vp;
+    const valTag = vp > 0
+      ? ` <span style="color:#34d399; font-size:10px; font-weight:900;">+${vp}</span> → <b style="color:#34d399;">${effVal}</b>`
+      : '';
+    return `<div class="codex-row face-${f}${vp > 0 ? ' has-vp' : ''}">
       <span class="cx-glyph">${FACE_GLYPH[f]}</span>
-      <span><b>${f}</b> · 价值 <span class="cx-val">${s.value}</span></span>
-      <span class="cx-prob">${(effProb*100).toFixed(1)}%${boostTag}</span>
+      <span><b>${f}</b> · 价值 <span class="cx-val">${s.value}</span>${valTag}</span>
+      <span class="cx-prob">${(effProb*100).toFixed(1)}%${probBoost}</span>
     </div>`;
   }).join('');
 }
