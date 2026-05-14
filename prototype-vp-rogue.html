@@ -1555,6 +1555,7 @@
   .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(251,191,36,0.3); }
 
   /* 结算日志 */
+  .log-wrap { position: relative; }
   .log {
     background: rgba(0,0,0,0.4);
     border: 1px solid rgba(251,191,36,0.15);
@@ -1566,6 +1567,76 @@
     line-height: 1.7;
     font-family: ui-monospace, monospace;
   }
+  /* v2.10.11 · 日志放大按钮（log 容器右上角浮动） */
+  .log-expand-btn {
+    position: absolute;
+    top: 6px; right: 8px;
+    background: rgba(40,24,60,0.85);
+    color: #fde68a;
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 5px;
+    padding: 3px 9px;
+    font-size: 11px;
+    cursor: pointer;
+    z-index: 5;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  .log-expand-btn:hover {
+    background: rgba(251,191,36,0.2);
+    border-color: #fbbf24;
+    box-shadow: 0 0 10px rgba(251,191,36,0.4);
+  }
+  /* 全屏日志 modal */
+  .log-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 9998;
+    display: none;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .log-modal-overlay.show { display: flex; }
+  .log-modal {
+    width: 92vw;
+    max-width: 1080px;
+    height: 88vh;
+    background: linear-gradient(180deg, #1e1530 0%, #261936 100%);
+    border: 2px solid #fbbf24;
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  }
+  .log-modal-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(251,191,36,0.3);
+  }
+  .log-modal-head h3 {
+    margin: 0; color: #fbbf24; letter-spacing: 2px; font-size: 16px;
+  }
+  .log-modal-close {
+    background: rgba(248,113,113,0.15);
+    color: #f87171;
+    border: 1px solid #f87171;
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .log-modal-close:hover { background: rgba(248,113,113,0.3); }
+  .log-modal-body {
+    flex: 1;
+    max-height: none !important;     /* 覆盖 .log 的 200px 限制 */
+    font-size: 14px;                  /* 放大字号 */
+    line-height: 1.8;
+    padding: 16px 20px;
+  }
+  .log-modal-body .log-line { padding: 3px 0; }
   .log-line { padding: 2px 0; }
   .log-base { color: #94a3b8; }
   .log-line-bonus { color: #fbbf24; }
@@ -1722,9 +1793,23 @@
     </div>
   </div>
 
-  <!-- 日志 -->
-  <div class="log" id="log">
-    <div class="log-line log-base">[准备就绪] 点击 SPIN 开始第 1 周 · 目标 100 金币</div>
+  <!-- 日志 (v2.10.11 加全屏放大按钮) -->
+  <div class="log-wrap">
+    <button class="log-expand-btn" id="log-expand-btn" title="点击全屏阅读完整日志">⛶ 放大</button>
+    <div class="log" id="log">
+      <div class="log-line log-base">[准备就绪] 点击 SPIN 开始第 1 周 · 目标 100 金币</div>
+    </div>
+  </div>
+
+  <!-- v2.10.11 · 日志全屏 modal -->
+  <div class="log-modal-overlay" id="log-modal">
+    <div class="log-modal">
+      <div class="log-modal-head">
+        <h3>📜 完整结算日志</h3>
+        <button class="log-modal-close" id="log-modal-close" title="关闭 (Esc)">✕ 关闭</button>
+      </div>
+      <div class="log log-modal-body" id="log-modal-body"></div>
+    </div>
   </div>
 
   <div class="footer">DESIGN PROTOTYPE · 仅用于验证核心循环 · R_RougeSlot v5</div>
@@ -4188,6 +4273,32 @@ document.querySelector('#btn-early').addEventListener('click', triggerEarlyFinis
       : '⚪ 100% 触发模式已关闭', 'log-line-bonus');
   });
 })();
+// v2.10.11 · 日志全屏放大
+(function bindLogExpand() {
+  const openBtn = document.querySelector('#log-expand-btn');
+  const closeBtn = document.querySelector('#log-modal-close');
+  const overlay = document.querySelector('#log-modal');
+  const body = document.querySelector('#log-modal-body');
+  if (!openBtn || !overlay || !body) return;
+  function open() {
+    // 克隆 log 当前内容到 modal body
+    const src = document.querySelector('#log');
+    body.innerHTML = src ? src.innerHTML : '';
+    overlay.classList.add('show');
+    // 滚到底（看最新日志）
+    requestAnimationFrame(() => { body.scrollTop = body.scrollHeight; });
+  }
+  function close() { overlay.classList.remove('show'); }
+  openBtn.addEventListener('click', open);
+  closeBtn && closeBtn.addEventListener('click', close);
+  // 点击遮罩关闭
+  overlay.addEventListener('click', (ev) => { if (ev.target === overlay) close(); });
+  // Esc 关闭
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape' && overlay.classList.contains('show')) close();
+  });
+})();
+
 // v2.10.10 · Charm 自选模式 toggle（影响起手 picker 是否提供全池入口）
 (function bindDevCharmToggle() {
   const cb = document.querySelector('#toggle-dev-charm');
