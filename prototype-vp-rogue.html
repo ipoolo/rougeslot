@@ -446,6 +446,78 @@
     letter-spacing: 2px;
   }
 
+  /* v2.10.10 · Charm 自选入口 + 全池多选区 */
+  .btn-dev-entry {
+    background: rgba(167,139,250,0.15);
+    border: 1.5px dashed #a78bfa;
+    color: #c4b5fd;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  .btn-dev-entry:hover { background: rgba(167,139,250,0.3); box-shadow: 0 0 12px rgba(167,139,250,0.5); }
+  .btn-dev-back {
+    background: rgba(100,116,139,0.2);
+    border: 1px solid #475569;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .btn-dev-back:hover { background: rgba(100,116,139,0.4); color: #cbd5e1; }
+  .dev-pick-info {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: #c4b5fd; letter-spacing: 1px;
+    margin-bottom: 12px; padding: 6px 4px;
+    border-bottom: 1px dashed rgba(167,139,250,0.3);
+  }
+  .dev-pick-info b { color: #fde68a; font-size: 16px; padding: 0 3px; }
+  .dev-pick-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 4px;
+  }
+  .dev-pick-item {
+    border: 1.5px solid var(--rarity, #475569);
+    background: rgba(0,0,0,0.35);
+    border-radius: 6px;
+    padding: 8px 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.12s;
+    position: relative;
+  }
+  .dev-pick-item:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.4); }
+  .dev-pick-item.checked {
+    background: rgba(251,191,36,0.15);
+    border-color: #fbbf24;
+    box-shadow: 0 0 12px rgba(251,191,36,0.5);
+  }
+  .dev-pick-item.checked::after {
+    content: '✓';
+    position: absolute;
+    top: 3px; right: 5px;
+    color: #fbbf24;
+    font-weight: 900;
+    font-size: 14px;
+    text-shadow: 0 0 6px #fbbf24;
+  }
+  .dev-pick-item .dpi-glyph { font-size: 22px; line-height: 1; margin-bottom: 4px; }
+  .dev-pick-item .dpi-name { font-size: 11px; font-weight: 700; color: var(--rarity, #eee); }
+  .dev-pick-item .dpi-rarity { font-size: 8px; opacity: 0.6; margin-top: 2px; text-transform: uppercase; }
+  .dev-pick-item .dpi-eff { font-size: 9px; color: #94a3b8; line-height: 1.3; margin-top: 4px; min-height: 24px; }
+  @media (max-width: 720px) {
+    .dev-pick-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
   /* v2.10 · 近输 · 屏幕震动 */
   @keyframes screenShake {
     0%, 100% { transform: translate(0); }
@@ -1548,6 +1620,11 @@
       <span class="gt-track"><span class="gt-thumb"></span></span>
       <span class="gt-label">🎯 100% 触发概率 <span class="gt-hint">（所有 charm 必触发）</span></span>
     </label>
+    <label class="gt-switch" title="开启后起手 charm 界面新增"自选所有 24 个 charm"入口，可手动挑选最多 5 个装备">
+      <input type="checkbox" id="toggle-dev-charm"/>
+      <span class="gt-track"><span class="gt-thumb"></span></span>
+      <span class="gt-label">🔧 Charm 自选 <span class="gt-hint">（起手页可挑全池）</span></span>
+    </label>
   </div>
 
   <div class="title">
@@ -1681,12 +1758,32 @@
   </div>
 </div>
 
-<!-- v2.10 · 起手 charm 选择（开局免费 3 选 1） -->
+<!-- v2.10 · 起手 charm 选择（开局免费 3 选 1，开调试模式后可切到全池自选） -->
 <div class="starter-overlay" id="starter-modal">
   <div class="starter-box">
-    <h2 style="color:#fbbf24; letter-spacing:3px; text-align:center; margin-top:0;">🎴 起手 charm · 免费 3 选 1</h2>
-    <p style="text-align:center; color:#94a3b8; font-size:12px; letter-spacing:1px; margin: 6px 0 20px;">选定后自动装备进 charm 槽，其余的之后可在商店购买</p>
+    <h2 id="starter-title" style="color:#fbbf24; letter-spacing:3px; text-align:center; margin-top:0;">🎴 起手 charm · 免费 3 选 1</h2>
+    <p id="starter-subtitle" style="text-align:center; color:#94a3b8; font-size:12px; letter-spacing:1px; margin: 6px 0 16px;">选定后自动装备进 charm 槽，其余的之后可在商店购买</p>
+
+    <!-- 正常 3 选 1 区 -->
     <div class="starter-items" id="starter-items"></div>
+
+    <!-- 调试入口（仅 devCharmPicker 开启时显示） -->
+    <div id="starter-dev-entry" style="display:none; text-align:center; margin-top:14px;">
+      <button class="btn-dev-entry" id="btn-open-dev-pick">🔧 调试模式 · 自选所有 24 个 charm →</button>
+    </div>
+
+    <!-- 自选全池区（默认隐藏，点击调试入口后展开） -->
+    <div id="starter-dev-area" style="display:none;">
+      <div class="dev-pick-info">
+        <span>从 24 个 charm 中自选装备（最多 5 个）</span>
+        <span class="dev-pick-count">已选 <b id="dev-pick-count">0</b> / 5</span>
+      </div>
+      <div class="dev-pick-grid" id="dev-pick-grid"></div>
+      <div style="text-align:center; margin-top:16px;">
+        <button class="btn-dev-back" id="btn-dev-back">← 返回 3 选 1</button>
+        <button class="shop-confirm" id="btn-dev-confirm" style="margin: 0 0 0 12px; display:inline-block;">确认装备 →</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2092,7 +2189,9 @@ const state = {
   // v2.10.2 · 全网附魔模式开关（顶部 toggle）· 开启时每次 spin 25 个 cell 都随机附魔
   allSymbolEnchant: false,
   // v2.10.9 · 100% 触发概率开关（调试用）· 开启时 rand_reroll / rand_forced 必发
-  alwaysTriggerCharms: false
+  alwaysTriggerCharms: false,
+  // v2.10.10 · Charm 自选模式（调试用）· 开启时起手 picker 提供"自选全池"入口
+  devCharmPicker: false
 };
 
 // v2.10 附魔类型定义
@@ -2147,6 +2246,10 @@ try {
 // v2.10.9 · 100% 触发概率开关
 try {
   state.alwaysTriggerCharms = localStorage.getItem('vp-rogue-100-trigger') === '1';
+} catch (e) {}
+// v2.10.10 · Charm 自选模式
+try {
+  state.devCharmPicker = localStorage.getItem('vp-rogue-dev-charm') === '1';
 } catch (e) {}
 
 // ============ 工具 ============
@@ -3418,14 +3521,24 @@ async function buildUpForBonus() {
 }
 
 // v2.10 · 起手 charm picker · 从 charm 池随机抽 3 个让玩家免费选 1
+// v2.10.10 · devCharmPicker 开启时可切换到"全池 24 自选"模式
 async function showStarterPickerModal() {
   return new Promise(resolve => {
     const overlay = document.querySelector('#starter-modal');
     const itemsEl = document.querySelector('#starter-items');
+    const titleEl = document.querySelector('#starter-title');
+    const subEl = document.querySelector('#starter-subtitle');
+    const devEntryEl = document.querySelector('#starter-dev-entry');
+    const devAreaEl = document.querySelector('#starter-dev-area');
+    const devGridEl = document.querySelector('#dev-pick-grid');
+    const devCountEl = document.querySelector('#dev-pick-count');
+    const devBackBtn = document.querySelector('#btn-dev-back');
+    const devConfirmBtn = document.querySelector('#btn-dev-confirm');
+    const devOpenBtn = document.querySelector('#btn-open-dev-pick');
+
     // 候选池：所有 common + 部分 rare（让起手有 1-2 个亮眼选项）
     const commonPool = CHARMS.filter(c => c.rarity === 'common');
     const rarePool = CHARMS.filter(c => c.rarity === 'rare');
-    // 抽 2 common + 1 rare（如果池子够）
     const pick = (pool, n) => {
       const out = []; const used = new Set();
       while (out.length < n && used.size < pool.length) {
@@ -3436,37 +3549,104 @@ async function showStarterPickerModal() {
       return out;
     };
     const picked = [...pick(commonPool, 2), ...pick(rarePool, 1)];
-    // 容错：不够 3 个就再补
     while (picked.length < 3) {
       const c = CHARMS[Math.floor(Math.random() * CHARMS.length)];
       if (!picked.find(p => p.id === c.id)) picked.push(c);
     }
-    itemsEl.innerHTML = picked.map(c => `
-      <div class="starter-item" data-id="${c.id}" style="--rarity:${RARITY_COLOR[c.rarity]||'#94a3b8'}" title="${c.effect}">
-        <div class="si-glyph">${c.glyph}</div>
-        <div class="si-name">${c.name}</div>
-        <div class="si-rarity">${c.rarity}</div>
-        <div class="si-desc">${c.effect}</div>
-        <div class="si-cta">免费选取 →</div>
-      </div>
-    `).join('');
-    itemsEl.querySelectorAll('.starter-item').forEach(el => {
-      el.onclick = () => {
-        const id = el.dataset.id;
-        state.ownedCharms = state.ownedCharms || [];
+
+    // —— 渲染正常 3 选 1 ——
+    function renderNormal() {
+      titleEl.textContent = '🎴 起手 charm · 免费 3 选 1';
+      subEl.textContent = '选定后自动装备进 charm 槽，其余的之后可在商店购买';
+      itemsEl.style.display = 'grid';
+      devAreaEl.style.display = 'none';
+      devEntryEl.style.display = state.devCharmPicker ? 'block' : 'none';
+      itemsEl.innerHTML = picked.map(c => `
+        <div class="starter-item" data-id="${c.id}" style="--rarity:${RARITY_COLOR[c.rarity]||'#94a3b8'}" title="${c.effect}">
+          <div class="si-glyph">${c.glyph}</div>
+          <div class="si-name">${c.name}</div>
+          <div class="si-rarity">${c.rarity}</div>
+          <div class="si-desc">${c.effect}</div>
+          <div class="si-cta">免费选取 →</div>
+        </div>
+      `).join('');
+      itemsEl.querySelectorAll('.starter-item').forEach(el => {
+        el.onclick = () => {
+          const id = el.dataset.id;
+          state.ownedCharms = state.ownedCharms || [];
+          if (!state.ownedCharms.includes(id)) state.ownedCharms.push(id);
+          if (state.equippedCharms.length < 5 && !state.equippedCharms.includes(id)) {
+            state.equippedCharms.push(id);
+          }
+          recomputeCharmPassives();
+          renderCharms();
+          renderStatus();
+          const ch = CHARMS.find(c => c.id === id);
+          log(`✓ 起手 charm <b>${ch.name}</b> 选定并装备`, 'log-line-bonus');
+          overlay.classList.remove('show');
+          resolve();
+        };
+      });
+    }
+
+    // —— 渲染全池 24 自选（调试） ——
+    const devSelected = new Set();
+    function renderDev() {
+      titleEl.textContent = '🔧 Charm 自选 · 调试模式';
+      subEl.textContent = '点击 charm 切换装备状态 · 最多装备 5 个';
+      itemsEl.style.display = 'none';
+      devEntryEl.style.display = 'none';
+      devAreaEl.style.display = 'block';
+      devCountEl.textContent = devSelected.size;
+      devGridEl.innerHTML = CHARMS.map(c => {
+        const checked = devSelected.has(c.id) ? 'checked' : '';
+        return `<div class="dev-pick-item ${checked}" data-id="${c.id}" style="--rarity:${RARITY_COLOR[c.rarity]||'#94a3b8'}" title="${c.effect}">
+          <div class="dpi-glyph">${c.glyph}</div>
+          <div class="dpi-name">${c.name}</div>
+          <div class="dpi-rarity">${c.rarity}</div>
+          <div class="dpi-eff">${c.effect}</div>
+        </div>`;
+      }).join('');
+      devGridEl.querySelectorAll('.dev-pick-item').forEach(el => {
+        el.onclick = () => {
+          const id = el.dataset.id;
+          if (devSelected.has(id)) {
+            devSelected.delete(id);
+          } else {
+            if (devSelected.size >= 5) {
+              log('⚠ 最多装备 5 个 charm', 'log-base');
+              return;
+            }
+            devSelected.add(id);
+          }
+          renderDev();
+        };
+      });
+    }
+
+    devOpenBtn.onclick = () => renderDev();
+    devBackBtn.onclick = () => renderNormal();
+    devConfirmBtn.onclick = () => {
+      if (devSelected.size === 0) {
+        log('⚠ 至少选 1 个 charm', 'log-base');
+        return;
+      }
+      state.ownedCharms = state.ownedCharms || [];
+      for (const id of devSelected) {
         if (!state.ownedCharms.includes(id)) state.ownedCharms.push(id);
         if (state.equippedCharms.length < 5 && !state.equippedCharms.includes(id)) {
           state.equippedCharms.push(id);
         }
-        recomputeCharmPassives();
-        renderCharms();
-        renderStatus();
-        const ch = CHARMS.find(c => c.id === id);
-        log(`✓ 起手 charm <b>${ch.name}</b> 选定并装备`, 'log-line-bonus');
-        overlay.classList.remove('show');
-        resolve();
-      };
-    });
+      }
+      recomputeCharmPassives();
+      renderCharms();
+      renderStatus();
+      log(`🔧 调试自选：装备 ${devSelected.size} 个 charm`, 'log-charm');
+      overlay.classList.remove('show');
+      resolve();
+    };
+
+    renderNormal();
     overlay.classList.add('show');
   });
 }
@@ -4006,6 +4186,19 @@ document.querySelector('#btn-early').addEventListener('click', triggerEarlyFinis
     log(state.alwaysTriggerCharms
       ? '🎯 <b>100% 触发模式已开启</b> · 概率类 charm（c15 / c16）必发'
       : '⚪ 100% 触发模式已关闭', 'log-line-bonus');
+  });
+})();
+// v2.10.10 · Charm 自选模式 toggle（影响起手 picker 是否提供全池入口）
+(function bindDevCharmToggle() {
+  const cb = document.querySelector('#toggle-dev-charm');
+  if (!cb) return;
+  cb.checked = !!state.devCharmPicker;
+  cb.addEventListener('change', (ev) => {
+    state.devCharmPicker = ev.target.checked;
+    try { localStorage.setItem('vp-rogue-dev-charm', ev.target.checked ? '1' : '0'); } catch (e) {}
+    log(state.devCharmPicker
+      ? '🔧 <b>Charm 自选模式已开启</b> · 下次新 run 起手页可挑全池 24 charm'
+      : '⚪ Charm 自选模式已关闭', 'log-line-bonus');
   });
 })();
 
