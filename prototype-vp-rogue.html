@@ -1237,6 +1237,24 @@
   }
   .gt-switch input:checked ~ .gt-label { color: #fde68a; font-weight: 700; }
   .gt-hint { font-size: 11px; color: #64748b; }
+  /* v2.10.13 · 附魔种类筛选 checkboxes */
+  .gt-enchant-types {
+    display: flex; gap: 10px; align-items: center;
+    padding: 4px 10px;
+    border: 1px dashed rgba(167,139,250,0.3);
+    border-radius: 6px;
+    background: rgba(0,0,0,0.2);
+    font-size: 11px;
+  }
+  .gt-enchant-types label {
+    display: inline-flex; align-items: center; gap: 4px;
+    cursor: pointer; user-select: none;
+  }
+  .gt-enchant-types input[type="checkbox"] {
+    width: 12px; height: 12px;
+    accent-color: #a78bfa;
+  }
+  .gt-enchant-types label span { font-weight: 700; letter-spacing: 0.5px; }
 
   /* v2.10.1 · 待激活附魔预告条（在 charms 下方） */
   .pending-enchants {
@@ -1686,6 +1704,12 @@
       <span class="gt-track"><span class="gt-thumb"></span></span>
       <span class="gt-label">🔮 全网附魔模式 <span class="gt-hint">（每个 cell 随机一个附魔）</span></span>
     </label>
+    <div class="gt-enchant-types" id="gt-enchant-types" title="勾选哪些附魔种类参与全网附魔的随机投放">
+      <label><input type="checkbox" data-etype="double" checked/><span style="color:#fbbf24;">✦ 双倍</span></label>
+      <label><input type="checkbox" data-etype="value_plus" checked/><span style="color:#34d399;">➕ 加值</span></label>
+      <label><input type="checkbox" data-etype="combo_plus" checked/><span style="color:#a78bfa;">⚡ 连击</span></label>
+      <label><input type="checkbox" data-etype="golden" checked/><span style="color:#fde68a;">💰 金袋</span></label>
+    </div>
     <label class="gt-switch" title="开启后所有概率类 charm（c15 随机重摇 / c16 随机锁定）直接 100% 触发，便于测试">
       <input type="checkbox" id="toggle-100-trigger"/>
       <span class="gt-track"><span class="gt-thumb"></span></span>
@@ -2276,15 +2300,29 @@ const state = {
   // v2.10.9 · 100% 触发概率开关（调试用）· 开启时 rand_reroll / rand_forced 必发
   alwaysTriggerCharms: false,
   // v2.10.10 · Charm 自选模式（调试用）· 开启时起手 picker 提供"自选全池"入口
-  devCharmPicker: false
+  devCharmPicker: false,
+  // v2.10.13 · 全网附魔模式下要投放的附魔种类（默认全部 4 种）
+  allSymbolEnchantTypes: ['double', 'value_plus', 'combo_plus', 'golden']
 };
 
-// v2.10 附魔类型定义
+// v2.10 附魔类型定义 · v2.10.13 desc 改清晰（tooltip 渲染时把 N 替换成实际 n 值）
 const ENCHANT_DEFS = {
-  double:     { name:'双倍',  glyph:'✦', color:'#fbbf24', desc:'该格参与的图形分数 ×2' },
-  value_plus: { name:'+值',   glyph:'➕', color:'#34d399', desc:'该格 face 价值 +N（默认 +3）' },
-  combo_plus: { name:'+连击', glyph:'⚡', color:'#a78bfa', desc:'该格参与图形时 combo 额外 +N（默认 +2）' },
-  golden:     { name:'金袋',  glyph:'💰', color:'#fde68a', desc:'触发图形时额外 +N 金币（默认 +5）' }
+  double:     {
+    name:'双倍', glyph:'✦', color:'#fbbf24',
+    desc:'让本格参与的图形整体 ×2；同图形多颗叠加（2 颗 ×4 / 3 颗 ×8 ...）'
+  },
+  value_plus: {
+    name:'加值', glyph:'➕', color:'#34d399',
+    desc:'本格 face 数值 +N，影响图形 maxValue 选取（同图形多颗仅取最高那颗生效）'
+  },
+  combo_plus: {
+    name:'连击', glyph:'⚡', color:'#a78bfa',
+    desc:'本格参与图形触发时 combo 额外 +N（基础每图形 +1）'
+  },
+  golden:     {
+    name:'金袋', glyph:'💰', color:'#fde68a',
+    desc:'本格参与图形触发时立即获得 +N 金币（与图形分数计算无关，直接进 money）'
+  }
 };
 
 // 附魔 helper
@@ -2335,6 +2373,14 @@ try {
 // v2.10.10 · Charm 自选模式
 try {
   state.devCharmPicker = localStorage.getItem('vp-rogue-dev-charm') === '1';
+} catch (e) {}
+// v2.10.13 · 全网附魔的种类筛选
+try {
+  const saved = localStorage.getItem('vp-rogue-enchant-types');
+  if (saved) {
+    const arr = JSON.parse(saved);
+    if (Array.isArray(arr) && arr.length > 0) state.allSymbolEnchantTypes = arr;
+  }
 } catch (e) {}
 
 // ============ 工具 ============
@@ -2452,8 +2498,8 @@ function renderGrid(animate = false) {
       if (die) {
         // v2.10 · 附魔角标（左上角）
         const e = getEnchant(r, c);
-        // v2.10.3 · 自定义 tooltip (data-tip + CSS ::after)
-        const tipText = e ? `${ENCHANT_DEFS[e.type].name}（${e.n>1?`×${e.n}`:'1'}）· ${ENCHANT_DEFS[e.type].desc}` : '';
+        // v2.10.13 · 自定义 tooltip · desc 模板里的 N 用实际 e.n 替换
+        const tipText = e ? `${ENCHANT_DEFS[e.type].name}（n=${e.n}）· ${ENCHANT_DEFS[e.type].desc.replace(/\bN\b/g, e.n)}` : '';
         const enchantHTML = e ? `<div class="enchant-badge" style="color:${ENCHANT_DEFS[e.type].color}" data-tip="${tipText.replace(/"/g,'&quot;')}">${ENCHANT_DEFS[e.type].glyph}${e.n>1?`<sub>${e.n}</sub>`:''}</div>` : '';
         cell.innerHTML = `<div class="suit">${FACE_GLYPH[die.r]}</div><div class="rank">${die.r}</div>${enchantHTML}`;
         if (e) cell.classList.add('enchanted');
@@ -2518,7 +2564,7 @@ async function renderReelSpin() {
       let encHTML = '';
       if (enc) {
         const def = ENCHANT_DEFS[enc.type];
-        const tip = `${def.name}（${enc.n>1?'×'+enc.n:'1'}）· ${def.desc}`.replace(/"/g,'&quot;');
+        const tip = `${def.name}（n=${enc.n}）· ${def.desc.replace(/\bN\b/g, enc.n)}`.replace(/"/g,'&quot;');
         encHTML = `<div class="enchant-badge" style="color:${def.color}" data-tip="${tip}">${def.glyph}${enc.n>1?`<sub>${enc.n}</sub>`:''}</div>`;
         cell.classList.add('enchanted');
       }
@@ -2690,16 +2736,19 @@ async function doSpin() {
   // v2.10 · 附魔仅持续 1 spin（每次 spin 开始时清空，charm/商店再注入）
   // 注：先清空 spin 内消耗式附魔。"永久附魔"未来用单独的 perm-enchants 集合实现。
   clearEnchants();
-  // v2.10.2 · 全网附魔模式：每个 cell 都从 4 种附魔池随机选一个
+  // v2.10.2 · 全网附魔模式：每个 cell 都从勾选的附魔池随机选一个
+  // v2.10.13 · 池子由调试区 4 个 checkbox 决定（默认 4 种全开）
   if (state.allSymbolEnchant) {
-    const types = Object.keys(ENCHANT_DEFS);
+    const types = (state.allSymbolEnchantTypes && state.allSymbolEnchantTypes.length > 0)
+      ? state.allSymbolEnchantTypes
+      : Object.keys(ENCHANT_DEFS);
     const defaultN = { double:1, value_plus:3, combo_plus:2, golden:5 };
     for (let r = 0; r < 5; r++)
       for (let c = 0; c < 5; c++) {
         const t = types[Math.floor(Math.random() * types.length)];
         setEnchant(r, c, t, defaultN[t] || 1);
       }
-    log(`🔮 <b>全网附魔模式</b>：25 个 cell 已注入随机附魔`, 'log-charm');
+    log(`🔮 <b>全网附魔模式</b>：25 个 cell 已注入随机附魔（池：${types.map(t=>ENCHANT_DEFS[t].name).join('/')}）`, 'log-charm');
   }
   // v2.10 · 商店购买的 pendingEnchant 注入到随机 cell（消耗一次）
   if (state._pendingEnchant && state._pendingEnchant.length > 0) {
@@ -4298,6 +4347,28 @@ document.querySelector('#btn-early').addEventListener('click', triggerEarlyFinis
   document.addEventListener('keydown', (ev) => {
     if (ev.key === 'Escape' && overlay.classList.contains('show')) close();
   });
+})();
+
+// v2.10.13 · 附魔种类筛选 checkboxes（决定全网附魔模式投放哪些类型）
+(function bindEnchantTypeFilters() {
+  const cbs = document.querySelectorAll('#gt-enchant-types input[type="checkbox"]');
+  if (!cbs.length) return;
+  // 初始按 state 勾选
+  cbs.forEach(cb => {
+    cb.checked = state.allSymbolEnchantTypes.includes(cb.dataset.etype);
+  });
+  function refresh() {
+    const selected = [];
+    cbs.forEach(cb => { if (cb.checked) selected.push(cb.dataset.etype); });
+    if (selected.length === 0) {
+      // 至少保留 1 项
+      cbs[0].checked = true; selected.push(cbs[0].dataset.etype);
+      log('⚠ 至少要勾选 1 种附魔', 'log-base');
+    }
+    state.allSymbolEnchantTypes = selected;
+    try { localStorage.setItem('vp-rogue-enchant-types', JSON.stringify(selected)); } catch (e) {}
+  }
+  cbs.forEach(cb => cb.addEventListener('change', refresh));
 })();
 
 // v2.10.10 · Charm 自选模式 toggle（影响起手 picker 是否提供全池入口）
