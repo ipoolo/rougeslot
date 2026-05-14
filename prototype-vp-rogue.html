@@ -2349,16 +2349,16 @@ const state = {
 // v2.10 附魔类型定义 · v2.10.13 desc 改清晰（tooltip 渲染时把 N 替换成实际 n 值）
 const ENCHANT_DEFS = {
   double:     {
-    name:'重触', glyph:'✦', color:'#fbbf24',
-    desc:'让本格参与的图形再多结算 1 次（retrigger，线性叠加：N 颗 = 多 N 次）；触发时本格附魔不再连锁'
+    name:'重触', glyph:'🔁', color:'#fbbf24',
+    desc:'让本格所参与的每个图形各多结算 1 次（retrigger 线性叠加：图形内 N 颗 = 多 N 次）；同一附魔在每个图形内只触发 1 次，但不同图形分别触发'
   },
   value_plus: {
-    name:'加值', glyph:'➕', color:'#34d399',
-    desc:'本格参与"首个图形"结算开始时，将该 face 类型的全网价值 +N（影响本图形 maxValue + 所有后续图形）；多颗在不同 face 独立累加，符号图鉴实时刷新'
+    name:'加值', glyph:'⊕', color:'#34d399',
+    desc:'本格参与每个图形开始时，将该 face 类型的全网价值 +N（影响该图形 maxValue + 所有后续图形）；不同图形分别触发累加'
   },
   combo_plus: {
     name:'连击', glyph:'⚡', color:'#a78bfa',
-    desc:'本格参与的"首个图形"结算时给 combo +N（每个附魔每 spin 只触发 1 次，不论该 cell 跨多少图形）'
+    desc:'本格参与每个图形结算时给 combo +N；每图形内触发 1 次，跨图形分别触发'
   }
   // v2.10.15: golden 附魔已删除
 };
@@ -3016,41 +3016,37 @@ async function doScore() {
   if (doubleScore) log(`×${dMult} <b>双倍结算激活</b>：每个图形将结算 ${dMult} 次`, 'log-line-bonus');
   log(`▸ 检测到 <b>${shapes.length}</b> 个触发图形`, 'log-base');
   let baseTotal = 0;
-  // v2.10.18 · 顶级规则："每个附魔每 spin 内只触发 1 次"，跨图形去重
-  const triggeredEnchantCells = new Set();
+  // v2.10.20 · 顶级规则："每个附魔在单图形内仅触发 1 次，跨图形分别触发"
+  //   sh.cells 本身在单图形内 (r,c) 不重复，所以无需 Set 去重；
+  //   不同图形间不再去重，让中心 cell 在 12 个图形里都获得各自的触发机会
   for (let i = 0; i < shapes.length; i++) {
     const sh = shapes[i];
-    // v2.10.16/.18 · 附魔新模型
+    // v2.10.16/.18/.20 · 附魔新模型
     //   - value_plus: 仍 per-cell（Task 3 改 face-level 时再调）
     //   - double:    改 retrigger —— 每颗让本图形再多结算 1 次（线性，不再 2^N）
     //   - combo_plus: 累加（Task 4 改逐个动画时再调）
     const shapeScore = sh.def.score;
     const shapeMul = sh.def.mul;
-    // v2.10.19 · 收集本图形里"首次出现"的 3 种附魔 cells（跨图形去重 = 顶级规则）
-    const newValuePlusCells = [];
-    const newDoubleCells = [];
-    const newComboPlusCells = [];
+    // v2.10.20 · 收集本图形内 3 种附魔 cells（单图形内不重复，跨图形分别触发）
+    const valuePlusCells = [];
+    const doubleCells = [];
+    const comboPlusCells = [];
     for (const cc of sh.cells) {
-      const key = cc.r + ',' + cc.c;
-      if (triggeredEnchantCells.has(key)) continue;
       const e = getEnchant(cc.r, cc.c);
       if (!e) continue;
       if (e.type === 'value_plus') {
-        newValuePlusCells.push({ r: cc.r, c: cc.c, n: e.n || 3 });
-        triggeredEnchantCells.add(key);
+        valuePlusCells.push({ r: cc.r, c: cc.c, n: e.n || 3 });
       } else if (e.type === 'double') {
-        newDoubleCells.push({ r: cc.r, c: cc.c });
-        triggeredEnchantCells.add(key);
+        doubleCells.push({ r: cc.r, c: cc.c });
       } else if (e.type === 'combo_plus') {
-        newComboPlusCells.push({ r: cc.r, c: cc.c, n: e.n || 2 });
-        triggeredEnchantCells.add(key);
+        comboPlusCells.push({ r: cc.r, c: cc.c, n: e.n || 2 });
       }
     }
 
-    // —— C.0. value_plus（首次出现的每颗 value_plus cell · base passes 前触发）——
+    // —— C.0. value_plus（本图形内每颗 value_plus cell · base passes 前触发）——
     // 让本图形的 base maxValue 享受加值；同时累计的 faceValuePlus 也惠及后续图形
-    for (let v = 0; v < newValuePlusCells.length; v++) {
-      const vc = newValuePlusCells[v];
+    for (let v = 0; v < valuePlusCells.length; v++) {
+      const vc = valuePlusCells[v];
       await valuePlusCellAnim(vc.r, vc.c, vc.n);
       log(`  🔮 <b>value+</b> · (${vc.r+1},${vc.c+1}) → ${FACE_GLYPH[state.grid[vc.r][vc.c].r]}${state.grid[vc.r][vc.c].r} 全网 +${vc.n}（face 累计 ${state.faceValuePlus[state.grid[vc.r][vc.c].r]}）`, 'log-charm');
     }
@@ -3104,9 +3100,9 @@ async function doScore() {
       startComboTimer();
     }
 
-    // —— B. double retrigger（首次触发的每颗 double cell · 仅 1 次，不跟 rep）——
-    for (let d = 0; d < newDoubleCells.length; d++) {
-      const dc = newDoubleCells[d];
+    // —— B. double retrigger（本图形内每颗 double cell · 不跟 rep）——
+    for (let d = 0; d < doubleCells.length; d++) {
+      const dc = doubleCells[d];
       await retriggerCellAnim(dc.r, dc.c);
       baseTotal += baseGot;
       showFloatScore(sh.cells, baseGot, 1);
@@ -3120,9 +3116,9 @@ async function doScore() {
       renderCombo();
     }
 
-    // —— C. combo_plus（首次触发的每颗 combo_plus cell · 仅 1 次，每颗单独动画）——
-    for (let k = 0; k < newComboPlusCells.length; k++) {
-      const cc = newComboPlusCells[k];
+    // —— C. combo_plus（本图形内每颗 combo_plus cell · 每颗单独动画）——
+    for (let k = 0; k < comboPlusCells.length; k++) {
+      const cc = comboPlusCells[k];
       await comboPlusCellAnim(cc.r, cc.c, cc.n);
       state.combo += cc.n;
       renderCombo();
