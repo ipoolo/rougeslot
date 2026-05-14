@@ -1057,7 +1057,7 @@
     line-height: 1;
     opacity: 0.55;
   }
-  /* v2.10 · 附魔角标（左上角）· v2.10.1 加脉动动画提升存在感 */
+  /* v2.10 · 附魔角标（左上角）· v2.10.1 加脉动 · v2.10.3 自定义 tooltip + 滚动期也显示 */
   .cell .enchant-badge {
     position: absolute;
     top: 2px; left: 4px;
@@ -1065,7 +1065,7 @@
     font-weight: 900;
     line-height: 1;
     filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px currentColor);
-    z-index: 3;
+    z-index: 50;
     pointer-events: auto;
     cursor: help;
     animation: enchantPulse 1.2s ease-in-out infinite alternate;
@@ -1074,6 +1074,37 @@
     font-size: 11px;
     vertical-align: super;
     font-weight: 900;
+  }
+  /* 自定义 tooltip（hover 出现，无延迟 + 多行支持）*/
+  .cell .enchant-badge::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: rgba(15, 10, 26, 0.98);
+    color: #fde68a;
+    border: 1.5px solid currentColor;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: normal;
+    width: max-content;
+    max-width: 220px;
+    text-align: left;
+    line-height: 1.45;
+    z-index: 99999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.7);
+    /* drop-shadow filter 来自父元素会影响 ::after，明确重置 */
+    filter: none;
+    animation: none;
+  }
+  .cell .enchant-badge:hover::after {
+    opacity: 1;
   }
   @keyframes enchantPulse {
     from { transform: scale(0.92); filter: drop-shadow(0 0 4px currentColor); }
@@ -2205,7 +2236,9 @@ function renderGrid(animate = false) {
       if (die) {
         // v2.10 · 附魔角标（左上角）
         const e = getEnchant(r, c);
-        const enchantHTML = e ? `<div class="enchant-badge" style="color:${ENCHANT_DEFS[e.type].color}" title="${ENCHANT_DEFS[e.type].name}: ${ENCHANT_DEFS[e.type].desc}">${ENCHANT_DEFS[e.type].glyph}${e.n>1?`<sub>${e.n}</sub>`:''}</div>` : '';
+        // v2.10.3 · 自定义 tooltip (data-tip + CSS ::after)
+        const tipText = e ? `${ENCHANT_DEFS[e.type].name}（${e.n>1?`×${e.n}`:'1'}）· ${ENCHANT_DEFS[e.type].desc}` : '';
+        const enchantHTML = e ? `<div class="enchant-badge" style="color:${ENCHANT_DEFS[e.type].color}" data-tip="${tipText.replace(/"/g,'&quot;')}">${ENCHANT_DEFS[e.type].glyph}${e.n>1?`<sub>${e.n}</sub>`:''}</div>` : '';
         cell.innerHTML = `<div class="suit">${FACE_GLYPH[die.r]}</div><div class="rank">${die.r}</div>${enchantHTML}`;
         if (e) cell.classList.add('enchanted');
         if (animate) cell.classList.add('flipped');
@@ -2276,6 +2309,18 @@ async function renderReelSpin() {
       }
       strip.innerHTML = html;
       cell.appendChild(strip);
+      // v2.10.3 · 附魔 badge 作为 cell 的直接子元素（与 strip 同级，不随 strip 滚动）
+      const enc = getEnchant(r, c);
+      if (enc) {
+        const def = ENCHANT_DEFS[enc.type];
+        const badge = document.createElement('div');
+        badge.className = 'enchant-badge';
+        badge.style.color = def.color;
+        badge.dataset.tip = `${def.name}（${enc.n>1?'×'+enc.n:'1'}）· ${def.desc}`;
+        badge.innerHTML = def.glyph + (enc.n > 1 ? `<sub>${enc.n}</sub>` : '');
+        cell.appendChild(badge);
+        cell.classList.add('enchanted');
+      }
       g.appendChild(cell);
       strips.push({ strip, cell, finalDie, r, c, N });
     }
