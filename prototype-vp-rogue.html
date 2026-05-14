@@ -2354,7 +2354,7 @@ const ENCHANT_DEFS = {
   },
   value_plus: {
     name:'加值', glyph:'➕', color:'#34d399',
-    desc:'spin 后立即把"该格 face 类型"的全网价值 +N，所有同 face 的 cell 都受益；多颗 value_plus 累加（不同 face 独立计算），符号图鉴实时刷新'
+    desc:'本格参与"首个图形"结算开始时，将该 face 类型的全网价值 +N（影响本图形 maxValue + 所有后续图形）；多颗在不同 face 独立累加，符号图鉴实时刷新'
   },
   combo_plus: {
     name:'连击', glyph:'⚡', color:'#a78bfa',
@@ -2909,56 +2909,34 @@ async function doSpin() {
     renderCombo();
   }
 
-  // v2.10.17 · Phase B · 应用 value_plus 附魔（face-level 加值 + 逐个动画 + 图鉴刷新）
-  await applyValuePlusPhase();
-
-  // 3) 进入结算（原 doScore 逻辑）
+  // 3) 进入结算（v2.10.19 · value_plus 不再有独立 Phase B，改为图形内 C.0 触发）
   await doScore();
 }
 
-// v2.10.17 · Phase B：遍历 state.enchants 找到所有 value_plus 类型，
-//                    逐个 cell 触发"+N 给 face X"动画，累计到 state.faceValuePlus，刷新图鉴。
-async function applyValuePlusPhase() {
+// v2.10.19 · 单个 value_plus cell 触发动画（绿色 pulse + 飘字 + 累计到 faceValuePlus + 图鉴刷新）
+async function valuePlusCellAnim(r, c, n) {
   const cells = document.querySelectorAll('.grid .cell');
-  // 收集所有 value_plus cell（按 r,c 顺序）
-  const list = [];
-  for (let r = 0; r < 5; r++) {
-    for (let c = 0; c < 5; c++) {
-      const e = getEnchant(r, c);
-      if (e && e.type === 'value_plus') list.push({ r, c, n: e.n, face: state.grid[r][c].r });
-    }
+  const cell = cells[r * 5 + c];
+  const face = state.grid[r][c] ? state.grid[r][c].r : null;
+  if (!face) return;
+  if (cell) {
+    cell.classList.add('value-plus-pulse');
+    setTimeout(() => cell.classList.remove('value-plus-pulse'), 380);
+    const rect = cell.getBoundingClientRect();
+    const el = document.createElement('div');
+    el.className = 'score-float';
+    el.style.color = '#34d399';
+    el.style.fontSize = '20px';
+    el.innerHTML = `🔮 ${FACE_GLYPH[face]}${face} +${n}`;
+    el.style.left = (rect.left + rect.width/2) + 'px';
+    el.style.top  = (rect.top + rect.height/2) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 950);
   }
-  if (list.length === 0) return;
-  log(`🔮 <b>Phase B</b> · 应用 ${list.length} 个 value_plus 附魔（face 级加值）`, 'log-charm');
-  for (const it of list) {
-    // ① 该 cell 绿色 pulse
-    const cell = cells[it.r * 5 + it.c];
-    if (cell) {
-      cell.classList.add('value-plus-pulse');
-      setTimeout(() => cell.classList.remove('value-plus-pulse'), 380);
-    }
-    // ② 飘字 "🔮 face X +N"
-    const rect = cell ? cell.getBoundingClientRect() : null;
-    if (rect) {
-      const el = document.createElement('div');
-      el.className = 'score-float';
-      el.style.color = '#34d399';
-      el.style.fontSize = '20px';
-      el.innerHTML = `🔮 ${FACE_GLYPH[it.face]}${it.face} +${it.n}`;
-      el.style.left = (rect.left + rect.width/2) + 'px';
-      el.style.top  = (rect.top + rect.height/2) + 'px';
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 950);
-    }
-    // ③ 累计 face-level 加值
-    state.faceValuePlus[it.face] = (state.faceValuePlus[it.face] || 0) + it.n;
-    // ④ 图鉴实时刷新（高亮该 face 行）
-    renderSymbolCodex();
-    playTone(520 + Math.random() * 80, 70, 'triangle', 0.16);
-    // ⑤ 等待下一颗
-    await sleep(260);
-  }
-  log(`  ↳ 累计：${FACES.map(f => state.faceValuePlus[f] > 0 ? `${FACE_GLYPH[f]}${f}+${state.faceValuePlus[f]}` : '').filter(Boolean).join(' / ')}`, 'log-charm');
+  state.faceValuePlus[face] = (state.faceValuePlus[face] || 0) + n;
+  renderSymbolCodex();
+  playTone(520 + Math.random() * 80, 70, 'triangle', 0.16);
+  await sleep(240);
 }
 
 async function doScore() {
@@ -3048,7 +3026,8 @@ async function doScore() {
     //   - combo_plus: 累加（Task 4 改逐个动画时再调）
     const shapeScore = sh.def.score;
     const shapeMul = sh.def.mul;
-    // 收集本图形里"首次出现"的 double / combo_plus cells（跨图形去重 = 顶级规则）
+    // v2.10.19 · 收集本图形里"首次出现"的 3 种附魔 cells（跨图形去重 = 顶级规则）
+    const newValuePlusCells = [];
     const newDoubleCells = [];
     const newComboPlusCells = [];
     for (const cc of sh.cells) {
@@ -3056,14 +3035,24 @@ async function doScore() {
       if (triggeredEnchantCells.has(key)) continue;
       const e = getEnchant(cc.r, cc.c);
       if (!e) continue;
-      if (e.type === 'double') {
+      if (e.type === 'value_plus') {
+        newValuePlusCells.push({ r: cc.r, c: cc.c, n: e.n || 3 });
+        triggeredEnchantCells.add(key);
+      } else if (e.type === 'double') {
         newDoubleCells.push({ r: cc.r, c: cc.c });
         triggeredEnchantCells.add(key);
       } else if (e.type === 'combo_plus') {
         newComboPlusCells.push({ r: cc.r, c: cc.c, n: e.n || 2 });
         triggeredEnchantCells.add(key);
       }
-      // value_plus 已在 Phase B 全局应用
+    }
+
+    // —— C.0. value_plus（首次出现的每颗 value_plus cell · base passes 前触发）——
+    // 让本图形的 base maxValue 享受加值；同时累计的 faceValuePlus 也惠及后续图形
+    for (let v = 0; v < newValuePlusCells.length; v++) {
+      const vc = newValuePlusCells[v];
+      await valuePlusCellAnim(vc.r, vc.c, vc.n);
+      log(`  🔮 <b>value+</b> · (${vc.r+1},${vc.c+1}) → ${FACE_GLYPH[state.grid[vc.r][vc.c].r]}${state.grid[vc.r][vc.c].r} 全网 +${vc.n}（face 累计 ${state.faceValuePlus[state.grid[vc.r][vc.c].r]}）`, 'log-charm');
     }
     // base maxValue 用全部 cells 的 effective face value
     const baseMaxValue = Math.max(...sh.cells.map(c => getEffectiveFaceValue(c.r, c.c, c.face)));
