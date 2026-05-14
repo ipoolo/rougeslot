@@ -2757,8 +2757,14 @@ async function doScore() {
       }
       const repLabel = doubleScore ? ` <span style="color:#fbbf24;">×${repeats} 第 ${rep+1}/${repeats} 次</span>` : '';
       const enchantNote = enchantMul > 1 ? ` × 附魔双倍(${enchantMul})` : '';
+      // v2.10.7 · 列出图形涉及的 symbol（带附魔角标）
+      const symbolList = sh.cells.map(cc => {
+        const e = getEnchant(cc.r, cc.c);
+        const ench = e ? `<span style="color:${ENCHANT_DEFS[e.type].color}; font-weight:900; font-size:11px;">${ENCHANT_DEFS[e.type].glyph}</span>` : '';
+        return `${FACE_GLYPH[cc.face]}${cc.face}${ench}`;
+      }).join(' ');
       log(
-        `${sh.def.glyph} ${sh.label}${repLabel} · <b>${sh.def.name}</b> · max(${maxValue}) × 基倍率(${SYMBOL_BASE_MUL}) × 图形分(${shapeScore}) × 图形倍率(${shapeMul})${enchantNote} = <b>+${got}</b>`,
+        `${sh.def.glyph} ${sh.label}${repLabel} · <b>${sh.def.name}</b> [<span style="font-size:12px;">${symbolList}</span>] · max(${maxValue}) × 基倍率(${SYMBOL_BASE_MUL}) × 图形分(${shapeScore}) × 图形倍率(${shapeMul})${enchantNote} = <b>+${got}</b>`,
         'log-line-bonus'
       );
       // v2.1: combo +1 + 重置 10s 倒计时（不再立即触发抽奖；归零时按等级抽）
