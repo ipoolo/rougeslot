@@ -2224,7 +2224,7 @@ const CHARMS = [
   // ── D. 触发 Trigger（带随机性） ─────────────────────────────
   { id:'c15', name:'随机重摇',   glyph:'🎲', kind:'rand_reroll',   value:0.25,effect:'spin 后 25% 概率重摇未中奖格', rarity:'common',    price:80  },
   { id:'c16', name:'随机锁定',   glyph:'📌', kind:'rand_forced',   value:0.15,effect:'spin 前 15% 概率固定 1 格为 6',rarity:'rare',      price:170 },
-  { id:'c17', name:'双倍号角',   glyph:'📯', kind:'last_double',   value:1,   effect:'每周最后 1 spin 必发 double_score',rarity:'epic',  price:240 },
+  // v2.10.14: c17 双倍号角已删除（绕过 lottery 直接给 double_score 的设计被砍）
   { id:'c18', name:'抽奖之神',   glyph:'🎰', kind:'lottery_god',   value:1,   effect:'COMBO 抽奖必中 double_score',  rarity:'epic',      price:260 },
   // ── E. 数值 Value ──────────────────────────────────────────
   { id:'c5',  name:'金袋之神',   glyph:'💰', kind:'six_bonus',     value:0.3, effect:'每颗 💰(6点) +30% 倍率',       rarity:'common',    price:50  },
@@ -2770,11 +2770,7 @@ async function doSpin() {
       state.forcedCells = [{ r, c, face: '6' }];
       log(`📌 <b>随机锁定</b> 触发：本 spin 锁 (${r+1},${c+1}) 为 6 点`, 'log-charm');
     }
-    if (ch.kind === 'last_double' && state.spinLeft === 1) {
-      state.doubleScoreNext = true;
-      state.doubleScoreMult = 2;
-      log(`📯 <b>双倍号角</b> 触发：最后 1 spin 必发 ×2 结算`, 'log-charm');
-    }
+    // v2.10.14: c17 last_double 分支已删除
   }
   // 1) 摇 25 颗骰子（优先级：forcedCells > cheat > 随机）
   const cheat = state.cheatNextFace;
@@ -3116,7 +3112,7 @@ async function doScore() {
         case 'unused_to_money':   statusIcon = ICON_SKIP; triggerNote = '周末按剩余 spin 给金币（待结算）'; break;
         case 'rand_reroll':       statusIcon = ICON_SKIP; triggerNote = 'spin 后概率重摇（已在前 log）'; break;
         case 'rand_forced':       statusIcon = ICON_SKIP; triggerNote = 'spin 前概率锁 6 点（已在前 log）'; break;
-        case 'last_double':       statusIcon = ICON_SKIP; triggerNote = '最后 spin 必双倍（已在前 log）'; break;
+        // v2.10.14: last_double 分支已删除（charm c17 移除）
         case 'lottery_god':       statusIcon = ICON_SKIP; triggerNote = '抽奖必中 double_score'; break;
         case 'luck_plus':
         case 'luck_plus_cost':    statusIcon = ICON_SKIP; triggerNote = `持续 luck +${charm.value}（已生效）`; break;
