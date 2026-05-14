@@ -1545,9 +1545,9 @@
   <!-- 状态栏 v2.10: luck + tickets -->
   <div class="status-bar status-bar-6">
     <div class="stat"><div class="label">📅 周</div><div class="value v-week" id="stat-week">1 / 6</div></div>
-    <div class="stat"><div class="label">🎯 本周目标</div><div class="value v-target" id="stat-target">50</div></div>
+    <div class="stat"><div class="label">🎯 本周目标</div><div class="value v-target" id="stat-target">80</div></div>
     <div class="stat"><div class="label">💰 累计金币</div><div class="value v-money" id="stat-money">0</div></div>
-    <div class="stat"><div class="label">🎲 剩余 spin</div><div class="value v-spin" id="stat-spin">3 / 3</div></div>
+    <div class="stat"><div class="label">🎲 剩余 spin</div><div class="value v-spin" id="stat-spin">7 / 7</div></div>
     <div class="stat"><div class="label">🍀 幸运</div><div class="value v-luck" id="stat-luck" title="每点 +0.2% 6 点 face 概率">0</div></div>
     <div class="stat"><div class="label">🎫 票</div><div class="value v-ticket" id="stat-ticket" title="商店专用货币 · 周间换票">0</div></div>
   </div>
@@ -2002,7 +2002,7 @@ const CHARMS = [
   // ── D. 触发 Trigger（带随机性） ─────────────────────────────
   { id:'c15', name:'随机重摇',   glyph:'🎲', kind:'rand_reroll',   value:0.25,effect:'spin 后 25% 概率重摇未中奖格', rarity:'common',    price:80  },
   { id:'c16', name:'随机锁定',   glyph:'📌', kind:'rand_forced',   value:0.15,effect:'spin 前 15% 概率固定 1 格为 6',rarity:'rare',      price:170 },
-  { id:'c17', name:'双倍号角',   glyph:'📯', kind:'last_double',   value:1,   effect:'每周第 3 spin 必发 double_score',rarity:'epic',    price:240 },
+  { id:'c17', name:'双倍号角',   glyph:'📯', kind:'last_double',   value:1,   effect:'每周最后 1 spin 必发 double_score',rarity:'epic',  price:240 },
   { id:'c18', name:'抽奖之神',   glyph:'🎰', kind:'lottery_god',   value:1,   effect:'COMBO 抽奖必中 double_score',  rarity:'epic',      price:260 },
   // ── E. 数值 Value ──────────────────────────────────────────
   { id:'c5',  name:'金袋之神',   glyph:'💰', kind:'six_bonus',     value:0.3, effect:'每颗 💰(6点) +30% 倍率',       rarity:'common',    price:50  },
@@ -2023,7 +2023,11 @@ const RARITY_COLOR = {
   legendary: '#f59e0b'
 };
 
-const WEEK_TARGETS = [50, 120, 250, 500, 1200, 3000]; // v2.10 平衡：配合 mega 起步 50 整体压缩
+// v2.10.4 · 每周 spin 上限改成 7，target 同步放大约 1.7-1.8 倍配合
+//   单 spin 期望产出 ~10-50 + 大奖 ~100-300 → 7 spin 平均 70-350 + 偶发大奖
+//   week 1 (80) 1-2 spin 就能过；week 6 (5500) 需 7 spin 全力 + charm 链 + 附魔
+const WEEK_TARGETS = [80, 200, 450, 900, 2200, 5500];
+const SPIN_MAX_DEFAULT = 7; // 每周默认 spin 上限
 const LORE_TEXTS = [
   '💀 高利贷主：「准时还，不然就埋了你。」',
   '💀 高利贷主：「不错嘛新仔。继续。」',
@@ -2036,7 +2040,8 @@ const LORE_TEXTS = [
 // ============ 状态 ============
 const state = {
   week: 1,
-  spinLeft: 3,
+  spinLeft: 7,    // v2.10.4 默认 7（从 3 提升）
+  spinMax: 7,     // 本周 spin 上限（受 charm/玩家配置影响），用于 stat-bar 显示
   money: 0,
   grid: Array(5).fill(null).map(() => Array(5).fill(null)), // [row][col]
   drawn: false,
@@ -2213,9 +2218,9 @@ function recomputeCharmPassives() {
   // spinLeft 在每周开始时重算（在 checkWeekResult 进入新周或 resetGame）
 }
 
-// v2.10 · 周开始时根据 charm 决定本周 spin 数（含 spin_plus / luck_plus_cost）
+// v2.10.4 · 周开始时根据 charm 决定本周 spin 数（含 spin_plus / luck_plus_cost）
 function applyWeeklySpinCharms() {
-  let base = 3;
+  let base = SPIN_MAX_DEFAULT; // 7
   for (const id of state.equippedCharms) {
     const ch = CHARMS.find(c => c.id === id);
     if (!ch) continue;
@@ -2223,6 +2228,7 @@ function applyWeeklySpinCharms() {
     if (ch.kind === 'luck_plus_cost') base -= 1; // 七星之运代价
   }
   state.spinLeft = Math.max(1, base);
+  state.spinMax = state.spinLeft;
 }
 
 function renderGrid(animate = false) {
@@ -2418,7 +2424,7 @@ function renderStatus() {
   weekEl.innerHTML = `${state.week} / 6${streakBadge}`;
   document.querySelector('#stat-target').textContent = WEEK_TARGETS[state.week-1];
   document.querySelector('#stat-money').textContent = state.money;
-  document.querySelector('#stat-spin').textContent = state.spinLeft + ' / 3';
+  document.querySelector('#stat-spin').textContent = state.spinLeft + ' / ' + (state.spinMax || SPIN_MAX_DEFAULT);
   const luckEl = document.querySelector('#stat-luck');
   if (luckEl) luckEl.textContent = state.luck || 0;
   const tEl = document.querySelector('#stat-ticket');
@@ -2509,7 +2515,7 @@ async function doSpin() {
     if (ch.kind === 'last_double' && state.spinLeft === 1) {
       state.doubleScoreNext = true;
       state.doubleScoreMult = 2;
-      log(`📯 <b>双倍号角</b> 触发：第 3 spin 必发 ×2 结算`, 'log-charm');
+      log(`📯 <b>双倍号角</b> 触发：最后 1 spin 必发 ×2 结算`, 'log-charm');
     }
   }
   // 1) 摇 25 颗骰子（优先级：forcedCells > cheat > 随机）
@@ -3262,9 +3268,10 @@ function checkWeekResult() {
           applyWeeklySpinCharms();
           if (state._weekSpinChoice && state._weekSpinChoice < state.spinLeft) {
             state.spinLeft = state._weekSpinChoice;
+            state.spinMax = state._weekSpinChoice;
           }
           // 商店买的消耗品额外加成
-          if (state._extraSpinNext) { state.spinLeft += state._extraSpinNext; state._extraSpinNext = 0; }
+          if (state._extraSpinNext) { state.spinLeft += state._extraSpinNext; state.spinMax = Math.max(state.spinMax || 0, state.spinLeft); state._extraSpinNext = 0; }
           if (state._extraLuckNext) { state.luck += state._extraLuckNext; state._extraLuckNext = 0; }
           state._weekSpinChoice = null;
           renderStatus();
@@ -3472,13 +3479,14 @@ async function showShopModal(nextWeekNo, isFirstWeek = false) {
     }
 
     let items = pickShopItems(3);
-    let chosenSpin = 3;
+    let chosenSpin = 7;
 
-    // 少 spin 多换票 · 总量克制
+    // v2.10.4 · 少 spin 多换票（4 档梯度，配合 7 spin 上限）
     const SPIN_OPTIONS = [
-      { spins: 3, ticketBonus: 0, label: '标准',  desc: '0 票补偿' },
-      { spins: 2, ticketBonus: 2, label: '节俭',  desc: '+2 票补偿' },
-      { spins: 1, ticketBonus: 5, label: '极简',  desc: '+5 票补偿' }
+      { spins: 7, ticketBonus: 0, label: '标准',  desc: '0 票补偿' },
+      { spins: 5, ticketBonus: 2, label: '节俭',  desc: '+2 票补偿' },
+      { spins: 3, ticketBonus: 5, label: '紧凑',  desc: '+5 票补偿' },
+      { spins: 1, ticketBonus: 9, label: '极限',  desc: '+9 票补偿' }
     ];
 
     function refresh() {
@@ -3585,7 +3593,8 @@ function showModal(title, msg, fail, onContinue) {
 
 function resetGame() {
   state.week = 1;
-  state.spinLeft = 3;
+  state.spinLeft = SPIN_MAX_DEFAULT; // v2.10.4 · 默认 7
+  state.spinMax = SPIN_MAX_DEFAULT;
   state.money = 0;
   state.drawn = false;
   state.gameOver = false;
@@ -4084,8 +4093,11 @@ async function startGame() {
   renderStatus();
   await showShopModal(1, true);
   applyWeeklySpinCharms();
-  if (state._weekSpinChoice && state._weekSpinChoice < state.spinLeft) state.spinLeft = state._weekSpinChoice;
-  if (state._extraSpinNext) { state.spinLeft += state._extraSpinNext; state._extraSpinNext = 0; }
+  if (state._weekSpinChoice && state._weekSpinChoice < state.spinLeft) {
+    state.spinLeft = state._weekSpinChoice;
+    state.spinMax = state._weekSpinChoice;
+  }
+  if (state._extraSpinNext) { state.spinLeft += state._extraSpinNext; state.spinMax = Math.max(state.spinMax || 0, state.spinLeft); state._extraSpinNext = 0; }
   if (state._extraLuckNext) { state.luck += state._extraLuckNext; state._extraLuckNext = 0; }
   state._weekSpinChoice = null;
   renderStatus();
