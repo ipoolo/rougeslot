@@ -1208,6 +1208,17 @@
     40%  { box-shadow: 0 0 26px 6px rgba(52,211,153,0.85), 0 0 40px rgba(74,222,128,0.55); transform: scale(1.06); }
     100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); transform: scale(1); }
   }
+  /* v2.10.18 · combo_plus 单 cell 紫色 pulse */
+  .cell.combo-plus-pulse {
+    animation: comboPlusPulse 0.38s ease-out;
+    border-color: #a78bfa !important;
+    z-index: 4;
+  }
+  @keyframes comboPlusPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(167,139,250,0); transform: scale(1); }
+    40%  { box-shadow: 0 0 28px 7px rgba(167,139,250,0.85), 0 0 44px rgba(236,72,153,0.5); transform: scale(1.07); }
+    100% { box-shadow: 0 0 0 0 rgba(167,139,250,0); transform: scale(1); }
+  }
   @keyframes retriggerPulse {
     0%   { box-shadow: 0 0 0 0 rgba(251,191,36,0); transform: scale(1); }
     30%  { box-shadow: 0 0 30px 8px rgba(251,191,36,0.95), 0 0 50px rgba(248,113,113,0.7); transform: scale(1.08); }
@@ -3027,38 +3038,49 @@ async function doScore() {
   if (doubleScore) log(`×${dMult} <b>双倍结算激活</b>：每个图形将结算 ${dMult} 次`, 'log-line-bonus');
   log(`▸ 检测到 <b>${shapes.length}</b> 个触发图形`, 'log-base');
   let baseTotal = 0;
+  // v2.10.18 · 顶级规则："每个附魔每 spin 内只触发 1 次"，跨图形去重
+  const triggeredEnchantCells = new Set();
   for (let i = 0; i < shapes.length; i++) {
     const sh = shapes[i];
-    // v2.10.16 · 附魔新模型
+    // v2.10.16/.18 · 附魔新模型
     //   - value_plus: 仍 per-cell（Task 3 改 face-level 时再调）
     //   - double:    改 retrigger —— 每颗让本图形再多结算 1 次（线性，不再 2^N）
     //   - combo_plus: 累加（Task 4 改逐个动画时再调）
     const shapeScore = sh.def.score;
     const shapeMul = sh.def.mul;
-    let comboPlusBonus = 0;
-    const doubleCells = [];
+    // 收集本图形里"首次出现"的 double / combo_plus cells（跨图形去重 = 顶级规则）
+    const newDoubleCells = [];
+    const newComboPlusCells = [];
     for (const cc of sh.cells) {
+      const key = cc.r + ',' + cc.c;
+      if (triggeredEnchantCells.has(key)) continue;
       const e = getEnchant(cc.r, cc.c);
       if (!e) continue;
-      if (e.type === 'double')     doubleCells.push(cc);
-      else if (e.type === 'combo_plus') comboPlusBonus += (e.n || 2);
+      if (e.type === 'double') {
+        newDoubleCells.push({ r: cc.r, c: cc.c });
+        triggeredEnchantCells.add(key);
+      } else if (e.type === 'combo_plus') {
+        newComboPlusCells.push({ r: cc.r, c: cc.c, n: e.n || 2 });
+        triggeredEnchantCells.add(key);
+      }
+      // value_plus 已在 Phase B 全局应用
     }
     // base maxValue 用全部 cells 的 effective face value
     const baseMaxValue = Math.max(...sh.cells.map(c => getEffectiveFaceValue(c.r, c.c, c.face)));
     const baseGot = baseMaxValue * SYMBOL_BASE_MUL * shapeScore * shapeMul;
     const repeats = doubleScore ? dMult : 1;
+    // 算高亮时长（不随 rep 变化）
+    let hlDur;
+    if (sh.isBonus) {
+      hlDur = sh.type === 'mega_yahtzee' ? 1800 :
+              sh.def.score >= 1000 ? 1200 :
+              sh.def.score >= 500  ? 900  : 700;
+    } else {
+      hlDur = Math.max(80, 380 - i * 50);
+    }
 
-    // 整体的内层执行序列：base pass + N 次 retrigger（顶级规则：每个附魔只触发 1 次）
-    // 外层 rep 对应 double_score 多倍结算
+    // —— A. base passes（外层 rep 由 double_score 决定）——
     for (let rep = 0; rep < repeats; rep++) {
-      let hlDur;
-      if (sh.isBonus) {
-        hlDur = sh.type === 'mega_yahtzee' ? 1800 :
-                sh.def.score >= 1000 ? 1200 :
-                sh.def.score >= 500  ? 900  : 700;
-      } else {
-        hlDur = Math.max(80, 380 - i * 50);
-      }
       // v2.5: double_score 多倍结算时屏幕中央 ×N 大字
       if (doubleScore && rep > 0) showMultFlash(rep + 1, repeats);
       // v2.10 · 大奖 build-up：score≥10 的 GRID_BONUS 第一次结算前屏息
@@ -3088,29 +3110,34 @@ async function doScore() {
         `${sh.def.glyph} ${sh.label}${repLabel} · <b>${sh.def.name}</b> [<span style="font-size:12px;">${symbolList}</span>] · max(${baseMaxValue}) × 基倍率(${SYMBOL_BASE_MUL}) × 图形分(${shapeScore}) × 图形倍率(${shapeMul}) = <b>+${baseGot}</b>`,
         'log-line-bonus'
       );
-      state.combo += 1 + comboPlusBonus;
+      state.combo += 1;        // base：每图形结算 +1（顶级规则之外的常规基础值）
       renderCombo();
       startComboTimer();
+    }
 
-      // —— B. retrigger passes —— 每颗 double 让本图形再多结算 1 次
-      for (let d = 0; d < doubleCells.length; d++) {
-        const dc = doubleCells[d];
-        // ① 该 cell 单独闪烁 + retrigger 飘字
-        await retriggerCellAnim(dc.r, dc.c);
-        // ② 再走一次图形结算（用同一 baseGot，因为本 cell 上只有 double 附魔，
-        //    skip 它的附魔仅意味着不再 retrigger，maxValue/comboPlus 等数据不变）
-        baseTotal += baseGot;
-        showFloatScore(sh.cells, baseGot, rep + 1);
-        await highlightShape(sh.cells, Math.max(120, hlDur - 80), rep + 1);
-        playTone(660 + d * 40, 90, 'triangle', 0.18);
-        log(
-          `  🔁 <b>double 重复</b> · (${dc.r+1},${dc.c+1}) 触发 → 再结算 <b>+${baseGot}</b>`,
-          'log-charm'
-        );
-        // combo 也加（按规则：retrigger 是"再触发一次本图形结算"）
-        state.combo += 1 + comboPlusBonus;
-        renderCombo();
-      }
+    // —— B. double retrigger（首次触发的每颗 double cell · 仅 1 次，不跟 rep）——
+    for (let d = 0; d < newDoubleCells.length; d++) {
+      const dc = newDoubleCells[d];
+      await retriggerCellAnim(dc.r, dc.c);
+      baseTotal += baseGot;
+      showFloatScore(sh.cells, baseGot, 1);
+      await highlightShape(sh.cells, Math.max(120, hlDur - 80), 1);
+      playTone(660 + d * 40, 90, 'triangle', 0.18);
+      log(
+        `  🔁 <b>retrigger</b> · (${dc.r+1},${dc.c+1}) double 触发 → 再结算 <b>+${baseGot}</b>`,
+        'log-charm'
+      );
+      state.combo += 1;        // retrigger 也算"再触发本图形"，给 +1 基础 combo
+      renderCombo();
+    }
+
+    // —— C. combo_plus（首次触发的每颗 combo_plus cell · 仅 1 次，每颗单独动画）——
+    for (let k = 0; k < newComboPlusCells.length; k++) {
+      const cc = newComboPlusCells[k];
+      await comboPlusCellAnim(cc.r, cc.c, cc.n);
+      state.combo += cc.n;
+      renderCombo();
+      log(`  ⚡ <b>combo+</b> · (${cc.r+1},${cc.c+1}) → combo +${cc.n}（累计 ${state.combo}）`, 'log-charm');
     }
   }
   total = baseTotal;
@@ -4102,6 +4129,28 @@ function highlightRow(r, ms) {
 }
 
 // 高亮组成图形的骰子集合（v0.4 / v2.5 加 rep 参数 + 弹跳重启）
+// v2.10.18 · combo_plus 单 cell 动画：紫色 pulse + "+N combo" 飘字
+async function comboPlusCellAnim(r, c, n) {
+  const cells = document.querySelectorAll('.grid .cell');
+  const cell = cells[r*5 + c];
+  if (cell) {
+    cell.classList.add('combo-plus-pulse');
+    setTimeout(() => cell.classList.remove('combo-plus-pulse'), 380);
+    const rect = cell.getBoundingClientRect();
+    const el = document.createElement('div');
+    el.className = 'score-float';
+    el.style.color = '#a78bfa';
+    el.style.fontSize = '22px';
+    el.textContent = `+${n} combo`;
+    el.style.left = (rect.left + rect.width/2) + 'px';
+    el.style.top  = (rect.top + rect.height/2) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 950);
+  }
+  playTone(620 + n * 30, 100, 'triangle', 0.18);
+  await sleep(280);
+}
+
 // v2.10.16 · double retrigger 单 cell 动画：金红色快速 pulse + "🔁 retrigger" 飘字
 async function retriggerCellAnim(r, c) {
   const cells = document.querySelectorAll('.grid .cell');
