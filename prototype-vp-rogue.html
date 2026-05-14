@@ -1114,17 +1114,27 @@
     box-shadow: inset 0 0 0 1.5px rgba(251,191,36,0.55), 0 0 14px rgba(251,191,36,0.35);
   }
 
-  /* v2.10.2 · 顶部全局开关 */
+  /* v2.10.2 · 顶部调试区 */
   .global-toggles {
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 18px;
     margin-bottom: 14px;
-    padding: 10px 14px;
+    padding: 10px 16px;
     background: rgba(40,24,60,0.4);
     border: 1px dashed rgba(167,139,250,0.4);
     border-radius: 10px;
     flex-wrap: wrap;
+  }
+  .global-toggles .gt-title {
+    font-size: 11px;
+    color: #fde68a;
+    letter-spacing: 3px;
+    font-weight: 700;
+    padding-right: 4px;
+    border-right: 1px solid rgba(167,139,250,0.3);
+    padding-right: 18px;
   }
   .gt-switch {
     display: inline-flex; align-items: center; gap: 10px;
@@ -1525,12 +1535,18 @@
 <body>
 
 <div class="game-frame">
-  <!-- v2.10.2 · 顶部全局开关 -->
+  <!-- v2.10.2 · 顶部调试区 -->
   <div class="global-toggles">
-    <label class="gt-switch" title="开启后每次 spin 时 25 个 cell 都从 4 种附魔池随机注入一个（测试 / 开挂模式）">
+    <div class="gt-title">🛠 调试区</div>
+    <label class="gt-switch" title="开启后每次 spin 时 25 个 cell 都从 4 种附魔池随机注入一个">
       <input type="checkbox" id="toggle-all-enchant"/>
       <span class="gt-track"><span class="gt-thumb"></span></span>
       <span class="gt-label">🔮 全网附魔模式 <span class="gt-hint">（每个 cell 随机一个附魔）</span></span>
+    </label>
+    <label class="gt-switch" title="开启后所有概率类 charm（c15 随机重摇 / c16 随机锁定）直接 100% 触发，便于测试">
+      <input type="checkbox" id="toggle-100-trigger"/>
+      <span class="gt-track"><span class="gt-thumb"></span></span>
+      <span class="gt-label">🎯 100% 触发概率 <span class="gt-hint">（所有 charm 必触发）</span></span>
     </label>
   </div>
 
@@ -2074,7 +2090,9 @@ const state = {
   // v2.10 · 拥有的 charm（开局空 · 通过起手 picker 免费 3 选 1，其余从商店收集）
   ownedCharms: [],
   // v2.10.2 · 全网附魔模式开关（顶部 toggle）· 开启时每次 spin 25 个 cell 都随机附魔
-  allSymbolEnchant: false
+  allSymbolEnchant: false,
+  // v2.10.9 · 100% 触发概率开关（调试用）· 开启时 rand_reroll / rand_forced 必发
+  alwaysTriggerCharms: false
 };
 
 // v2.10 附魔类型定义
@@ -2125,6 +2143,10 @@ try {
 // v2.10.2 · 全网附魔模式开关
 try {
   state.allSymbolEnchant = localStorage.getItem('vp-rogue-all-enchant') === '1';
+} catch (e) {}
+// v2.10.9 · 100% 触发概率开关
+try {
+  state.alwaysTriggerCharms = localStorage.getItem('vp-rogue-100-trigger') === '1';
 } catch (e) {}
 
 // ============ 工具 ============
@@ -2505,7 +2527,7 @@ async function doSpin() {
   for (const id of state.equippedCharms) {
     const ch = CHARMS.find(c => c.id === id);
     if (!ch) continue;
-    if (ch.kind === 'rand_forced' && Math.random() < ch.value) {
+    if (ch.kind === 'rand_forced' && (state.alwaysTriggerCharms || Math.random() < ch.value)) {
       // 15% 概率固定 1 格为 6
       const r = Math.floor(Math.random()*5), c = Math.floor(Math.random()*5);
       state.forcedCells = [{ r, c, face: '6' }];
@@ -2571,7 +2593,7 @@ async function doSpin() {
       setEnchant(r, c, 'double', 1);
       log(`🎁 <b>双倍铃</b> 触发：(${r+1},${c+1}) → double`, 'log-charm');
     }
-    if (ch.kind === 'rand_reroll' && Math.random() < ch.value) {
+    if (ch.kind === 'rand_reroll' && (state.alwaysTriggerCharms || Math.random() < ch.value)) {
       state.rerollLosersNext = true;
       state.rerollLosersTimes = 1;
       log(`🎲 <b>随机重摇</b> 触发：本 spin 将重摇未中奖格`, 'log-charm');
@@ -3971,6 +3993,19 @@ document.querySelector('#btn-early').addEventListener('click', triggerEarlyFinis
     log(state.allSymbolEnchant
       ? '🔮 <b>全网附魔模式已开启</b> · 下次 spin 起 25 cell 都会随机附魔'
       : '⚪ 全网附魔模式已关闭', 'log-line-bonus');
+  });
+})();
+// v2.10.9 · 100% 触发概率 toggle（影响 rand_reroll / rand_forced 等概率类 charm）
+(function bind100TriggerToggle() {
+  const cb = document.querySelector('#toggle-100-trigger');
+  if (!cb) return;
+  cb.checked = !!state.alwaysTriggerCharms;
+  cb.addEventListener('change', (ev) => {
+    state.alwaysTriggerCharms = ev.target.checked;
+    try { localStorage.setItem('vp-rogue-100-trigger', ev.target.checked ? '1' : '0'); } catch (e) {}
+    log(state.alwaysTriggerCharms
+      ? '🎯 <b>100% 触发模式已开启</b> · 概率类 charm（c15 / c16）必发'
+      : '⚪ 100% 触发模式已关闭', 'log-line-bonus');
   });
 })();
 
