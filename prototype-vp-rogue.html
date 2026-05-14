@@ -2427,6 +2427,8 @@ function renderStatus() {
   const tEl = document.querySelector('#stat-ticket');
   if (tEl) tEl.textContent = state.tickets || 0;
   document.querySelector('#lore-text').textContent = LORE_TEXTS[state.week-1];
+  // v2.10.6 · 同步刷新符号图鉴（luck 变化反映 6 点 prob 加成）
+  if (typeof renderSymbolCodex === 'function') renderSymbolCodex();
 }
 
 // v2.10 · 提前完成奖励配方：剩余 spin × EARLY_TICKET_PER_SPIN
@@ -3976,14 +3978,24 @@ document.querySelector('#btn-cheat').addEventListener('click', () => {
 // 右侧图形规则 toggle 已由 setupPanelCollapse('right') 接管（#toggle-right），此处旧绑定已移除
 
 // ============ 渲染图鉴 + 图形表 ============
+// v2.10.6 · 符号图鉴渲染动态 prob（响应 luck 变化：6 点概率会随 luck 上升）
 function renderSymbolCodex() {
   const root = document.querySelector('#symbol-codex');
+  if (!root) return;
+  // 与 rollDie 相同公式：luckBoost 区间直接给 6 点，其余按 (1-luckBoost) 折扣
+  const luckBoost = Math.min(0.4, (state.luck || 0) * 0.002);
   root.innerHTML = FACES.map(f => {
     const s = SYMBOL_TABLE[f];
+    let effProb;
+    if (f === '6') effProb = s.prob * (1 - luckBoost) + luckBoost;
+    else effProb = s.prob * (1 - luckBoost);
+    const boostTag = (f === '6' && luckBoost > 0)
+      ? ` <span style="color:#4ade80; font-size:9px; font-weight:700;">+${(luckBoost*100).toFixed(1)}%</span>`
+      : '';
     return `<div class="codex-row face-${f}">
       <span class="cx-glyph">${FACE_GLYPH[f]}</span>
       <span><b>${f}</b> · 价值 <span class="cx-val">${s.value}</span></span>
-      <span class="cx-prob">${(s.prob*100).toFixed(0)}%</span>
+      <span class="cx-prob">${(effProb*100).toFixed(1)}%${boostTag}</span>
     </div>`;
   }).join('');
 }
