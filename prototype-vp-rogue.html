@@ -2913,15 +2913,15 @@ async function doSpin() {
   await doScore();
 }
 
-// v2.10.19 · 单个 value_plus cell 触发动画（绿色 pulse + 飘字 + 累计到 faceValuePlus + 图鉴刷新）
-async function valuePlusCellAnim(r, c, n) {
+// v2.10.21 · 单个 value_plus cell 触发动画（绿色 pulse + 飘字 + 累计到 faceValuePlus + 图鉴刷新）
+async function valuePlusCellAnim(r, c, n, speed = 1) {
   const cells = document.querySelectorAll('.grid .cell');
   const cell = cells[r * 5 + c];
   const face = state.grid[r][c] ? state.grid[r][c].r : null;
   if (!face) return;
   if (cell) {
     cell.classList.add('value-plus-pulse');
-    setTimeout(() => cell.classList.remove('value-plus-pulse'), 380);
+    setTimeout(() => cell.classList.remove('value-plus-pulse'), 380 * speed);
     const rect = cell.getBoundingClientRect();
     const el = document.createElement('div');
     el.className = 'score-float';
@@ -2936,7 +2936,7 @@ async function valuePlusCellAnim(r, c, n) {
   state.faceValuePlus[face] = (state.faceValuePlus[face] || 0) + n;
   renderSymbolCodex();
   playTone(520 + Math.random() * 80, 70, 'triangle', 0.16);
-  await sleep(240);
+  await sleep(240 * speed);
 }
 
 async function doScore() {
@@ -3043,43 +3043,32 @@ async function doScore() {
       }
     }
 
-    // —— C.0. value_plus（本图形内每颗 value_plus cell · base passes 前触发）——
-    // 让本图形的 base maxValue 享受加值；同时累计的 faceValuePlus 也惠及后续图形
-    for (let v = 0; v < valuePlusCells.length; v++) {
-      const vc = valuePlusCells[v];
-      await valuePlusCellAnim(vc.r, vc.c, vc.n);
-      log(`  🔮 <b>value+</b> · (${vc.r+1},${vc.c+1}) → ${FACE_GLYPH[state.grid[vc.r][vc.c].r]}${state.grid[vc.r][vc.c].r} 全网 +${vc.n}（face 累计 ${state.faceValuePlus[state.grid[vc.r][vc.c].r]}）`, 'log-charm');
-    }
-    // base maxValue 用全部 cells 的 effective face value
+    // v2.10.21 · base maxValue 用当前 faceValuePlus（C.B value_plus 在 base 后才作用，影响后续图形）
     const baseMaxValue = Math.max(...sh.cells.map(c => getEffectiveFaceValue(c.r, c.c, c.face)));
     const baseGot = baseMaxValue * SYMBOL_BASE_MUL * shapeScore * shapeMul;
     const repeats = doubleScore ? dMult : 1;
-    // 算高亮时长（不随 rep 变化）
-    let hlDur;
-    if (sh.isBonus) {
-      hlDur = sh.type === 'mega_yahtzee' ? 1800 :
-              sh.def.score >= 1000 ? 1200 :
-              sh.def.score >= 500  ? 900  : 700;
-    } else {
-      hlDur = Math.max(80, 380 - i * 50);
-    }
+    // v2.10.21 · speedFactor：附魔多时加速动画，避免 mega 25 颗满网时单图形 30s+
+    const enchantCount = valuePlusCells.length + doubleCells.length + comboPlusCells.length;
+    const speedFactor =
+      enchantCount >= 10 ? 0.35 :
+      enchantCount >= 6  ? 0.55 :
+      enchantCount >= 3  ? 0.75 :
+      1;
 
-    // —— A. base passes（外层 rep 由 double_score 决定）——
+    // v2.10.21 · 加亮（持续 C.A/C.B/C.C/C.D 整段，附魔触发期间背景不消失）
+    addShapeScoring(sh.cells, 1);
+    if (sh.isBonus && sh.def.score >= 10) await buildUpForBonus();
+
+    // —— C.A. base passes（外层 rep 由 double_score 决定）——
     for (let rep = 0; rep < repeats; rep++) {
-      // v2.5: double_score 多倍结算时屏幕中央 ×N 大字
       if (doubleScore && rep > 0) showMultFlash(rep + 1, repeats);
-      // v2.10 · 大奖 build-up：score≥10 的 GRID_BONUS 第一次结算前屏息
-      if (sh.isBonus && rep === 0 && sh.def.score >= 10) await buildUpForBonus();
-
-      // —— A. base pass —— 第一次结算图形（含所有附魔的 base 效果）
       baseTotal += baseGot;
       showFloatScore(sh.cells, baseGot, rep + 1);
-      await highlightShape(sh.cells, hlDur, rep + 1);
-      // 音效
+      // 音效 fire-and-forget（不 await），避免主流程卡顿
       if (sh.isBonus) {
-        if (sh.type === 'mega_yahtzee') await sfxBonusMega();
-        else if (sh.def.score >= 1000) await sfxBonusEpic();
-        else if (sh.def.score >= 500)  await sfxBonusMid();
+        if (sh.type === 'mega_yahtzee') sfxBonusMega();
+        else if (sh.def.score >= 1000) sfxBonusEpic();
+        else if (sh.def.score >= 500)  sfxBonusMid();
         else sfxBonusSmall();
         flashScreen(sh.type === 'mega_yahtzee' ? 3 : sh.def.score >= 500 ? 2 : 1);
       } else {
@@ -3095,35 +3084,49 @@ async function doScore() {
         `${sh.def.glyph} ${sh.label}${repLabel} · <b>${sh.def.name}</b> [<span style="font-size:12px;">${symbolList}</span>] · max(${baseMaxValue}) × 基倍率(${SYMBOL_BASE_MUL}) × 图形分(${shapeScore}) × 图形倍率(${shapeMul}) = <b>+${baseGot}</b>`,
         'log-line-bonus'
       );
-      state.combo += 1;        // base：每图形结算 +1（顶级规则之外的常规基础值）
+      state.combo += 1;
+      renderCombo();
+      startComboTimer();
+      await sleep(280 * speedFactor);
+    }
+
+    // —— C.B. value_plus（本图形内每颗 · base 后触发，影响后续图形）——
+    for (let v = 0; v < valuePlusCells.length; v++) {
+      const vc = valuePlusCells[v];
+      await valuePlusCellAnim(vc.r, vc.c, vc.n, speedFactor);
+      log(`  ⊕ <b>value+</b> · (${vc.r+1},${vc.c+1}) → ${FACE_GLYPH[state.grid[vc.r][vc.c].r]}${state.grid[vc.r][vc.c].r} 全网 +${vc.n}（face 累计 ${state.faceValuePlus[state.grid[vc.r][vc.c].r]}）`, 'log-charm');
+      startComboTimer();
+    }
+
+    // —— C.C. double retrigger（本图形内每颗 · 再加一次 baseGot，整图背景仍在）——
+    for (let d = 0; d < doubleCells.length; d++) {
+      const dc = doubleCells[d];
+      await retriggerCellAnim(dc.r, dc.c, speedFactor);
+      baseTotal += baseGot;
+      showFloatScore(sh.cells, baseGot, 1);
+      playTone(660 + d * 40, 90, 'triangle', 0.18);
+      log(
+        `  🔁 <b>再一次</b> · (${dc.r+1},${dc.c+1}) double 触发 → 再结算 <b>+${baseGot}</b>`,
+        'log-charm'
+      );
+      state.combo += 1;
       renderCombo();
       startComboTimer();
     }
 
-    // —— B. double retrigger（本图形内每颗 double cell · 不跟 rep）——
-    for (let d = 0; d < doubleCells.length; d++) {
-      const dc = doubleCells[d];
-      await retriggerCellAnim(dc.r, dc.c);
-      baseTotal += baseGot;
-      showFloatScore(sh.cells, baseGot, 1);
-      await highlightShape(sh.cells, Math.max(120, hlDur - 80), 1);
-      playTone(660 + d * 40, 90, 'triangle', 0.18);
-      log(
-        `  🔁 <b>retrigger</b> · (${dc.r+1},${dc.c+1}) double 触发 → 再结算 <b>+${baseGot}</b>`,
-        'log-charm'
-      );
-      state.combo += 1;        // retrigger 也算"再触发本图形"，给 +1 基础 combo
-      renderCombo();
-    }
-
-    // —— C. combo_plus（本图形内每颗 combo_plus cell · 每颗单独动画）——
+    // —— C.D. combo_plus（本图形内每颗 · 单独动画）——
     for (let k = 0; k < comboPlusCells.length; k++) {
       const cc = comboPlusCells[k];
-      await comboPlusCellAnim(cc.r, cc.c, cc.n);
+      await comboPlusCellAnim(cc.r, cc.c, cc.n, speedFactor);
       state.combo += cc.n;
       renderCombo();
       log(`  ⚡ <b>combo+</b> · (${cc.r+1},${cc.c+1}) → combo +${cc.n}（累计 ${state.combo}）`, 'log-charm');
+      startComboTimer();
     }
+
+    // v2.10.21 · 解亮（所有附魔完成后才移除高亮背景）
+    removeShapeScoring(sh.cells);
+    await sleep(140 * speedFactor);
   }
   total = baseTotal;
   log(`▸ 图形结算总分 = <b>${total}</b>`, 'log-base');
@@ -4116,13 +4119,13 @@ function highlightRow(r, ms) {
 }
 
 // 高亮组成图形的骰子集合（v0.4 / v2.5 加 rep 参数 + 弹跳重启）
-// v2.10.18 · combo_plus 单 cell 动画：紫色 pulse + "+N combo" 飘字
-async function comboPlusCellAnim(r, c, n) {
+// v2.10.21 · 三种附魔单 cell 动画 · 支持 speedFactor 加速（大奖时缩短）
+async function comboPlusCellAnim(r, c, n, speed = 1) {
   const cells = document.querySelectorAll('.grid .cell');
   const cell = cells[r*5 + c];
   if (cell) {
     cell.classList.add('combo-plus-pulse');
-    setTimeout(() => cell.classList.remove('combo-plus-pulse'), 380);
+    setTimeout(() => cell.classList.remove('combo-plus-pulse'), 380 * speed);
     const rect = cell.getBoundingClientRect();
     const el = document.createElement('div');
     el.className = 'score-float';
@@ -4135,30 +4138,29 @@ async function comboPlusCellAnim(r, c, n) {
     setTimeout(() => el.remove(), 950);
   }
   playTone(620 + n * 30, 100, 'triangle', 0.18);
-  await sleep(280);
+  await sleep(280 * speed);
 }
 
-// v2.10.16 · double retrigger 单 cell 动画：金红色快速 pulse + "🔁 retrigger" 飘字
-async function retriggerCellAnim(r, c) {
+// v2.10.21 · double retrigger 单 cell 动画：金红 pulse + "🔁 再一次" 飘字
+async function retriggerCellAnim(r, c, speed = 1) {
   const cells = document.querySelectorAll('.grid .cell');
   const cell = cells[r*5 + c];
   if (cell) {
     cell.classList.add('retrigger-pulse');
-    setTimeout(() => cell.classList.remove('retrigger-pulse'), 400);
-    // 飘字
+    setTimeout(() => cell.classList.remove('retrigger-pulse'), 400 * speed);
     const rect = cell.getBoundingClientRect();
     const el = document.createElement('div');
     el.className = 'score-float';
     el.style.color = '#fbbf24';
     el.style.fontSize = '24px';
-    el.textContent = '🔁 retrigger';
+    el.textContent = '🔁 再一次';
     el.style.left = (rect.left + rect.width/2) + 'px';
     el.style.top  = (rect.top + rect.height/2) + 'px';
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 900);
   }
   playTone(740, 80, 'square', 0.22);
-  await sleep(320);
+  await sleep(320 * speed);
 }
 
 function highlightShape(cellList, ms, rep = 1) {
@@ -4167,7 +4169,6 @@ function highlightShape(cellList, ms, rep = 1) {
     const repClass = 'scoring-rep-' + Math.min(5, rep);
     cellList.forEach(({r, c}) => {
       const cell = cells[r*5+c];
-      // force restart animation
       cell.classList.remove('scoring-shape','scoring-rep-1','scoring-rep-2','scoring-rep-3','scoring-rep-4','scoring-rep-5');
       void cell.offsetWidth;
       cell.classList.add('scoring-shape', repClass);
@@ -4178,6 +4179,24 @@ function highlightShape(cellList, ms, rep = 1) {
       });
       resolve();
     }, ms);
+  });
+}
+
+// v2.10.21 · 分阶段高亮：加亮/解亮分开，配合附魔触发期间保持图形背景
+function addShapeScoring(cellList, rep = 1) {
+  const cells = document.querySelectorAll('.grid .cell');
+  const repClass = 'scoring-rep-' + Math.min(5, rep);
+  cellList.forEach(({r, c}) => {
+    const cell = cells[r*5+c];
+    cell.classList.remove('scoring-shape','scoring-rep-1','scoring-rep-2','scoring-rep-3','scoring-rep-4','scoring-rep-5');
+    void cell.offsetWidth;
+    cell.classList.add('scoring-shape', repClass);
+  });
+}
+function removeShapeScoring(cellList) {
+  const cells = document.querySelectorAll('.grid .cell');
+  cellList.forEach(({r, c}) => {
+    cells[r*5+c].classList.remove('scoring-shape','scoring-rep-1','scoring-rep-2','scoring-rep-3','scoring-rep-4','scoring-rep-5');
   });
 }
 
