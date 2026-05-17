@@ -1184,17 +1184,21 @@
     opacity: 0.55;
   }
   /* v2.10 · 附魔角标（左上角）· v2.10.1 加脉动 · v2.10.3 自定义 tooltip + 滚动期也显示 */
+  /* v2.10.31 · 圆形徽章 + 右下角数字气泡 · 固定尺寸 + 视觉统一 */
   .cell .enchant-badge {
     position: absolute;
-    top: 2px; left: 4px;
-    font-size: 22px;
+    top: 3px; left: 3px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(15, 10, 26, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
     font-weight: 900;
     line-height: 1;
-    /* v2.10.29 · 去掉外发光 + 外描边，保留深底让 emoji 自身清晰 */
-    background: rgba(0,0,0,0.55);
-    border-radius: 6px;
-    padding: 1px 4px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.85);
     z-index: 50;
     pointer-events: auto;
     cursor: help;
@@ -1214,12 +1218,26 @@
     75%  { transform: translateX(2px) rotate(4deg) scale(1.1); }
     100% { transform: translateX(0) rotate(0) scale(1); }
   }
+  /* v2.10.31 · 数字气泡浮在徽章右下角（脱离主体保证主徽章一直是圆形） */
   .cell .enchant-badge sub {
-    font-size: 11px;
-    vertical-align: super;
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: currentColor;
+    color: #1e1530;
+    font-size: 10px;
     font-weight: 900;
-    color: #fff;
-    text-shadow: 0 0 4px currentColor;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(15,10,26,0.85);
+    vertical-align: baseline;
+    margin: 0;
+    text-shadow: none;
   }
   /* 自定义 tooltip（hover 出现，无延迟 + 多行支持）*/
   .cell .enchant-badge::after {
