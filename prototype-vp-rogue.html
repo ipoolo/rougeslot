@@ -3385,6 +3385,11 @@ function renderCombo() {
   const numEl = document.querySelector('#combo-num');
   const prev = parseInt(numEl.textContent) || 0;
   numEl.textContent = state.combo;
+  // v2.10.25 · combo 数字随累计值逐步变大，封顶 80px
+  //   用 sqrt 让小数值就有明显放大反馈：0→38 / 5→51 / 15→61 / 30→71 / 50+→80
+  const MIN_SIZE = 38, MAX_SIZE = 80, MAX_COMBO_SIZE = 50;
+  const t = Math.min(1, Math.sqrt(state.combo / MAX_COMBO_SIZE));
+  numEl.style.fontSize = (MIN_SIZE + (MAX_SIZE - MIN_SIZE) * t).toFixed(1) + 'px';
   // 数字增加时触发 bump 动画
   if (state.combo > prev) {
     numEl.classList.remove('bump');
