@@ -3184,6 +3184,8 @@ async function doScore() {
       state.combo += 1;
       renderCombo();
       startComboTimer();
+      // v2.10.27 · 图形天然 +1 combo 也飘字（在第一颗 cell 上方）
+      if (sh.cells.length > 0) showComboFloat(sh.cells[0].r, sh.cells[0].c, 1);
       await sleep(280 * speedFactor);
     }
 
@@ -3223,6 +3225,8 @@ async function doScore() {
       state.combo += 1;
       renderCombo();
       startComboTimer();
+      // v2.10.27 · retrigger 的 +1 combo 视觉化飘字（紫色，让玩家看到 retrigger 给的 combo）
+      showComboFloat(dc.r, dc.c, 1);
       // 重新走 enchant pass（double 不参与，防死循环；其它附魔被再次触发）
       await runEnchantPass(` (re#${d+1})`);
     }
@@ -4246,6 +4250,23 @@ function highlightRow(r, ms) {
 }
 
 // 高亮组成图形的骰子集合（v0.4 / v2.5 加 rep 参数 + 弹跳重启）
+// v2.10.27 · 通用 combo +N 飘字（紫色，用于 retrigger / base 的隐式 +1 combo 视觉化）
+function showComboFloat(r, c, n) {
+  const cells = document.querySelectorAll('.grid .cell');
+  const cell = cells[r*5 + c];
+  if (!cell) return;
+  const rect = cell.getBoundingClientRect();
+  const el = document.createElement('div');
+  el.className = 'score-float';
+  el.style.color = '#a78bfa';
+  el.style.fontSize = '18px';
+  el.textContent = `+${n} combo`;
+  el.style.left = (rect.left + rect.width/2) + 'px';
+  el.style.top  = (rect.top + rect.height/2 - 14) + 'px';   // 上偏一点避免与 baseGot 飘字重叠
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 900);
+}
+
 // v2.10.21 · 三种附魔单 cell 动画 · 支持 speedFactor 加速（大奖时缩短）
 async function comboPlusCellAnim(r, c, n, speed = 1) {
   const cells = document.querySelectorAll('.grid .cell');
