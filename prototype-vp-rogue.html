@@ -1036,6 +1036,74 @@
 
   /* 网格 + 行标 */
   .grid-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
+
+  /* v2.11 · 机台金属外框（包裹 .grid） */
+  .machine-frame {
+    flex: 1;
+    position: relative;
+    padding: 30px 18px 22px;
+    border-radius: 14px;
+    background:
+      linear-gradient(180deg, #4a4036 0%, #3a3128 35%, #2a2218 70%, #1f1810 100%);
+    border: 4px solid #2a1f15;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.08),
+      inset 0 -3px 8px rgba(0,0,0,0.6),
+      0 8px 24px rgba(0,0,0,0.6),
+      0 0 0 1px #5a4a38;
+  }
+  /* 顶部 LED 灯条（10 个小圆灯） */
+  .machine-led-strip {
+    position: absolute;
+    top: 8px; left: 18px; right: 18px;
+    height: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 8px;
+    background: linear-gradient(180deg, #1a0f08, #2a1810);
+    border-radius: 8px;
+    border: 1px solid #5a4a38;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.7);
+  }
+  .machine-led-strip span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fde68a 0%, #fbbf24 50%, #a16207 100%);
+    box-shadow: 0 0 6px #fbbf24, inset 0 0 1px #fff;
+    animation: ledTwinkle 2.4s ease-in-out infinite;
+  }
+  .machine-led-strip span:nth-child(2) { animation-delay: 0.24s; }
+  .machine-led-strip span:nth-child(3) { animation-delay: 0.48s; }
+  .machine-led-strip span:nth-child(4) { animation-delay: 0.72s; }
+  .machine-led-strip span:nth-child(5) { animation-delay: 0.96s; }
+  .machine-led-strip span:nth-child(6) { animation-delay: 1.2s;  }
+  .machine-led-strip span:nth-child(7) { animation-delay: 1.44s; }
+  .machine-led-strip span:nth-child(8) { animation-delay: 1.68s; }
+  .machine-led-strip span:nth-child(9) { animation-delay: 1.92s; }
+  .machine-led-strip span:nth-child(10){ animation-delay: 2.16s; }
+  @keyframes ledTwinkle {
+    0%, 100% { opacity: 0.6; box-shadow: 0 0 4px #fbbf24; }
+    50%      { opacity: 1;   box-shadow: 0 0 12px #fde68a, 0 0 20px #fbbf24; }
+  }
+  /* 四角螺丝装饰 */
+  .machine-screws .screw {
+    position: absolute;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #8a7a60, #4a3e2e 60%, #2a2218 100%);
+    box-shadow: inset -1px -1px 2px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.5);
+  }
+  .machine-screws .screw::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 8px; height: 1.5px;
+    background: #1a0a0a;
+    transform: translate(-50%,-50%) rotate(45deg);
+  }
+  .screw-tl { top: 10px; left: 10px; }
+  .screw-tr { top: 10px; right: 10px; }
+  .screw-bl { bottom: 10px; left: 10px; }
+  .screw-br { bottom: 10px; right: 10px; }
   .row-tags { display: flex; flex-direction: column; gap: 6px; justify-content: center;
               padding: 12px 0; }
   .row-tag {
@@ -1054,9 +1122,15 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 6px;
-    background: rgba(0,0,0,0.3);
-    padding: 12px;
-    border-radius: 10px;
+    /* v2.11 · 机台屏幕风格：深陷下凹 + 内嵌阴影 */
+    background: linear-gradient(180deg, #050308 0%, #0a0612 50%, #050308 100%);
+    padding: 14px;
+    border-radius: 8px;
+    border: 2px solid #1a0f08;
+    box-shadow:
+      inset 0 4px 12px rgba(0,0,0,0.85),
+      inset 0 -2px 6px rgba(0,0,0,0.6),
+      0 0 0 1px #5a4a38;
   }
   /* 列同色发光（结算时） */
   .grid.show-col-flush .cell.col-flush-on {
@@ -1072,9 +1146,11 @@
   }
   .cell {
     aspect-ratio: 1/1;
-    background: linear-gradient(180deg, #1e1530 0%, #261936 100%);
-    border: 1.5px solid #475569;
+    /* v2.11 · 机台 cell：深色金属面板风格 */
+    background: linear-gradient(180deg, #1a0f1f 0%, #221530 50%, #1a0f1f 100%);
+    border: 1.5px solid #4a3e2e;
     border-radius: 6px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -1px 2px rgba(0,0,0,0.4);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     cursor: default;
@@ -1966,7 +2042,17 @@
     <!-- 中：游戏区 -->
     <div class="game-center">
       <div class="grid-wrap">
-        <div class="grid" id="grid"></div>
+        <div class="machine-frame">
+          <div class="machine-led-strip">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="grid" id="grid"></div>
+          <div class="machine-screws">
+            <span class="screw screw-tl"></span><span class="screw screw-tr"></span>
+            <span class="screw screw-bl"></span><span class="screw screw-br"></span>
+          </div>
+        </div>
       </div>
     </div>
 
