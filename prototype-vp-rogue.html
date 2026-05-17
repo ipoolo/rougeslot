@@ -1252,9 +1252,10 @@
   .cell .enchant-badge:hover::after {
     opacity: 1;
   }
+  /* v2.10.30 · 移除 drop-shadow 同色光晕（外发光），只保留呼吸 scale */
   @keyframes enchantPulse {
-    from { transform: scale(0.92); filter: drop-shadow(0 0 4px currentColor); }
-    to   { transform: scale(1.12); filter: drop-shadow(0 0 10px currentColor) drop-shadow(0 0 18px currentColor); }
+    from { transform: scale(0.95); }
+    to   { transform: scale(1.08); }
   }
   .cell.enchanted {
     /* v2.10.24 · 削弱：1.5px 0.55 → 1px 0.25；外光晕 14px 0.35 → 6px 0.12 */
