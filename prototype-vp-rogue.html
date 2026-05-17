@@ -1190,17 +1190,29 @@
     font-size: 22px;
     font-weight: 900;
     line-height: 1;
-    /* 替换 drop-shadow 为单层光晕 + 深底背景，让 emoji 自身清晰 */
+    /* v2.10.29 · 去掉外发光 + 外描边，保留深底让 emoji 自身清晰 */
     background: rgba(0,0,0,0.55);
-    border: 1.5px solid currentColor;
     border-radius: 6px;
     padding: 1px 4px;
-    box-shadow: 0 0 8px currentColor;
     text-shadow: 0 1px 2px rgba(0,0,0,0.8);
     z-index: 50;
     pointer-events: auto;
     cursor: help;
     animation: enchantPulse 1.2s ease-in-out infinite alternate;
+  }
+  /* v2.10.29 · 该附魔被触发计算时，图标震动以提示玩家 */
+  .cell.retrigger-pulse .enchant-badge,
+  .cell.value-plus-pulse .enchant-badge,
+  .cell.combo-plus-pulse .enchant-badge {
+    animation: badgeShake 0.4s ease-in-out !important;
+  }
+  @keyframes badgeShake {
+    0%   { transform: translateX(0) rotate(0); }
+    15%  { transform: translateX(-3px) rotate(-8deg) scale(1.15); }
+    35%  { transform: translateX(3px) rotate(8deg) scale(1.2); }
+    55%  { transform: translateX(-3px) rotate(-6deg) scale(1.18); }
+    75%  { transform: translateX(2px) rotate(4deg) scale(1.1); }
+    100% { transform: translateX(0) rotate(0) scale(1); }
   }
   .cell .enchant-badge sub {
     font-size: 11px;
