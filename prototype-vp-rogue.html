@@ -524,6 +524,55 @@
     .dev-pick-grid { grid-template-columns: repeat(3, 1fr); }
   }
 
+  /* v2.10.22 · 大奖 / 超级大奖 屏幕中央大字（持续到附魔结束） */
+  .bonus-megaword {
+    position: fixed;
+    top: 28%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9100;
+    font-weight: 900;
+    letter-spacing: 12px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .bonus-megaword.show { opacity: 1; }
+  .bonus-megaword.show.fading { opacity: 0; transition: opacity 0.4s; }
+  /* 普通大奖（金色） */
+  .bonus-megaword.tier-bonus {
+    font-size: 88px;
+    background: linear-gradient(180deg, #fde68a 0%, #fbbf24 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 40px rgba(251,191,36,0.6);
+    filter: drop-shadow(0 0 18px rgba(251,191,36,0.7)) drop-shadow(0 4px 0 rgba(0,0,0,0.4));
+    animation: bonusWordPulse 1.4s ease-in-out infinite alternate;
+  }
+  /* 超级大奖（紫金渐变 + 更强光晕） */
+  .bonus-megaword.tier-super {
+    font-size: 116px;
+    background: linear-gradient(180deg, #fde68a 0%, #fb923c 30%, #ec4899 70%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 60px rgba(236,72,153,0.8), 0 0 100px rgba(167,139,250,0.6);
+    filter:
+      drop-shadow(0 0 24px rgba(236,72,153,0.8))
+      drop-shadow(0 0 48px rgba(167,139,250,0.6))
+      drop-shadow(0 6px 0 rgba(0,0,0,0.5));
+    animation: superBonusWordPulse 0.9s ease-in-out infinite alternate;
+  }
+  @keyframes bonusWordPulse {
+    from { transform: translate(-50%, -50%) scale(0.96); }
+    to   { transform: translate(-50%, -50%) scale(1.06); }
+  }
+  @keyframes superBonusWordPulse {
+    from { transform: translate(-50%, -50%) scale(0.94) rotate(-1deg); filter: drop-shadow(0 0 24px rgba(236,72,153,0.8)) drop-shadow(0 0 48px rgba(167,139,250,0.6)) drop-shadow(0 6px 0 rgba(0,0,0,0.5)); }
+    to   { transform: translate(-50%, -50%) scale(1.10) rotate(1deg); filter: drop-shadow(0 0 36px rgba(236,72,153,1)) drop-shadow(0 0 80px rgba(167,139,250,0.9)) drop-shadow(0 6px 0 rgba(0,0,0,0.5)); }
+  }
+
   /* v2.10 · 近输 · 屏幕震动 */
   @keyframes screenShake {
     0%, 100% { transform: translate(0); }
@@ -3063,6 +3112,12 @@ async function doScore() {
       enchantCount >= 3  ? 0.75 :
       1;
 
+    // v2.10.22 · 大奖 / 超级大奖 屏幕中央大字（持续到附魔结束）
+    let bonusWordHandle = null;
+    if (sh.isBonus) {
+      const isSuper = (sh.type === 'outer_ring' || sh.type === 'mega_yahtzee');
+      bonusWordHandle = showBonusMegaword(isSuper ? 'super' : 'bonus');
+    }
     // v2.10.21 · 加亮（持续 C.A/C.B/C.C/C.D 整段，附魔触发期间背景不消失）
     addShapeScoring(sh.cells, 1);
     if (sh.isBonus && sh.def.score >= 10) await buildUpForBonus();
@@ -3074,11 +3129,14 @@ async function doScore() {
       showFloatScore(sh.cells, baseGot, rep + 1);
       // 音效 fire-and-forget（不 await），避免主流程卡顿
       if (sh.isBonus) {
+        const isSuper = (sh.type === 'outer_ring' || sh.type === 'mega_yahtzee');
         if (sh.type === 'mega_yahtzee') sfxBonusMega();
-        else if (sh.def.score >= 1000) sfxBonusEpic();
-        else if (sh.def.score >= 500)  sfxBonusMid();
+        else if (sh.type === 'outer_ring') sfxBonusEpic();
+        else if (sh.def.score >= 10) sfxBonusMid();
         else sfxBonusSmall();
-        flashScreen(sh.type === 'mega_yahtzee' ? 3 : sh.def.score >= 500 ? 2 : 1);
+        // v2.10.22 · 超级大奖比普通大奖更强烈：屏幕震动 + 三级闪屏
+        flashScreen(isSuper ? 3 : 2);
+        if (isSuper && rep === 0) shakeScreen(500);
       } else {
         playTone(440 * Math.pow(1.12, i + (rep ? 7 : 0)), 130);
       }
@@ -3134,6 +3192,8 @@ async function doScore() {
 
     // v2.10.21 · 解亮（所有附魔完成后才移除高亮背景）
     removeShapeScoring(sh.cells);
+    // v2.10.22 · 大字与图形高亮同步淡出
+    if (bonusWordHandle) bonusWordHandle.dismiss();
     await sleep(140 * speedFactor);
   }
   total = baseTotal;
@@ -3746,6 +3806,23 @@ function showNearMissOverlay() {
   el.className = 'near-miss-overlay';
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 1500);
+}
+
+// v2.10.22 · 大奖 / 超级大奖 屏幕中央大字（持续到附魔结束后一起淡出）
+//   tier: 'super' (outer_ring / mega_yahtzee) 或 'bonus' (其他 GRID_BONUS)
+function showBonusMegaword(tier) {
+  const el = document.createElement('div');
+  el.className = 'bonus-megaword tier-' + tier;
+  el.textContent = tier === 'super' ? '超级大奖' : '大奖';
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  return {
+    el,
+    dismiss() {
+      el.classList.add('fading');
+      setTimeout(() => el.remove(), 450);
+    }
+  };
 }
 
 // v2.10 · 大奖 build-up（触发前 350ms 全屏屏息感）
