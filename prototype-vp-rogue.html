@@ -1158,23 +1158,14 @@
     from { box-shadow: 0 0 12px rgba(251,191,36,0.45), inset 0 0 6px rgba(251,191,36,0.18); }
     to   { box-shadow: 0 0 26px rgba(251,191,36,1), 0 0 40px rgba(248,113,113,0.5), inset 0 0 14px rgba(251,191,36,0.4); }
   }
-  /* v2.10: 列 5 在列 4 停下前的"等待揭晓"状态——隐藏内部 strip，仅保留金色脉动边框 */
-  .cell.reeling.waiting .reel-strip { opacity: 0; }
-  .cell.reeling.waiting::after {
-    content: '?';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 36px;
-    font-weight: 900;
-    color: #fbbf24;
-    text-shadow: 0 0 12px rgba(251,191,36,0.9);
-    animation: waitMarkPulse 0.7s ease-in-out infinite alternate;
-    pointer-events: none;
+  /* v2.10.28 · 列 5 在列 4 停下前"持续极速滚动"（去掉静态 "?" 占位） */
+  .cell.reeling.waiting .reel-strip {
+    animation: reelWaitLoop 0.4s linear infinite;
   }
-  @keyframes waitMarkPulse {
-    from { opacity: 0.5; transform: translate(-50%, -50%) scale(0.95); }
-    to   { opacity: 1;   transform: translate(-50%, -50%) scale(1.1); }
+  /* 每 0.4s 循环滚 4 个 cell 距离（strip 内含 N 个 reel-cell，跨 4/N × 100% 后跳回起点）*/
+  @keyframes reelWaitLoop {
+    from { transform: translateY(0); }
+    to   { transform: translateY(calc(-1 * 4 / var(--reel-count, 12) * 100%)); }
   }
   .cell .suit {
     font-size: 56px;
@@ -2729,6 +2720,8 @@ async function renderReelSpin() {
     s.finalY = -(s.N - 1) * cellH;
     s.overshootY = s.finalY - cellH * OVERSHOOT_RATIO;
     s.strip.style.height = (s.N * cellH) + 'px';
+    // v2.10.28 · 设置 --reel-count CSS 变量供 @keyframes reelWaitLoop 使用
+    s.strip.style.setProperty('--reel-count', s.N);
     s.strip.querySelectorAll('.reel-cell').forEach(rc => {
       rc.style.height = cellH + 'px';
       rc.style.flex = '0 0 ' + cellH + 'px';
@@ -2750,9 +2743,15 @@ async function renderReelSpin() {
     const startDelay = colStartDelay[c];
     const dashMs = colTotalMs[c] - BACK_MS;
     setTimeout(() => {
-      // teasing 列 5 启动时把 waiting 移除（揭晓出现）
+      // teasing 列 5 启动时把 waiting 移除（停止 loop animation）
+      // v2.10.28 · 先把当前 animation transform 固定为 inline，再取消 animation，避免跳变
       if (teasing && c === 4) {
-        strips.filter(s => s.c === 4).forEach(({ cell }) => cell.classList.remove('waiting'));
+        strips.filter(s => s.c === 4).forEach(({ cell, strip }) => {
+          const computed = getComputedStyle(strip).transform;
+          strip.style.transform = (computed && computed !== 'none') ? computed : 'translateY(0)';
+          cell.classList.remove('waiting');
+          void strip.offsetHeight; // 强制 reflow，让 transform 起点定格
+        });
       }
       strips.filter(s => s.c === c).forEach(s => {
         s.strip.style.transition = `transform ${dashMs}ms ${NORMAL_EASE}`;
