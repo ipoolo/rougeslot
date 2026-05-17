@@ -169,6 +169,13 @@
   }
   .sub-head:first-of-type { border-top: none; margin-top: 0; padding-top: 4px; }
   .sub-head.bonus { color: #fbbf24; }
+  .sub-head.super {
+    color: #ec4899;
+    background: linear-gradient(90deg, rgba(236,72,153,0.08), rgba(167,139,250,0.08));
+    border-left: 2px solid #ec4899;
+    padding-left: 8px;
+    text-shadow: 0 0 8px rgba(236,72,153,0.4);
+  }
   .sub-toggle {
     background: rgba(251,191,36,0.12);
     color: #fbbf24;
@@ -1538,6 +1545,28 @@
   }
   .shape-row.bonus .sh-score { color: #fbbf24; font-size: 13px; }
   .shape-row.bonus .sh-mul   { color: #fde68a; font-weight: 700; }
+  /* v2.10.23 · 超级大奖独立配色（紫粉渐变 + 更强光晕） */
+  .shape-row.super {
+    background: linear-gradient(90deg, rgba(236,72,153,0.12), rgba(167,139,250,0.1));
+    border-left: 2px solid #ec4899;
+    box-shadow: inset 0 0 0 1px rgba(236,72,153,0.2);
+  }
+  .shape-row.super .sh-score {
+    color: #ec4899;
+    font-size: 14px;
+    font-weight: 900;
+    text-shadow: 0 0 6px rgba(236,72,153,0.5);
+  }
+  .shape-row.super .sh-mul {
+    color: #c4b5fd;
+    font-weight: 800;
+    text-shadow: 0 0 4px rgba(167,139,250,0.5);
+  }
+  .shape-row.super .sh-name { color: #fbcfe8; }
+  .shape-row.super .mini-cell.on {
+    background: #ec4899;
+    box-shadow: 0 0 5px #ec4899, 0 0 10px rgba(167,139,250,0.5);
+  }
   .row-bonus {
     grid-column: 1 / 6;
     text-align: center;
@@ -4698,25 +4727,34 @@ function renderSymbolCodex() {
     </div>`;
   }).join('');
 }
+// v2.10.23 · outer_ring + mega_yahtzee 拆到独立的"超级大奖"组
+const SUPER_BONUS_KEYS = new Set(['outer_ring', 'mega_yahtzee']);
+
 function renderShapeTable() {
   const root = document.querySelector('#shape-table');
-  const handRows = Object.entries(HAND_PAY).map(([k, v]) => ({k, v, bonus: false}));
-  const bonusRows = Object.entries(GRID_BONUS).map(([k, v]) => ({k, v, bonus: true}));
-  const renderRow = ({k, v, bonus}) => {
+  const handRows  = Object.entries(HAND_PAY).map(([k, v]) => ({k, v, tier: 'normal'}));
+  const bonusRows = Object.entries(GRID_BONUS)
+    .filter(([k]) => !SUPER_BONUS_KEYS.has(k))
+    .map(([k, v]) => ({k, v, tier: 'bonus'}));
+  const superRows = Object.entries(GRID_BONUS)
+    .filter(([k]) => SUPER_BONUS_KEYS.has(k))
+    .map(([k, v]) => ({k, v, tier: 'super'}));
+  const renderRow = ({k, v, tier}) => {
     const enabled = !state.disabledShapes.has(k);
+    const isBonus = tier !== 'normal';
     return `
-      <div class="shape-row ${enabled ? '' : 'disabled'} ${bonus ? 'bonus' : ''}" data-shape="${k}">
+      <div class="shape-row ${enabled ? '' : 'disabled'} ${isBonus ? 'bonus' : ''} ${tier === 'super' ? 'super' : ''}" data-shape="${k}">
         ${renderMiniGrid(k)}
-        <span class="sh-name">${v.glyph} ${v.name}${bonus ? `<div style="font-size:9px; opacity:.6; line-height:1.3;">${v.desc}</div>` : ''}</span>
+        <span class="sh-name">${v.glyph} ${v.name}${isBonus ? `<div style="font-size:9px; opacity:.6; line-height:1.3;">${v.desc}</div>` : ''}</span>
         <span class="sh-score">${v.score}</span>
         <span class="sh-mul">×${v.mul}</span>
         <button class="sh-toggle ${enabled ? 'on' : ''}" data-shape="${k}" title="启用/关闭"></button>
       </div>
     `;
   };
-  // 子区块独立折叠状态
   const normalCollapsed = (() => { try { return localStorage.getItem('vp-rogue-normal-collapsed') === '1'; } catch { return false; } })();
-  const bonusCollapsed  = (() => { try { return localStorage.getItem('vp-rogue-bonus-collapsed') === '1'; } catch { return false; } })();
+  const bonusCollapsed  = (() => { try { return localStorage.getItem('vp-rogue-bonus-collapsed')  === '1'; } catch { return false; } })();
+  const superCollapsed  = (() => { try { return localStorage.getItem('vp-rogue-super-collapsed')  === '1'; } catch { return false; } })();
 
   root.innerHTML = `
     <div class="sub-head">
@@ -4733,6 +4771,14 @@ function renderShapeTable() {
     </div>
     <div class="sub-content ${bonusCollapsed ? 'collapsed' : ''}" id="sub-bonus">
       ${bonusRows.map(renderRow).join('')}
+    </div>
+
+    <div class="sub-head super">
+      <span>🌌 超级大奖（终极爆发）</span>
+      <button class="sub-toggle" data-sub="super">${superCollapsed ? '展开 ▾' : '收起 ▴'}</button>
+    </div>
+    <div class="sub-content ${superCollapsed ? 'collapsed' : ''}" id="sub-super">
+      ${superRows.map(renderRow).join('')}
     </div>
   `;
   // 子区块 toggle 绑定
