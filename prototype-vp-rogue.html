@@ -1204,19 +1204,41 @@
     cursor: help;
     animation: enchantPulse 1.2s ease-in-out infinite alternate;
   }
-  /* v2.10.29 · 该附魔被触发计算时，图标震动以提示玩家 */
+  /* v2.10.32 · 附魔触发震动 · 三层强化 */
+  /* 层 1：badge 主体大幅震动 + 缩放 + 旋转，0.55s 10 关键帧 */
   .cell.retrigger-pulse .enchant-badge,
   .cell.value-plus-pulse .enchant-badge,
   .cell.combo-plus-pulse .enchant-badge {
-    animation: badgeShake 0.4s ease-in-out !important;
+    animation: badgeShake 0.55s cubic-bezier(.36, .07, .19, .97) !important;
+    /* 层 3：触发瞬间短暂彩色闪光（区别于持久外发光，是一次性弹出） */
+    box-shadow:
+      0 0 0 3px currentColor,
+      0 0 22px currentColor,
+      0 0 40px currentColor !important;
   }
   @keyframes badgeShake {
-    0%   { transform: translateX(0) rotate(0); }
-    15%  { transform: translateX(-3px) rotate(-8deg) scale(1.15); }
-    35%  { transform: translateX(3px) rotate(8deg) scale(1.2); }
-    55%  { transform: translateX(-3px) rotate(-6deg) scale(1.18); }
-    75%  { transform: translateX(2px) rotate(4deg) scale(1.1); }
-    100% { transform: translateX(0) rotate(0) scale(1); }
+    0%   { transform: translate(0,0)    rotate(0)    scale(1); }
+    8%   { transform: translate(-7px,-3px) rotate(-18deg) scale(1.45); }
+    18%  { transform: translate(7px,3px)   rotate(18deg)  scale(1.55); }
+    28%  { transform: translate(-8px,2px)  rotate(-15deg) scale(1.5); }
+    38%  { transform: translate(7px,-2px)  rotate(14deg)  scale(1.45); }
+    48%  { transform: translate(-6px,2px)  rotate(-11deg) scale(1.4); }
+    58%  { transform: translate(6px,-1px)  rotate(9deg)   scale(1.32); }
+    70%  { transform: translate(-4px,1px)  rotate(-6deg)  scale(1.22); }
+    82%  { transform: translate(2px,0)     rotate(3deg)   scale(1.12); }
+    100% { transform: translate(0,0)    rotate(0)    scale(1); }
+  }
+  /* 层 2：数字气泡 sub 同步弹大（独立动画，叠加在 badgeShake 上） */
+  .cell.retrigger-pulse .enchant-badge sub,
+  .cell.value-plus-pulse .enchant-badge sub,
+  .cell.combo-plus-pulse .enchant-badge sub {
+    animation: subPop 0.55s cubic-bezier(.36, .07, .19, .97);
+  }
+  @keyframes subPop {
+    0%   { transform: scale(1); }
+    25%  { transform: scale(1.85) rotate(-12deg); }
+    50%  { transform: scale(1.7)  rotate(10deg); }
+    100% { transform: scale(1)    rotate(0); }
   }
   /* v2.10.31 · 数字气泡浮在徽章右下角（脱离主体保证主徽章一直是圆形） */
   .cell .enchant-badge sub {
