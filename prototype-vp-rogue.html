@@ -211,7 +211,8 @@
     font-size: 11px;
   }
   .codex-row:last-child { border-bottom: none; }
-  .codex-row .cx-glyph { font-size: 16px; text-align: center; }
+  .codex-row .cx-glyph { font-size: 16px; text-align: center; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; }
+  .codex-row .cx-glyph svg { width: 100%; height: 100%; }
   .codex-row .cx-val { color: #fbbf24; font-weight: 700; }
   .codex-row .cx-prob { color: #94a3b8; font-size: 10px; text-align: right; }
   /* v2.10.17 · face 有 value_plus 时整行加绿光提示 */
@@ -1125,10 +1126,20 @@
   /* v2.8.4: reel-cell 内字号 / 阴影 / 位置 严格对齐普通 cell，避免移除 reeling class 时
      被 .cell 的 transition: all .4s cubic-bezier(.34,1.56,.64,1) 当作变化触发 overshoot */
   .cell.reeling .reel-cell .suit {
-    font-size: 56px;
+    width: 64px;
+    height: 64px;
     line-height: 0.85;
     margin: 0;
-    text-shadow: 0 0 8px currentColor, 0 0 14px rgba(255,255,255,0.12);
+    font-size: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
+  }
+  .cell.reeling .reel-cell .suit > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
   .cell.reeling .reel-cell .rank {
     position: absolute;
@@ -1168,11 +1179,21 @@
     to   { transform: translateY(calc(-1 * 4 / var(--reel-count, 12) * 100%)); }
   }
   .cell .suit {
-    font-size: 56px;
+    width: 64px;
+    height: 64px;
     line-height: 0.85;
     margin: 0;
-    /* v2.10.24 · 削弱发光：8px+14px 双层 → 单层 3px 极弱光晕 */
+    font-size: 56px; /* fallback for non-SVG packs */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-shadow: 0 0 3px rgba(0,0,0,0.5);
+  }
+  .cell .suit > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
   }
   .cell .rank {
     position: absolute;
@@ -2088,22 +2109,73 @@
 </div>
 
 <script>
-// ============ 数据定义（骰子版 v0.4）============
+// ============ 数据定义（v2.11 抽象为 Symbol Pack） ============
 const FACES = ['1','2','3','4','5','6'];
-// v1.7: 改用传统 slot 符号 · 价值递增（樱桃→柠檬→葡萄→铃铛→西瓜→钱袋）
-const FACE_GLYPH = { '1':'🍒','2':'🍋','3':'🍇','4':'🔔','5':'🍉','6':'💰' };
 
-// 符号图鉴：每个骰面的价值（费波那契）+ 出现概率（加权）
-const SYMBOL_TABLE = {
-  '1': { value: 1,  prob: 0.25 },
-  '2': { value: 2,  prob: 0.22 },
-  '3': { value: 3,  prob: 0.18 },
-  '4': { value: 5,  prob: 0.15 },
-  '5': { value: 8,  prob: 0.12 },
-  '6': { value: 13, prob: 0.08 }
+// v2.11 · 6 个狗品种 SVG（已确认 v2 强化版）
+const DOG_SVGS = {
+  '1': `<svg viewBox="0 0 100 100"><path d="M 15 28 Q 6 0 22 12 Q 36 20 32 32 Z" fill="#f87171" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 85 28 Q 94 0 78 12 Q 64 20 68 32 Z" fill="#f87171" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 18 27 Q 12 8 22 16 Q 30 22 28 28 Z" fill="#fda4af"/><path d="M 82 27 Q 88 8 78 16 Q 70 22 72 28 Z" fill="#fda4af"/><ellipse cx="50" cy="62" rx="25" ry="25" fill="#f87171" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="39" cy="58" rx="11" ry="13" fill="#1a0a0a"/><ellipse cx="61" cy="58" rx="11" ry="13" fill="#1a0a0a"/><ellipse cx="42" cy="53" rx="4" ry="5" fill="#fff"/><ellipse cx="64" cy="53" rx="4" ry="5" fill="#fff"/><ellipse cx="36" cy="62" rx="1.5" ry="2" fill="#fff" opacity="0.7"/><ellipse cx="58" cy="62" rx="1.5" ry="2" fill="#fff" opacity="0.7"/><ellipse cx="50" cy="74" rx="3" ry="2.5" fill="#1a0a0a"/><path d="M 47 78 Q 44 82 41 80" stroke="#1a0a0a" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M 53 78 Q 56 82 59 80" stroke="#1a0a0a" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M 49 79 L 50 84 L 51 79 Z" fill="#fff" stroke="#1a0a0a" stroke-width="0.7"/></svg>`,
+  '2': `<svg viewBox="0 0 100 100"><ellipse cx="22" cy="20" rx="11" ry="13" fill="#fb923c" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="78" cy="20" rx="11" ry="13" fill="#fb923c" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="22" cy="22" rx="6" ry="8" fill="#fed7aa"/><ellipse cx="78" cy="22" rx="6" ry="8" fill="#fed7aa"/><ellipse cx="50" cy="54" rx="36" ry="28" fill="#fb923c" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="28" cy="62" rx="9" ry="7" fill="#fed7aa" opacity="0.7"/><ellipse cx="72" cy="62" rx="9" ry="7" fill="#fed7aa" opacity="0.7"/><path d="M 32 48 Q 39 42 46 48" stroke="#1a0a0a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 54 48 Q 61 42 68 48" stroke="#1a0a0a" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="58" rx="4.5" ry="3.5" fill="#1a0a0a"/><path d="M 36 67 Q 50 80 64 67 Q 60 73 50 73 Q 40 73 36 67 Z" fill="#fff5e6" stroke="#1a0a0a" stroke-width="1.8" stroke-linejoin="round"/><path d="M 42 68 Q 50 96 58 68 Q 56 78 53 88 Q 50 92 47 88 Q 44 78 42 68 Z" fill="#ec4899" stroke="#be185d" stroke-width="0.8"/><line x1="50" y1="72" x2="50" y2="90" stroke="#be185d" stroke-width="1.2"/></svg>`,
+  '3': `<svg viewBox="0 0 100 100"><path d="M 22 30 L 18 8 L 38 22 Z" fill="#fbbf24" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 78 30 L 82 8 L 62 22 Z" fill="#fbbf24" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 25 26 L 22 14 L 32 22 Z" fill="#fef3c7"/><path d="M 75 26 L 78 14 L 68 22 Z" fill="#fef3c7"/><ellipse cx="50" cy="55" rx="31" ry="29" fill="#fbbf24" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 28 44 Q 33 38 38 44 Q 42 50 38 52 Q 33 50 28 44 Z" fill="#fef9c3"/><path d="M 62 44 Q 67 38 72 44 Q 75 50 72 52 Q 67 50 62 44 Z" fill="#fef9c3"/><path d="M 30 62 Q 50 56 70 62 Q 70 76 50 78 Q 30 76 30 62 Z" fill="#fef9c3" opacity="0.8"/><ellipse cx="22" cy="62" rx="6" ry="3" fill="#fb7185" opacity="0.6"/><ellipse cx="78" cy="62" rx="6" ry="3" fill="#fb7185" opacity="0.6"/><path d="M 30 48 Q 34 44 38 48" stroke="#1a0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M 62 48 Q 66 44 70 48" stroke="#1a0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="61" rx="3.5" ry="2.8" fill="#1a0a0a"/><path d="M 50 64 L 50 70" stroke="#1a0a0a" stroke-width="1.8" stroke-linecap="round"/><path d="M 50 70 Q 40 78 32 72" stroke="#1a0a0a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M 50 70 Q 60 78 68 72" stroke="#1a0a0a" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>`,
+  '4': `<svg viewBox="0 0 100 100"><ellipse cx="14" cy="55" rx="10" ry="28" transform="rotate(-12, 14, 55)" fill="#34d399" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="86" cy="55" rx="10" ry="28" transform="rotate(12, 86, 55)" fill="#34d399" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="15" cy="58" rx="6" ry="22" transform="rotate(-12, 15, 58)" fill="#86efac"/><ellipse cx="85" cy="58" rx="6" ry="22" transform="rotate(12, 85, 58)" fill="#86efac"/><ellipse cx="50" cy="50" rx="28" ry="28" fill="#34d399" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 30 46 Q 38 38 46 46" stroke="#1a0a0a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 54 46 Q 62 38 70 46" stroke="#1a0a0a" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="55" rx="4" ry="3" fill="#1a0a0a"/><path d="M 32 64 Q 50 86 68 64 Q 64 76 50 76 Q 36 76 32 64 Z" fill="#fff5e6" stroke="#1a0a0a" stroke-width="1.8" stroke-linejoin="round"/><rect x="44" y="63" width="3" height="5" fill="#fff" stroke="#1a0a0a" stroke-width="0.6"/><rect x="53" y="63" width="3" height="5" fill="#fff" stroke="#1a0a0a" stroke-width="0.6"/><path d="M 42 70 Q 50 100 58 70 Q 56 84 53 94 Q 50 98 47 94 Q 44 84 42 70 Z" fill="#ec4899" stroke="#be185d" stroke-width="0.8"/><line x1="50" y1="76" x2="50" y2="95" stroke="#be185d" stroke-width="1.2"/></svg>`,
+  '5': `<svg viewBox="0 0 100 100"><path d="M 24 30 L 14 0 L 38 22 Z" fill="#60a5fa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 76 30 L 86 0 L 62 22 Z" fill="#60a5fa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 26 26 L 20 8 L 32 22 Z" fill="#bfdbfe"/><path d="M 74 26 L 80 8 L 68 22 Z" fill="#bfdbfe"/><ellipse cx="50" cy="50" rx="28" ry="28" fill="#60a5fa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 22 50 Q 22 22 50 22 Q 78 22 78 50 Q 70 32 50 32 Q 30 32 22 50 Z" fill="#1e3a8a" opacity="0.55"/><ellipse cx="50" cy="74" rx="14" ry="14" fill="#bfdbfe" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 28 38 L 42 44" stroke="#1e1b4b" stroke-width="2.5" stroke-linecap="round"/><path d="M 58 44 L 72 38" stroke="#1e1b4b" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="36" cy="48" rx="4.5" ry="5" fill="#1a0a0a"/><ellipse cx="64" cy="48" rx="4.5" ry="5" fill="#1a0a0a"/><ellipse cx="37" cy="46" rx="2" ry="2.5" fill="#fbbf24"/><ellipse cx="65" cy="46" rx="2" ry="2.5" fill="#fbbf24"/><ellipse cx="50" cy="68" rx="4" ry="3" fill="#1a0a0a"/><path d="M 50 72 Q 44 78 38 76" stroke="#1a0a0a" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 50 72 Q 56 78 62 76" stroke="#1a0a0a" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 46 73 L 47 79 L 48 73 Z" fill="#fff" stroke="#1a0a0a" stroke-width="0.5"/><path d="M 52 73 L 53 79 L 54 73 Z" fill="#fff" stroke="#1a0a0a" stroke-width="0.5"/></svg>`,
+  '6': `<svg viewBox="0 0 100 100"><path d="M 22 28 L 14 4 L 38 22 Z" fill="#a78bfa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 78 28 L 86 4 L 62 22 Z" fill="#a78bfa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 24 25 L 20 10 L 32 22 Z" fill="#ddd6fe"/><path d="M 76 25 L 80 10 L 68 22 Z" fill="#ddd6fe"/><ellipse cx="50" cy="55" rx="32" ry="30" fill="#a78bfa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 18 36 Q 26 30 36 38 L 50 50 L 64 38 Q 74 30 82 36 L 78 50 Q 72 62 64 60 L 50 56 L 36 60 Q 28 62 22 50 Z" fill="#5b21b6" opacity="0.78"/><path d="M 47 30 Q 45 50 47 70 L 53 70 Q 55 50 53 30 Z" fill="#fafafa"/><ellipse cx="28" cy="62" rx="10" ry="9" fill="#fafafa" opacity="0.75"/><ellipse cx="72" cy="62" rx="10" ry="9" fill="#fafafa" opacity="0.75"/><ellipse cx="36" cy="52" rx="7" ry="8" fill="#1a0a0a"/><ellipse cx="64" cy="52" rx="7" ry="8" fill="#1a0a0a"/><ellipse cx="36" cy="52" rx="5.5" ry="6.5" fill="#0ea5e9"/><ellipse cx="64" cy="52" rx="5.5" ry="6.5" fill="#0ea5e9"/><ellipse cx="34" cy="50" rx="2.5" ry="3" fill="#bae6fd"/><ellipse cx="62" cy="50" rx="2.5" ry="3" fill="#bae6fd"/><ellipse cx="36" cy="48" rx="1.2" ry="1.5" fill="#fff"/><ellipse cx="64" cy="48" rx="1.2" ry="1.5" fill="#fff"/><ellipse cx="50" cy="66" rx="4.5" ry="3.5" fill="#1a0a0a"/><path d="M 40 72 Q 50 80 60 72 Q 56 76 50 76 Q 44 76 40 72 Z" fill="#fff5e6" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 45 74 Q 50 86 55 74 Q 53 80 51 83 Q 50 84 49 83 Q 47 80 45 74 Z" fill="#ec4899"/><line x1="50" y1="77" x2="50" y2="84" stroke="#be185d" stroke-width="1"/></svg>`
 };
-// 兼容旧引用
-const FACE_VAL = Object.fromEntries(Object.entries(SYMBOL_TABLE).map(([k,v])=>[k,v.value]));
+
+// v2.11 · SYMBOL_PACKS：dog（完整）+ duck（stub，留待将来填充）
+const SYMBOL_PACKS = {
+  dog: {
+    label: '🐕 狗子',
+    faces: {
+      '1': { name:'奇瓦瓦', glyph:'🐕', value:1,  prob:0.25, color:'#f87171', bark:'tiny',  svg: DOG_SVGS['1'] },
+      '2': { name:'柯基',   glyph:'🐶', value:2,  prob:0.22, color:'#fb923c', bark:'small', svg: DOG_SVGS['2'] },
+      '3': { name:'柴犬',   glyph:'🦮', value:3,  prob:0.18, color:'#fbbf24', bark:'med',   svg: DOG_SVGS['3'] },
+      '4': { name:'金毛',   glyph:'🐩', value:5,  prob:0.15, color:'#34d399', bark:'big',   svg: DOG_SVGS['4'] },
+      '5': { name:'德牧',   glyph:'🐕‍🦺', value:8, prob:0.12, color:'#60a5fa', bark:'guard', svg: DOG_SVGS['5'] },
+      '6': { name:'哈士奇', glyph:'🐺', value:13, prob:0.08, color:'#a78bfa', bark:'husky', svg: DOG_SVGS['6'] }
+    },
+    sfx: {
+      // 大奖音效序列（每档对应不同的狗叫组合）
+      small: ['tiny', 'tiny', 'small'],
+      mid:   ['med', 'med', 'big', 'big'],
+      epic:  ['big', 'guard', 'guard', 'husky'],
+      mega:  ['husky', 'husky', 'husky']
+    }
+  },
+  duck: {
+    // stub · 后续填充鸭子数据 + 嘎嘎声
+    label: '🦆 鸭子',
+    faces: {},  // 待填充
+    sfx: {}     // 待填充
+  }
+};
+let CURRENT_PACK = 'dog';
+
+// pack helpers
+function getPack()          { return SYMBOL_PACKS[CURRENT_PACK]; }
+function getFaceData(face)  { return getPack().faces[face]; }
+function getFaceSVG(face)   { return getFaceData(face).svg; }
+function getFaceName(face)  { return getFaceData(face).name; }
+function getFaceGlyph(face) { return getFaceData(face).glyph; }
+function getFaceBarkKey(face){return getFaceData(face).bark; }
+
+// 兼容旧引用：保持 SYMBOL_TABLE / FACE_GLYPH / FACE_VAL 名字，但内容由 pack 派生
+const SYMBOL_TABLE = {};
+const FACE_GLYPH = {};
+const FACE_VAL = {};
+function rebuildSymbolViews() {
+  for (const k of Object.keys(SYMBOL_TABLE)) delete SYMBOL_TABLE[k];
+  for (const k of Object.keys(FACE_GLYPH))   delete FACE_GLYPH[k];
+  for (const k of Object.keys(FACE_VAL))     delete FACE_VAL[k];
+  for (const f of FACES) {
+    const d = getFaceData(f);
+    if (!d) continue;
+    SYMBOL_TABLE[f] = { value: d.value, prob: d.prob };
+    FACE_GLYPH[f] = d.glyph;
+    FACE_VAL[f] = d.value;
+  }
+}
+rebuildSymbolViews();
 
 // 全局符号基础倍率（默认 ×1，可被 charms 修改）
 let SYMBOL_BASE_MUL = 1;
@@ -2677,7 +2749,7 @@ function renderGrid(animate = false) {
         // v2.10.13 · 自定义 tooltip · desc 模板里的 N 用实际 e.n 替换
         const tipText = e ? `${ENCHANT_DEFS[e.type].name}（n=${e.n}）· ${ENCHANT_DEFS[e.type].desc.replace(/\bN\b/g, e.n)}` : '';
         const enchantHTML = e ? `<div class="enchant-badge" style="color:${ENCHANT_DEFS[e.type].color}" data-tip="${tipText.replace(/"/g,'&quot;')}">${ENCHANT_DEFS[e.type].glyph}${e.n>1?`<sub>${e.n}</sub>`:''}</div>` : '';
-        cell.innerHTML = `<div class="suit">${FACE_GLYPH[die.r]}</div><div class="rank">${die.r}</div>${enchantHTML}`;
+        cell.innerHTML = `<div class="suit">${getFaceSVG(die.r)}</div><div class="rank">${die.r}</div>${enchantHTML}`;
         if (e) cell.classList.add('enchanted');
         if (animate) cell.classList.add('flipped');
         if (animate) cell.style.animationDelay = (r * 0.08 + c * 0.03) + 's';
@@ -2747,10 +2819,10 @@ async function renderReelSpin() {
       let html = '';
       for (let i = 0; i < N - 1; i++) {
         const f = FACES[Math.floor(Math.random() * 6)];
-        html += `<div class="reel-cell face-${f}">${encHTML}<div class="suit">${FACE_GLYPH[f]}</div><div class="rank">${f}</div></div>`;
+        html += `<div class="reel-cell face-${f}">${encHTML}<div class="suit">${getFaceSVG(f)}</div><div class="rank">${f}</div></div>`;
       }
       if (finalDie) {
-        html += `<div class="reel-cell face-${finalDie.r}">${encHTML}<div class="suit">${FACE_GLYPH[finalDie.r]}</div><div class="rank">${finalDie.r}</div></div>`;
+        html += `<div class="reel-cell face-${finalDie.r}">${encHTML}<div class="suit">${getFaceSVG(finalDie.r)}</div><div class="rank">${finalDie.r}</div></div>`;
       } else {
         html += `<div class="reel-cell"><div class="suit">?</div></div>`;
       }
@@ -3038,7 +3110,7 @@ async function doSpin() {
         const die = state.grid[r][c];
         cellEl.classList.remove('face-1','face-2','face-3','face-4','face-5','face-6','empty');
         cellEl.classList.add('face-' + die.r);
-        cellEl.innerHTML = `<div class="suit">${FACE_GLYPH[die.r]}</div><div class="rank">${die.r}</div>`;
+        cellEl.innerHTML = `<div class="suit">${getFaceSVG(die.r)}</div><div class="rank">${die.r}</div>`;
         void cellEl.offsetWidth;
         cellEl.style.animationDelay = (i * 0.04) + 's';
         cellEl.classList.add('flipped');
@@ -4807,8 +4879,8 @@ function renderSymbolCodex() {
       ? ` <span style="color:#34d399; font-size:10px; font-weight:900;">+${vp}</span> → <b style="color:#34d399;">${effVal}</b>`
       : '';
     return `<div class="codex-row face-${f}${vp > 0 ? ' has-vp' : ''}">
-      <span class="cx-glyph">${FACE_GLYPH[f]}</span>
-      <span><b>${f}</b> · 价值 <span class="cx-val">${s.value}</span>${valTag}</span>
+      <span class="cx-glyph">${getFaceSVG(f)}</span>
+      <span><b>${getFaceName(f)}</b> · 价值 <span class="cx-val">${s.value}</span>${valTag}</span>
       <span class="cx-prob">${(effProb*100).toFixed(1)}%${probBoost}</span>
     </div>`;
   }).join('');
