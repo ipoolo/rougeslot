@@ -3187,15 +3187,29 @@ async function doScore() {
       await sleep(280 * speedFactor);
     }
 
-    // —— C.B. value_plus（本图形内每颗 · base 后触发，影响后续图形）——
-    for (let v = 0; v < valuePlusCells.length; v++) {
-      const vc = valuePlusCells[v];
-      await valuePlusCellAnim(vc.r, vc.c, vc.n, speedFactor);
-      log(`  ⊕ <b>value+</b> · (${vc.r+1},${vc.c+1}) → ${FACE_GLYPH[state.grid[vc.r][vc.c].r]}${state.grid[vc.r][vc.c].r} 全网 +${vc.n}（face 累计 ${state.faceValuePlus[state.grid[vc.r][vc.c].r]}）`, 'log-charm');
-      startComboTimer();
-    }
+    // v2.10.26 · 把 value_plus + combo_plus 抽成 enchant pass，
+    //   double retrigger 时再调用一次（"重新计算其它附魔"），但 double 自己不参与（防死循环）
+    const runEnchantPass = async (passLabel) => {
+      for (let v = 0; v < valuePlusCells.length; v++) {
+        const vc = valuePlusCells[v];
+        await valuePlusCellAnim(vc.r, vc.c, vc.n, speedFactor);
+        log(`  ⊕ <b>value+</b>${passLabel} · (${vc.r+1},${vc.c+1}) → ${FACE_GLYPH[state.grid[vc.r][vc.c].r]}${state.grid[vc.r][vc.c].r} 全网 +${vc.n}（face 累计 ${state.faceValuePlus[state.grid[vc.r][vc.c].r]}）`, 'log-charm');
+        startComboTimer();
+      }
+      for (let k = 0; k < comboPlusCells.length; k++) {
+        const cc = comboPlusCells[k];
+        await comboPlusCellAnim(cc.r, cc.c, cc.n, speedFactor);
+        state.combo += cc.n;
+        renderCombo();
+        log(`  ⚡ <b>combo+</b>${passLabel} · (${cc.r+1},${cc.c+1}) → combo +${cc.n}（累计 ${state.combo}）`, 'log-charm');
+        startComboTimer();
+      }
+    };
 
-    // —— C.C. double retrigger（本图形内每颗 · 再加一次 baseGot，整图背景仍在）——
+    // —— C.B. 第 1 次 enchant pass（base 后立即触发）——
+    await runEnchantPass('');
+
+    // —— C.C. double retrigger（每颗 · 加 baseGot + 再走 enchant pass）——
     for (let d = 0; d < doubleCells.length; d++) {
       const dc = doubleCells[d];
       await retriggerCellAnim(dc.r, dc.c, speedFactor);
@@ -3203,22 +3217,14 @@ async function doScore() {
       showFloatScore(sh.cells, baseGot, 1);
       playTone(660 + d * 40, 90, 'triangle', 0.18);
       log(
-        `  🔁 <b>再一次</b> · (${dc.r+1},${dc.c+1}) double 触发 → 再结算 <b>+${baseGot}</b>`,
+        `  🔁 <b>再一次</b> #${d+1} · (${dc.r+1},${dc.c+1}) double 触发 → 再结算 <b>+${baseGot}</b>`,
         'log-charm'
       );
       state.combo += 1;
       renderCombo();
       startComboTimer();
-    }
-
-    // —— C.D. combo_plus（本图形内每颗 · 单独动画）——
-    for (let k = 0; k < comboPlusCells.length; k++) {
-      const cc = comboPlusCells[k];
-      await comboPlusCellAnim(cc.r, cc.c, cc.n, speedFactor);
-      state.combo += cc.n;
-      renderCombo();
-      log(`  ⚡ <b>combo+</b> · (${cc.r+1},${cc.c+1}) → combo +${cc.n}（累计 ${state.combo}）`, 'log-charm');
-      startComboTimer();
+      // 重新走 enchant pass（double 不参与，防死循环；其它附魔被再次触发）
+      await runEnchantPass(` (re#${d+1})`);
     }
 
     // v2.10.21 · 解亮（所有附魔完成后才移除高亮背景）
