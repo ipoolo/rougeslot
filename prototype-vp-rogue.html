@@ -1180,7 +1180,8 @@
     font-size: 56px;
     line-height: 0.85;
     margin: 0;
-    text-shadow: 0 0 8px currentColor, 0 0 14px rgba(255,255,255,0.12);
+    /* v2.10.24 · 削弱发光：8px+14px 双层 → 单层 3px 极弱光晕 */
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
   }
   .cell .rank {
     position: absolute;
@@ -1253,7 +1254,8 @@
     to   { transform: scale(1.12); filter: drop-shadow(0 0 10px currentColor) drop-shadow(0 0 18px currentColor); }
   }
   .cell.enchanted {
-    box-shadow: inset 0 0 0 1.5px rgba(251,191,36,0.55), 0 0 14px rgba(251,191,36,0.35);
+    /* v2.10.24 · 削弱：1.5px 0.55 → 1px 0.25；外光晕 14px 0.35 → 6px 0.12 */
+    box-shadow: inset 0 0 0 1px rgba(251,191,36,0.25), 0 0 6px rgba(251,191,36,0.12);
   }
   /* v2.10.16 · double retrigger 时单 cell 快速金红 pulse */
   .cell.retrigger-pulse {
