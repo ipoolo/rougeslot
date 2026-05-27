@@ -2236,34 +2236,36 @@
 // ============ 数据定义（v2.11 抽象为 Symbol Pack） ============
 const FACES = ['1','2','3','4','5','6'];
 
-// v2.11 · 6 个狗品种 SVG（已确认 v2 强化版）
+// v2.12 · 6 个萌兽 SVG（Fluent Emoji Flat · 中二风递进）
+// 1 小灰豆(仓鼠) 2 玉皇兔 3 桃花猪 4 烈焰狐 5 山林虎 6 苍穹龙
 const DOG_SVGS = {
-  '1': `<svg viewBox="0 0 100 100"><path d="M 15 28 Q 6 0 22 12 Q 36 20 32 32 Z" fill="#f87171" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 85 28 Q 94 0 78 12 Q 64 20 68 32 Z" fill="#f87171" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 18 27 Q 12 8 22 16 Q 30 22 28 28 Z" fill="#fda4af"/><path d="M 82 27 Q 88 8 78 16 Q 70 22 72 28 Z" fill="#fda4af"/><ellipse cx="50" cy="62" rx="25" ry="25" fill="#f87171" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="39" cy="58" rx="11" ry="13" fill="#1a0a0a"/><ellipse cx="61" cy="58" rx="11" ry="13" fill="#1a0a0a"/><ellipse cx="42" cy="53" rx="4" ry="5" fill="#fff"/><ellipse cx="64" cy="53" rx="4" ry="5" fill="#fff"/><ellipse cx="36" cy="62" rx="1.5" ry="2" fill="#fff" opacity="0.7"/><ellipse cx="58" cy="62" rx="1.5" ry="2" fill="#fff" opacity="0.7"/><ellipse cx="50" cy="74" rx="3" ry="2.5" fill="#1a0a0a"/><path d="M 47 78 Q 44 82 41 80" stroke="#1a0a0a" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M 53 78 Q 56 82 59 80" stroke="#1a0a0a" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M 49 79 L 50 84 L 51 79 Z" fill="#fff" stroke="#1a0a0a" stroke-width="0.7"/></svg>`,
-  '2': `<svg viewBox="0 0 100 100"><ellipse cx="22" cy="20" rx="11" ry="13" fill="#fb923c" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="78" cy="20" rx="11" ry="13" fill="#fb923c" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="22" cy="22" rx="6" ry="8" fill="#fed7aa"/><ellipse cx="78" cy="22" rx="6" ry="8" fill="#fed7aa"/><ellipse cx="50" cy="54" rx="36" ry="28" fill="#fb923c" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="28" cy="62" rx="9" ry="7" fill="#fed7aa" opacity="0.7"/><ellipse cx="72" cy="62" rx="9" ry="7" fill="#fed7aa" opacity="0.7"/><path d="M 32 48 Q 39 42 46 48" stroke="#1a0a0a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 54 48 Q 61 42 68 48" stroke="#1a0a0a" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="58" rx="4.5" ry="3.5" fill="#1a0a0a"/><path d="M 36 67 Q 50 80 64 67 Q 60 73 50 73 Q 40 73 36 67 Z" fill="#fff5e6" stroke="#1a0a0a" stroke-width="1.8" stroke-linejoin="round"/><path d="M 42 68 Q 50 96 58 68 Q 56 78 53 88 Q 50 92 47 88 Q 44 78 42 68 Z" fill="#ec4899" stroke="#be185d" stroke-width="0.8"/><line x1="50" y1="72" x2="50" y2="90" stroke="#be185d" stroke-width="1.2"/></svg>`,
-  '3': `<svg viewBox="0 0 100 100"><path d="M 22 30 L 18 8 L 38 22 Z" fill="#fbbf24" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 78 30 L 82 8 L 62 22 Z" fill="#fbbf24" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 25 26 L 22 14 L 32 22 Z" fill="#fef3c7"/><path d="M 75 26 L 78 14 L 68 22 Z" fill="#fef3c7"/><ellipse cx="50" cy="55" rx="31" ry="29" fill="#fbbf24" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 28 44 Q 33 38 38 44 Q 42 50 38 52 Q 33 50 28 44 Z" fill="#fef9c3"/><path d="M 62 44 Q 67 38 72 44 Q 75 50 72 52 Q 67 50 62 44 Z" fill="#fef9c3"/><path d="M 30 62 Q 50 56 70 62 Q 70 76 50 78 Q 30 76 30 62 Z" fill="#fef9c3" opacity="0.8"/><ellipse cx="22" cy="62" rx="6" ry="3" fill="#fb7185" opacity="0.6"/><ellipse cx="78" cy="62" rx="6" ry="3" fill="#fb7185" opacity="0.6"/><path d="M 30 48 Q 34 44 38 48" stroke="#1a0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M 62 48 Q 66 44 70 48" stroke="#1a0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="61" rx="3.5" ry="2.8" fill="#1a0a0a"/><path d="M 50 64 L 50 70" stroke="#1a0a0a" stroke-width="1.8" stroke-linecap="round"/><path d="M 50 70 Q 40 78 32 72" stroke="#1a0a0a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M 50 70 Q 60 78 68 72" stroke="#1a0a0a" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>`,
-  '4': `<svg viewBox="0 0 100 100"><ellipse cx="14" cy="55" rx="10" ry="28" transform="rotate(-12, 14, 55)" fill="#34d399" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="86" cy="55" rx="10" ry="28" transform="rotate(12, 86, 55)" fill="#34d399" stroke="#1a0a0a" stroke-width="1.5"/><ellipse cx="15" cy="58" rx="6" ry="22" transform="rotate(-12, 15, 58)" fill="#86efac"/><ellipse cx="85" cy="58" rx="6" ry="22" transform="rotate(12, 85, 58)" fill="#86efac"/><ellipse cx="50" cy="50" rx="28" ry="28" fill="#34d399" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 30 46 Q 38 38 46 46" stroke="#1a0a0a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 54 46 Q 62 38 70 46" stroke="#1a0a0a" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="55" rx="4" ry="3" fill="#1a0a0a"/><path d="M 32 64 Q 50 86 68 64 Q 64 76 50 76 Q 36 76 32 64 Z" fill="#fff5e6" stroke="#1a0a0a" stroke-width="1.8" stroke-linejoin="round"/><rect x="44" y="63" width="3" height="5" fill="#fff" stroke="#1a0a0a" stroke-width="0.6"/><rect x="53" y="63" width="3" height="5" fill="#fff" stroke="#1a0a0a" stroke-width="0.6"/><path d="M 42 70 Q 50 100 58 70 Q 56 84 53 94 Q 50 98 47 94 Q 44 84 42 70 Z" fill="#ec4899" stroke="#be185d" stroke-width="0.8"/><line x1="50" y1="76" x2="50" y2="95" stroke="#be185d" stroke-width="1.2"/></svg>`,
-  '5': `<svg viewBox="0 0 100 100"><path d="M 24 30 L 14 0 L 38 22 Z" fill="#60a5fa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 76 30 L 86 0 L 62 22 Z" fill="#60a5fa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 26 26 L 20 8 L 32 22 Z" fill="#bfdbfe"/><path d="M 74 26 L 80 8 L 68 22 Z" fill="#bfdbfe"/><ellipse cx="50" cy="50" rx="28" ry="28" fill="#60a5fa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 22 50 Q 22 22 50 22 Q 78 22 78 50 Q 70 32 50 32 Q 30 32 22 50 Z" fill="#1e3a8a" opacity="0.55"/><ellipse cx="50" cy="74" rx="14" ry="14" fill="#bfdbfe" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 28 38 L 42 44" stroke="#1e1b4b" stroke-width="2.5" stroke-linecap="round"/><path d="M 58 44 L 72 38" stroke="#1e1b4b" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="36" cy="48" rx="4.5" ry="5" fill="#1a0a0a"/><ellipse cx="64" cy="48" rx="4.5" ry="5" fill="#1a0a0a"/><ellipse cx="37" cy="46" rx="2" ry="2.5" fill="#fbbf24"/><ellipse cx="65" cy="46" rx="2" ry="2.5" fill="#fbbf24"/><ellipse cx="50" cy="68" rx="4" ry="3" fill="#1a0a0a"/><path d="M 50 72 Q 44 78 38 76" stroke="#1a0a0a" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 50 72 Q 56 78 62 76" stroke="#1a0a0a" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 46 73 L 47 79 L 48 73 Z" fill="#fff" stroke="#1a0a0a" stroke-width="0.5"/><path d="M 52 73 L 53 79 L 54 73 Z" fill="#fff" stroke="#1a0a0a" stroke-width="0.5"/></svg>`,
-  '6': `<svg viewBox="0 0 100 100"><path d="M 22 28 L 14 4 L 38 22 Z" fill="#a78bfa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 78 28 L 86 4 L 62 22 Z" fill="#a78bfa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 24 25 L 20 10 L 32 22 Z" fill="#ddd6fe"/><path d="M 76 25 L 80 10 L 68 22 Z" fill="#ddd6fe"/><ellipse cx="50" cy="55" rx="32" ry="30" fill="#a78bfa" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 18 36 Q 26 30 36 38 L 50 50 L 64 38 Q 74 30 82 36 L 78 50 Q 72 62 64 60 L 50 56 L 36 60 Q 28 62 22 50 Z" fill="#5b21b6" opacity="0.78"/><path d="M 47 30 Q 45 50 47 70 L 53 70 Q 55 50 53 30 Z" fill="#fafafa"/><ellipse cx="28" cy="62" rx="10" ry="9" fill="#fafafa" opacity="0.75"/><ellipse cx="72" cy="62" rx="10" ry="9" fill="#fafafa" opacity="0.75"/><ellipse cx="36" cy="52" rx="7" ry="8" fill="#1a0a0a"/><ellipse cx="64" cy="52" rx="7" ry="8" fill="#1a0a0a"/><ellipse cx="36" cy="52" rx="5.5" ry="6.5" fill="#0ea5e9"/><ellipse cx="64" cy="52" rx="5.5" ry="6.5" fill="#0ea5e9"/><ellipse cx="34" cy="50" rx="2.5" ry="3" fill="#bae6fd"/><ellipse cx="62" cy="50" rx="2.5" ry="3" fill="#bae6fd"/><ellipse cx="36" cy="48" rx="1.2" ry="1.5" fill="#fff"/><ellipse cx="64" cy="48" rx="1.2" ry="1.5" fill="#fff"/><ellipse cx="50" cy="66" rx="4.5" ry="3.5" fill="#1a0a0a"/><path d="M 40 72 Q 50 80 60 72 Q 56 76 50 76 Q 44 76 40 72 Z" fill="#fff5e6" stroke="#1a0a0a" stroke-width="1.5"/><path d="M 45 74 Q 50 86 55 74 Q 53 80 51 83 Q 50 84 49 83 Q 47 80 45 74 Z" fill="#ec4899"/><line x1="50" y1="77" x2="50" y2="84" stroke="#be185d" stroke-width="1"/></svg>`
+  '1': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="none"><path fill="#F3AD61" d="M13.36 10.66q.077-.46.078-.941a5.719 5.719 0 1 0-6.123 5.705c-1.97 2.42-3.284 5.165-3.284 7.092c0 4.484 4.063 7.422 7.063 7.422c2.257 0 3.27-.397 3.978-.675c.38-.149.672-.263 1.022-.263c.383 0 .683.138 1.054.307c.597.274 1.377.63 2.977.63c2.828 0 7.828-2.125 7.828-7.421c0-1.897-1.22-4.664-3.123-7.104a5.72 5.72 0 1 0-6.207-4.86a7.5 7.5 0 0 0-2.53-.458c-.904 0-1.824.205-2.733.566"/><path fill="#FF8687" d="M6.86 13.875a4.266 4.266 0 1 0 0-8.531a4.266 4.266 0 0 0 0 8.531m18.25 0a4.266 4.266 0 1 0 0-8.531a4.266 4.266 0 0 0 0 8.531"/><path fill="#1C1C1C" d="M12 17.969a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1m8 0a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1"/><path fill="#F70A8D" d="M17.586 22.64c0 .488-.93 1.704-1.578 1.704c-.694 0-1.594-1.11-1.594-1.703c0-.594.703-.649 1.594-.649c.89 0 1.578.04 1.578.649"/><path fill="#1C1C1C" d="M16 26.395c-.396.555-.95.828-1.535.787c-.832-.057-1.53-.77-1.462-1.733a.5.5 0 0 1 .997.07c-.028.398.24.645.534.666c.247.017.724-.141.957-1.072a.5.5 0 0 1 .509-.378a.5.5 0 0 1 .51.378c.231.93.707 1.083.952 1.064c.296-.022.566-.274.538-.673a.5.5 0 1 1 .997-.07c.068.96-.628 1.677-1.458 1.74c-.587.045-1.142-.226-1.539-.779"/></g></svg>`,
+  '2': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="none"><path fill="#CDC4D6" d="M27.45 21.89c0-.45-.04-.9-.12-1.33c-.26-1.73-1.05-4.82-3.49-7.32c-.55-.57-1.13-1.04-1.72-1.43l1.22-6.61c.3-1.66-.98-3.2-2.67-3.2c-1.5 0-2.71 1.21-2.71 2.71v5.4c-1.32-.26-2.23-.22-2.23-.22s-.7-.04-1.76.13V4.71c0-1.5-1.21-2.71-2.71-2.71c-1.7 0-2.98 1.54-2.67 3.2l1.17 6.34c-.73.44-1.46 1-2.15 1.7c-2.43 2.5-3.23 5.58-3.49 7.32c-.08.44-.12.88-.13 1.34v.02c0 2.88 1.67 5.36 4.08 6.55c0 0 2.62 1.53 7.64 1.53c5.03 0 7.64-1.53 7.64-1.53a7.29 7.29 0 0 0 4.08-6.55c.02 0 .02-.01.02-.03"/><path fill="#FF8687" d="M11.13 10.78c.06.32.33.55.66.55c.38 0 .68-.31.68-.67V4.74c0-.67-.56-1.24-1.23-1.24c-.49 0-.79.27-.93.43c-.13.16-.35.51-.26 1zm8.32-6.04v5.91c0 .37.3.68.68.68c.32 0 .6-.23.66-.55l1.08-5.84c.09-.49-.12-.84-.26-1s-.44-.44-.93-.44c-.68 0-1.23.57-1.23 1.24"/><path fill="#B4ACBC" d="M2.5 21a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm7.137 2.98a.5.5 0 0 0-.274-.96l-7 2a.5.5 0 0 0 .274.96zM22 21.5a.5.5 0 0 1 .5-.5h7a.5.5 0 1 1 0 1h-7a.5.5 0 0 1-.5-.5m.638 1.52a.5.5 0 0 0-.275.96l7 2a.5.5 0 0 0 .274-.96z"/><path fill="#F4F4F4" d="m15.96 24.67l-1.36.74c-.08.04-.13.13-.13.22v.78c0 .24.2.44.44.44h2.12c.24 0 .44-.2.44-.44v-.78c0-.09-.05-.18-.13-.22z"/><path fill="#CA0B4A" d="m15.52 22.81l-.94-.77a.67.67 0 0 1-.24-.51c0-.36.3-.66.66-.66h1.92c.36 0 .66.3.66.66c0 .2-.09.38-.24.51l-.94.77c-.26.21-.63.21-.88 0"/><path fill="#1C1C1C" d="M11 17.969a1 1 0 0 1 2 0v1a1 1 0 0 1-2 0zm8 0a1 1 0 0 1 2 0v1a1 1 0 0 1-2 0zm-6.52 5.051a.5.5 0 0 1 .5.5a1.241 1.241 0 0 0 2.48 0a.5.5 0 0 1 .5-.5h.01a.5.5 0 0 1 .5.5a1.241 1.241 0 0 0 2.48 0a.5.5 0 1 1 1 0a2.241 2.241 0 0 1-3.985 1.404a2.241 2.241 0 0 1-3.985-1.404a.5.5 0 0 1 .5-.5"/></g></svg>`,
+  '3': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="none"><path fill="#FF8687" d="M3 17C3 10.373 8.373 5 15 5h1.998c6.627 0 12 5.373 12 12v1c0 6.627-5.373 12-12 12H15C8.373 30 3 24.627 3 18z"/><path fill="#FBB8AB" d="m26.38 5.634l3.044 3.331c.768.841.768 2.221 0 3.062l-3.045 3.332c-1.25 1.37-3.379.399-3.379-1.531V7.175c0-1.93 2.138-2.9 3.38-1.541M5.62 5.633l-3.044 3.34c-.768.84-.768 2.218 0 3.058l3.045 3.329C6.87 16.727 9 15.758 9 13.83V7.173c0-1.928-2.128-2.897-3.38-1.54M14 19a3 3 0 1 0 0 6h4a3 3 0 1 0 0-6z"/><path fill="#F92F60" d="M15 22a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/><path fill="#1C1C1C" d="M11 16c0 .55.45 1 1 1s1-.45 1-1v-1c0-.55-.45-1-1-1s-1 .45-1 1zm8 0c0 .55.45 1 1 1s1-.45 1-1v-1c0-.55-.45-1-1-1s-1 .45-1 1z"/></g></svg>`,
+  '4': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="none"><path fill="#FF822D" d="M17.558 5.98A12 12 0 0 0 16.86 8h-2.58c-.17-.69-.41-1.386-.715-2.057l-3.534-.92l-3.466.913a10.9 10.9 0 0 0-.985 4.484v7.77c0 .45-.36.81-.81.81H2.63c-.41 0-.71.4-.6.8q.174.616.402 1.209l13.153 4.846l13.144-4.847q.227-.592.401-1.208c.11-.4-.19-.8-.61-.8h-2.14c-.45 0-.81-.36-.81-.81v-7.77a10.9 10.9 0 0 0-.962-4.428l-3.567-.969z"/><path fill="#FF6723" d="M10.19 3.98a8.64 8.64 0 0 1 2.64 4.4a10 10 0 0 0-5.76 4.36V10.4c0-2.47 1.06-4.79 2.87-6.42c.07-.06.18-.06.25 0m13.88 6.44v2.31a10 10 0 0 0-5.77-4.35a8.6 8.6 0 0 1 2.63-4.39c.07-.06.18-.06.25 0a8.57 8.57 0 0 1 2.89 6.43"/><path fill="#FFDEA7" d="M28.73 20.99h-6.46c-1.75 0-3.46.55-4.88 1.57l-1.81 1.29l-1.81-1.29a8.37 8.37 0 0 0-4.88-1.57H2.42C4.43 26.26 9.53 30 15.5 30h.14c5.98-.01 11.08-3.75 13.09-9.01"/><path fill="#212121" d="M13.58 5.95c-.65-1.43-1.6-2.75-2.79-3.71c-.2-.16-.45-.24-.7-.24s-.5.08-.7.24c-1.21.97-2.18 2.26-2.83 3.71zm8.18-3.71c-.2-.16-.45-.24-.7-.24s-.5.08-.7.24c-1.2.97-2.16 2.31-2.81 3.76h7.07c-.66-1.47-1.63-2.78-2.86-3.76M11 18a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm7 0a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm-2.42 7.63c.54.82 1.48 1.37 2.54 1.37c.27 0 .49-.22.49-.5s-.22-.5-.5-.5c-1.12 0-2.04-.91-2.04-2.04a.5.5 0 0 0-.052-.226a1 1 0 0 0 .172-.134l1.13-1.13a.865.865 0 0 0-.61-1.48h-2.26c-.78 0-1.17.93-.62 1.48l1.13 1.13q.076.075.165.13a.5.5 0 0 0-.055.23c0 1.12-.91 2.04-2.04 2.04c-.28 0-.5.22-.5.5s.22.5.5.5c1.06 0 2-.55 2.55-1.37"/></g></svg>`,
+  '5': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="none"><path fill="#FF822D" d="m27.75 12.372l-1.78-2.08A3.9 3.9 0 0 0 28 6.702c-.09-2.01-1.74-3.64-3.75-3.7a3.9 3.9 0 0 0-3.6 2.14a10 10 0 0 0-2.782-.967l-1.864.86l-1.872-.86a10 10 0 0 0-2.782.967a3.88 3.88 0 0 0-3.6-2.14c-2.01.07-3.66 1.69-3.75 3.7a3.91 3.91 0 0 0 2.02 3.59l-1.77 2.08a9.3 9.3 0 0 0-1.898 3.585l1.757 2.539l-1.924 1.585l2.236 2.912l-2.06 1.126a4.69 4.69 0 0 0 4.329 2.883h18.62c1.95 0 3.621-1.19 4.329-2.883L28.5 22.5l1.281-2.395L29 18.5l.662-2.528a9.4 9.4 0 0 0-1.912-3.6"/><path fill="#FF6723" d="m8.2 7.742l-1.17 1.37a2.4 2.4 0 0 1-1.53-2.23c0-1.31 1.07-2.38 2.38-2.38c.98 0 1.83.6 2.18 1.46c-.69.51-1.32 1.11-1.86 1.78m16.76 1.36l-1.17-1.37a10 10 0 0 0-1.87-1.78c.36-.85 1.21-1.45 2.19-1.45c1.31 0 2.38 1.07 2.38 2.38c0 1.01-.63 1.88-1.53 2.22"/><path fill="#E1D8EC" d="M16 30.002c-3.87 0-7-3.13-7-7v-2h14v2c0 3.87-3.13 7-7 7"/><path fill="#F3EEF8" d="M20 18.002h-8c-1.66 0-3 1.34-3 3s1.34 3 3 3h1.5a3 3 0 0 0 2.5-1.34a3 3 0 0 0 2.5 1.34H20c1.66 0 3-1.34 3-3s-1.34-3-3-3"/><path fill="#CDC4D6" d="m8.08 17.572l3.46 2c.24.14.32.44.18.68s-.44.32-.68.18l-3.46-2a.493.493 0 0 1-.18-.68c.14-.24.44-.32.68-.18m2.95 4l-3.46 2c-.23.14-.32.44-.18.68s.44.32.68.18l3.46-2c.24-.14.32-.44.18-.68a.493.493 0 0 0-.68-.18m9.43-2l3.46-2c.24-.14.54-.06.68.18s.06.54-.18.68l-3.46 2c-.24.14-.54.06-.68-.18a.493.493 0 0 1 .18-.68m.51 2l3.46 2c.23.14.32.44.18.68s-.44.32-.68.18l-3.46-2a.493.493 0 0 1-.18-.68c.14-.24.44-.32.68-.18"/><path fill="#212121" d="M17.89 4.182a10 10 0 0 0-1.89-.18q-.975 0-1.89.18l1.17 1.25c.39.41 1.04.41 1.42 0zm.96 3.32h-5.7c-.38 0-.54.47-.25.71l2.7 2.16c.24.19.57.19.8 0l2.7-2.16c.29-.24.13-.71-.25-.71M6.7 22.892l-4.13-2.75h3.75c.67 0 .94-.87.38-1.25l-4.35-2.93c-.23.8-.35 1.65-.35 2.5v3.85c0 .65.13 1.26.37 1.82h3.95c.67 0 .94-.87.38-1.24m22.93 1.24c.24-.56.37-1.17.37-1.82v-3.85c0-.85-.12-1.69-.34-2.5l-4.36 2.92c-.56.37-.3 1.25.38 1.25h3.75l-4.13 2.75c-.56.37-.3 1.25.38 1.25zM12 14a1 1 0 0 0-1 1v1a1 1 0 1 0 2 0v-1a1 1 0 0 0-1-1m8 0a1 1 0 0 0-1 1v1a1 1 0 1 0 2 0v-1a1 1 0 0 0-1-1m-6.12 5.812l1.38 1.38c.41.41 1.08.41 1.5 0l1.38-1.38c.67-.67.19-1.81-.75-1.81h-2.75c-.96 0-1.43 1.14-.76 1.81"/></g></svg>`,
+  '6': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="none"><path fill="#D3D3D3" d="m9.87 18.79l-.042-.04h3.406l-1.103 1.27c-.27.27-.7.27-.97 0l-.905-.862l-.844.862c-.27.27-.7.27-.97 0l-.892-.91l-.872.91c-.27.27-.7.27-.97 0l-1.192-1.192h2.757l-.039-.039z"/><path fill="#F70A8D" d="M19.656 19H19l.537-6.937h10.135c.58 0 .875.544.875 1.124V14.5c0 2.309-1.767 4.205-4.4 4.469h3.18c.73 0 1.33.41 1.33 1.14v3.652c0 3.755-2.141 6.16-4.47 6.16h-6.53z"/><path fill="#FCD53F" d="M10.551 1.679a.969.969 0 1 0-.54 1.861c.673.195.984.454 1.121.637a.61.61 0 0 1 .123.501c-.079.43-.489.744-.786.744c-.46 0-.784-.144-1.287-.367c-.17-.075-.36-.16-.583-.25c-.858-.35-1.897-.6-3.297-.05c-1.915.75-2.257 2.64-2.152 4.1c.107 1.483.678 2.988 1.152 3.75a.969.969 0 0 0 1.646-1.023c-.312-.502-.781-1.704-.865-2.867c-.085-1.188.232-1.884.927-2.157c.789-.309 1.289-.19 1.857.04q.148.063.332.147c.557.253 1.354.615 2.27.615c1.356 0 2.47-1.109 2.693-2.335a2.55 2.55 0 0 0-.479-2.01c-.46-.615-1.187-1.062-2.132-1.336M22.859 5h4.684c.21 0 .362.23.276.43l-.228.57c-.476 1.21-1.6 2-2.847 2h-1.886a.71.71 0 0 0-.628.42l-1.39 3.23a.58.58 0 0 1-.514.35h-1.952c-.4 0-.676-.44-.514-.83l1.59-3.83C20.04 5.92 21.383 5 22.859 5"/><path fill="#00D26A" d="m13.545 7.749l.299-.515c.101-.187.64-1.156 1.562-1.156h1.742c.563 0 .875.57.875.906c0 .391-.218 1.016-.875 1.016h-.773a.25.25 0 0 0-.281.125a12 12 0 0 0-.291.796h11.876c.25 0 .42.23.37.47l-.33 1.96c-.3 1.2-1.38 2.04-2.61 2.04H23.4l.06.07c.54.6.84 1.37.84 2.18l-.01 7.42v.36l-.04 1.04c-.01.17-.03.35-.05.52l-.06.52c-.013.123-.037.242-.06.36l-.03.16l-.1.51c-.02.113-.049.226-.078.34l-.042.17c-.26.99-.62 1.96-1.07 2.88h-8.244l.922-3.209c.557-.517.584-1.186.612-1.898c.008-.193.016-.388.034-.585A.207.207 0 0 0 15.88 24H7.14c-1.64 0-3.07-1.23-3.06-2.48c0-.33.266-.486.596-.486h5.552c.492 0 1.172-.316 1.523-.666l1.328-1.447H3.82c-.96 0-1.74-.78-1.74-1.74v-3.8a2.5 2.5 0 0 1 2.5-2.46c.6 0 1.336.14 1.766.5l.085.072c.28.236.6.506.962.506l3.037-.108c.5 0 .94-.3 1.13-.75l.44-.72q.04-.07.084-.136c.418-.747 1.079-1.88 1.462-2.536"/><path fill="#FCD53F" d="M14.616 29.92c.707-.44 1.938-2.343 2.634-4.059c.563-1.387-.401-1.819-.953-1.861h-2.094l-.066.042a.2.2 0 0 1 .167.225c-.13.921-.26 1.788-.967 2.445c-.93.877-2.664 1.443-3.891 1.843l-.257.084q-.143.07-.288.134c-.44.198-.853.384-.853.757c0 .35.226.358.588.37q.161.003.355.02z"/><path fill="#008463" d="M4 17c-.546 0-1-.41-1-.924v-2.152c0-.505.443-.924 1-.924c.546 0 1 .41 1 .924v2.152c-.01.505-.454.924-1 .924"/><path fill="#1C1C1C" d="M14 14a1 1 0 1 1 2 0v2a1 1 0 1 1-2 0z"/></g></svg>`
 };
 
-// v2.11 · SYMBOL_PACKS：dog（完整）+ duck（stub，留待将来填充）
+// v2.12 · SYMBOL_PACKS：beast（萌兽 · 中二递进）+ duck（stub）
+// pack key 仍称 'dog' 保持兼容（内部 ID，不影响显示）
 const SYMBOL_PACKS = {
   dog: {
-    label: '🐕 狗子',
+    label: '🦁 萌兽',
     faces: {
-      '1': { name:'奇瓦瓦', glyph:'🐕', value:1,  prob:0.25, color:'#f87171', bark:'tiny',  svg: DOG_SVGS['1'] },
-      '2': { name:'柯基',   glyph:'🐶', value:2,  prob:0.22, color:'#fb923c', bark:'small', svg: DOG_SVGS['2'] },
-      '3': { name:'柴犬',   glyph:'🦮', value:3,  prob:0.18, color:'#fbbf24', bark:'med',   svg: DOG_SVGS['3'] },
-      '4': { name:'金毛',   glyph:'🐩', value:5,  prob:0.15, color:'#34d399', bark:'big',   svg: DOG_SVGS['4'] },
-      '5': { name:'德牧',   glyph:'🐕‍🦺', value:8, prob:0.12, color:'#60a5fa', bark:'guard', svg: DOG_SVGS['5'] },
-      '6': { name:'哈士奇', glyph:'🐺', value:13, prob:0.08, color:'#a78bfa', bark:'husky', svg: DOG_SVGS['6'] }
+      '1': { name:'小灰豆', glyph:'🐹', value:1,  prob:0.25, color:'#c89968', bark:'squeak', svg: DOG_SVGS['1'] },
+      '2': { name:'玉皇兔', glyph:'🐰', value:2,  prob:0.22, color:'#f5f5f5', bark:'chirp',  svg: DOG_SVGS['2'] },
+      '3': { name:'桃花猪', glyph:'🐷', value:3,  prob:0.18, color:'#f8a4c4', bark:'grunt',  svg: DOG_SVGS['3'] },
+      '4': { name:'烈焰狐', glyph:'🦊', value:5,  prob:0.15, color:'#ff7a1f', bark:'yelp',   svg: DOG_SVGS['4'] },
+      '5': { name:'山林虎', glyph:'🐯', value:8,  prob:0.12, color:'#f5b830', bark:'roar',   svg: DOG_SVGS['5'] },
+      '6': { name:'苍穹龙', glyph:'🐲', value:13, prob:0.08, color:'#3fb27a', bark:'dragon', svg: DOG_SVGS['6'] }
     },
     sfx: {
-      // 大奖音效序列（每档对应不同的狗叫组合）
-      small: ['tiny', 'tiny', 'small'],
-      mid:   ['med', 'med', 'big', 'big'],
-      epic:  ['big', 'guard', 'guard', 'husky'],
-      mega:  ['husky', 'husky', 'husky']
+      // 大奖音效序列（每档对应不同萌兽叫声组合）
+      small: ['squeak', 'squeak', 'chirp'],
+      mid:   ['grunt', 'grunt', 'yelp', 'yelp'],
+      epic:  ['yelp', 'roar', 'roar', 'dragon'],
+      mega:  ['dragon', 'dragon', 'dragon']
     }
   },
   duck: {
@@ -4782,37 +4784,38 @@ function flashScreen(intensity = 1) {
   frame.classList.add('flash-' + intensity);
   setTimeout(() => frame.classList.remove('flash-' + intensity), 600);
 }
-// ========== v2.11 · 大奖音效 = 狗叫合成（按 SYMBOL_PACK 配置）==========
-// 6 种狗叫合成（Web Audio 合成，无外部资源）· 频率从高→低 = 小狗→大狗
+// ========== v2.12 · 大奖音效 = 萌兽叫声合成（按 SYMBOL_PACK 配置）==========
+// 6 种叫声合成（Web Audio 合成，无外部资源）· 弱→神兽递进
 const BARK_SYNTH = {
-  // 奇瓦瓦：尖锐高频"汪汪"2 连
-  tiny:  () => {
-    playSweep(1000, 1400, 70, 'square');
-    setTimeout(() => playSweep(900, 1250, 60, 'square'), 90);
+  // 小灰豆 仓鼠：极高频"吱吱"短促 2 连
+  squeak: () => {
+    playSweep(2200, 2600, 45, 'square');
+    setTimeout(() => playSweep(2000, 2400, 40, 'square'), 70);
   },
-  // 柯基：中高频快快"汪汪"
-  small: () => {
-    playSweep(650, 950, 90, 'triangle');
-    setTimeout(() => playSweep(600, 880, 80, 'triangle'), 110);
+  // 玉皇兔：中高频柔和"啾啾"轻啼 2 连
+  chirp:  () => {
+    playSweep(1100, 1500, 80, 'triangle');
+    setTimeout(() => playSweep(900, 1300, 70, 'triangle'), 100);
   },
-  // 柴犬：稳定中频"汪"
-  med:   () => {
-    playSweep(450, 620, 110, 'sawtooth');
-    setTimeout(() => playSweep(420, 580, 100, 'sawtooth'), 140);
+  // 桃花猪：低频鼻音"哼哼"2 连
+  grunt:  () => {
+    playSweep(180, 240, 130, 'sawtooth');
+    setTimeout(() => playSweep(150, 200, 120, 'sawtooth'), 160);
   },
-  // 金毛：浑厚低中频"汪汪"
-  big:   () => {
-    playSweep(300, 460, 130, 'sawtooth');
-    setTimeout(() => playSweep(280, 420, 120, 'sawtooth'), 160);
+  // 烈焰狐：中频尖锐"嗷"一声
+  yelp:   () => {
+    playSweep(550, 800, 120, 'sawtooth');
+    setTimeout(() => playSweep(500, 700, 100, 'triangle'), 150);
   },
-  // 德牧：低沉警觉"汪"
-  guard: () => {
-    playSweep(220, 340, 150, 'sawtooth');
-    setTimeout(() => playSweep(200, 310, 140, 'square'), 180);
+  // 山林虎：低频浑厚"吼"一声（带颤）
+  roar:   () => {
+    playSweep(110, 220, 280, 'sawtooth');
+    setTimeout(() => playSweep(90, 180, 250, 'sawtooth'), 80);
   },
-  // 哈士奇：长低沉"嗷嗚"狼嚎
-  husky: () => {
-    playSweep(160, 90, 700, 'sawtooth');
+  // 苍穹龙：超低频长沉"嗷呜~"龙吟（下降扫频）
+  dragon: () => {
+    playSweep(140, 80, 800, 'sawtooth');
+    setTimeout(() => playChord([60, 90, 180], 600, 'sawtooth', 0.08), 200);
   }
 };
 

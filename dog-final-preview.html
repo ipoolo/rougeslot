@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>方案 D · 萌兽老虎机（差异强化版）</title>
+<style>
+  body { margin:0; padding:32px; background:#15101e; color:#eee; font-family: system-ui, -apple-system, sans-serif; }
+  h1 { color:#fbbf24; letter-spacing:2px; margin:0 0 4px; }
+  .sub { color:#94a3b8; font-size:13px; margin-bottom:24px; line-height:1.7; }
+  h2 { color:#fde68a; font-size:15px; letter-spacing:2px; margin:32px 0 8px; }
+
+  .row { display:grid; grid-template-columns:repeat(6, 1fr); gap:14px; max-width:1100px; padding:16px; background:rgba(0,0,0,0.3); border:1px solid #475569; border-radius:10px; }
+  .cell {
+    background: linear-gradient(180deg, #1e1530 0%, #261936 100%);
+    border:3px solid #475569; border-radius:12px; padding:14px 8px 12px;
+    text-align:center; position: relative;
+  }
+  .cell .icon { width:108px; height:108px; margin:auto; display:flex; align-items:center; justify-content:center; }
+  .cell .icon img { width:100%; height:100%; }
+  .cell .name { color:#fde68a; font-size:17px; font-weight:900; margin-top:10px; letter-spacing:2px; }
+  .cell .role { color:#cbd5e1; font-size:11px; margin-top:2px; }
+  .cell .face-tag { position:absolute; top:6px; left:6px; font-size:9px; color:#fff; padding:2px 6px; border-radius:4px; letter-spacing:1px; font-weight:800; }
+
+  .f1 { border-color:#f87171; }
+  .f1 .face-tag { background:#f87171; }
+  .f2 { border-color:#fb923c; }
+  .f2 .face-tag { background:#fb923c; }
+  .f3 { border-color:#fbbf24; }
+  .f3 .face-tag { background:#fbbf24; color:#15101e; }
+  .f4 { border-color:#34d399; }
+  .f4 .face-tag { background:#34d399; color:#15101e; }
+  .f5 { border-color:#60a5fa; }
+  .f5 .face-tag { background:#60a5fa; }
+  .f6 { border-color:#a78bfa; }
+  .f6 .face-tag { background:#a78bfa; }
+
+  .mini-row { display:flex; gap:18px; align-items:flex-start; justify-content:flex-start; margin-top:12px; padding:16px; background:rgba(0,0,0,0.4); border:1px dashed #475569; border-radius:8px; }
+  .mini { width:64px; height:64px; }
+  .mini img { width:100%; height:100%; }
+  .mini-lbl { font-size:11px; color:#fde68a; text-align:center; margin-top:6px; font-weight:700; }
+
+  .swatch-row { display:flex; gap:8px; margin-top:14px; padding:10px; background:rgba(0,0,0,0.3); border-radius:6px; align-items:center; flex-wrap:wrap; }
+  .swatch-row .lbl { color:#94a3b8; font-size:11px; margin-right:8px; }
+  .swatch { display:inline-flex; align-items:center; gap:6px; color:#eee; font-size:11px; }
+  .swatch .dot { width:18px; height:18px; border-radius:50%; border:1px solid rgba(255,255,255,0.2); }
+
+  .note { background:rgba(34, 197, 94, 0.08); border:1px solid rgba(34, 197, 94, 0.35); padding:12px 16px; border-radius:8px; margin-top:14px; font-size:12px; color:#bbf7d0; line-height:1.7; }
+
+  .progression { display:flex; align-items:center; gap:6px; margin-top:8px; font-size:11px; color:#94a3b8; }
+  .progression .arrow { color:#fbbf24; }
+</style>
+</head>
+<body>
+<h1>🦁 方案 D · 萌兽老虎机（差异强化版）</h1>
+<p class="sub">
+  上一版 D 用了 dog/fox/raccoon/bear/wolf/polar-bear → 棕褐色调太多、易混。<br/>
+  这版换 6 个<b>色彩完全不同</b>的萌兽，并按"<b>弱 → 神兽</b>"递进设计名字。
+</p>
+
+<h2>📐 6 个新选手</h2>
+<div class="row">
+  <div class="cell f1">
+    <div class="face-tag">FACE-1</div>
+    <div class="icon"><img src="https://api.iconify.design/fluent-emoji-flat/hamster.svg"/></div>
+    <div class="name">阿仓</div>
+    <div class="role">仓鼠 · 棕黄</div>
+  </div>
+  <div class="cell f2">
+    <div class="face-tag">FACE-2</div>
+    <div class="icon"><img src="https://api.iconify.design/fluent-emoji-flat/rabbit-face.svg"/></div>
+    <div class="name">玉兔</div>
+    <div class="role">兔 · 雪白</div>
+  </div>
+  <div class="cell f3">
+    <div class="face-tag">FACE-3</div>
+    <div class="icon"><img src="https://api.iconify.design/fluent-emoji-flat/pig-face.svg"/></div>
+    <div class="name">粉粉</div>
+    <div class="role">猪 · 粉红</div>
+  </div>
+  <div class="cell f4">
+    <div class="face-tag">FACE-4</div>
+    <div class="icon"><img src="https://api.iconify.design/fluent-emoji-flat/fox.svg"/></div>
+    <div class="name">火狐</div>
+    <div class="role">狐 · 火橙</div>
+  </div>
+  <div class="cell f5">
+    <div class="face-tag">FACE-5</div>
+    <div class="icon"><img src="https://api.iconify.design/fluent-emoji-flat/tiger-face.svg"/></div>
+    <div class="name">虎王</div>
+    <div class="role">虎 · 金黄黑纹</div>
+  </div>
+  <div class="cell f6">
+    <div class="face-tag">FACE-6</div>
+    <div class="icon"><img src="https://api.iconify.design/fluent-emoji-flat/dragon-face.svg"/></div>
+    <div class="name">神龙</div>
+    <div class="role">龙 · 翠绿</div>
+  </div>
+</div>
+
+<div class="progression">
+  <span>弱</span>
+  <span class="arrow">→</span>
+  <span>仓鼠</span>
+  <span class="arrow">→</span>
+  <span>玉兔</span>
+  <span class="arrow">→</span>
+  <span>粉猪</span>
+  <span class="arrow">→</span>
+  <span>火狐</span>
+  <span class="arrow">→</span>
+  <span>猛虎</span>
+  <span class="arrow">→</span>
+  <span>神龙</span>
+  <span class="arrow">→</span>
+  <span>强</span>
+</div>
+
+<h2>🎨 6 个主体色对比（确认没有色调重复）</h2>
+<div class="swatch-row">
+  <span class="lbl">主体色：</span>
+  <span class="swatch"><span class="dot" style="background:#c89968"></span>阿仓 棕黄</span>
+  <span class="swatch"><span class="dot" style="background:#f5f5f5"></span>玉兔 雪白</span>
+  <span class="swatch"><span class="dot" style="background:#f8a4c4"></span>粉粉 粉红</span>
+  <span class="swatch"><span class="dot" style="background:#ff7a1f"></span>火狐 火橙</span>
+  <span class="swatch"><span class="dot" style="background:#f5b830"></span>虎王 金黄</span>
+  <span class="swatch"><span class="dot" style="background:#3fb27a"></span>神龙 翠绿</span>
+</div>
+<div class="note">
+  6 个主体色覆盖了：棕黄 / 雪白 / 粉红 / 火橙 / 金黄+黑纹 / 翠绿。<br/>
+  虎王的黑色条纹是关键差异点 —— 即使在小尺寸也一眼能从其他金黄色（阿仓）里区分。<br/>
+  神龙的翠绿是全场唯一冷色 —— 在一堆暖色里非常突出。
+</div>
+
+<h2>📐 实际游戏 cell 尺寸（64px · 排在一起）</h2>
+<div class="mini-row">
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/hamster.svg"/></div><div class="mini-lbl">阿仓</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/rabbit-face.svg"/></div><div class="mini-lbl">玉兔</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/pig-face.svg"/></div><div class="mini-lbl">粉粉</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/fox.svg"/></div><div class="mini-lbl">火狐</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/tiger-face.svg"/></div><div class="mini-lbl">虎王</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/dragon-face.svg"/></div><div class="mini-lbl">神龙</div></div>
+</div>
+
+<h2>🆚 对比：旧 D 方案（已淘汰）</h2>
+<div class="mini-row" style="opacity:0.5;">
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg"/></div><div class="mini-lbl">旧·棕</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/fox.svg"/></div><div class="mini-lbl">旧·橙</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/raccoon.svg"/></div><div class="mini-lbl">旧·灰</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/bear.svg"/></div><div class="mini-lbl">旧·棕</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/wolf.svg"/></div><div class="mini-lbl">旧·灰</div></div>
+  <div><div class="mini"><img src="https://api.iconify.design/fluent-emoji-flat/polar-bear.svg"/></div><div class="mini-lbl">旧·白</div></div>
+</div>
+<p class="sub" style="margin-top:8px;">旧版 6 只里有 2 个棕、2 个灰，色调重复 → 这版全部换掉。</p>
+
+<div style="margin-top:36px; padding:18px; background:rgba(168,139,250,0.1); border:1px solid rgba(168,139,250,0.4); border-radius:10px;">
+  <h3 style="color:#c4b5fd; margin-top:0;">需要你确认的事</h3>
+  <p style="color:#ddd6fe; font-size:13px; line-height:1.8;">
+    <b>1. 6 个新选手满意吗？</b> 阿仓 / 玉兔 / 粉粉 / 火狐 / 虎王 / 神龙<br/>
+    <b>2. 名字风格满意吗？</b> 走的是"萌+霸气递进"路线（仓鼠到神龙）。<br/>
+    如果想换风格我可以提：<br/>
+    　 · 中二风：小灰豆 / 玉皇兔 / 桃花猪 / 烈焰狐 / 山林虎 / 苍穹龙<br/>
+    　 · 二字短名：仓鼠 / 玉兔 / 粉猪 / 火狐 / 老虎 / 神龙<br/>
+    　 · 拼音风：A仓 / B兔 / C猪 / D狐 / E虎 / F龙<br/>
+    <b>3. 是否需要把游戏标题从"狗主题"改成"萌兽老虎机"？</b><br/>
+    　 · 把 audio 的 bark 系列改成"叫声 cry"系列 → 每只用对应叫声（吱吱 / 啾啾 / 哼哼 / 嗷 / 吼 / 嗷呜～）
+  </p>
+  <p style="color:#fde68a;"><b>请你确认：</b>名字组用哪套？要不要改音效？确认了就嵌主 prototype。</p>
+</div>
+
+</body>
+</html>
