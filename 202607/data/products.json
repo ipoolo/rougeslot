@@ -1,0 +1,1522 @@
+{
+  "version": "202607-draft.6",
+  "migration": {
+    "source": "data/games.json",
+    "imported_at": "2026-07-25",
+    "policy": "legacy_snapshot_copy_no_runtime_dependency"
+  },
+  "items": [
+    {
+      "id": "product.luck-be-a-landlord",
+      "name": "幸运房东",
+      "name_en": "Luck be a Landlord",
+      "type": "product",
+      "record_type": "game",
+      "status": "reference_confirmed",
+      "order": 10,
+      "relation_types": [
+        "source",
+        "representative"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-numeric"
+      ],
+      "variant_ids": [],
+      "classification_status": "confirmed",
+      "summary": "“Slot 数值型 - 幸运房东”品类原型的主要提炼来源与代表产品。",
+      "source_url": "https://store.steampowered.com/app/1404850/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1404850/header.jpg",
+      "developer": "TrampolineTales",
+      "release_year": 2022,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "符号 RPB"
+      ],
+      "core_loop": "3×5 老虎机每回合 spin，符号 + 道具构筑应对房租压力",
+      "observed_mechanics": [
+        "3×5 老虎机每回合 spin，符号 + 道具构筑应对房租压力",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：threshold + adjacency"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "luck-be-a-landlord",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "用户已确认其作为“Slot 数值型 - 幸运房东”的品类原型来源和代表产品。"
+      ]
+    },
+    {
+      "id": "product.lucky-city",
+      "name": "幸运城市",
+      "type": "product",
+      "status": "content_pending",
+      "order": 20,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-numeric"
+      ],
+      "variant_ids": [
+        "variant.lucky-city"
+      ],
+      "summary": "幸运城市品类变体对应的具体产品对象。",
+      "evidence": [
+        "用户已确认其作为“Slot 数值型 - 幸运房东”下的首个品类变体。",
+        "用户已确认《幸运城市》的 Show_TP 不是 2D 网格；当前正式记录为 0D 多重集。"
+      ],
+      "record_type": "game",
+      "classification_status": "confirmed"
+    },
+    {
+      "id": "product.slotbound-demo",
+      "name": "Slotbound Demo",
+      "type": "product",
+      "status": "content_pending",
+      "order": 30,
+      "relation_types": [
+        "member"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "summary": "以 3×3 Slot Spin 召唤单位，并把 Slot 结果转译为自动战斗防守、单位吸收与职业进化的 Roguelite Demo。",
+      "source_url": "https://store.steampowered.com/app/4906570/Slotbound_Demo/",
+      "steam_app_id": "4906570",
+      "product_form": "demo",
+      "developer": "Optima Arch",
+      "publisher": "Optima Arch",
+      "release_date": "2026-07-10",
+      "observed_mechanics": [
+        "Spin 3×3 Slot 召唤单位",
+        "匹配支付线并触发单位与 Core 协同",
+        "单位吸收、升星与分支职业进化",
+        "Items 与 Cores 调整概率、属性和协同",
+        "自动战斗防守、审判波次与 Boss 波次"
+      ],
+      "classification_note": "已确认归入 Slot 机制母型；候选品类方向为“Slot 战斗型”，在正式建立该品类原型前不挂靠现有“Slot 数值型 - 幸运房东”。",
+      "evidence": [
+        "Steam 商店页将游戏描述为结合 3×3 Slot、Roguelite 防守和自动战斗策略的作品。",
+        "Steam 商店页说明 Spin 用于召唤单位，单位可以吸收进化，Items 与 Cores 用于影响概率、属性与协同。",
+        "品类原型与公式字段约束尚未完成正式拆解。"
+      ],
+      "record_type": "game",
+      "classification_status": "partial"
+    },
+    {
+      "id": "product.balatro",
+      "name": "小丑牌",
+      "name_en": "Balatro",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 110,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "150+ Joker 与塔罗卡牌的倍率组合突破每个 Blind 的目标分数",
+      "source_url": "https://store.steampowered.com/app/2379780/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2379780/header.jpg",
+      "developer": "LocalThunk",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "扑克",
+        "倍率构筑"
+      ],
+      "core_loop": "150+ Joker 与塔罗卡牌的倍率组合突破每个 Blind 的目标分数",
+      "observed_mechanics": [
+        "150+ Joker 与塔罗卡牌的倍率组合突破每个 Blind 的目标分数",
+        "Show_TP：0D_multiset",
+        "Put：manual_set",
+        "C₁：type_dict + trigger_chain"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "balatro",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.peglin",
+      "name": "哥布林弹球",
+      "name_en": "Peglin",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 120,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "Plinko 弹珠台的物理弹射 + 弹珠类型与钉子效果的构筑战斗",
+      "source_url": "https://store.steampowered.com/app/1296610/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1296610/header.jpg",
+      "developer": "Red Nexus Games",
+      "release_year": 2022,
+      "tags": [
+        "装置类",
+        "弹珠",
+        "物理模拟"
+      ],
+      "core_loop": "Plinko 弹珠台的物理弹射 + 弹珠类型与钉子效果的构筑战斗",
+      "observed_mechanics": [
+        "Plinko 弹珠台的物理弹射 + 弹珠类型与钉子效果的构筑战斗",
+        "Show_TP：2D_physical",
+        "Put：auto_place",
+        "C₁：path + cascade"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "peglin",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.ballionaire",
+      "name": "弹珠大亨",
+      "name_en": "Ballionaire",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 130,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "Trinket 小挂件布局优化弹球链路，达成每回合目标分",
+      "source_url": "https://store.steampowered.com/app/2667120/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2667120/header.jpg",
+      "developer": "newobject",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "弹球机",
+        "物理美学"
+      ],
+      "core_loop": "Trinket 小挂件布局优化弹球链路，达成每回合目标分",
+      "observed_mechanics": [
+        "Trinket 小挂件布局优化弹球链路，达成每回合目标分",
+        "Show_TP：2D_physical",
+        "Put：auto_place",
+        "C₁：path + cascade"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "ballionaire",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.dicey-dungeons",
+      "name": "骰子地下城",
+      "name_en": "Dicey Dungeons",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 140,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "6 个职业差异化的骰子投掷 + 装备格子配置爬塔战斗",
+      "source_url": "https://store.steampowered.com/app/861540/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/861540/header.jpg",
+      "developer": "Terry Cavanagh",
+      "release_year": 2019,
+      "tags": [
+        "装置类",
+        "骰子",
+        "职业差异化"
+      ],
+      "core_loop": "6 个职业差异化的骰子投掷 + 装备格子配置爬塔战斗",
+      "observed_mechanics": [
+        "6 个职业差异化的骰子投掷 + 装备格子配置爬塔战斗",
+        "Show_TP：0D_multiset",
+        "Put：manual_place",
+        "C₁：type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "dicey-dungeons",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.slice-and-dice",
+      "name": "切骰",
+      "name_en": "Slice & Dice",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 150,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "5 英雄团队骰子协同、骰面可替换的构筑爬层",
+      "source_url": "https://store.steampowered.com/app/1775490/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1775490/header.jpg",
+      "developer": "Tann",
+      "release_year": 2022,
+      "tags": [
+        "装置类",
+        "骰子",
+        "团队编队"
+      ],
+      "core_loop": "5 英雄团队骰子协同、骰面可替换的构筑爬层",
+      "observed_mechanics": [
+        "5 英雄团队骰子协同、骰面可替换的构筑爬层",
+        "Show_TP：0D_multiset",
+        "Put：manual_place",
+        "C₁：type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "slice-and-dice",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.astrea-six-sided-oracles",
+      "name": "六面神谕",
+      "name_en": "Astrea: Six-Sided Oracles",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 160,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "350+ 骰子的净化/腐化双轴构筑，平衡伤敌与自损",
+      "source_url": "https://store.steampowered.com/app/1755830/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1755830/header.jpg",
+      "developer": "Little Leo Games",
+      "release_year": 2023,
+      "tags": [
+        "装置类",
+        "骰子",
+        "双资源平衡"
+      ],
+      "core_loop": "350+ 骰子的净化/腐化双轴构筑，平衡伤敌与自损",
+      "observed_mechanics": [
+        "350+ 骰子的净化/腐化双轴构筑，平衡伤敌与自损",
+        "Show_TP：0D_multiset",
+        "Put：manual_place",
+        "C₁：type_dict + threshold"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "astrea-six-sided-oracles",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.die-in-the-dungeon",
+      "name": "地牢掷骰",
+      "name_en": "Die in the Dungeon",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 170,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "3×3 棋盘上放置骰子，邻接加成推进地牢",
+      "source_url": "https://store.steampowered.com/app/2026820/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2026820/header.jpg",
+      "developer": "Atico",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "骰子",
+        "空间摆位"
+      ],
+      "core_loop": "3×3 棋盘上放置骰子，邻接加成推进地牢",
+      "observed_mechanics": [
+        "3×3 棋盘上放置骰子，邻接加成推进地牢",
+        "Show_TP：2D_grid",
+        "Put：manual_place",
+        "C₁：adjacency + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "die-in-the-dungeon",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.aotenjo-infinite-hands",
+      "name": "青天井",
+      "name_en": "Aotenjo: Infinite Hands",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 180,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "100+ 牌型 + 144 artifacts 融合多地域麻将规则突破目标分",
+      "source_url": "https://store.steampowered.com/app/3066570/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3066570/header.jpg",
+      "developer": "",
+      "release_year": 2025,
+      "tags": [
+        "装置类",
+        "麻将",
+        "东方题材"
+      ],
+      "core_loop": "100+ 牌型 + 144 artifacts 融合多地域麻将规则突破目标分",
+      "observed_mechanics": [
+        "100+ 牌型 + 144 artifacts 融合多地域麻将规则突破目标分",
+        "Show_TP：0D_multiset",
+        "Put：manual_set",
+        "C₁：type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "aotenjo-infinite-hands",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.raccoin",
+      "name": "浣熊推币机",
+      "name_en": "RACCOIN",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 190,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "物理推币机 × 特殊币与道具构筑，多角色策略应对波次",
+      "source_url": "https://store.steampowered.com/app/3784030/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3784030/441ff79feb6f3e92a5a6ed4a1d4b89c79e275644/header.jpg?t=1776154119",
+      "developer": "",
+      "release_year": 2026,
+      "tags": [
+        "装置类",
+        "推币机",
+        "物理反馈"
+      ],
+      "core_loop": "物理推币机 × 特殊币与道具构筑，多角色策略应对波次",
+      "observed_mechanics": [
+        "物理推币机 × 特殊币与道具构筑，多角色策略应对波次",
+        "Show_TP：2D_physical",
+        "Put：auto_place",
+        "C₁：path + cascade"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "raccoin",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.roulette-hero",
+      "name": "轮盘英雄",
+      "name_en": "Roulette Hero",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 200,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "100+ 动物伙伴 + 90+ 强化在赌场轮盘格子上构筑战胜机械 boss",
+      "source_url": "https://store.steampowered.com/app/3371510/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3371510/d8f4a3b61bf07def68ef77a2aab4d5d1fe8c1ff7/header.jpg?t=1772681037",
+      "developer": "Amethyst",
+      "release_year": 2025,
+      "tags": [
+        "装置类",
+        "轮盘",
+        "格子构筑"
+      ],
+      "core_loop": "100+ 动物伙伴 + 90+ 强化在赌场轮盘格子上构筑战胜机械 boss",
+      "observed_mechanics": [
+        "100+ 动物伙伴 + 90+ 强化在赌场轮盘格子上构筑战胜机械 boss",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：adjacency + type_dict + trigger_chain"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "roulette-hero",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.bingo-betty",
+      "name": "宾果贝蒂",
+      "name_en": "Bingo Betty",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 210,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "28 回合内 150+ 被动道具 + 卡片自定义，让摇号填满宾果连线",
+      "source_url": "https://store.steampowered.com/app/4045170/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4045170/59305dbffba864e14d4f04e86a0603174a6cf73c/header.jpg?t=1776993346",
+      "developer": "Elias Austin",
+      "release_year": 2026,
+      "tags": [
+        "装置类",
+        "宾果",
+        "连线反馈"
+      ],
+      "core_loop": "28 回合内 150+ 被动道具 + 卡片自定义，让摇号填满宾果连线",
+      "observed_mechanics": [
+        "28 回合内 150+ 被动道具 + 卡片自定义，让摇号填满宾果连线",
+        "Show_TP：2D_grid",
+        "Put：manual_place",
+        "C₁：line_complete"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "bingo-betty",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.spinera",
+      "name": "帝国轮盘",
+      "name_en": "Spinera",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 220,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "老虎机 spin 产出资源，分配建造兵种与奇迹推动帝国科技树",
+      "source_url": "https://store.steampowered.com/app/3576520/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3576520/2d9f43ddbd134a25e0942e725ffca4c5ec0ca298/header.jpg?t=1777038565",
+      "developer": "Arvis Games",
+      "release_year": 2026,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "资源构筑",
+        "帝国经营"
+      ],
+      "core_loop": "老虎机 spin 产出资源，分配建造兵种与奇迹推动帝国科技树",
+      "observed_mechanics": [
+        "老虎机 spin 产出资源，分配建造兵种与奇迹推动帝国科技树",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：line_complete + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "spinera",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.spin-hero",
+      "name": "拉杆英雄",
+      "name_en": "Spin Hero",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 230,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "老虎机符号构筑驱动自动战斗，每局拉杆推进 roguelike 闯关",
+      "source_url": "https://store.steampowered.com/app/2917350/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2917350/header.jpg?t=1760025570",
+      "developer": "Sphere Studios",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "符号 RPB",
+        "自动战斗"
+      ],
+      "core_loop": "老虎机符号构筑驱动自动战斗，每局拉杆推进 roguelike 闯关",
+      "observed_mechanics": [
+        "老虎机符号构筑驱动自动战斗，每局拉杆推进 roguelike 闯关",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：type_dict + threshold"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "spin-hero",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.cloverpit",
+      "name": "四叶草深渊",
+      "name_en": "CLOVERPIT",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 240,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "第一人称操作老虎机连击吸金，护身符构筑应对无尽债务循环",
+      "source_url": "https://store.steampowered.com/app/3314790/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3314790/f9e9b212e2d5a11bb049e31639c80e49b231f427/header_alt_assets_1.jpg?t=1775754157",
+      "developer": "Panik Arcade",
+      "release_year": 2025,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "恐怖向",
+        "还债主题"
+      ],
+      "core_loop": "第一人称操作老虎机连击吸金，护身符构筑应对无尽债务循环",
+      "observed_mechanics": [
+        "第一人称操作老虎机连击吸金，护身符构筑应对无尽债务循环",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：line_complete + type_dict + cascade"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "cloverpit",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.dice-player-one",
+      "name": "骰号玩家",
+      "name_en": "Dice Player One",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 250,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "骰子重投与卡牌组合构筑，将随机机会转化为闯关倍率",
+      "source_url": "https://store.steampowered.com/app/2752720/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2752720/header.jpg?t=1743229533",
+      "developer": "KDream",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "骰子",
+        "roguelike 卡牌",
+        "倍率构筑"
+      ],
+      "core_loop": "骰子重投与卡牌组合构筑，将随机机会转化为闯关倍率",
+      "observed_mechanics": [
+        "骰子重投与卡牌组合构筑，将随机机会转化为闯关倍率",
+        "Show_TP：0D_multiset",
+        "Put：auto_place",
+        "C₁：type_dict + threshold + trigger_chain"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "dice-player-one",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.coin-push-rpg",
+      "name": "推币勇者",
+      "name_en": "Coin Push RPG",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 260,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "推币机投币触发自动战斗，招募英雄与天赋构筑推进城镇升级",
+      "source_url": "https://store.steampowered.com/app/3036010/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3036010/181928c99334a7b40dd435e9a701cb927cfd6df0/header.jpg?t=1773392771",
+      "developer": "RAmen",
+      "release_year": 2025,
+      "tags": [
+        "装置类",
+        "推币",
+        "团队编队",
+        "养成 RPG"
+      ],
+      "core_loop": "推币机投币触发自动战斗，招募英雄与天赋构筑推进城镇升级",
+      "observed_mechanics": [
+        "推币机投币触发自动战斗，招募英雄与天赋构筑推进城镇升级",
+        "Show_TP：2D_physical",
+        "Put：auto_place",
+        "C₁：path + cascade + threshold"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "coin-push-rpg",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.luckland",
+      "name": "幸运大陆",
+      "name_en": "LuckLand",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 270,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "旋转棋盘格子蓄能触发卡牌效果，构筑卡组推进 roguelike 闯关",
+      "source_url": "https://store.steampowered.com/app/2516820/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2516820/header.jpg?t=1726290426",
+      "developer": "e-Jade",
+      "release_year": 2023,
+      "tags": [
+        "装置类",
+        "网格",
+        "roguelike 卡牌",
+        "格子构筑"
+      ],
+      "core_loop": "旋转棋盘格子蓄能触发卡牌效果，构筑卡组推进 roguelike 闯关",
+      "observed_mechanics": [
+        "旋转棋盘格子蓄能触发卡牌效果，构筑卡组推进 roguelike 闯关",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：adjacency + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "luckland",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.lucky-island",
+      "name": "幸运岛",
+      "name_en": "Lucky Island",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 280,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "老虎机分派岛民工作产出资源，规划海岛建设应对 roguelike 事件",
+      "source_url": "https://store.steampowered.com/app/2195650/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2195650/header.jpg?t=1716624493",
+      "developer": "Just L Studio",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "海岛经营",
+        "符号 RPB"
+      ],
+      "core_loop": "老虎机分派岛民工作产出资源，规划海岛建设应对 roguelike 事件",
+      "observed_mechanics": [
+        "老虎机分派岛民工作产出资源，规划海岛建设应对 roguelike 事件",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：type_dict + threshold"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "lucky-island",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.lucky-lord",
+      "name": "幸运领主：命运的推币机",
+      "name_en": "Lucky Lord: The Coin Pusher of Fate",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 290,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "推币机 × 老虎机随机 × roguelike 卡牌的中世纪奇幻构筑",
+      "source_url": "https://store.steampowered.com/app/3408410/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3408410/header_schinese.jpg?t=1768181635",
+      "developer": "Star Seeker Studio",
+      "release_year": 2025,
+      "tags": [
+        "装置类",
+        "推币",
+        "中世纪",
+        "roguelike 卡牌"
+      ],
+      "core_loop": "推币机 × 老虎机随机 × roguelike 卡牌的中世纪奇幻构筑",
+      "observed_mechanics": [
+        "推币机 × 老虎机随机 × roguelike 卡牌的中世纪奇幻构筑",
+        "Show_TP：2D_physical",
+        "Put：auto_place",
+        "C₁：path + cascade + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "lucky-lord",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.lucky-hero",
+      "name": "幸运勇者",
+      "name_en": "Lucky Hero",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 300,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "武器装备化为符号，转动命运轮盘构筑组合击败敌人",
+      "source_url": "https://store.steampowered.com/app/2404510/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2404510/header.jpg",
+      "developer": "mora churrasco studio",
+      "release_year": 2023,
+      "tags": [
+        "装置类",
+        "轮盘",
+        "符号 RPB",
+        "roguelike 卡牌"
+      ],
+      "core_loop": "武器装备化为符号，转动命运轮盘构筑组合击败敌人",
+      "observed_mechanics": [
+        "武器装备化为符号，转动命运轮盘构筑组合击败敌人",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：adjacency + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "lucky-hero",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.bingle-bingle",
+      "name": "转啊转",
+      "name_en": "Bingle Bingle",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 310,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "自建轮盘，组合下注与特殊球的协同冲击高分对抗赌场",
+      "source_url": "https://store.steampowered.com/app/2789810/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2789810/header.jpg?t=1775412277",
+      "developer": "Knitting Games",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "轮盘",
+        "符号 RPB",
+        "赌场分数"
+      ],
+      "core_loop": "自建轮盘，组合下注与特殊球的协同冲击高分对抗赌场",
+      "observed_mechanics": [
+        "自建轮盘，组合下注与特殊球的协同冲击高分对抗赌场",
+        "Show_TP：1D_ring",
+        "Put：auto_place",
+        "C₁：adjacency + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "bingle-bingle",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.die-shou-wei-cheng",
+      "name": "死守危城",
+      "name_en": "",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 320,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "构筑符号组合产出防御值抵挡僵尸潮的牌组构建塔防",
+      "source_url": "https://store.steampowered.com/app/1863170/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1863170/header.jpg",
+      "developer": "3P Studios",
+      "release_year": 2022,
+      "tags": [
+        "装置类",
+        "卡牌",
+        "符号 RPB",
+        "自动战斗"
+      ],
+      "core_loop": "构筑符号组合产出防御值抵挡僵尸潮的牌组构建塔防",
+      "observed_mechanics": [
+        "构筑符号组合产出防御值抵挡僵尸潮的牌组构建塔防",
+        "Show_TP：2D_grid",
+        "Put：manual_place",
+        "C₁：line_complete + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "die-shou-wei-cheng",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.crop-rotation",
+      "name": "轮作法",
+      "name_en": "Crop Rotation",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 330,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "drafting 卡牌组建自动农场，自动结算还清贷款",
+      "source_url": "https://store.steampowered.com/app/2348090/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2348090/header.jpg?t=1756122377",
+      "developer": "Sprouting Potato",
+      "release_year": 2023,
+      "tags": [
+        "装置类",
+        "种田",
+        "自动战斗",
+        "还债主题"
+      ],
+      "core_loop": "drafting 卡牌组建自动农场，自动结算还清贷款",
+      "observed_mechanics": [
+        "drafting 卡牌组建自动农场，自动结算还清贷款",
+        "Show_TP：2D_grid",
+        "Put：manual_place",
+        "C₁：adjacency + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "crop-rotation",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.cat-god-ranch",
+      "name": "猫神牧场",
+      "name_en": "Cat God Ranch",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 340,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "构筑动物牌组每日产出货币向猫神进贡的牧场 roguelike",
+      "source_url": "https://store.steampowered.com/app/2797340/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2797340/d1e3697fb2ed8e4e885d9be93d4d85eafa1426e9/header_schinese.jpg?t=1773415538",
+      "developer": "CrazyPotato Studio",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "卡牌",
+        "自动战斗",
+        "种田"
+      ],
+      "core_loop": "构筑动物牌组每日产出货币向猫神进贡的牧场 roguelike",
+      "observed_mechanics": [
+        "构筑动物牌组每日产出货币向猫神进贡的牧场 roguelike",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：adjacency + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "cat-god-ranch",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.lucky-hunter",
+      "name": "幸运猎人",
+      "name_en": "Lucky Hunter",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 350,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "三消合并构筑棋子阵容，自走棋自动战斗对抗灾变怪物",
+      "source_url": "https://store.steampowered.com/app/2824310/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2824310/header_schinese.jpg?t=1770639208",
+      "developer": "159 Studio",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "自走棋",
+        "三消合并",
+        "自动战斗"
+      ],
+      "core_loop": "三消合并构筑棋子阵容，自走棋自动战斗对抗灾变怪物",
+      "observed_mechanics": [
+        "三消合并构筑棋子阵容，自走棋自动战斗对抗灾变怪物",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：adjacency + threshold + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "lucky-hunter",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.lucky-mayor",
+      "name": "幸运市长",
+      "name_en": "Lucky Mayor",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 360,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
+      "source_url": "https://store.steampowered.com/app/2659970/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2659970/header_schinese.jpg?t=1720252883",
+      "developer": "MadGoat Game Studio",
+      "release_year": 2023,
+      "tags": [
+        "装置类",
+        "卡牌",
+        "城市管理",
+        "轻装置"
+      ],
+      "core_loop": "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
+      "observed_mechanics": [
+        "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
+        "Show_TP：0D_multiset",
+        "Put：auto_place",
+        "C₁：type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "lucky-mayor",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.insider-trading",
+      "name": "内幕交易",
+      "name_en": "Insider Trading",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 370,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "卡牌构筑操纵股价 + 周目目标的炒股 roguelike",
+      "source_url": "https://store.steampowered.com/app/3166810/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3166810/f630edf3f73d0b98ab76b4118d7d35f7f700c0c3/header_schinese.jpg?t=1776280182",
+      "developer": "Naiive",
+      "release_year": 2026,
+      "tags": [
+        "装置类",
+        "卡牌",
+        "炒股roguelike"
+      ],
+      "core_loop": "卡牌构筑操纵股价 + 周目目标的炒股 roguelike",
+      "observed_mechanics": [
+        "卡牌构筑操纵股价 + 周目目标的炒股 roguelike",
+        "Show_TP：0D_multiset",
+        "Put：auto_place",
+        "C₁：type_dict + trigger_chain"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "insider-trading",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.vampire-crawlers",
+      "name": "吸血鬼爬行者：屠戮地牢的吸血鬼幸存者",
+      "name_en": "Vampire Crawlers",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 380,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "卡牌构筑 + 第一人称网格地牢的回合制 combo 战斗",
+      "source_url": "https://store.steampowered.com/app/3265700/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3265700/5590e42cab09dacabee973dd2c3e27ef12ed4950/header.jpg?t=1776925935",
+      "developer": "Poncle, Nosebleed Interactive",
+      "release_year": 2026,
+      "tags": [
+        "装置类",
+        "卡牌",
+        "第一人称地牢"
+      ],
+      "core_loop": "卡牌构筑 + 第一人称网格地牢的回合制 combo 战斗",
+      "observed_mechanics": [
+        "卡牌构筑 + 第一人称网格地牢的回合制 combo 战斗",
+        "Show_TP：1D_sequence",
+        "Put：manual_place",
+        "C₁：type_dict + trigger_chain"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "vampire-crawlers",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.card-hog",
+      "name": "Card Hog",
+      "name_en": "Card Hog",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 390,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "100+ 卡牌构筑 + 网格地牢的回合制 combo 战斗",
+      "source_url": "https://store.steampowered.com/app/1163740/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1163740/header.jpg",
+      "developer": "SnoutUp",
+      "release_year": 2023,
+      "tags": [
+        "装置类",
+        "卡牌网格",
+        "地牢爬行"
+      ],
+      "core_loop": "100+ 卡牌构筑 + 网格地牢的回合制 combo 战斗",
+      "observed_mechanics": [
+        "100+ 卡牌构筑 + 网格地牢的回合制 combo 战斗",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：adjacency + type_dict"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "card-hog",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.dice-tribes-ambitions",
+      "name": "骰子部落：野心",
+      "name_en": "Dice Tribes: Ambitions",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 400,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "骰子工人放置 + 部落抱负的策略经营",
+      "source_url": "https://store.steampowered.com/app/1965800/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1965800/header.jpg",
+      "developer": "Sprouting Potato",
+      "release_year": 2022,
+      "tags": [
+        "装置类",
+        "骰子",
+        "工人放置"
+      ],
+      "core_loop": "骰子工人放置 + 部落抱负的策略经营",
+      "observed_mechanics": [
+        "骰子工人放置 + 部落抱负的策略经营",
+        "Show_TP：0D_multiset",
+        "Put：manual_place",
+        "C₁：type_dict + threshold"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "dice-tribes-ambitions",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.right-and-down",
+      "name": "右与下",
+      "name_en": "Right and Down",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 410,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "仅两键操作 + 卡牌构筑的 50 层地牢爬行",
+      "source_url": "https://store.steampowered.com/app/2008050/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2008050/header.jpg",
+      "developer": "mc2games",
+      "release_year": 2022,
+      "tags": [
+        "装置类",
+        "卡牌",
+        "极简双键"
+      ],
+      "core_loop": "仅两键操作 + 卡牌构筑的 50 层地牢爬行",
+      "observed_mechanics": [
+        "仅两键操作 + 卡牌构筑的 50 层地牢爬行",
+        "Show_TP：2D_grid",
+        "Put：manual_place",
+        "C₁：path + chain"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "right-and-down",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.dog-and-goblin",
+      "name": "狗与哥布林",
+      "name_en": "Dog And Goblin",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 420,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "spin 随机出棋子位置 + 150 棋子 combo 自动战斗",
+      "source_url": "https://store.steampowered.com/app/2666230/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2666230/header_schinese.jpg?t=1749176310",
+      "developer": "Zony",
+      "release_year": 2024,
+      "tags": [
+        "装置类",
+        "slot",
+        "自走棋融合"
+      ],
+      "core_loop": "spin 随机出棋子位置 + 150 棋子 combo 自动战斗",
+      "observed_mechanics": [
+        "spin 随机出棋子位置 + 150 棋子 combo 自动战斗",
+        "Show_TP：2D_grid",
+        "Put：manual_place",
+        "C₁：type_dict + adjacency + threshold"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "dog-and-goblin",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    },
+    {
+      "id": "product.endgame-of-devil",
+      "name": "魔王终局",
+      "name_en": "Endgame of Devil",
+      "type": "product",
+      "record_type": "game",
+      "status": "legacy_imported",
+      "order": 430,
+      "relation_types": [],
+      "mother_ids": [],
+      "prototype_ids": [],
+      "variant_ids": [],
+      "classification_status": "unreviewed",
+      "summary": "spin 随机出棋子位置 + 240 随从一键自动战斗",
+      "source_url": "https://store.steampowered.com/app/2343600/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2343600/header_schinese.jpg?t=1771846080",
+      "developer": "MiniWhale",
+      "release_year": 2023,
+      "tags": [
+        "装置类",
+        "slot",
+        "自走棋融合"
+      ],
+      "core_loop": "spin 随机出棋子位置 + 240 随从一键自动战斗",
+      "observed_mechanics": [
+        "spin 随机出棋子位置 + 240 随从一键自动战斗",
+        "Show_TP：2D_grid",
+        "Put：auto_place",
+        "C₁：type_dict + adjacency"
+      ],
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "legacy_source": {
+        "slug": "endgame-of-devil",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
+      "evidence": [
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
+      ]
+    }
+  ]
+}

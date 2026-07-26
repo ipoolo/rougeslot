@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>方案 4 · dog-face + 配饰区分</title>
+<style>
+  body { margin:0; padding:32px; background:#15101e; color:#eee; font-family: system-ui, -apple-system, sans-serif; }
+  h1 { color:#fbbf24; letter-spacing:2px; }
+  .legend { color:#94a3b8; font-size:13px; margin-bottom:24px; line-height:1.6; }
+  .grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; max-width:900px; }
+  .card {
+    background: linear-gradient(180deg, #1e1530 0%, #261936 100%);
+    border:2px solid #475569; border-radius:12px; padding:18px;
+    text-align:center;
+  }
+  .card .icon {
+    width:140px; height:140px; margin:auto;
+    position: relative;
+  }
+  .card .icon .dog {
+    width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card .icon .dog img {
+    width:100%; height:100%;
+  }
+  /* 装饰元素：顶部叠加 + 不同位置/旋转区分品种 */
+  .card .icon .accessory {
+    position: absolute;
+    pointer-events: none;
+    width: 60px; height: 60px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 50px;
+    line-height: 1;
+  }
+  /* face-1 奇瓦瓦 红色蝴蝶结 顶部偏右 */
+  .acc-bow { top: -8px; right: 12px; transform: rotate(-15deg); filter: drop-shadow(0 2px 4px rgba(248,113,113,0.6)); }
+  /* face-2 柯基 橙色花朵 顶部偏左 */
+  .acc-flower { top: -6px; left: 8px; transform: rotate(-20deg); filter: drop-shadow(0 2px 4px rgba(251,146,60,0.6)); }
+  /* face-3 柴犬 黄色铃铛 顶部偏右（领圈感）*/
+  .acc-bell { bottom: 6px; right: 12px; font-size: 38px; filter: drop-shadow(0 2px 4px rgba(251,191,36,0.6)); }
+  /* face-4 金毛 绿色棒球帽 顶部 */
+  .acc-cap { top: -14px; left: 50%; transform: translateX(-50%) rotate(-8deg); filter: drop-shadow(0 2px 4px rgba(52,211,153,0.5)); }
+  /* face-5 德牧 蓝色警帽 头顶 */
+  .acc-police { top: -16px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 2px 4px rgba(96,165,250,0.6)); font-size: 46px; }
+  /* face-6 哈士奇 紫色雪花皇冠 头顶 */
+  .acc-crown { top: -18px; left: 50%; transform: translateX(-50%) rotate(-5deg); filter: drop-shadow(0 2px 6px rgba(167,139,250,0.7)); }
+
+  .card .name { color:#fde68a; font-size:18px; font-weight:800; margin-top:14px; letter-spacing:2px; }
+  .card .desc { font-size:11px; color:#94a3b8; margin-top:6px; line-height:1.5; }
+  .card.face-1 { border-color:#f87171; }
+  .card.face-2 { border-color:#fb923c; }
+  .card.face-3 { border-color:#fbbf24; }
+  .card.face-4 { border-color:#34d399; }
+  .card.face-5 { border-color:#60a5fa; }
+  .card.face-6 { border-color:#a78bfa; }
+
+  /* 实际游戏 cell 64px 对比 */
+  .compare { margin-top:48px; padding:24px; background: rgba(0,0,0,0.3); border:1px dashed #475569; border-radius:10px; }
+  .compare h2 { color:#fde68a; margin-top:0; font-size:14px; letter-spacing:3px; }
+  .compare-row { display:flex; gap:24px; align-items:flex-end; justify-content:center; margin-top:12px; }
+  .compare-row .cell-mini {
+    width:64px; height:64px; position: relative;
+  }
+  .compare-row .cell-mini .dog { width:100%; height:100%; }
+  .compare-row .cell-mini .dog img { width:100%; height:100%; }
+  .compare-row .cell-mini .accessory { font-size: 24px; width: 28px; height: 28px; }
+  /* 64px 下的位置调整 */
+  .compare-row .cell-mini .acc-bow { top: -4px; right: 4px; }
+  .compare-row .cell-mini .acc-flower { top: -2px; left: 2px; }
+  .compare-row .cell-mini .acc-bell { bottom: 2px; right: 4px; font-size: 18px; }
+  .compare-row .cell-mini .acc-cap { top: -6px; }
+  .compare-row .cell-mini .acc-police { top: -7px; font-size: 22px; }
+  .compare-row .cell-mini .acc-crown { top: -8px; }
+  .lbl { font-size:10px; color:#94a3b8; text-align:center; margin-top:4px; }
+
+  .info { background: rgba(34, 197, 94, 0.1); border:1px solid rgba(34, 197, 94, 0.4); padding:14px 18px; border-radius:8px; margin-bottom:24px; }
+  .info h3 { margin:0 0 6px; color:#86efac; font-size:14px; }
+  .info p { margin:4px 0; font-size:12px; color:#bbf7d0; }
+  .warn { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.4); }
+  .warn h3 { color:#fde68a; }
+  .warn p { color:#fef3c7; }
+</style>
+</head>
+<body>
+<h1>🐕 方案 4 · dog-face base + 6 个配饰区分</h1>
+
+<div class="info">
+  <h3>核心思路</h3>
+  <p>6 个 cell 都用同一个 <code>fluent-emoji-flat:dog-face</code> 作为基底 → 风格 100% 统一</p>
+  <p>差异通过"装饰物覆盖叠加"实现：蝴蝶结 / 花朵 / 铃铛 / 棒球帽 / 警帽 / 皇冠</p>
+  <p>每个装饰位置 + 旋转角度 + 阴影色 也都按 face-X 颜色定制</p>
+</div>
+
+<div class="grid">
+
+  <div class="card face-1">
+    <div class="icon">
+      <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg" alt=""/></div>
+      <div class="accessory acc-bow">🎀</div>
+    </div>
+    <div class="name">奇瓦瓦</div>
+    <div class="desc">face-1 · 红蝴蝶结（顶右）</div>
+  </div>
+
+  <div class="card face-2">
+    <div class="icon">
+      <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg" alt=""/></div>
+      <div class="accessory acc-flower">🌼</div>
+    </div>
+    <div class="name">柯基</div>
+    <div class="desc">face-2 · 橙花朵（顶左）</div>
+  </div>
+
+  <div class="card face-3">
+    <div class="icon">
+      <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg" alt=""/></div>
+      <div class="accessory acc-bell">🔔</div>
+    </div>
+    <div class="name">柴犬</div>
+    <div class="desc">face-3 · 黄铃铛（脖右）</div>
+  </div>
+
+  <div class="card face-4">
+    <div class="icon">
+      <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg" alt=""/></div>
+      <div class="accessory acc-cap">🧢</div>
+    </div>
+    <div class="name">金毛</div>
+    <div class="desc">face-4 · 绿棒球帽（头顶）</div>
+  </div>
+
+  <div class="card face-5">
+    <div class="icon">
+      <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg" alt=""/></div>
+      <div class="accessory acc-police">👮</div>
+    </div>
+    <div class="name">德牧</div>
+    <div class="desc">face-5 · 蓝警帽（头顶）</div>
+  </div>
+
+  <div class="card face-6">
+    <div class="icon">
+      <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg" alt=""/></div>
+      <div class="accessory acc-crown">👑</div>
+    </div>
+    <div class="name">哈士奇</div>
+    <div class="desc">face-6 · 紫皇冠（头顶）</div>
+  </div>
+
+</div>
+
+<div class="compare">
+  <h2>📐 实际游戏 cell 尺寸（64px）</h2>
+  <div class="compare-row">
+    <div>
+      <div class="cell-mini">
+        <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg"/></div>
+        <div class="accessory acc-bow">🎀</div>
+      </div>
+      <div class="lbl">奇瓦瓦</div>
+    </div>
+    <div>
+      <div class="cell-mini">
+        <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg"/></div>
+        <div class="accessory acc-flower">🌼</div>
+      </div>
+      <div class="lbl">柯基</div>
+    </div>
+    <div>
+      <div class="cell-mini">
+        <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg"/></div>
+        <div class="accessory acc-bell">🔔</div>
+      </div>
+      <div class="lbl">柴犬</div>
+    </div>
+    <div>
+      <div class="cell-mini">
+        <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg"/></div>
+        <div class="accessory acc-cap">🧢</div>
+      </div>
+      <div class="lbl">金毛</div>
+    </div>
+    <div>
+      <div class="cell-mini">
+        <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg"/></div>
+        <div class="accessory acc-police">👮</div>
+      </div>
+      <div class="lbl">德牧</div>
+    </div>
+    <div>
+      <div class="cell-mini">
+        <div class="dog"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg"/></div>
+        <div class="accessory acc-crown">👑</div>
+      </div>
+      <div class="lbl">哈士奇</div>
+    </div>
+  </div>
+</div>
+
+<div class="info warn">
+  <h3>⚠ 这方案的本质</h3>
+  <p>6 只其实是同一只狗，**靠头顶配饰 + cell 边框色 区分品种**。</p>
+  <p>优势：风格 100% 统一、辨识度好（配饰位置 + 颜色不同）、技术上极简（一张 base + emoji 装饰）</p>
+  <p>劣势：玩家会意识到"是同一只狗换装备"，缺乏品种特征的真实感（不像奇瓦瓦/不像柴犬）</p>
+  <p>适合作为"占位 + 临时方案"，等 AI 生成的真品种图准备好后替换</p>
+</div>
+
+</body>
+</html>

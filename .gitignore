@@ -16,6 +16,7 @@
 .tmp/
 tmp/
 /tmp/
+.playwright-mcp/
 
 # Node（不用但防御）
 node_modules/

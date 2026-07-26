@@ -1,0 +1,179 @@
+{
+  "version": "202607-draft.3",
+  "status": "core_confirmed",
+  "name": "双峰多巴胺体验模型",
+  "experience_goal": "持续爱干",
+  "model_positioning": "本模型本质上是对这类游戏的抽象假设。",
+  "formula": {
+    "display": "[ Random@Pool_Symbol → Put@Show_TP → Combo(C1→C2?)@Show_TP ]_N → BD",
+    "scope_operator": {
+      "symbol": "@",
+      "name": "作用域／承载域标记",
+      "is_multiplication": false
+    },
+    "confirmed_scope_rules": [
+      "Random 只直接作用于 Pool_Symbol",
+      "Put 发生在 Show_TP 上",
+      "Combo 与 Put 共用同一个 Show_TP"
+    ]
+  },
+  "single_spin_flow": [
+    {
+      "order": 1,
+      "operation": "Random",
+      "inputs": [
+        "Pool_Symbol"
+      ],
+      "outputs": [
+        "SingleSpin_Symbol"
+      ],
+      "scope": "Pool_Symbol"
+    },
+    {
+      "order": 2,
+      "operation": "Put",
+      "inputs": [
+        "SingleSpin_Symbol",
+        "Show_TP"
+      ],
+      "outputs": [
+        "Show_State"
+      ],
+      "scope": "Show_TP"
+    },
+    {
+      "order": 3,
+      "operation": "Combo",
+      "inputs": [
+        "Show_TP",
+        "Show_State",
+        "C1",
+        "C2"
+      ],
+      "outputs": [
+        "Spin_Result"
+      ],
+      "scope": "Show_TP"
+    }
+  ],
+  "experience_mapping": {
+    "peak_1": {
+      "name": "第一峰",
+      "operations": [
+        "Random",
+        "Put"
+      ],
+      "end_state": "Show_State"
+    },
+    "peak_2": {
+      "name": "第二峰",
+      "operations": [
+        "Combo"
+      ],
+      "end_state": "Spin_Result"
+    },
+    "long_loop": {
+      "operation": "BD",
+      "description": "当下层启用 BD 时，基于 N 次 Spin 的结果改变后续循环参数",
+      "lower_layers_may_disable": true
+    }
+  },
+  "cycle": {
+    "display": "Spin_1 → Spin_2 → … → Spin_N → BD → 下一周期",
+    "n_definition": "触发一次 BD 之前，连续发生的 Spin 数量",
+    "n_min": 1,
+    "n_determination": "dynamic_by_game_rules",
+    "bd_trigger": "每 N 次 Spin 后触发一次 BD",
+    "activation_rule": "只有下层机制启用 BD 时，N 与 BD 才进入实际流程；机制母型可以同时禁用 N 与 BD，品类原型也可以在母型先验上重新启用并扩展构筑循环。",
+    "build_state_symbol": "theta",
+    "build_state_symbol_is_primary_term": false
+  },
+  "confirmed_term_rules": {
+    "SingleSpin_Symbol": {
+      "strict_multiset": false,
+      "description": "可以是单个符号、一组无序符号，或由具体机制定义的其他结构。"
+    },
+    "Put": {
+      "control_types": [
+        "auto",
+        "semi_manual",
+        "full_manual"
+      ]
+    },
+    "Show_TP": {
+      "types": [
+        "0D_multiset",
+        "1D_sequence",
+        "1D_ring",
+        "2D_grid",
+        "2D_physical"
+      ]
+    },
+    "C1": {
+      "name": "符号协同",
+      "description": "来源于先验装置及玩家先验知识，几乎不需要学习，或只需学习少量变化点。"
+    },
+    "C2": {
+      "name": "协同结果演绎",
+      "short_name": "结果演绎",
+      "optional": true,
+      "depends_on": "C1 基础结果",
+      "description": "作用于 C1 基础结果之上的可选二次规则层，负责对协同结果进行修饰、转换或映射，形成最终的 Spin_Result。",
+      "primary_types": [
+        "修饰型演绎",
+        "转译型演绎"
+      ]
+    },
+    "BD": {
+      "scope_principle": "可以修改公式中的大部分可配置变量",
+      "scope_is_restricted_by_lower_layers": true
+    }
+  },
+  "stable_items": [
+    "体验目标为持续爱干",
+    "体验模型为双峰多巴胺",
+    "单次 Spin 核心流程为 Random → Put → Combo；启用长期构筑时再进入 N → BD",
+    "Random 只直接作用于 Pool_Symbol",
+    "Put 与 Combo 共用 Show_TP",
+    "第一峰覆盖 Random + Put",
+    "第二峰覆盖 Combo",
+    "Show_TP 与 Show_State 分开",
+    "SingleSpin_Symbol 不强制定义为无序多重集",
+    "Put 采用自动、微手动、全手动三类",
+    "Show_TP 沿用五种空间类型",
+    "C1 正式名称为符号协同",
+    "C2 正式名称为协同结果演绎，页面简称结果演绎",
+    "C2 位于 C1 基础结果之后，并且可以不启用",
+    "当 BD 启用时，N 大于等于 1 且由游戏规则动态决定",
+    "BD 原则上可以修改大部分可配置变量",
+    "下层机制可以禁用 N 与 BD，后续品类也可以重新启用构筑循环",
+    "下层节点必须回到公式字段"
+  ],
+  "pending_decisions": [
+    {
+      "id": "put_boundary_cases",
+      "question": "微手动与全手动在边界案例中如何判定？"
+    },
+    {
+      "id": "c1_subtypes",
+      "question": "符号协同需要哪些正式子类型？"
+    },
+    {
+      "id": "c2_subtypes",
+      "question": "修饰型演绎与转译型演绎还需要哪些细分类型和边界案例？"
+    },
+    {
+      "id": "bd_lower_layer_limits",
+      "question": "各机制母型允许 BD 修改哪些变量、禁止修改哪些变量？"
+    },
+    {
+      "id": "show_tp_multilayer",
+      "question": "Show_TP 的尺寸、边界和多层承载如何表达？"
+    }
+  ],
+  "source_policy": {
+    "legacy_framework": "reference_only",
+    "legacy_values_require_reconfirmation": true,
+    "runtime_dependency_on_legacy": false
+  }
+}

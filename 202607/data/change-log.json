@@ -1,0 +1,52 @@
+{
+  "version": "202607-draft.1",
+  "items": [
+    {
+      "id": "change.20260726113354418.6ba7um",
+      "timestamp": "2026-07-26T11:33:54.416Z",
+      "action": "confirm",
+      "node_id": "mechanism.slot",
+      "node_name": "Slot",
+      "node_type": "mechanism_archetype",
+      "field": "Pool_Symbol",
+      "before": {
+        "operation": "fix",
+        "constraint_label": "固定符号池",
+        "summary": "传统 Slot 的符号身份、数量或转轴条由游戏预先配置，玩家不能通过构筑改变 Pool_Symbol。"
+      },
+      "after": {
+        "operation": "fix",
+        "constraint_label": "固定符号池",
+        "summary": "传统 Slot 的符号身份、数量或转轴条由游戏预先配置，玩家不能通过构筑改变 Pool_Symbol。",
+        "review_status": "confirmed",
+        "review_note": "",
+        "last_modified_at": "2026-07-26T11:33:54.416Z",
+        "confirmed_at": "2026-07-26T11:33:54.416Z"
+      },
+      "note": ""
+    },
+    {
+      "id": "change.20260724233245798.xstvj7",
+      "timestamp": "2026-07-24T23:32:45.797Z",
+      "action": "update",
+      "node_id": "mechanism.slot",
+      "node_name": "Slot",
+      "node_type": "mechanism_archetype",
+      "field": "C2",
+      "before": {
+        "operation": "disable",
+        "constraint_label": "无 C₂",
+        "summary": "传统 Slot 母型只要求存在可识别的 C₁，不默认要求在 C₁ 基础结果之后再加入独立的结果演绎层。"
+      },
+      "after": {
+        "operation": "disable",
+        "constraint_label": "无 C₂",
+        "summary": "传统 Slot 母型只要求存在可识别的 C₁，不默认要求在 C₁ 基础结果之后再加入独立的结果演绎层。",
+        "review_status": "pending",
+        "review_note": "",
+        "last_modified_at": "2026-07-24T23:32:45.797Z"
+      },
+      "note": ""
+    }
+  ]
+}

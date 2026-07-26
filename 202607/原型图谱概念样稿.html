@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>原型图谱 · 概念样稿</title>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   html-viz Design System
+   Dark theme CSS for system visualization pages.
+   Paste entire contents into <style> tag of your HTML output.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Core Reset + Body ─────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    background: #0f0f1a;
+    color: #e8e8f0;
+    line-height: 1.6;
+    padding: 24px 20px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ── */
+  .hero {
+    text-align: center;
+    padding: 48px 20px 36px;
+    border-bottom: 1px solid #2a2a40;
+    margin-bottom: 40px;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #6c63ff, #3ecfcf);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: 38px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #c9b8ff, #3ecfcf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+  .hero .subtitle {
+    color: #888;
+    font-size: 16px;
+  }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6c63ff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #2a2a40;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  /* ── What is it ── */
+  .what-box {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 1px solid #2a2a50;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .what-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6c63ff, #3ecfcf);
+  }
+  .what-box p {
+    color: #c0c0d8;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+  .what-box p:last-child { margin-bottom: 0; }
+  .highlight { color: #3ecfcf; font-weight: 600; }
+
+  /* ── Layer architecture ── */
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .layer {
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .layer-L0 { background: linear-gradient(135deg, #1f1535, #251c42); border: 1px solid #4a3f7a; }
+  .layer-L1 { background: linear-gradient(135deg, #1a2535, #1c2d42); border: 1px solid #3a5f8a; }
+  .layer-L2 { background: linear-gradient(135deg, #132520, #163028); border: 1px solid #2a6a50; }
+  .layer-L3 { background: linear-gradient(135deg, #252015, #2d2a10); border: 1px solid #6a5a20; }
+
+  .layer-badge {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .layer-L0 .layer-badge { background: #4a3f7a; color: #c9b8ff; }
+  .layer-L1 .layer-badge { background: #3a5f8a; color: #9ecfff; }
+  .layer-L2 .layer-badge { background: #2a6a50; color: #7effc8; }
+  .layer-L3 .layer-badge { background: #6a5a20; color: #ffe88a; }
+
+  .layer-content h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .layer-content p {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 8px;
+  }
+  .agent-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .agent-tag {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+  }
+  .layer-L0 .agent-tag { background: #2d2250; color: #b4a0ff; border: 1px solid #4a3f7a; }
+  .layer-L1 .agent-tag { background: #152030; color: #80bfff; border: 1px solid #3a5f8a; }
+  .layer-L2 .agent-tag { background: #0d2018; color: #60dda0; border: 1px solid #2a6a50; }
+  .layer-L3 .agent-tag { background: #201c00; color: #e0c060; border: 1px solid #6a5a20; }
+
+  /* Arrow between layers */
+  .layer-arrow {
+    text-align: center;
+    color: #444;
+    font-size: 20px;
+    margin: -4px 0;
+  }
+
+  /* ── File structure ── */
+  .file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .file-card {
+    background: #1a1a28;
+    border: 1px solid #2a2a40;
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .file-card .icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .file-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    font-family: 'SF Mono', monospace;
+  }
+  .file-card p { font-size: 12px; color: #888; line-height: 1.5; }
+  .file-card .count {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #6c63ff;
+    background: #1e1a35;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  /* ── How it's written ── */
+  .structure-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .struct-block {
+    background: #131320;
+    border: 1px solid #252535;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .struct-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1a1a2c;
+    border-bottom: 1px solid #252535;
+  }
+  .struct-num {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6c63ff, #3ecfcf);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #fff;
+    flex-shrink: 0;
+  }
+  .struct-header h4 { font-size: 14px; font-weight: 700; color: #fff; }
+  .struct-header span { font-size: 11px; color: #666; font-family: monospace; margin-left: auto; }
+  .struct-body {
+    padding: 16px 20px;
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.7;
+  }
+  .struct-body code {
+    display: block;
+    background: #0d0d1a;
+    border: 1px solid #222238;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 11.5px;
+    color: #c9b8ff;
+    white-space: pre;
+    overflow-x: auto;
+    margin: 10px 0;
+    line-height: 1.6;
+  }
+  .struct-body .note {
+    background: #1a1a2c;
+    border-left: 3px solid #6c63ff;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    color: #888;
+    margin-top: 10px;
+  }
+
+  /* ── How to use ── */
+  .usage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 600px) {
+    .usage-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 28px; }
+  }
+  .usage-card {
+    background: #1a1a28;
+    border: 1px solid #2a2a40;
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .usage-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .usage-card .emoji { font-size: 18px; }
+  .cmd {
+    background: #0d0d1a;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'SF Mono', monospace;
+    font-size: 11px;
+    color: #7effc8;
+    margin-bottom: 6px;
+  }
+  .cmd .at { color: #c9b8ff; }
+  .cmd .comment { color: #555; }
+
+  /* ── Workflow timeline ── */
+  .workflow-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 13px;
+  }
+  .workflow-table th {
+    text-align: left;
+    padding: 10px 14px;
+    color: #666;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #222;
+  }
+  .workflow-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #1a1a28;
+    vertical-align: top;
+  }
+  .workflow-table tr:last-child td { border-bottom: none; }
+  .workflow-table tr:hover td { background: #151520; }
+  .wf-name { color: #fff; font-weight: 600; white-space: nowrap; }
+  .wf-flow { color: #888; font-size: 12px; line-height: 1.8; }
+  .wf-flow .arrow { color: #3ecfcf; margin: 0 4px; }
+  .wf-duration {
+    color: #ffe88a;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    background: #252010;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  /* ── Design principles ── */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .principle-card {
+    background: #131320;
+    border: 1px solid #252535;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .principle-card .p-num {
+    font-size: 11px;
+    font-weight: 800;
+    color: #6c63ff;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .principle-card h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .principle-card p { font-size: 12px; color: #888; line-height: 1.6; }
+  .principle-card .key {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    background: #1e1a35;
+    color: #b4a0ff;
+    border: 1px solid #3a3060;
+  }
+
+  /* ── HITL Flow ── */
+  .hitl-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 40px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .hitl-step {
+    flex-shrink: 0;
+    background: #1a1a28;
+    border: 1px solid #2a2a40;
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .hitl-step .hs-icon { font-size: 22px; margin-bottom: 4px; }
+  .hitl-step .hs-label { font-size: 11px; color: #fff; font-weight: 600; }
+  .hitl-step .hs-sub { font-size: 10px; color: #666; margin-top: 2px; }
+  .hitl-step.ai { border-color: #4a3f7a; background: #1f1535; }
+  .hitl-step.human { border-color: #2a6a50; background: #132520; }
+  .hitl-arrow {
+    flex-shrink: 0;
+    color: #3ecfcf;
+    font-size: 16px;
+    padding: 0 6px;
+  }
+  .hitl-arrow.red { color: #ff6b6b; }
+
+  /* ── Conflict rules ── */
+  .conflict-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .conflict-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #1a1a28;
+    border: 1px solid #2a2a40;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13px;
+  }
+  .cb-trigger { color: #c9b8ff; font-family: monospace; font-size: 12px; white-space: nowrap; }
+  .cb-arrow { color: #3ecfcf; flex-shrink: 0; }
+  .cb-result { color: #e0e0f0; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid #2a2a40;
+    color: #444;
+    font-size: 12px;
+    margin-top: 20px;
+  }
+  .footer strong { color: #6c63ff; }
+
+/* ── Workflow Card Components ───────────────────────────────── */
+/* ── Workflow detail styles ── */
+.wf-detail {
+  margin-bottom: 36px;
+  background: #131320;
+  border: 1px solid #252535;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.wf-detail-header {
+  background: linear-gradient(135deg, #1a1a2c, #1e1e38);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid #252535;
+  cursor: pointer;
+  user-select: none;
+}
+.wf-detail-header .wf-icon { font-size: 26px; flex-shrink: 0; }
+.wf-detail-header .wf-meta { flex: 1; }
+.wf-detail-header h3 { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.wf-detail-header p { font-size: 12px; color: #777; }
+.wf-detail-header .wf-dur {
+  font-size: 12px; font-weight: 700; color: #ffe88a;
+  background: #252010; padding: 4px 12px; border-radius: 8px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.wf-detail-header .expand-icon {
+  color: #555; font-size: 14px; transition: transform .3s; flex-shrink: 0;
+}
+.wf-detail.open .expand-icon { transform: rotate(180deg); }
+.wf-body { display: none; padding: 0 24px 24px; }
+.wf-detail.open .wf-body { display: block; }
+
+/* Agents strip */
+.wf-agents-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 16px 0 20px;
+  border-bottom: 1px solid #1e1e30;
+  margin-bottom: 20px;
+}
+.wf-agents-row .wf-agent-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: #1a1a2c; border: 1px solid #2a2a45;
+  border-radius: 8px; padding: 5px 10px;
+  font-size: 11px; color: #c0b8ff;
+  font-family: 'SF Mono', monospace;
+}
+.wf-agent-chip .chip-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.chip-L0 { background: #9985ff; }
+.chip-L1 { background: #5cb8ff; }
+.chip-L2 { background: #40d9a0; }
+.chip-L3 { background: #ffcc55; }
+.chip-skill { background: #ff8c55; }
+
+/* Phase flow */
+.phase-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.phase-item {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 0;
+  position: relative;
+}
+.phase-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 44px;
+  top: 44px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #3ecfcf44, transparent);
+}
+.phase-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
+  padding-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+.phase-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 4px #131320;
+}
+.phase-dur {
+  font-size: 10px; color: #555; margin-top: 6px;
+  text-align: center; line-height: 1.3;
+}
+.phase-right {
+  padding: 16px 0 28px 16px;
+}
+.phase-right h4 {
+  font-size: 14px; font-weight: 700; color: #eee; margin-bottom: 12px;
+}
+
+/* IO row */
+.io-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+.io-box {
+  background: #0d0d1a; border: 1px solid #1e1e30;
+  border-radius: 8px; padding: 8px 10px;
+}
+.io-box .io-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 5px;
+}
+.io-label-in { color: #5cb8ff; }
+.io-label-out { color: #40d9a0; }
+.io-box ul { list-style: none; }
+.io-box ul li {
+  font-size: 11px; color: #888; padding: 2px 0;
+  display: flex; align-items: flex-start; gap: 5px;
+}
+.io-box ul li::before { content: '·'; color: #444; flex-shrink: 0; }
+.io-arrow { color: #3ecfcf; font-size: 18px; padding-top: 12px; text-align: center; }
+
+/* Participant chips in phase */
+.phase-participants {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+}
+.part-chip {
+  font-size: 11px; padding: 3px 9px; border-radius: 6px;
+  font-family: 'SF Mono', monospace; display: flex; align-items: center; gap: 5px;
+}
+.part-agent { background: #1e1e35; color: #b4a0ff; border: 1px solid #3a3060; }
+.part-skill { background: #1e1a10; color: #ffaa60; border: 1px solid #504020; }
+.part-tmpl  { background: #101e18; color: #60d9a0; border: 1px solid #205040; }
+.part-chip .p-icon { font-size: 10px; }
+
+/* Level badge mini */
+.level-mini {
+  font-size: 9px; font-weight: 800; letter-spacing: 1px;
+  padding: 2px 6px; border-radius: 4px;
+}
+.lvl-L0 { background: #2d2250; color: #b4a0ff; }
+.lvl-L1 { background: #152030; color: #80bfff; }
+.lvl-L2 { background: #0d2018; color: #60dda0; }
+.lvl-L3 { background: #201c00; color: #e0c060; }
+
+/* Gate badge */
+.gate-box {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #1a1208; border: 1px solid #4a3800;
+  border-radius: 6px; padding: 4px 10px; margin-top: 6px;
+  font-size: 11px; color: #ffcc55;
+}
+
+/* ── Phase Flow + I/O Annotation ───────────────────────────── */
+.dep-map {
+  background: #0e0e1a;
+  border: 1px solid #252535;
+  border-radius: 16px;
+  padding: 28px 28px 32px;
+  margin-bottom: 40px;
+}
+.dep-map-heading {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #555;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dep-map-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #1e1e30;
+}
+
+/* Phase rows */
+.dep-phase {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 0;
+}
+.dep-phase-label {
+  width: 80px;
+  flex-shrink: 0;
+  padding-top: 10px;
+  text-align: right;
+}
+.dep-phase-label .pl-tag {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.dep-phase-label .pl-name {
+  font-size: 10px;
+  color: #444;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+/* Connector column */
+.dep-connector {
+  width: 80px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 6px;
+}
+.dep-vline {
+  width: 2px;
+  flex: 1;
+  background: linear-gradient(to bottom, #2a2a40, transparent);
+  min-height: 28px;
+}
+.dep-arrow-down {
+  color: #333;
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Cards grid */
+.dep-cards {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 6px 0 6px;
+}
+
+.dep-card {
+  border-radius: 10px;
+  border: 1px solid;
+  padding: 10px 14px;
+  min-width: 148px;
+  position: relative;
+}
+.dep-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dep-card-en {
+  font-size: 10px;
+  opacity: 0.5;
+  letter-spacing: 0.5px;
+}
+.dep-card-deps {
+  margin-top: 7px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.dep-dep-chip {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  opacity: 0.75;
+}
+
+/* Color variants */
+.dc-human {
+  background: rgba(248,113,113,0.06);
+  border-color: rgba(248,113,113,0.25);
+  color: #f87171;
+}
+.dc-human .dep-dep-chip { background: rgba(248,113,113,0.12); color: #f87171; }
+
+.dc-conception {
+  background: rgba(240,180,41,0.07);
+  border-color: rgba(240,180,41,0.3);
+  color: #f0b429;
+}
+.dc-conception .dep-dep-chip { background: rgba(240,180,41,0.12); color: #f0b429; }
+
+.dc-world {
+  background: rgba(57,211,83,0.06);
+  border-color: rgba(57,211,83,0.25);
+  color: #39d353;
+}
+.dc-world .dep-dep-chip { background: rgba(57,211,83,0.12); color: #39d353; }
+
+.dc-core {
+  background: rgba(88,166,255,0.06);
+  border-color: rgba(88,166,255,0.25);
+  color: #58a6ff;
+}
+.dc-core .dep-dep-chip { background: rgba(88,166,255,0.12); color: #58a6ff; }
+
+.dc-detail {
+  background: rgba(163,113,247,0.06);
+  border-color: rgba(163,113,247,0.25);
+  color: #a371f7;
+}
+.dc-detail .dep-dep-chip { background: rgba(163,113,247,0.12); color: #a371f7; }
+
+.dc-ops {
+  background: rgba(251,146,60,0.06);
+  border-color: rgba(251,146,60,0.25);
+  color: #fb923c;
+}
+.dc-ops .dep-dep-chip { background: rgba(251,146,60,0.12); color: #fb923c; }
+
+.dc-util {
+  background: rgba(100,100,120,0.06);
+  border-color: rgba(100,100,120,0.2);
+  color: #666;
+}
+.dc-util .dep-dep-chip { background: rgba(100,100,120,0.12); color: #666; }
+
+/* Phase label colors */
+.pl-human { background: rgba(248,113,113,0.12); color: #f87171; }
+.pl-p1 { background: rgba(240,180,41,0.12); color: #f0b429; }
+.pl-p2 { background: rgba(57,211,83,0.12); color: #39d353; }
+.pl-p3 { background: rgba(88,166,255,0.12); color: #58a6ff; }
+.pl-p4 { background: rgba(163,113,247,0.12); color: #a371f7; }
+.pl-ops { background: rgba(251,146,60,0.12); color: #fb923c; }
+.pl-util { background: rgba(100,100,120,0.12); color: #888; }
+
+/* Arrow connector between phases */
+.dep-between {
+  display: flex;
+  align-items: stretch;
+  margin: 0;
+  padding-left: 96px; /* label width + gap */
+}
+.dep-between-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 2px;
+  height: 24px;
+}
+.dep-between-line::before {
+  content: '';
+  flex: 1;
+  width: 2px;
+  background: #252535;
+}
+.dep-between-line::after {
+  content: '▾';
+  color: #333;
+  font-size: 12px;
+  line-height: 1;
+  margin-top: -2px;
+}
+.dep-note {
+  font-size: 10px;
+  color: #444;
+  margin-top: 4px;
+  padding-left: 96px;
+  margin-bottom: 20px;
+}
+.dep-divider {
+  border: none;
+  border-top: 1px solid #1a1a28;
+  margin: 20px 0;
+}
+
+/* ── Prototype graph mockup overrides ── */
+body {
+  max-width: 1440px;
+  padding: 24px 28px 72px;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(108,99,255,.16), transparent 34%),
+    #0b0c14;
+}
+.hero { margin-bottom: 28px; padding-top: 34px; }
+.hero-stats { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:20px; }
+.stat-pill { border:1px solid #30324d; background:#151725; border-radius:999px; padding:6px 12px; font-size:11px; color:#aeb3c9; }
+.stat-pill b { color:#fff; margin-right:4px; }
+.callout {
+  border:1px solid #2d3657; background:linear-gradient(135deg,rgba(30,40,70,.68),rgba(18,22,37,.86));
+  padding:18px 20px; border-radius:14px; color:#b7bdd0; font-size:13px; margin-bottom:28px;
+}
+.callout strong { color:#75d9ff; }
+.formula {
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px;
+  padding:17px; margin:14px 0 6px; border-radius:12px; background:#0d101c; border:1px solid #242a42;
+  font-family:'SF Mono','Menlo',monospace; font-size:13px;
+}
+.f-op { color:#77c8ff; font-weight:750; }
+.f-scope { color:#f5bf68; }
+.f-arrow { color:#59627d; font-size:17px; }
+.graph-toolbar {
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin:0 0 14px;
+}
+.legend { display:flex; gap:14px; flex-wrap:wrap; font-size:11px; color:#8b91a8; }
+.legend span { display:flex; align-items:center; gap:7px; }
+.line-key { width:24px; height:0; border-top:2px solid #5cb8ff; }
+.line-key.inherit { border-color:#47d6a0; }
+.line-key.compose { border-color:#bc87ff; border-top-style:dashed; }
+.graph-shell {
+  display:grid; grid-template-columns:minmax(780px,1fr) 340px; gap:16px; align-items:stretch; margin-bottom:34px;
+}
+.graph-scroll {
+  position:relative; min-height:720px; overflow:auto; border:1px solid #252a40; border-radius:18px;
+  background:
+    linear-gradient(rgba(34,38,58,.36) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,38,58,.36) 1px,transparent 1px),
+    radial-gradient(circle at 50% 10%,rgba(95,116,255,.1),transparent 34%),
+    #0e101a;
+  background-size:24px 24px,24px 24px,auto,auto;
+}
+.graph-canvas { position:relative; min-width:980px; min-height:720px; padding:28px 34px 40px; }
+.edge-layer { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+.edge { fill:none; stroke-width:2; opacity:.78; }
+.edge.map { stroke:#5cb8ff; }
+.edge.inherit { stroke:#47d6a0; }
+.edge.compose { stroke:#bc87ff; stroke-dasharray:7 6; }
+.edge-dot { filter:drop-shadow(0 0 4px currentColor); }
+.graph-row {
+  position:relative; z-index:2; display:grid; gap:18px; align-items:start;
+}
+.row-experience { grid-template-columns:1fr; justify-items:center; margin-bottom:80px; }
+.row-mothers { grid-template-columns:repeat(4,1fr); margin-bottom:100px; }
+.row-prototypes { grid-template-columns:repeat(4,1fr); margin-bottom:84px; }
+.row-variants { grid-template-columns:repeat(4,1fr); }
+.row-label {
+  position:absolute; left:14px; transform:translateY(-18px); font-size:9px; letter-spacing:1.6px;
+  color:#5d647d; text-transform:uppercase; font-weight:800; z-index:3;
+}
+.label-mothers { top:174px; }
+.label-prototypes { top:376px; }
+.label-variants { top:576px; }
+.proto-node {
+  appearance:none; width:100%; min-height:96px; text-align:left; cursor:pointer; color:#e9ecf7;
+  border:1px solid #30354d; background:linear-gradient(145deg,#171a28,#12141f);
+  border-radius:14px; padding:13px 14px; position:relative; transition:.18s ease;
+  box-shadow:0 10px 28px rgba(0,0,0,.18);
+}
+.proto-node:hover { transform:translateY(-2px); border-color:#6a7195; }
+.proto-node.active { outline:2px solid #75d9ff; outline-offset:2px; }
+.proto-node .node-type { font-size:9px; letter-spacing:1.2px; color:#707891; font-weight:800; margin-bottom:6px; }
+.proto-node h3 { font-size:14px; margin:0 0 5px; color:#fff; }
+.proto-node p { font-size:10px; line-height:1.45; color:#838aa1; margin:0; }
+.proto-node .node-badge {
+  position:absolute; right:9px; top:9px; font-size:9px; border-radius:999px; padding:2px 7px;
+  border:1px solid #333a55; color:#8b94ad; background:#10121d;
+}
+.proto-node.experience { max-width:380px; min-height:105px; border-color:#5374bc; background:linear-gradient(145deg,#182844,#131a2d); }
+.proto-node.mother { border-color:#5c4b89; background:linear-gradient(145deg,#211b38,#171425); }
+.proto-node.prototype { border-color:#2f6b59; background:linear-gradient(145deg,#142c27,#111f1c); }
+.proto-node.variant { border-color:#785b27; background:linear-gradient(145deg,#2d2617,#201b12); }
+.proto-node.hybrid { border-color:#845ec2; background:linear-gradient(145deg,#2a1d3d,#191326); }
+.empty-node { opacity:.55; border-style:dashed; }
+.detail-panel {
+  min-height:720px; border:1px solid #2c3148; border-radius:18px; background:#11131e; overflow:hidden;
+  position:sticky; top:14px;
+}
+.detail-head { padding:20px; background:linear-gradient(145deg,#1c2031,#151725); border-bottom:1px solid #292d42; }
+.detail-kicker { font-size:9px; letter-spacing:1.5px; color:#7a829d; font-weight:800; margin-bottom:7px; }
+.detail-head h2 { font-size:21px; margin:0 0 7px; }
+.detail-head p { color:#8e95aa; font-size:12px; margin:0; }
+.detail-body { padding:18px 20px 22px; }
+.parent-row { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 18px; }
+.parent-chip { border:1px solid #3a4160; color:#afb7d0; background:#191c2a; font-size:10px; padding:3px 8px; border-radius:6px; }
+.panel-title { font-size:10px; letter-spacing:1.4px; color:#67708a; font-weight:800; margin:18px 0 10px; }
+.fingerprint { display:flex; flex-direction:column; gap:7px; }
+.fp-row { display:grid; grid-template-columns:88px 1fr; gap:8px; padding:8px 10px; background:#0c0e17; border:1px solid #23273a; border-radius:8px; }
+.fp-key { color:#74c7ff; font:10px 'SF Mono','Menlo',monospace; }
+.fp-value { color:#a7aec1; font-size:10px; line-height:1.45; }
+.diff-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+.diff-list li { font-size:11px; color:#9aa1b5; padding:8px 10px 8px 30px; border:1px solid #24283b; border-radius:8px; background:#0e1019; position:relative; }
+.diff-list li::before { position:absolute; left:10px; top:8px; font-size:9px; padding:1px 4px; border-radius:4px; content:attr(data-op); background:#27213a; color:#c9a8ff; }
+.scale-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:34px; }
+.scale-card { padding:17px; border-radius:12px; background:#141622; border:1px solid #292d41; }
+.scale-card h4 { font-size:13px; color:#fff; margin-bottom:7px; }
+.scale-card p { font-size:11px; color:#858ca1; line-height:1.55; }
+.mock-note { color:#697086; font-size:11px; text-align:center; margin-top:-20px; margin-bottom:30px; }
+@media (max-width:1100px) {
+  .graph-shell { grid-template-columns:1fr; }
+  .detail-panel { position:relative; min-height:auto; }
+}
+@media (max-width:720px) {
+  body { padding:16px 12px 52px; }
+  .scale-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="badge">202607 · CONCEPT MOCKUP</div>
+  <h1>多机制母型 · 原型图谱</h1>
+  <p class="subtitle">体验模型共享一套公式，多个机制母型并列分化；原型可继承，也可跨母型组合</p>
+  <div class="hero-stats">
+    <span class="stat-pill"><b>1</b>体验模型</span>
+    <span class="stat-pill"><b>4</b>示意母型</span>
+    <span class="stat-pill"><b>N</b>品类原型</span>
+    <span class="stat-pill"><b>N×M</b>品类变体</span>
+  </div>
+</header>
+
+<div class="callout">
+  <strong>这不是最终分类结果。</strong> 当前页面只验证信息架构：所有节点都必须回到同一条体验公式；点击任意节点，右侧查看它的“公式指纹”和相对父级的约束变化。
+  <div class="formula">
+    <span class="f-op">Random</span><span class="f-scope">@Pool_Symbol</span>
+    <span class="f-arrow">→</span>
+    <span class="f-op">Put</span><span class="f-scope">@Show_TP</span>
+    <span class="f-arrow">→</span>
+    <span class="f-op">Combo(C₁,C₂)</span><span class="f-scope">@Show_TP</span>
+    <span class="f-arrow">→</span>
+    <span class="f-op">BD</span>
+  </div>
+</div>
+
+<div class="section-title">01 原型图谱概念视图</div>
+<div class="graph-toolbar">
+  <div class="legend">
+    <span><i class="line-key"></i>体验映射</span>
+    <span><i class="line-key inherit"></i>继承 / 特化</span>
+    <span><i class="line-key compose"></i>跨母型组合</span>
+  </div>
+  <span class="stat-pill">点击节点查看公式变化</span>
+</div>
+
+<div class="graph-shell">
+  <div class="graph-scroll">
+    <div class="graph-canvas" id="graphCanvas">
+      <svg class="edge-layer" id="edgeLayer" aria-hidden="true"></svg>
+      <div class="row-label label-mothers">MECHANISM MOTHERS · 机制母型</div>
+      <div class="row-label label-prototypes">CATEGORY PROTOTYPES · 品类原型</div>
+      <div class="row-label label-variants">CATEGORY VARIANTS · 品类变体</div>
+
+      <div class="graph-row row-experience">
+        <button class="proto-node experience active" data-node="experience" id="node-experience">
+          <span class="node-badge">共享根模型</span>
+          <div class="node-type">体验模型</div>
+          <h3>双峰多巴胺</h3>
+          <p>定义体验时间结构，不规定具体装置形态。</p>
+        </button>
+      </div>
+
+      <div class="graph-row row-mothers">
+        <button class="proto-node mother" data-node="slot" id="node-slot">
+          <span class="node-badge">M-01</span><div class="node-type">机制母型</div><h3>Slot</h3><p>槽位、符号揭晓与组合结算的先验。</p>
+        </button>
+        <button class="proto-node mother" data-node="dice" id="node-dice">
+          <span class="node-badge">M-02</span><div class="node-type">机制母型</div><h3>Dice</h3><p>面值随机、骰面操作与结果判定的先验。</p>
+        </button>
+        <button class="proto-node mother" data-node="roulette" id="node-roulette">
+          <span class="node-badge">M-03</span><div class="node-type">机制母型</div><h3>Roulette</h3><p>环形空间、押注与落点揭晓的先验。</p>
+        </button>
+        <button class="proto-node mother" data-node="pachinko" id="node-pachinko">
+          <span class="node-badge">M-04</span><div class="node-type">机制母型</div><h3>Pachinko</h3><p>连续物理路径、碰撞与落点结算的先验。</p>
+        </button>
+      </div>
+
+      <div class="graph-row row-prototypes">
+        <button class="proto-node prototype" data-node="landlord" id="node-landlord">
+          <span class="node-badge">P-01</span><div class="node-type">品类原型</div><h3>幸运房东型 Slot 构筑</h3><p>符号池成长、邻接协同与周期压力。</p>
+        </button>
+        <button class="proto-node hybrid" data-node="hybrid" id="node-hybrid">
+          <span class="node-badge">组合示意</span><div class="node-type">混合品类原型</div><h3>Dice × Slot 构筑</h3><p>以 Dice 为主母型，组合 Slot 的槽位揭晓。</p>
+        </button>
+        <button class="proto-node prototype" data-node="wheel" id="node-wheel">
+          <span class="node-badge">P-03</span><div class="node-type">品类原型</div><h3>轮盘战术原型</h3><p>环形 Show_TP 与落点触发链。</p>
+        </button>
+        <button class="proto-node prototype" data-node="peglin" id="node-peglin">
+          <span class="node-badge">P-04</span><div class="node-type">品类原型</div><h3>弹珠构筑原型</h3><p>物理路径、碰撞对象池与伤害结算。</p>
+        </button>
+      </div>
+
+      <div class="graph-row row-variants">
+        <button class="proto-node variant" data-node="city" id="node-city">
+          <span class="node-badge">V-01</span><div class="node-type">品类变体</div><h3>幸运城市</h3><p>继承幸运房东型原型，改变语义与系统约束。</p>
+        </button>
+        <button class="proto-node variant" data-node="hybridV" id="node-hybridV">
+          <span class="node-badge">V-02</span><div class="node-type">品类变体</div><h3>骰面工坊</h3><p>混合原型下继续固定 BD 与 Combo 规则。</p>
+        </button>
+        <button class="proto-node variant empty-node" data-node="future" id="node-future">
+          <span class="node-badge">可继续分化</span><div class="node-type">品类变体</div><h3>新轮盘变体</h3><p>允许在原型下继续增加任意深度节点。</p>
+        </button>
+        <button class="proto-node variant empty-node" data-node="future2" id="node-future2">
+          <span class="node-badge">可继续分化</span><div class="node-type">品类变体</div><h3>新物理变体</h3><p>继承母型先验，只记录自身差异。</p>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="detail-panel">
+    <div class="detail-head">
+      <div class="detail-kicker" id="detailType">EXPERIENCE MODEL</div>
+      <h2 id="detailName">双峰多巴胺</h2>
+      <p id="detailDesc">提供所有机制母型共同实现的体验时间结构。</p>
+    </div>
+    <div class="detail-body">
+      <div class="panel-title">关系</div>
+      <div class="parent-row" id="detailParents"><span class="parent-chip">全图共享根模型</span></div>
+
+      <div class="panel-title">公式指纹</div>
+      <div class="fingerprint" id="detailFingerprint"></div>
+
+      <div class="panel-title">相对父级的变化</div>
+      <ul class="diff-list" id="detailDiff"></ul>
+    </div>
+  </aside>
+</div>
+<p class="mock-note">示意名称仅用于验证结构；正式母型、原型与变体内容将在公式规范确认后录入。</p>
+
+<div class="section-title">02 这套图谱如何扩展</div>
+<div class="scale-grid">
+  <div class="scale-card">
+    <h4>多个母型并列</h4>
+    <p>Slot、Dice、Roulette、Pachinko 都映射同一体验公式，但分别对 Random、Put、Show_TP 与 Combo 施加不同先验。</p>
+  </div>
+  <div class="scale-card">
+    <h4>分支无限向下</h4>
+    <p>母型下可以有多个原型；原型下可以有多层变体。节点只保存差异，完整公式指纹通过继承自动合成。</p>
+  </div>
+  <div class="scale-card">
+    <h4>允许跨母型组合</h4>
+    <p>混合品类指定一个主母型，同时组合其他母型的部分先验。紫色虚线只表示“能力组合”，不等同于普通继承。</p>
+  </div>
+</div>
+
+<div class="footer">R_RougeSlot · 202607 原型图谱概念样稿 · 用于确认信息架构</div>
+
+<script>
+const nodeData = {
+  experience: {
+    type:'EXPERIENCE MODEL · 体验模型', name:'双峰多巴胺', desc:'提供所有机制母型共同实现的体验时间结构。',
+    parents:['全图共享根模型'],
+    fp:{'Random':'第一峰的期待来源','Put':'第一峰的揭晓与呈现','Show_TP':'Put / Combo 的体验承载空间','Combo':'第二峰的结算爆发','BD':'改变后续循环，形成持续投入'},
+    diff:[['define','定义两次峰值及其时间关系'],['open','不固定任何具体装置形态']]
+  },
+  slot: {
+    type:'MECHANISM MOTHER · 机制母型', name:'Slot', desc:'把双峰体验映射为槽位、符号揭晓与组合结算。',
+    parents:['体验映射：双峰多巴胺'],
+    fp:{'Pool_Symbol':'离散符号池','Random':'从符号池抽取本次符号','Put':'通常自动进入槽位','Show_TP':'槽位空间，具体维度仍可收窄','Combo':'按符号与位置关系结算','BD':'允许改变符号池或规则'},
+    diff:[['default','Put 默认自动放置'],['restrict','Random 只作用于 Pool_Symbol'],['open','Show_TP 与 Combo 规则留给原型决定']]
+  },
+  dice: {
+    type:'MECHANISM MOTHER · 机制母型', name:'Dice', desc:'把 Random 映射成骰面结果，并携带骰面操作先验。',
+    parents:['体验映射：双峰多巴胺'],
+    fp:{'Pool_Symbol':'骰面或骰子池','Random':'生成面值结果','Put':'投掷后自动 / 手动分配','Show_TP':'0D 多重集或目标槽位','Combo':'面值、同类与组合判定','BD':'增删骰面、升级骰子'},
+    diff:[['fix','随机对象具备离散面值'],['default','允许重掷、锁定等微手动'],['open','放置目标由品类原型确定']]
+  },
+  roulette: {
+    type:'MECHANISM MOTHER · 机制母型', name:'Roulette', desc:'以环形空间和单一落点揭晓承载第一峰。',
+    parents:['体验映射：双峰多巴胺'],
+    fp:{'Pool_Symbol':'环上区段或落点池','Random':'选择最终落点','Put':'结果映射至环形位置','Show_TP':'1D Ring','Combo':'落点、邻域与投注规则','BD':'调整环、权重或投注'},
+    diff:[['default','Show_TP 默认为 1D Ring'],['restrict','Put 必须形成环上落点'],['open','投注与协同规则可继续特化']]
+  },
+  pachinko: {
+    type:'MECHANISM MOTHER · 机制母型', name:'Pachinko', desc:'通过连续物理路径把 Random 与 Put 合并成可观看过程。',
+    parents:['体验映射：双峰多巴胺'],
+    fp:{'Pool_Symbol':'碰撞对象与落点集合','Random':'由初始条件与物理过程共同产生','Put':'连续路径中的动态安置','Show_TP':'2D Physical','Combo':'碰撞、路径与连锁','BD':'调整弹珠或场内对象'},
+    diff:[['default','Show_TP 默认为 2D Physical'],['extend','Put 具有连续动态过程'],['restrict','Combo 可读取路径和碰撞事件']]
+  },
+  landlord: {
+    type:'CATEGORY PROTOTYPE · 品类原型', name:'幸运房东型 Slot 构筑', desc:'从 Slot 母型中固定一套可复制的品类结构。',
+    parents:['主母型：Slot'],
+    fp:{'Pool_Symbol':'可增删、带稀有度的构筑池','Random':'每次 Spin 抽取符号','Put':'自动放入固定槽位','Show_TP':'2D 离散网格','Combo':'类型字典 + 邻接 + 触发','BD':'每轮选择符号 / 道具'},
+    diff:[['fix','Show_TP 固定为 2D Grid'],['fix','Put 固定为 Auto Place'],['extend','加入符号池构筑与周期压力']]
+  },
+  hybrid: {
+    type:'COMPOSED PROTOTYPE · 混合品类原型', name:'Dice × Slot 构筑', desc:'展示一个原型同时使用多个母型先验的情况。',
+    parents:['主母型：Dice','组合母型：Slot'],
+    fp:{'Pool_Symbol':'可构筑骰面 / 骰子池','Random':'骰面结果生成','Put':'将骰子自动放入 Slot 槽位','Show_TP':'2D 离散槽位','Combo':'面值关系 + 槽位关系','BD':'升级骰面并改变槽位规则'},
+    diff:[['inherit','继承 Dice 的面值随机'],['compose','组合 Slot 的槽位 Put'],['fix','Show_TP 固定为 2D Grid']]
+  },
+  wheel: {
+    type:'CATEGORY PROTOTYPE · 品类原型', name:'轮盘战术原型', desc:'在 Roulette 母型上建立环形构筑与触发链。',
+    parents:['主母型：Roulette'],
+    fp:{'Pool_Symbol':'可成长环区段','Random':'单点落位','Put':'自动映射到环','Show_TP':'1D Ring','Combo':'落点邻域 + 连续触发','BD':'替换区段、改变权重'},
+    diff:[['inherit','继承环形 Show_TP'],['extend','环区段可以构筑'],['fix','Combo 使用落点邻域']]
+  },
+  peglin: {
+    type:'CATEGORY PROTOTYPE · 品类原型', name:'弹珠构筑原型', desc:'在 Pachinko 母型上固定碰撞对象池与战斗产出。',
+    parents:['主母型：Pachinko'],
+    fp:{'Pool_Symbol':'可构筑弹珠池','Random':'发射参数与路径不确定性','Put':'物理下落过程','Show_TP':'2D Physical','Combo':'碰撞触发 + 路径累计','BD':'选择弹珠与遗物'},
+    diff:[['inherit','继承连续物理 Put'],['extend','碰撞对象成为可构筑内容'],['fix','Spin_Result 映射为战斗伤害']]
+  },
+  city: {
+    type:'CATEGORY VARIANT · 品类变体', name:'幸运城市', desc:'继承幸运房东型公式指纹，只记录城市化差异。',
+    parents:['Slot','幸运房东型 Slot 构筑'],
+    fp:{'Pool_Symbol':'城市设施 / 单位池','Random':'继承原型','Put':'继承自动槽位安置','Show_TP':'2D 城市网格','Combo':'城市功能邻接与产业链','BD':'选择设施并规划城市成长'},
+    diff:[['inherit','Random 与 Put 不变'],['override','符号语义改为城市设施'],['extend','Combo 增加城市功能链']]
+  },
+  hybridV: {
+    type:'CATEGORY VARIANT · 品类变体', name:'骰面工坊', desc:'混合原型下继续固定更具体的玩法规则。',
+    parents:['Dice × Slot 构筑'],
+    fp:{'Pool_Symbol':'工坊骰面池','Random':'继承骰面随机','Put':'自动进入生产槽位','Show_TP':'2D 工坊网格','Combo':'产线邻接 + 面值倍率','BD':'改造骰面与机器'},
+    diff:[['inherit','保留双母型组合'],['fix','Combo 固定为产线邻接'],['extend','BD 增加骰面改造']]
+  },
+  future: {
+    type:'CATEGORY VARIANT · 品类变体', name:'新轮盘变体', desc:'占位节点，用于确认分支能够继续向下生长。',
+    parents:['轮盘战术原型'], fp:{'状态':'尚未定义','继承':'自动获得父级完整公式指纹'}, diff:[['open','等待未来设计']]
+  },
+  future2: {
+    type:'CATEGORY VARIANT · 品类变体', name:'新物理变体', desc:'占位节点，用于确认内容无需提前穷举。',
+    parents:['弹珠构筑原型'], fp:{'状态':'尚未定义','继承':'自动获得父级完整公式指纹'}, diff:[['open','等待未来设计']]
+  }
+};
+
+const edges = [
+  ['experience','slot','map'],['experience','dice','map'],['experience','roulette','map'],['experience','pachinko','map'],
+  ['slot','landlord','inherit'],['dice','hybrid','inherit'],['roulette','wheel','inherit'],['pachinko','peglin','inherit'],
+  ['slot','hybrid','compose'],
+  ['landlord','city','inherit'],['hybrid','hybridV','inherit'],['wheel','future','inherit'],['peglin','future2','inherit']
+];
+
+function renderDetails(id) {
+  const d = nodeData[id];
+  document.querySelectorAll('.proto-node').forEach(n => n.classList.toggle('active', n.dataset.node === id));
+  document.getElementById('detailType').textContent = d.type;
+  document.getElementById('detailName').textContent = d.name;
+  document.getElementById('detailDesc').textContent = d.desc;
+  document.getElementById('detailParents').innerHTML = d.parents.map(x => '<span class="parent-chip">'+x+'</span>').join('');
+  document.getElementById('detailFingerprint').innerHTML = Object.entries(d.fp).map(([k,v]) =>
+    '<div class="fp-row"><span class="fp-key">'+k+'</span><span class="fp-value">'+v+'</span></div>'
+  ).join('');
+  document.getElementById('detailDiff').innerHTML = d.diff.map(([op,text]) =>
+    '<li data-op="'+op+'">'+text+'</li>'
+  ).join('');
+}
+
+function drawEdges() {
+  const canvas = document.getElementById('graphCanvas');
+  const svg = document.getElementById('edgeLayer');
+  const c = canvas.getBoundingClientRect();
+  svg.setAttribute('viewBox','0 0 '+canvas.clientWidth+' '+canvas.clientHeight);
+  svg.innerHTML = '';
+  edges.forEach(([from,to,type]) => {
+    const a = document.getElementById('node-'+from).getBoundingClientRect();
+    const b = document.getElementById('node-'+to).getBoundingClientRect();
+    const x1 = a.left - c.left + a.width/2;
+    const y1 = a.bottom - c.top;
+    const x2 = b.left - c.left + b.width/2;
+    const y2 = b.top - c.top;
+    const bend = Math.max(28,(y2-y1)*.48);
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d','M '+x1+' '+y1+' C '+x1+' '+(y1+bend)+', '+x2+' '+(y2-bend)+', '+x2+' '+y2);
+    path.setAttribute('class','edge '+type);
+    svg.appendChild(path);
+  });
+}
+document.querySelectorAll('.proto-node').forEach(node => node.addEventListener('click',()=>renderDetails(node.dataset.node)));
+window.addEventListener('resize',drawEdges);
+renderDetails('experience');
+requestAnimationFrame(drawEdges);
+</script>
+</body>
+</html>
+

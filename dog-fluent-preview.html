@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>狗品种 6 种正面狗头风格预览</title>
+<style>
+  body { margin:0; padding:32px; background:#15101e; color:#eee; font-family: system-ui, -apple-system, sans-serif; }
+  h1 { color:#fbbf24; letter-spacing:2px; }
+  .legend { color:#94a3b8; font-size:13px; margin-bottom:24px; }
+  .grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; max-width:900px; }
+  .card {
+    background: linear-gradient(180deg, #1e1530 0%, #261936 100%);
+    border:2px solid #475569; border-radius:12px; padding:18px;
+    text-align:center;
+  }
+  .card .icon { width:140px; height:140px; margin:auto; display:flex; align-items:center; justify-content:center; }
+  .card .icon img { width:100%; height:100%; }
+  .card .name { color:#fde68a; font-size:18px; font-weight:800; margin-top:12px; letter-spacing:2px; }
+  .card .desc { font-size:11px; color:#94a3b8; margin-top:6px; line-height:1.5; }
+  .card.face-1 { border-color:#f87171; }
+  .card.face-2 { border-color:#fb923c; }
+  .card.face-3 { border-color:#fbbf24; }
+  .card.face-4 { border-color:#34d399; }
+  .card.face-5 { border-color:#60a5fa; }
+  .card.face-6 { border-color:#a78bfa; }
+  .compare { margin-top:48px; padding:24px; background: rgba(0,0,0,0.3); border:1px dashed #475569; border-radius:10px; }
+  .compare h2 { color:#fde68a; margin-top:0; font-size:14px; letter-spacing:3px; }
+  .compare-row { display:flex; gap:24px; align-items:flex-end; justify-content:center; margin-top:12px; }
+  .compare-row .small { width:64px; height:64px; }
+  .lbl { font-size:10px; color:#94a3b8; text-align:center; margin-top:4px; }
+  .info { background: rgba(34, 197, 94, 0.1); border:1px solid rgba(34, 197, 94, 0.4); padding:14px 18px; border-radius:8px; margin-bottom:24px; }
+  .info h3 { margin:0 0 6px; color:#86efac; font-size:14px; }
+  .info p { margin:4px 0; font-size:12px; color:#bbf7d0; }
+  .warn { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.4); }
+  .warn h3 { color:#fde68a; }
+  .warn p { color:#fef3c7; }
+</style>
+</head>
+<body>
+<h1>🐕 6 种"正面狗头"风格预览 (混搭 emoji 集合)</h1>
+
+<div class="info">
+  <h3>✅ 思路：6 个不同 emoji 集合的 dog-face</h3>
+  <p>世界上没有现成的"6 个正面狗品种头"统一图标集（开源免费的）。</p>
+  <p>变通方案：用 6 个不同设计师的 dog-face SVG（同一种"emoji"，但来自不同图库）。视觉风格自然各异，配色统一是"狗头"。</p>
+  <p>每个 SVG 仅 1-2KB（除 fluent-emoji 18KB），都可 base64 内嵌。</p>
+</div>
+
+<p class="legend">6 个不同风格的"正面卡通狗头"。语义上都是"狗"，但视觉差异明显（Microsoft Fluent / Twitter / Google Noto / OpenMoji / Microsoft Fluent 3D / EmojiOne 老风格）。</p>
+
+<div class="grid">
+  <div class="card face-1">
+    <div class="icon"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg" alt=""/></div>
+    <div class="name">奇瓦瓦</div>
+    <div class="desc">face-1 · fluent-emoji-flat / dog-face<br>Microsoft Fluent · 棕色短毛卡通</div>
+  </div>
+
+  <div class="card face-2">
+    <div class="icon"><img src="https://api.iconify.design/twemoji/dog-face.svg" alt=""/></div>
+    <div class="name">柯基</div>
+    <div class="desc">face-2 · twemoji / dog-face<br>Twitter 风 · 大眼黄色狗头</div>
+  </div>
+
+  <div class="card face-3">
+    <div class="icon"><img src="https://api.iconify.design/noto/dog-face.svg" alt=""/></div>
+    <div class="name">柴犬</div>
+    <div class="desc">face-3 · noto / dog-face<br>Google Noto · 简洁现代风</div>
+  </div>
+
+  <div class="card face-4">
+    <div class="icon"><img src="https://api.iconify.design/openmoji/dog-face.svg" alt=""/></div>
+    <div class="name">金毛</div>
+    <div class="desc">face-4 · openmoji / dog-face<br>OpenMoji · 线条清新风</div>
+  </div>
+
+  <div class="card face-5">
+    <div class="icon"><img src="https://api.iconify.design/fluent-emoji/dog-face.svg" alt=""/></div>
+    <div class="name">德牧</div>
+    <div class="desc">face-5 · fluent-emoji / dog-face<br>Microsoft Fluent 3D · 立体光影</div>
+  </div>
+
+  <div class="card face-6">
+    <div class="icon"><img src="https://api.iconify.design/emojione/dog-face.svg" alt=""/></div>
+    <div class="name">哈士奇</div>
+    <div class="desc">face-6 · emojione / dog-face<br>EmojiOne · 老牌 emoji 风</div>
+  </div>
+</div>
+
+<div class="compare">
+  <h2>📐 实际游戏 cell 尺寸（64px）</h2>
+  <div class="compare-row">
+    <div><div class="small"><img src="https://api.iconify.design/fluent-emoji-flat/dog-face.svg" style="width:100%;height:100%"/></div><div class="lbl">奇瓦瓦</div></div>
+    <div><div class="small"><img src="https://api.iconify.design/twemoji/dog-face.svg" style="width:100%;height:100%"/></div><div class="lbl">柯基</div></div>
+    <div><div class="small"><img src="https://api.iconify.design/noto/dog-face.svg" style="width:100%;height:100%"/></div><div class="lbl">柴犬</div></div>
+    <div><div class="small"><img src="https://api.iconify.design/openmoji/dog-face.svg" style="width:100%;height:100%"/></div><div class="lbl">金毛</div></div>
+    <div><div class="small"><img src="https://api.iconify.design/fluent-emoji/dog-face.svg" style="width:100%;height:100%"/></div><div class="lbl">德牧</div></div>
+    <div><div class="small"><img src="https://api.iconify.design/emojione/dog-face.svg" style="width:100%;height:100%"/></div><div class="lbl">哈士奇</div></div>
+  </div>
+</div>
+
+<div class="info warn">
+  <h3>⚠ 这方案的缺点</h3>
+  <p>每个其实都是"标准 dog-face"，配色都是棕黄色系，玩家可能觉得"6 个都是同一只狗"。</p>
+  <p>视觉差异有但不大，6 个 cell 排在一起后辨识度可能不够。</p>
+  <p><b>建议把 cell 边框颜色 +/face-X label 作为辅助识别</b>（已在游戏中实现）。</p>
+</div>
+
+<div class="info" style="background:rgba(168,139,250,0.1); border-color:rgba(168,139,250,0.4);">
+  <h3 style="color:#c4b5fd;">💡 终极方案 · AI 生成统一风格 6 张图</h3>
+  <p style="color:#ddd6fe;">如果以上方案都不够好，最务实的方案：你用 AI 生成 6 张统一风格的正面狗品种头像。</p>
+  <p style="color:#ddd6fe;">推荐 Prompt：</p>
+  <pre style="background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; color:#fde68a; font-size:11px; overflow:auto;">cute chibi style cartoon dog head portrait, [breed name],
+front facing, big round eyes, flat colors, thick black outline,
+no body just head, white background, square 1:1, mobile game icon,
+simple shapes --style raw --ar 1:1</pre>
+  <p style="color:#ddd6fe;">把 <code>[breed name]</code> 替换为：chihuahua / corgi / shiba inu / golden retriever / german shepherd / siberian husky</p>
+  <p style="color:#ddd6fe;">生成后你把 6 张 PNG 发我，我用 base64 内嵌到 prototype。质量会比所有开源方案都好。</p>
+</div>
+
+</body>
+</html>

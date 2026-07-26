@@ -1,0 +1,70 @@
+{
+  "version": "202607-draft.4",
+  "items": [
+    {
+      "id": "mechanism.slot",
+      "name": "Slot",
+      "type": "mechanism_archetype",
+      "status": "working",
+      "order": 10,
+      "summary": "以符号池、随机抽取和装置化承载空间为先验的机制母型。",
+      "definition": "Slot 不是某一款具体游戏，而是一组玩家已经具备认知先验的装置规则：从符号池产生随机结果，由装置完成主要放置，再在承载空间中识别符号协同。",
+      "formula_constraints": {
+        "Pool_Symbol": {
+          "operation": "fix",
+          "constraint_label": "固定符号池",
+          "summary": "传统 Slot 的符号身份、数量或转轴条由游戏预先配置，玩家不能通过构筑改变 Pool_Symbol。",
+          "review_status": "confirmed",
+          "review_note": "",
+          "last_modified_at": "2026-07-26T11:33:54.416Z",
+          "confirmed_at": "2026-07-26T11:33:54.416Z"
+        },
+        "Random": {
+          "operation": "restrict",
+          "constraint_label": "从固定池随机抽取",
+          "summary": "只从预先配置的 Pool_Symbol 中，按游戏设定的概率规则生成本次 Spin 结果。"
+        },
+        "Put": {
+          "operation": "fix",
+          "constraint_label": "装置自动安置",
+          "summary": "传统 Slot 由装置自动完成转轴停止与符号落位，玩家不决定主要安置结果。"
+        },
+        "Show_TP": {
+          "operation": "fix",
+          "constraint_label": "2D 网格",
+          "summary": "固定使用 2D 离散网格承载符号位置、邻接关系与组合判定。"
+        },
+        "C1": {
+          "operation": "default",
+          "constraint_label": "Slot 基础协同",
+          "summary": "使用同符号、支付线、连续符号、支付表和经典特殊符号角色等玩家可以快速理解的 Slot 先验协同。"
+        },
+        "C2": {
+          "operation": "disable",
+          "constraint_label": "无 C₂",
+          "summary": "传统 Slot 母型只要求存在可识别的 C₁，不默认要求在 C₁ 基础结果之后再加入独立的结果演绎层。",
+          "review_status": "pending",
+          "review_note": "",
+          "last_modified_at": "2026-07-24T23:32:45.797Z"
+        },
+        "N": {
+          "operation": "disable",
+          "constraint_label": "不适用 · 无 BD",
+          "summary": "传统 Slot 不进入构筑决策，因此不存在用于触发 BD 的 N 次 Spin 周期。"
+        },
+        "BD": {
+          "operation": "disable",
+          "constraint_label": "无构筑决策",
+          "summary": "传统 Slot 不提供基于周期结果修改后续公式参数的构筑决策。"
+        }
+      },
+      "open_axes": [
+        "2D 网格的尺寸、形状与可用区域",
+        "固定符号池与随机概率的具体配置",
+        "支付线、相同符号、连续符号、支付表与经典特殊符号等 C1 规则",
+        "下层品类是否在 Slot 的 C1 基础结果之后新增独立 C2 结果演绎",
+        "下层品类是否在 Slot 装置先验上额外加入构筑系统"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "version": "202607-draft.5",
+  "items": [
+    {
+      "id": "prototype.slot-numeric",
+      "name": "Slot 数值型 - 幸运房东",
+      "name_status": "confirmed",
+      "type": "category_prototype",
+      "status": "working",
+      "order": 10,
+      "primary_mother_id": "mechanism.slot",
+      "composed_mother_ids": [],
+      "representative_product_ids": [
+        "product.luck-be-a-landlord"
+      ],
+      "summary": "从《幸运房东》提炼：构筑符号池，在 2D Slot 网格中通过符号产出、阈值与邻接协同获得数值。",
+      "definition": "本品类原型以《幸运房东》为提炼来源：保留 Slot 的自动随机与装置落位，把固定符号池改为可构筑符号池，并加入符号直接产出、阈值／邻接协同、道具结果演绎以及 Spin 后构筑决策。",
+      "formula_changes": {
+        "Pool_Symbol": {
+          "operation": "override",
+          "constraint_label": "可构筑符号池",
+          "summary": "采用《幸运房东》的符号池构筑：玩家能够持续增加、删除或调整后续 Spin 可以抽到的符号。"
+        },
+        "Random": {
+          "operation": "restrict",
+          "constraint_label": "从当前符号池自动抽取",
+          "summary": "每次 Spin 由 Slot 装置从玩家当前构筑的 Pool_Symbol 中自动产生本次符号结果。"
+        },
+        "Put": {
+          "operation": "restrict",
+          "constraint_label": "自动落位",
+          "summary": "采用《幸运房东》的自动 Put：装置把本次抽取符号自动写入 Slot 网格，玩家不决定单次落位。"
+        },
+        "Show_TP": {
+          "operation": "fix",
+          "constraint_label": "2D Slot 网格",
+          "summary": "采用《幸运房东》的 2D 离散 Slot 网格；符号位置与邻接关系可以被 C₁ 读取。"
+        },
+        "C1": {
+          "operation": "extend",
+          "constraint_label": "直接产出 · 阈值 · 邻接",
+          "summary": "采用《幸运房东》的基础协同：符号直接产生数值，并通过数量阈值与网格邻接形成额外产出。"
+        },
+        "C2": {
+          "operation": "extend",
+          "constraint_label": "道具结果演绎",
+          "summary": "在 Slot 母型无 C₂ 的基础上，加入《幸运房东》的道具层，对 C₁ 基础结果进行全局／局部修饰，或改变其最终结果映射。"
+        },
+        "N": {
+          "operation": "override",
+          "constraint_label": "N = 1",
+          "summary": "采用《幸运房东》的核心短循环：完成一次 Spin 后即进入一次符号选择类 BD。"
+        },
+        "BD": {
+          "operation": "extend",
+          "constraint_label": "选符号 · 删符号 · 获得道具",
+          "summary": "在传统 Slot 之上加入《幸运房东》的构筑决策，用新符号、删除与道具持续改变后续 Pool_Symbol、C₁ 和 C₂。"
+        }
+      },
+      "identity_rules": [
+        "以《幸运房东》作为本品类原型的提炼来源和代表产品",
+        "Pool_Symbol 可由玩家持续增加、删除或调整",
+        "装置自动把本次结果 Put 到 2D Slot 网格",
+        "C1 同时包含符号直接产出、数量阈值与网格邻接",
+        "C2 来自道具对 C1 基础结果的修饰或结果转译",
+        "一次 Spin 后进入一次构筑决策，并持续改变后续循环"
+      ]
+    }
+  ]
+}

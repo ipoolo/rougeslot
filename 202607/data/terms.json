@@ -1,0 +1,1037 @@
+{
+  "version": "202607-draft.3",
+  "status": "core_confirmed",
+  "terms": [
+    {
+      "key": "Pool_Symbol",
+      "name": "符号池",
+      "kind": "input_collection",
+      "status": "stable",
+      "definition": "Random 在一次 Spin 中唯一直接读取的候选符号池。",
+      "inputs": [],
+      "outputs": [
+        "Random"
+      ],
+      "formula_location": "Random@Pool_Symbol",
+      "contents": [
+        "可抽取的符号身份或类型",
+        "各符号的数量或权重",
+        "重复项",
+        "可用性条件",
+        "BD 对后续符号池的修改"
+      ],
+      "boundaries": [
+        "负责可能抽到什么",
+        "不负责本次实际抽取结果",
+        "不负责放置、协同和结算"
+      ],
+      "detail_sections": [
+        {
+          "title": "符号池需要记录什么",
+          "items": [
+            {
+              "name": "符号身份",
+              "description": "池中有哪些符号、每个符号属于什么类型，以及符号携带哪些基础属性。"
+            },
+            {
+              "name": "数量与权重",
+              "description": "每种符号存在多少份，或在 Random 中具有怎样的抽取权重。"
+            },
+            {
+              "name": "重复规则",
+              "description": "同一符号能否存在多份，以及重复项如何影响抽取概率。"
+            },
+            {
+              "name": "可用性",
+              "description": "哪些符号当前可以被读取，哪些符号需要解锁、激活或满足条件后才进入候选范围。"
+            }
+          ]
+        },
+        {
+          "title": "下层可以约束什么",
+          "items": [
+            {
+              "name": "初始池",
+              "description": "机制母型或品类原型可以规定开局默认包含哪些符号。"
+            },
+            {
+              "name": "池的变化",
+              "description": "规定 BD 是否可以增加、删除、替换符号，或调整数量与权重。"
+            },
+            {
+              "name": "Random 可见范围",
+              "description": "规定 Random 每次读取整个池，还是只读取当前满足条件的子集。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "池里有什么？",
+              "description": "列出候选符号、数量、权重和重复关系。"
+            },
+            {
+              "name": "池怎样变化？",
+              "description": "说明玩家何时、通过什么 BD 行为改变后续候选内容。"
+            },
+            {
+              "name": "哪些内容不属于池？",
+              "description": "区分候选符号、单次抽取结果、承载空间和协同规则。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Random",
+      "name": "随机抽取",
+      "kind": "operation",
+      "status": "stable",
+      "definition": "从 Pool_Symbol 中为一次 Spin 随机选择出 SingleSpin_Symbol 的过程。",
+      "inputs": [
+        "Pool_Symbol"
+      ],
+      "outputs": [
+        "SingleSpin_Symbol"
+      ],
+      "formula_location": "Spin 第一步",
+      "scope": "Pool_Symbol",
+      "boundaries": [
+        "不产生由 Put 决定的位置关系",
+        "不执行 Combo"
+      ],
+      "detail_sections": [
+        {
+          "title": "Random 的关键参数",
+          "items": [
+            {
+              "name": "抽取数量",
+              "description": "一次 Spin 从 Pool_Symbol 中选择多少个符号。"
+            },
+            {
+              "name": "概率与权重",
+              "description": "各符号被选中的概率是否相等，权重由什么规则决定。"
+            },
+            {
+              "name": "放回规则",
+              "description": "一次抽取后是否放回，后续抽取是否会受到前一次结果影响。"
+            },
+            {
+              "name": "重复与关联",
+              "description": "同一符号能否在本次结果中重复，以及多个选择之间是否独立。"
+            },
+            {
+              "name": "输出结构",
+              "description": "SingleSpin_Symbol 是单个符号、无序多重集，还是带顺序或其他结构的结果。"
+            }
+          ]
+        },
+        {
+          "title": "Random 不负责什么",
+          "items": [
+            {
+              "name": "不负责位置",
+              "description": "结果进入 Show_TP 的位置、顺序或映射关系属于 Put。"
+            },
+            {
+              "name": "不负责协同",
+              "description": "符号是否满足 C₁、C₁ 产生什么基础结果，以及是否需要 C₂ 演绎都属于 Combo。"
+            },
+            {
+              "name": "不直接读取 Show_TP",
+              "description": "Random 唯一直接读取的内容域是 Pool_Symbol。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "从哪里抽？",
+              "description": "明确 Random 实际读取的 Pool_Symbol 范围。"
+            },
+            {
+              "name": "一次抽多少？",
+              "description": "明确选择数量、重复规则和概率结构。"
+            },
+            {
+              "name": "输出是什么形态？",
+              "description": "明确 SingleSpin_Symbol 是否有序、是否重复以及携带哪些信息。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "SingleSpin_Symbol",
+      "name": "单次 Spin 抽取结果",
+      "kind": "intermediate_result",
+      "status": "stable",
+      "definition": "一次 Random 完成后、Put 开始前，本次 Spin 已选出的符号结果；它不被严格定义为无序多重集。",
+      "inputs": [
+        "Random"
+      ],
+      "outputs": [
+        "Put"
+      ],
+      "formula_location": "Random 输出、Put 输入",
+      "strict_multiset": false,
+      "possible_structures": [
+        "单个符号",
+        "无序多重集",
+        "带顺序或其他结构的符号结果"
+      ],
+      "boundaries": [
+        "具体结构由机制母型、品类原型或品类变体继续约束",
+        "不把所有机制母型的抽取结果强制压缩为同一种数据形态"
+      ],
+      "detail_sections": [
+        {
+          "title": "SingleSpin_Symbol 需要记录什么",
+          "items": [
+            {
+              "name": "符号内容",
+              "description": "记录本次 Random 实际选出了哪些符号，以及每个符号携带的基础属性。"
+            },
+            {
+              "name": "数量与重复",
+              "description": "记录本次结果包含多少个符号、同一符号是否重复及重复次数。"
+            },
+            {
+              "name": "结果结构",
+              "description": "明确结果是单个符号、无序多重集、带顺序集合，还是机制规定的其他结构。"
+            },
+            {
+              "name": "附带信息",
+              "description": "记录 Random 是否同时输出权重来源、稀有度、随机标签或其他供 Put 使用的数据。"
+            }
+          ]
+        },
+        {
+          "title": "与相邻步骤的边界",
+          "items": [
+            {
+              "name": "它是 Random 的输出",
+              "description": "Pool_Symbol 描述可能抽到什么；SingleSpin_Symbol 描述本次实际抽到了什么。"
+            },
+            {
+              "name": "它是 Put 的输入",
+              "description": "Put 读取这份结果，再决定如何写入或安置到 Show_TP。"
+            },
+            {
+              "name": "它还不是 Show_State",
+              "description": "在 Put 完成之前，不应把承载位置、邻接或空间状态混入 SingleSpin_Symbol。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "本次具体抽到了什么？",
+              "description": "给出符号身份、数量、重复关系和必要附带信息。"
+            },
+            {
+              "name": "结果是否有序？",
+              "description": "明确顺序是否来自 Random；不要把随后由 Put 产生的空间顺序提前写入。"
+            },
+            {
+              "name": "Put 将读取哪些内容？",
+              "description": "指出哪些数据会决定后续安置、映射或呈现。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Put",
+      "name": "放置／安置",
+      "kind": "operation",
+      "status": "stable",
+      "definition": "把 SingleSpin_Symbol 写入或安置到 Show_TP，形成 Show_State 的过程。",
+      "inputs": [
+        "SingleSpin_Symbol",
+        "Show_TP"
+      ],
+      "outputs": [
+        "Show_State"
+      ],
+      "formula_location": "Spin 第二步",
+      "scope": "Show_TP",
+      "enum_ref": "put_control_enum",
+      "boundaries": [
+        "不负责从 Pool_Symbol 随机抽取",
+        "不负责 Combo 判定与结算"
+      ],
+      "detail_sections": [
+        {
+          "title": "Put 需要描述什么",
+          "items": [
+            {
+              "name": "执行者",
+              "description": "由系统、装置还是玩家完成主要安置过程。"
+            },
+            {
+              "name": "玩家介入程度",
+              "description": "玩家是否能够选择位置、顺序、目标、方向或映射关系。"
+            },
+            {
+              "name": "介入时机",
+              "description": "玩家在安置前选择、安置过程中调整，还是只能在结果形成后做有限修正。"
+            },
+            {
+              "name": "空间约束",
+              "description": "哪些位置允许写入，容量、边界、占用和替换规则是什么。"
+            },
+            {
+              "name": "输出状态",
+              "description": "Put 完成后 Show_State 包含哪些位置、顺序、邻接或物理信息。"
+            }
+          ]
+        },
+        {
+          "title": "三类的判定原则",
+          "items": [
+            {
+              "name": "看主要决策权",
+              "description": "分类依据不是玩家有没有点击，而是谁决定主要的放置、映射或排列结果。"
+            },
+            {
+              "name": "看干预范围",
+              "description": "只能改少量位置或有限步骤通常属于微手动；主导主要结果才属于全手动。"
+            },
+            {
+              "name": "看 Put 而不是 BD",
+              "description": "Spin 之间的构筑选择属于 BD，不能因为存在 BD 就把自动 Put 判成手动。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "谁把结果放进去？",
+              "description": "明确系统与玩家各自控制的步骤。"
+            },
+            {
+              "name": "玩家具体能改什么？",
+              "description": "列出位置、顺序、方向、目标或映射中的可操作项。"
+            },
+            {
+              "name": "Put 何时结束？",
+              "description": "明确 Show_State 在什么条件下被视为形成，并交给 Combo。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Show_TP",
+      "name": "表演拓扑／承载拓扑",
+      "kind": "space_type",
+      "status": "stable",
+      "definition": "Put 写入结果、Combo 读取并判定结果时共同使用的空间结构类型。",
+      "inputs": [],
+      "outputs": [
+        "Put",
+        "Combo"
+      ],
+      "formula_location": "Put 与 Combo 的共同承载域",
+      "enum_ref": "show_tp_enum",
+      "boundaries": [
+        "Show_TP 是类型",
+        "Show_State 是某次 Spin 的具体实例"
+      ],
+      "detail_sections": [
+        {
+          "title": "Show_TP 需要描述什么",
+          "items": [
+            {
+              "name": "拓扑类型",
+              "description": "从五种正式承载拓扑中确定当前机制采用哪一种。"
+            },
+            {
+              "name": "容量与尺寸",
+              "description": "可承载多少元素，序列长度、网格行列或连续空间范围是多少。"
+            },
+            {
+              "name": "边界规则",
+              "description": "序列是否首尾相接、网格边界如何处理、空间是否允许越界或重叠。"
+            },
+            {
+              "name": "有效关系",
+              "description": "该空间允许 Combo 读取数量、顺序、邻接、距离、路径或碰撞中的哪些关系。"
+            },
+            {
+              "name": "状态持续性",
+              "description": "每次 Spin 后空间是否清空、保留、部分替换或继续累积。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "结果被放在哪里？",
+              "description": "明确 Put 写入的空间结构和具体尺寸。"
+            },
+            {
+              "name": "哪些关系真实存在？",
+              "description": "不要在 0D 多重集中虚构位置，也不要忽略网格或物理空间提供的关系。"
+            },
+            {
+              "name": "Combo 能读取什么？",
+              "description": "明确协同判定允许使用哪些空间关系。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Show_State",
+      "name": "本次表演状态",
+      "kind": "intermediate_result",
+      "status": "working_definition",
+      "definition": "某一次 Spin 中，SingleSpin_Symbol 经 Put 写入 Show_TP 后形成的具体状态。",
+      "inputs": [
+        "Put"
+      ],
+      "outputs": [
+        "Combo"
+      ],
+      "formula_location": "Put 输出、Combo 输入",
+      "possible_data": [
+        "元素类型",
+        "元素数量",
+        "顺序",
+        "离散坐标",
+        "邻接关系",
+        "连续坐标",
+        "路径或碰撞状态"
+      ],
+      "boundaries": [
+        "Show_TP 定义承载空间的类型与有效关系",
+        "Show_State 是该类型在某一次 Spin 中形成的具体实例",
+        "Show_State 由 Put 形成并由 Combo 读取"
+      ],
+      "detail_sections": [
+        {
+          "title": "Show_State 需要记录什么",
+          "items": [
+            {
+              "name": "元素状态",
+              "description": "记录当前承载空间中有哪些符号、数量多少，以及符号携带的当前属性。"
+            },
+            {
+              "name": "安置映射",
+              "description": "记录 SingleSpin_Symbol 被 Put 写入了哪些位置、顺序、槽位或连续坐标。"
+            },
+            {
+              "name": "可计算关系",
+              "description": "记录由 Show_TP 允许存在的邻接、距离、路径、连线、碰撞或区域关系。"
+            },
+            {
+              "name": "占用与持续性",
+              "description": "记录哪些位置被占用、哪些元素被替换，以及状态会在何时清空或保留。"
+            }
+          ]
+        },
+        {
+          "title": "Show_TP 与 Show_State 的区别",
+          "items": [
+            {
+              "name": "Show_TP 是类型",
+              "description": "它规定空间可以表达哪些位置与关系，例如 0D 多重集或 2D 离散网格。"
+            },
+            {
+              "name": "Show_State 是实例",
+              "description": "它描述某一次 Spin 中，具体哪些符号处于哪些位置并形成了哪些关系。"
+            },
+            {
+              "name": "Combo 读取实例",
+              "description": "Combo 在 Show_TP 允许的关系范围内读取 Show_State，先执行 C₁，再按需执行 C₂。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "Put 最终形成了什么状态？",
+              "description": "给出元素、位置、顺序、占用和必要的空间关系。"
+            },
+            {
+              "name": "哪些关系能被 Combo 使用？",
+              "description": "只保留 Show_TP 中真实存在并允许读取的关系。"
+            },
+            {
+              "name": "本次状态会持续多久？",
+              "description": "说明结算后是清空、保留、局部替换还是继续累积。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "C1",
+      "name": "符号协同",
+      "kind": "rule_set",
+      "status": "stable",
+      "definition": "主要来自先验装置、由玩家先验知识即可理解的符号协同规则；通常几乎不需要学习，或只需学习少量变化点。",
+      "inputs": [
+        "Show_TP",
+        "Show_State"
+      ],
+      "outputs": [
+        "Combo"
+      ],
+      "formula_location": "Combo 参数",
+      "boundaries": [
+        "描述符号之间如何形成装置先验中的基础协同",
+        "强调低学习成本和可由先验知识识别",
+        "具体子类型与少数边界案例由后续实例校准"
+      ],
+      "detail_sections": [
+        {
+          "title": "C₁ 的判定标准",
+          "items": [
+            {
+              "name": "来源于装置先验",
+              "description": "规则应能从 Slot、骰子、轮盘等装置原型或符号关系中被快速理解。"
+            },
+            {
+              "name": "学习成本低",
+              "description": "玩家几乎不需要学习，或只需要理解相对于既有先验的少量变化点。"
+            },
+            {
+              "name": "直接读取 Show_State",
+              "description": "依据符号的类型、数量、顺序、位置或空间关系判断基础协同是否成立。"
+            }
+          ]
+        },
+        {
+          "title": "可以记录的规则内容",
+          "items": [
+            {
+              "name": "参与符号",
+              "description": "哪些符号或符号类型能够参与该协同。"
+            },
+            {
+              "name": "成立条件",
+              "description": "需要满足怎样的数量、相同关系、邻接、序列或其他先验条件。"
+            },
+            {
+              "name": "基础结果",
+              "description": "协同成立后产生什么基础数值、资源或状态结果。"
+            },
+            {
+              "name": "少量变化点",
+              "description": "相对装置先验新增了哪些必须额外学习的变化。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "玩家凭什么能快速理解？",
+              "description": "指出规则依赖的装置先验、常识或明显符号关系。"
+            },
+            {
+              "name": "协同怎样成立？",
+              "description": "写出可验证的参与对象、关系与触发条件。"
+            },
+            {
+              "name": "哪里开始变成 C₂？",
+              "description": "当规则开始处理 C₁ 的基础结果，对其进行修饰、转换或映射时，应转入协同结果演绎。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "C2",
+      "name": "协同结果演绎",
+      "kind": "rule_set",
+      "status": "stable",
+      "optional": true,
+      "depends_on": "C1 基础结果",
+      "definition": "作用于 C₁ 基础结果之上的可选二次规则层，负责对协同结果进行修饰、转换或映射，形成最终的 Spin_Result。",
+      "inputs": [
+        "C1 基础结果",
+        "Show_State（上下文）"
+      ],
+      "outputs": [
+        "Combo"
+      ],
+      "formula_location": "Combo 中位于 C₁ 之后的可选结果处理层",
+      "possible_effects": [
+        "修饰 C₁ 的基础结果",
+        "增加倍率、条件、例外或连锁",
+        "改变结果的计算方式或性质",
+        "把基础结果转译为伤害、治疗、资源、状态或其他结果系统"
+      ],
+      "boundaries": [
+        "C₁ 负责识别先验装置中的基础协同并产生基础结果",
+        "C₂ 只在 C₁ 基础结果之后工作，可以不启用",
+        "结果转译指机制结果的映射，不是单纯的视觉表现包装",
+        "跨 Spin 形式与更细子类型由后续实例校准"
+      ],
+      "detail_sections": [
+        {
+          "title": "C₂ 的两种一级演绎方式",
+          "items": [
+            {
+              "name": "修饰型演绎",
+              "description": "对 C₁ 的基础结果增加倍率、条件、例外、连锁，或改变原本的计算方式与性质。"
+            },
+            {
+              "name": "转译型演绎",
+              "description": "把 C₁ 的基础结果映射到另一套机制结果，例如伤害、治疗、防御、技能触发、资源或状态。"
+            },
+            {
+              "name": "可以不启用",
+              "description": "当 C₁ 的基础结果已经能够直接成为 Spin_Result 时，C₂ 不参与本次 Combo。"
+            },
+            {
+              "name": "不是视觉包装",
+              "description": "C₂ 的转译必须改变机制语义或最终结果类型；仅改变动画、音效或界面表现不属于 C₂。"
+            }
+          ]
+        },
+        {
+          "title": "与 C₁ 的边界",
+          "items": [
+            {
+              "name": "C₁ 先回答是否协同",
+              "description": "C₁ 描述装置先验中的基础符号关系与基础结果。"
+            },
+            {
+              "name": "C₂ 再回答怎样被改变",
+              "description": "C₂ 描述 C₁ 的基础结果如何被修饰，或被转译到另一套结果系统。"
+            },
+            {
+              "name": "允许跨越多个对象",
+              "description": "C₂ 可以读取某个符号、某条 C₁、整个 Combo 上下文或当前状态，但处理对象必须落回 C₁ 的基础结果。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "它处理了哪个 C₁ 基础结果？",
+              "description": "必须指出被修饰或转译的基础协同及其原始结果。"
+            },
+            {
+              "name": "修改发生在何时？",
+              "description": "明确判定前、判定中、结算时或结算后的作用时机。"
+            },
+            {
+              "name": "演绎后的结果是什么？",
+              "description": "写清倍率、条件、例外或结果映射怎样形成最终 Spin_Result。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Combo",
+      "name": "协同判定与结算",
+      "kind": "operation",
+      "status": "stable",
+      "definition": "在 Show_TP / Show_State 上先依据 C₁ 产生基础协同结果，再按需通过 C₂ 完成结果演绎与结算的过程。",
+      "inputs": [
+        "Show_TP",
+        "Show_State",
+        "C1",
+        "C2"
+      ],
+      "outputs": [
+        "Spin_Result"
+      ],
+      "formula_location": "Spin 第三步",
+      "scope": "Show_TP",
+      "experience_role": "第二峰",
+      "boundaries": [
+        "读取 Show_State，不负责从 Pool_Symbol 抽取符号",
+        "依据 C₁ 判断基础协同，再按需应用 C₂ 的结果修饰或转译",
+        "输出 Spin_Result，不直接执行后续 BD"
+      ],
+      "detail_sections": [
+        {
+          "title": "Combo 的三个连续步骤",
+          "items": [
+            {
+              "name": "协同判定",
+              "description": "读取 Show_State 中的符号与空间关系，判断哪些 C₁ 基础协同成立。"
+            },
+            {
+              "name": "结果演绎（可选）",
+              "description": "由 C₂ 对 C₁ 基础结果进行修饰，或将其转译为战斗、资源、状态等另一套机制结果。"
+            },
+            {
+              "name": "结果结算",
+              "description": "把所有有效规则整理为可观察的数值、资源、战斗或状态结果。"
+            }
+          ]
+        },
+        {
+          "title": "Combo 需要明确什么",
+          "items": [
+            {
+              "name": "读取范围",
+              "description": "明确 Combo 读取整个 Show_State，还是只读取其中满足条件的区域或对象。"
+            },
+            {
+              "name": "触发顺序",
+              "description": "明确多个 C₁ 的判定顺序，以及可选 C₂ 的作用顺序、并行关系与冲突解决方式。"
+            },
+            {
+              "name": "结算顺序",
+              "description": "明确基础结果、加法、倍率、条件和后续触发按照什么顺序计算。"
+            },
+            {
+              "name": "最终输出",
+              "description": "明确哪些内容进入 Spin_Result，哪些只是中间判定信息。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "哪些 C₁ 成立？",
+              "description": "列出参与对象、空间关系与成立条件。"
+            },
+            {
+              "name": "哪些 C₂ 演绎了结果？",
+              "description": "指出被处理的 C₁ 基础结果、作用时机，以及采用修饰还是转译。"
+            },
+            {
+              "name": "最终怎样得到 Spin_Result？",
+              "description": "写出从 C₁ 判定、C₂ 可选演绎到结算完成的可复核顺序。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Spin_Result",
+      "name": "单次 Spin 结果",
+      "kind": "output_result",
+      "status": "working_definition",
+      "definition": "单次 Spin 经 Combo 完成判定和结算后产生的可观察结果。",
+      "inputs": [
+        "Combo"
+      ],
+      "outputs": [
+        "BD"
+      ],
+      "formula_location": "Combo 输出",
+      "possible_forms": [
+        "数值",
+        "资源变化",
+        "战斗结果",
+        "状态变化",
+        "多项结果组合"
+      ],
+      "boundaries": [
+        "Spin_Result 是单次 Spin 的可观察输出",
+        "它可以被累计、比较或作为 BD 的决策依据",
+        "它不等于 BD，也不直接描述下一周期如何修改"
+      ],
+      "detail_sections": [
+        {
+          "title": "Spin_Result 可以包含什么",
+          "items": [
+            {
+              "name": "数值结果",
+              "description": "分数、金币、伤害、收益或其他能够直接度量的单次产出。"
+            },
+            {
+              "name": "资源变化",
+              "description": "资源获得、消耗、转移、生成或删除。"
+            },
+            {
+              "name": "状态结果",
+              "description": "角色、敌人、符号、棋盘或全局状态发生的变化。"
+            },
+            {
+              "name": "复合结果",
+              "description": "一次 Spin 同时产生数值、资源、战斗和状态等多类输出。"
+            }
+          ]
+        },
+        {
+          "title": "在循环中的作用",
+          "items": [
+            {
+              "name": "单次反馈",
+              "description": "它是玩家在 Combo 结算后直接看到和理解的本次结果。"
+            },
+            {
+              "name": "周期累计",
+              "description": "连续 N 次 Spin_Result 可以被累计、比较或共同决定进入 BD 时的状态。"
+            },
+            {
+              "name": "构筑依据",
+              "description": "玩家通过一个周期内的结果判断当前构筑是否有效，并决定 BD。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "玩家看到了什么？",
+              "description": "列出本次结算直接呈现的数值、资源、战斗或状态结果。"
+            },
+            {
+              "name": "哪些结果会被累计？",
+              "description": "明确进入 N 次周期统计的字段与计算方式。"
+            },
+            {
+              "name": "哪些结果影响 BD？",
+              "description": "说明玩家会依据哪些观察结果调整下一周期。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "N",
+      "name": "BD 前连续 Spin 数量",
+      "kind": "cycle_parameter",
+      "status": "stable",
+      "definition": "当下层启用 BD 时，进入一次 BD 之前连续发生的 Spin 数量；完成 N 次 Spin 后触发一次 BD。",
+      "inputs": [],
+      "outputs": [
+        "BD"
+      ],
+      "formula_location": "[Spin]_N",
+      "minimum": 1,
+      "determination": "dynamic_by_game_rules",
+      "bd_trigger": "每完成 N 次 Spin 触发一次 BD",
+      "special_case": "每次 Spin 后都触发 BD 时，N = 1",
+      "availability": "下层机制可以同时禁用 N 与 BD；此时 N 不适用。",
+      "detail_sections": [
+        {
+          "title": "N 的正式规则",
+          "items": [
+            {
+              "name": "最小值",
+              "description": "N ≥ 1，不存在零次 Spin 就进入本周期 BD 的表达。"
+            },
+            {
+              "name": "触发关系",
+              "description": "完成 N 次连续 Spin 后触发一次 BD。"
+            },
+            {
+              "name": "动态决定",
+              "description": "N 由游戏规则和当前状态动态确定，不要求全局固定为同一个数字。"
+            },
+            {
+              "name": "特殊情况",
+              "description": "如果每次 Spin 后都进入一次 BD，则 N = 1。"
+            }
+          ]
+        },
+        {
+          "title": "N 会影响什么",
+          "items": [
+            {
+              "name": "反馈频率",
+              "description": "N 越小，玩家越频繁地调整构筑；N 越大，单个构筑决定需要经历更多结果才能再次修正。"
+            },
+            {
+              "name": "结果样本",
+              "description": "进入 BD 前玩家能够观察多少次 Spin_Result。"
+            },
+            {
+              "name": "循环节奏",
+              "description": "决定短期随机体验与长期构筑决策之间的切换频率。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "当前 N 怎样决定？",
+              "description": "列出决定本周期 Spin 数量的规则与状态。"
+            },
+            {
+              "name": "什么时候进入 BD？",
+              "description": "明确计数起点、终点和提前结束条件。"
+            },
+            {
+              "name": "BD 后怎样重新计数？",
+              "description": "说明进入下一周期时 N 是否重新计算。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "BD",
+      "name": "构筑决策",
+      "working_english_name": "Builder Decision",
+      "kind": "operation",
+      "status": "stable_principle_lower_layer_scope",
+      "definition": "玩家基于一个周期内的结果，对后续 Spin 所使用的构筑参数进行调整的过程。",
+      "inputs": [
+        "Spin_Result",
+        "当前构筑状态",
+        "当前可选调整项"
+      ],
+      "outputs": [
+        "后续循环参数变化"
+      ],
+      "formula_location": "N 次 Spin 之后",
+      "possible_targets": [
+        "Pool_Symbol",
+        "Random 参数",
+        "Put 参数",
+        "Show_TP 参数或类型",
+        "C1",
+        "C2",
+        "N"
+      ],
+      "scope_principle": "BD 原则上可以修改大部分可配置的一级变量；具体允许项由机制母型、品类原型和品类变体逐层约束。",
+      "availability": "机制母型可以禁用 BD；品类原型可以在继承装置先验的同时重新启用并扩展 BD。",
+      "invariant": "BD 可以修改后续循环参数，但不改变 Random → Put → Combo → BD 的核心流程身份。",
+      "calibration": [
+        "各下层节点对 BD 可修改字段的允许与禁止范围",
+        "BD 与压力、目标、Checkpoint 的具体关系"
+      ],
+      "detail_sections": [
+        {
+          "title": "BD 原则上可以修改什么",
+          "items": [
+            {
+              "name": "Pool_Symbol",
+              "description": "增加、删除、替换符号，或调整数量、权重和可用性。"
+            },
+            {
+              "name": "Random",
+              "description": "调整抽取数量、概率、放回、重复或其他随机参数。"
+            },
+            {
+              "name": "Put",
+              "description": "调整控制方式、可选位置、操作范围或安置规则。"
+            },
+            {
+              "name": "Show_TP",
+              "description": "调整尺寸、边界、容量；具体机制允许时也可以改变拓扑类型。"
+            },
+            {
+              "name": "C₁ 与 C₂",
+              "description": "调整 C₁ 基础协同中的可变部分，并增加、删除或升级 C₂ 的结果修饰或转译规则。"
+            },
+            {
+              "name": "N",
+              "description": "调整进入下一次 BD 前的 Spin 周期与反馈频率。"
+            }
+          ]
+        },
+        {
+          "title": "BD 的边界",
+          "items": [
+            {
+              "name": "由下层限制实际范围",
+              "description": "BD 可以修改大部分一级变量，但每个机制母型、品类原型和品类变体必须明确允许项与禁止项。"
+            },
+            {
+              "name": "不改变核心流程身份",
+              "description": "BD 修改下一周期参数，但不把 Random → Put → Combo → BD 变成另一套流程。"
+            },
+            {
+              "name": "必须产生后续影响",
+              "description": "只影响当前说明文本、不改变后续 Spin 参数的行为，不应被视为有效 BD。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "玩家在选择什么？",
+              "description": "列出具体选项、成本、限制和机会成本。"
+            },
+            {
+              "name": "选择修改哪个公式字段？",
+              "description": "每个 BD 行为都必须映射到 Pool_Symbol、Random、Put、Show_TP、C₁、C₂ 或 N。"
+            },
+            {
+              "name": "影响从何时开始？",
+              "description": "明确修改在下一次 Spin、下一周期或更晚阶段生效。"
+            },
+            {
+              "name": "玩家如何再次验证？",
+              "description": "说明玩家会通过哪些后续 Spin_Result 判断本次构筑是否有效。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "enums": {
+    "put_control_enum": {
+      "status": "stable",
+      "source": "confirmed_2026-07-23",
+      "values": [
+        {
+          "key": "auto",
+          "name": "自动",
+          "definition": "系统或装置完成全部安置，玩家不决定主要的位置、顺序或映射结果。",
+          "decision_boundary": "玩家可以触发 Spin 或观看动画，但不直接控制 Put 的主要结果。"
+        },
+        {
+          "key": "semi_manual",
+          "name": "微手动",
+          "definition": "系统完成主要安置过程，玩家只能调整局部步骤、有限选项或少量位置。",
+          "decision_boundary": "玩家具有真实干预权，但无法主导整个 Show_State 的形成。"
+        },
+        {
+          "key": "full_manual",
+          "name": "全手动",
+          "definition": "玩家主导主要的选择、放置、映射或排列过程，决定 Show_State 的核心结构。",
+          "decision_boundary": "系统可以提供限制或候选项，但主要安置结果由玩家决定。"
+        }
+      ]
+    },
+    "show_tp_enum": {
+      "status": "stable",
+      "source": "legacy_v5_reconfirmed_2026-07-23",
+      "values": [
+        {
+          "key": "0D_multiset",
+          "name": "0D 多重集",
+          "definition": "只有成员与重复次数，不建立位置、方向或顺序关系。"
+        },
+        {
+          "key": "1D_sequence",
+          "name": "1D 序列",
+          "definition": "元素沿线性方向排列，存在顺序、前后或距离关系。"
+        },
+        {
+          "key": "1D_ring",
+          "name": "1D 圆环",
+          "definition": "线性序列首尾相接，形成循环邻接关系。"
+        },
+        {
+          "key": "2D_grid",
+          "name": "2D 离散网格",
+          "definition": "元素占据离散格位，可使用行列、邻接、连线或区域关系。"
+        },
+        {
+          "key": "2D_physical",
+          "name": "2D 连续物理空间",
+          "definition": "元素位于连续坐标空间，可使用路径、碰撞、速度或物理接触关系。"
+        }
+      ]
+    }
+  }
+}

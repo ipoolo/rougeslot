@@ -1,0 +1,49 @@
+{
+  "version": "202607-draft.1",
+  "items": [
+    {
+      "id": "sample.dice-eight-poker-proposal",
+      "record_type": "design_sample",
+      "name": "骰子德州·提案",
+      "name_en": "Dice Eight Poker (Sample Design)",
+      "source_url": "sample-designs/dice-eight-poker.html",
+      "summary": "掷 8 骰用德州扩展牌型计分，charms 乘性链滚雪球还债 · 首次填补 auto_set 结构性空类",
+      "legacy_source": {
+        "slug": "dice-eight-poker-proposal",
+        "framework_version": "v5"
+      },
+      "legacy_analysis": {
+        "framework_version": "v5",
+        "updated_at": "2026-05-13",
+        "scores": {
+          "random": 8,
+          "combo": 9,
+          "pool": 8,
+          "structure": 9
+        },
+        "qualitative": {
+          "pool_base_desc": "基础池 18 骰种（6 点数 × 3 颜色 R/G/B）；每局掷 8 颗骰子；颜色分布随机；骰盅+骰桌物理装置；点数与颜色双重 random，无稀有度梯度（所有骰均等概率）",
+          "pool_active_desc": "主动池 150 charms（90 普 + 38 罕 + 18 史诗 + 4 传奇）；6 大类：① 点数概率（30）② 颜色概率（25）③ 牌型倍率（35）④ 结构改造（20）⑤ 触发链（20）⑥ 颠覆规则（20）；玩家可挂 5-8 装备槽，按位置 1→N 顺序触发",
+          "random_design": "骰盅震动 → 倒出 8 颗骰子 → 在圆桌上滚动 1-2s → 落定后逐颗高亮（动画节奏匹配 Cloverpit）；点数和颜色同时随机产生戏剧化（VR 触发不可预测 + 视觉锁定明确）。v0.2 升级：combo1 结算时逐牌型顺序触发（800ms→150ms 速度递增）+ 贡献骰子金色高亮 + Web Audio 合成音效（Tier 1-5 频率/和弦递增）",
+          "show_topology": "0D_multiset",
+          "put_form": "auto_set",
+          "combo_synergy": "德州扑克扩展牌型字典 24 种。v0.2 计分公式 4 乘性维度：单牌型得分 = Σ(组成骰子的价值 × 符号倍率) × 图形分 × 图形倍率。基础 4（对子/两对/三对/三条）+ 进阶 5（葫芦/顺子/同色对/同色组5/双葫芦）+ 中阶 4（四条/同色三条/大顺/同色组6）+ 高级 5（五条/同色顺子/同色四条/同色组7/六条/同色大顺）+ 传奇 4（全同色8/同色五条/七条/八条 figure_score 25-50）。符号价值表（决策 1A 按点数 6 档）：1-2 价值 2 / 3-4 价值 3 / 5 价值 5 / 6 价值 7（Cloverpit 同构）。1M 次 Monte Carlo 仿真：一对自然概率 100%（保底），五条 2.77%，六条 0.26%，八条 0.0006%（必须靠传奇 charm wild dice 达成）",
+          "combo_predicate": [
+            "type_dict"
+          ],
+          "combo_modifier": "150 charms 按位置 1→8 严格顺序触发乘性链。v0.2 起作用于 4 乘性维度的各通道：① 概率类（改 random 分布，如「幸运六」6 点 +50%）② 符号倍率类（如「6 点高徒」6 点 ×3，让高点价值进一步放大）③ 图形倍率类（如「葫芦升华」葫芦图形 ×3）④ 全局倍率（如「黄金骰盅」全局 ×1.5）+ 颠覆规则（百搭骰/牌型升档/无视破产等传奇）。倍率范围 ×1.2（普）→ ×50（传奇）",
+          "rpbd_construction": "密室商店/抽卡获得新 charms；不动基础骰池（保持养概率纯粹）；跨局解锁系统提供元进展（新角色 / 新主题 / 新难度）",
+          "checkpoint_mechanism": "6 周还债 checkpoint，每周 3 spin；T₀=100，r=2.0 指数递增；最终债务 ≈ 3200；未达标永久死亡 + 多结局叙事；推荐题材：东方占卜师 / 中式古风赌场（差异化 Cloverpit 西方恐怖路线） · 补充：M=6 / N=3 / T₀=100 / r=2.0 / 无显式 boss（最后一局做高强度收尾）"
+        },
+        "pressure_params": {
+          "M": "6",
+          "N": "3",
+          "T0": "100",
+          "r": "2.0",
+          "m_boss": null
+        },
+        "summary": "【提案作品 · 非已发售】总分 34（A 级），表演 8.5 / 结构 8.5。设计指纹：[0D_multiset × auto_set × type_dict + multiplicative_chain]，**首次填补 v5 框架的 auto_set 结构性空类**（34 已分析样本无此格）。投影到锚点 Cloverpit + Aotenjo + Dice A Million 复合：继承 Cloverpit charms 乘性链 + 还债压力，但装置层换为骰盅+8 骰，判定层换为德州扑克扩展牌型 × 3 色花色。差异化 3 条：① 填空 auto_set ② 颜色花色 × 德州牌型扩大组合空间 ③ 骰盅物理戏剧化第一峰多巴胺。设计风险：30 牌型心智负担需教学渐进；自然 8 条概率 6/1M 必须靠传奇 charms。基于 1M Monte Carlo 仿真期望单局基础分 351 → 8 charms 乘性链放大 ×50-100 → 单局产出 17000-35000 匹配第 5-6 周还债额度（6400 → 19200）。"
+      }
+    }
+  ]
+}

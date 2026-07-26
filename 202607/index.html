@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、品类变体图谱。">
+  <title>持续爱干 · 游戏体验模型与原型图谱</title>
+  <link rel="stylesheet" href="./assets/styles.css?v=20260726-21">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <a class="brand" href="#model" aria-label="返回体验模型">
+      <span class="brand-mark" aria-hidden="true">R</span>
+      <span>
+        <strong>持续爱干</strong>
+        <small>体验模型与原型图谱</small>
+      </span>
+    </a>
+    <nav class="main-nav" aria-label="主要导航">
+      <a href="#model" data-nav="model">体验模型</a>
+      <a href="#atlas" data-nav="atlas">原型图谱</a>
+      <a href="#library" data-nav="library">游戏库</a>
+    </nav>
+    <span class="version-label">202607 · draft.19</span>
+  </header>
+
+  <main id="main">
+    <div class="tab-page" data-tab-page="model">
+    <section class="hero" id="top">
+      <div class="hero-intro">
+        <div class="hero-title">
+          <p class="eyebrow">00 · EXPERIENCE MODEL</p>
+          <h1>双峰多巴胺<br><em>体验公式</em></h1>
+        </div>
+        <div class="hero-thesis">
+          <span>体验目标</span>
+          <strong>持续爱干</strong>
+          <p>玩家在多次短循环后，仍愿意主动开始下一次操作、观察结果并调整构筑。</p>
+        </div>
+      </div>
+
+      <div class="hero-model" aria-label="核心公式">
+        <div class="model-card-head">
+          <span>一次 Spin 的双峰体验，与多次 Spin 后的构筑循环</span>
+          <span class="status-dot">主干已确认</span>
+        </div>
+        <div class="hero-formula">
+          <span class="formula-bracket">[</span>
+          <span class="formula-peak-group peak-one-group">
+            <span class="formula-peak-label">
+              <b>多巴胺峰值 ①</b>
+              <small>结果揭晓 · 控制感</small>
+            </span>
+            <span class="formula-group-row">
+              <span class="formula-stage stage-one">Random<small>@ Pool_Symbol</small></span>
+              <span class="formula-arrow">→</span>
+              <span class="formula-stage stage-one">Put<small>@ Show_TP</small></span>
+            </span>
+          </span>
+          <span class="formula-arrow">→</span>
+          <span class="formula-peak-group peak-two-group">
+            <span class="formula-peak-label">
+              <b>多巴胺峰值 ②</b>
+              <small>协同识别 · 结算</small>
+            </span>
+            <span class="formula-group-row">
+              <span class="formula-stage stage-two">Combo<small>(C₁ → C₂?) @ Show_TP</small></span>
+            </span>
+          </span>
+          <span class="formula-bracket">]ₙ</span>
+          <span class="formula-arrow">→</span>
+          <span class="formula-peak-group build-loop-group">
+            <span class="formula-peak-label">
+              <b>长期循环</b>
+              <small>不是第三峰值</small>
+            </span>
+            <span class="formula-group-row">
+              <span class="formula-stage stage-build">BD<small>构筑决策</small></span>
+            </span>
+          </span>
+        </div>
+
+        <div class="formula-dataflow" aria-label="从单次 Spin 到下一构筑周期的完整数据流">
+          <span>Pool_Symbol</span>
+          <i>Random</i>
+          <span>SingleSpin_Symbol</span>
+          <i>Put @ Show_TP</i>
+          <span>Show_State</span>
+          <i>Combo(C₁ → C₂?) @ Show_TP</i>
+          <span>Spin_Result</span>
+          <i>累计 × N</i>
+          <span>BD</span>
+          <i>修改参数</i>
+          <span>下一周期</span>
+        </div>
+
+        <div class="formula-annotations">
+          <div class="formula-note note-experience">
+            <span class="note-index">体验映射</span>
+            <strong>双峰发生在一次 Spin 内</strong>
+            <p>第一峰来自 Random + Put 的结果揭晓与控制感；第二峰来自 Combo 的协同识别与结算。</p>
+          </div>
+          <div class="formula-note note-scope">
+            <span class="note-index">@ 作用域</span>
+            <strong>随机域与承载域分开</strong>
+            <p>Random 只直接读取 Pool_Symbol；Put 与 Combo 则共同使用同一个 Show_TP。</p>
+          </div>
+          <div class="formula-note note-combo">
+            <span class="note-index">C₁ / C₂</span>
+            <strong>基础协同与结果演绎</strong>
+            <p>C₁ 产生低学习成本的基础协同结果；可选的 C₂ 再对结果进行修饰，或转译为战斗、资源与状态等结果系统。</p>
+          </div>
+          <div class="formula-note note-cycle">
+            <span class="note-index">N → BD</span>
+            <strong>短循环进入长期构筑</strong>
+            <p>当下层启用 BD 时，N ≥ 1 且动态决定；未启用构筑的机制可以令 N 与 BD 不适用。</p>
+          </div>
+        </div>
+        <p class="model-positioning">本模型本质上是对这类游戏的抽象假设。</p>
+      </div>
+
+      <div class="hero-foot">
+        <p>
+          <strong>公式是整站的共同底座。</strong>
+          机制母型、品类原型与品类变体，都必须说明自己约束或改变了哪个公式字段。
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#model-content">逐项理解公式</a>
+          <a class="button button-secondary" href="#atlas">查看逐层约束</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section model-section" id="model-content">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">01 · 体验模型的抽象架构</p>
+          <h2>三个体验阶段：<br>揭晓 → 结算 → 构筑</h2>
+        </div>
+        <p>
+          公式保留 Random、Put、Combo 与可选的 BD 接口；当下层启用构筑循环时，
+          玩家体验可以归纳为三个阶段。
+        </p>
+      </div>
+
+      <section class="experience-timeline-shell" id="experience-timeline" aria-labelledby="experience-timeline-title">
+        <div class="experience-timeline-head">
+          <div>
+            <span class="timeline-kicker">EXPERIENCE TIMELINE</span>
+            <h3 id="experience-timeline-title">一次 Spin 的双峰，与 N 次后的构筑节点</h3>
+          </div>
+          <button type="button" class="timeline-reset" data-experience-preset="all" aria-pressed="true">
+            查看完整循环
+          </button>
+        </div>
+
+        <div class="experience-timeline-scroll">
+          <div class="experience-timeline" aria-label="体验阶段时间轴">
+            <div class="timeline-scope-row" aria-hidden="true">
+              <span class="timeline-spin-scope">一次 Spin · 短周期（连续重复 × N）</span>
+              <span class="timeline-build-scope">周期边界 · 长期构筑</span>
+            </div>
+            <div class="timeline-track">
+              <span class="timeline-start">Spin 开始</span>
+              <button type="button" class="timeline-stage timeline-stage-reveal"
+                data-experience-preset="reveal" aria-pressed="false">
+                <span class="timeline-dot">01</span>
+                <span>
+                  <strong>揭晓</strong>
+                  <small>Random + Put · 第一峰</small>
+                </span>
+              </button>
+              <span class="timeline-arrow" aria-hidden="true">→</span>
+              <button type="button" class="timeline-stage timeline-stage-settle"
+                data-experience-preset="settle" aria-pressed="false">
+                <span class="timeline-dot">02</span>
+                <span>
+                  <strong>结算</strong>
+                  <small>Combo · 第二峰</small>
+                </span>
+              </button>
+              <span class="timeline-repeat" aria-label="重复 N 次">× N</span>
+              <span class="timeline-arrow" aria-hidden="true">→</span>
+              <button type="button" class="timeline-stage timeline-stage-build"
+                data-experience-preset="build" aria-pressed="false">
+                <span class="timeline-dot">03</span>
+                <span>
+                  <strong>构筑</strong>
+                  <small>BD · 修改下一周期</small>
+                </span>
+              </button>
+              <span class="timeline-return" aria-hidden="true">↺ 下一周期</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="experience-timeline-info" data-experience-info aria-live="polite">
+          <span data-experience-info-label>完整循环</span>
+          <strong data-experience-info-title>揭晓与结算构成单次 Spin 的双峰，连续 N 次后进入构筑。</strong>
+          <p data-experience-info-copy>构筑通过 BD 修改可配置参数，再把玩家送回下一周期的 Random。</p>
+        </div>
+      </section>
+
+      <div class="cycle-board experience-stage-board" data-experience-stage-board>
+        <article class="cycle-stage experience-stage experience-reveal" data-experience-stage="reveal">
+          <div class="experience-stage-head">
+            <span class="stage-index">阶段 01</span>
+            <span class="peak-tag">多巴胺第一峰</span>
+          </div>
+          <h3>结果揭晓与呈现</h3>
+          <code>Random + Put</code>
+          <button type="button" class="stage-visual stage-visual-reveal"
+            data-experience-preset="reveal" aria-pressed="false"
+            aria-label="聚焦揭晓阶段：符号池经过随机抽取后进入 Show_TP">
+            <span class="visual-sequence" aria-hidden="true">
+              <span class="visual-pool">
+                <i>◆</i><i>7</i><i>●</i>
+              </span>
+              <span class="visual-arrow">→</span>
+              <span class="visual-operation">
+                <b>Random</b>
+                <em>抽取 1 个</em>
+              </span>
+              <span class="visual-arrow">→</span>
+              <span class="visual-grid">
+                <i></i><i class="is-landed">◆</i><i></i>
+                <i></i><i></i><i></i>
+              </span>
+            </span>
+            <span class="stage-visual-caption">Pool_Symbol → 随机抽取 → 呈现于 Show_TP</span>
+          </button>
+          <p>
+            玩家等待随机结果出现，并看到结果进入 Show_TP。
+            如果 Put 允许玩家参与，还会产生放置或选择的控制感。
+          </p>
+          <strong>玩家此刻关心：这次抽到了什么，结果怎样落下？</strong>
+        </article>
+
+        <span class="cycle-connector" aria-hidden="true">→</span>
+
+        <article class="cycle-stage experience-stage experience-settle" data-experience-stage="settle">
+          <div class="experience-stage-head">
+            <span class="stage-index">阶段 02</span>
+            <span class="peak-tag">多巴胺第二峰</span>
+          </div>
+          <h3>协同识别与结算</h3>
+          <code>Combo(C₁ → C₂?)</code>
+          <button type="button" class="stage-visual stage-visual-settle"
+            data-experience-preset="settle" aria-pressed="false"
+            aria-label="聚焦结算阶段：识别符号协同并生成单次结果">
+            <span class="visual-sequence" aria-hidden="true">
+              <span class="visual-combo">
+                <i>◆</i><i>◆</i><i>◆</i>
+                <b>C₁</b>
+              </span>
+              <span class="visual-plus">+</span>
+              <span class="visual-modifier">
+                <b>C₂</b>
+                <em>修饰／转译</em>
+              </span>
+              <span class="visual-arrow">→</span>
+              <span class="visual-result">
+                <small>Spin_Result</small>
+                <strong>+12</strong>
+              </span>
+            </span>
+            <span class="stage-visual-caption">C₁ 产生基础结果 → C₂ 可选演绎 → 生成单次结果</span>
+          </button>
+          <p>
+            玩家先识别 C₁ 符号协同，再观察可选的 C₂ 如何修饰基础结果，
+            或将其转译为数值、战斗、资源与状态结果。
+          </p>
+          <strong>玩家此刻关心：组合触发了什么，最终得到多少（数值），或呈现了怎样的开奖过程（表演）？</strong>
+        </article>
+
+        <span class="cycle-connector" aria-hidden="true">→</span>
+
+        <article class="cycle-stage experience-stage experience-build" data-experience-stage="build">
+          <div class="experience-stage-head">
+            <span class="stage-index">阶段 03</span>
+            <span class="peak-tag">长期构筑循环</span>
+          </div>
+          <h3>构筑调整与再次期待</h3>
+          <code>[Spin]ₙ → BD → 下一周期</code>
+          <button type="button" class="stage-visual stage-visual-build"
+            data-experience-preset="build" aria-pressed="false"
+            aria-label="聚焦构筑阶段：累计 N 次 Spin 后调整变量并进入下一周期">
+            <span class="visual-sequence" aria-hidden="true">
+              <span class="visual-spins">
+                <i>1</i><i>2</i><i>…</i><i>N</i>
+              </span>
+              <span class="visual-arrow">→</span>
+              <span class="visual-sliders">
+                <b>BD</b>
+                <i></i><i></i><i></i>
+              </span>
+              <span class="visual-arrow">→</span>
+              <span class="visual-next">
+                <b>↺</b>
+                <em>下一周期</em>
+              </span>
+            </span>
+            <span class="stage-visual-caption">累计 N 次 → 修改可配置参数 → 重新进入 Random</span>
+          </button>
+          <p>
+            当下层启用 BD 时，完成 N 次 Spin 后，玩家根据周期结果调整符号池、
+            随机参数、Put、协同规则或周期节奏，再进入下一轮。
+          </p>
+          <strong>玩家此刻关心：下一轮要改什么，能不能变得更强？</strong>
+        </article>
+      </div>
+
+      <div class="term-workbench">
+        <div class="field-formula-panel">
+          <div class="field-formula-head">
+            <div>
+              <span>当前公式</span>
+              <strong>点击字段，定位它在公式中的位置</strong>
+            </div>
+            <small>高亮位置与下方 Tab 双向联动</small>
+          </div>
+          <div id="field-formula-map" aria-label="可交互公式字段定位"></div>
+        </div>
+        <div class="term-list-panel">
+          <div class="panel-title">
+            <span>公式字段</span>
+            <small>点击 Tab 切换下方详情</small>
+          </div>
+          <div class="term-buttons" id="formula-controls" aria-label="公式字段列表"></div>
+        </div>
+        <article class="term-detail" id="term-detail" aria-live="polite">
+          <p class="loading-copy">正在载入公式定义…</p>
+        </article>
+      </div>
+    </section>
+    </div>
+
+    <div class="tab-page" data-tab-page="atlas" hidden>
+    <section class="section atlas-section" id="atlas-content">
+      <div class="section-heading atlas-heading">
+        <div>
+          <p class="eyebrow">02 · 原型继承分析</p>
+          <h2>沿公式逐层收窄，而不是复制整套说明</h2>
+        </div>
+        <p>
+          横向先看“有多少、有哪些”，选中节点后再看它继承了什么、
+          改变了什么，以及变化落在公式的哪个位置。
+        </p>
+      </div>
+
+      <section class="atlas-formula-panel" aria-labelledby="atlas-formula-title">
+        <div class="atlas-formula-head">
+          <div>
+            <p class="eyebrow">FORMULA CONSTRAINT VIEW</p>
+            <h3 id="atlas-formula-title">当前节点如何约束体验公式</h3>
+          </div>
+          <div class="atlas-formula-legend" aria-label="公式约束图例">
+            <span><i class="mechanism"></i>机制母型</span>
+            <span><i class="prototype"></i>品类原型</span>
+            <span><i class="variant"></i>品类变体</span>
+            <span><i class="direct-change"></i>当前层变化</span>
+            <span><i class="inherited"></i>继承未改</span>
+          </div>
+        </div>
+        <div id="atlas-formula-map" aria-live="polite">
+          <p class="loading-copy">正在载入公式约束…</p>
+        </div>
+      </section>
+
+      <div class="atlas-stats" id="atlas-stats" aria-label="图谱数量统计"></div>
+
+      <div class="atlas-toolbar">
+        <label class="search-box">
+          <span class="search-icon" aria-hidden="true"></span>
+          <span class="sr-only">搜索图谱节点</span>
+          <input id="atlas-search" type="search" placeholder="搜索母型、原型、变体或产品">
+        </label>
+        <label class="filter-box">
+          <span>显示</span>
+          <select id="atlas-filter">
+            <option value="all">全部状态</option>
+            <option value="ready">已确认与可用</option>
+            <option value="working">包含待完善</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="atlas-browser">
+        <section class="atlas-level" aria-labelledby="mechanism-title">
+          <div class="level-head">
+            <div>
+              <span class="level-number">01</span>
+              <h3 id="mechanism-title">机制母型</h3>
+            </div>
+            <p id="mechanism-count">共 0 种</p>
+          </div>
+          <div class="card-rail" id="mechanism-rail"></div>
+        </section>
+
+        <section class="atlas-level" aria-labelledby="prototype-title">
+          <div class="level-head">
+            <div>
+              <span class="level-number">02</span>
+              <h3 id="prototype-title">品类原型</h3>
+            </div>
+            <p id="prototype-count">包含 0 种</p>
+          </div>
+          <div class="card-rail" id="prototype-rail"></div>
+        </section>
+
+        <section class="atlas-level" aria-labelledby="variant-title">
+          <div class="level-head">
+            <div>
+              <span class="level-number">03</span>
+              <h3 id="variant-title">品类变体</h3>
+            </div>
+            <p id="variant-count">包含 0 种</p>
+          </div>
+          <div class="card-rail" id="variant-rail"></div>
+        </section>
+      </div>
+
+      <div class="node-inspector">
+        <nav class="breadcrumb" id="atlas-breadcrumb" aria-label="当前图谱路径"></nav>
+        <article id="node-detail" aria-live="polite">
+          <p class="loading-copy">正在载入原型图谱…</p>
+        </article>
+      </div>
+    </section>
+    </div>
+
+    <div class="tab-page" data-tab-page="library" hidden>
+    <section class="section library-section" id="library-content">
+      <div class="section-heading library-heading">
+        <div>
+          <p class="eyebrow">03 · 游戏库</p>
+          <h2>游戏目录与模型数据管理台</h2>
+        </div>
+        <p>
+          具体产品从这里进入数据库；母型、品类原型与品类变体的公式字段，
+          也在这里集中查看、调整并完成人工确认。
+        </p>
+      </div>
+
+      <div class="library-service-bar" id="library-service-bar" aria-live="polite">
+        <span class="service-dot"></span>
+        <div>
+          <strong>正在检查本地数据服务…</strong>
+          <p>
+            查看模式始终可用；编辑和确认需要通过项目的本地网页地址打开。
+          </p>
+        </div>
+      </div>
+
+      <div class="library-stats" id="library-stats" aria-label="游戏库数据统计"></div>
+
+      <nav class="library-subnav" aria-label="游戏库功能">
+        <button type="button" data-library-view="products" aria-pressed="true">
+          <span>01</span>
+          <strong>游戏目录</strong>
+          <small>查看产品与分类路径</small>
+        </button>
+        <button type="button" data-library-view="matrix" aria-pressed="false">
+          <span>02</span>
+          <strong>公式数据表</strong>
+          <small>横向检查八个字段</small>
+        </button>
+        <button type="button" data-library-view="review" aria-pressed="false">
+          <span>03</span>
+          <strong>待确认队列</strong>
+          <small>集中完成人工确认</small>
+        </button>
+      </nav>
+
+      <section class="library-panel" data-library-panel="products" aria-labelledby="product-catalog-title">
+        <div class="library-panel-head">
+          <div>
+            <p class="eyebrow">PRODUCT CATALOG</p>
+            <h3 id="product-catalog-title">全部具体产品</h3>
+          </div>
+          <div class="product-catalog-tools">
+            <label class="product-filter">
+              <span>分类状态</span>
+              <select id="library-product-filter">
+                <option value="all">全部游戏</option>
+                <option value="confirmed">已确认分类</option>
+                <option value="partial">部分归类</option>
+                <option value="unreviewed">尚未归类</option>
+                <option value="legacy">旧版迁入</option>
+              </select>
+            </label>
+            <label class="library-search">
+              <span class="sr-only">搜索游戏</span>
+              <input id="library-product-search" type="search" placeholder="搜索游戏、作者、标签或旧版分析">
+            </label>
+          </div>
+        </div>
+        <div class="product-result-summary" id="product-result-summary" aria-live="polite"></div>
+        <div class="product-catalog" id="product-catalog">
+          <p class="loading-copy">正在载入产品数据…</p>
+        </div>
+      </section>
+
+      <section class="library-panel" data-library-panel="matrix" aria-labelledby="formula-matrix-title" hidden>
+        <div class="library-panel-head matrix-head">
+          <div>
+            <p class="eyebrow">FORMULA DATA MATRIX</p>
+            <h3 id="formula-matrix-title">模型公式字段总表</h3>
+            <p>每一行是一个模型节点，每一列是一个公式字段。点击单元格查看或修改。</p>
+          </div>
+          <div class="matrix-filters">
+            <label>
+              <span>层级</span>
+              <select id="library-level-filter">
+                <option value="all">全部层级</option>
+                <option value="mechanism_archetype">机制母型</option>
+                <option value="category_prototype">品类原型</option>
+                <option value="category_variant">品类变体</option>
+              </select>
+            </label>
+            <label>
+              <span>字段</span>
+              <select id="library-field-filter">
+                <option value="all">全部字段</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="formula-matrix-scroll">
+          <table class="formula-data-table" id="formula-data-table">
+            <caption class="sr-only">机制母型、品类原型和品类变体的公式字段表</caption>
+          </table>
+        </div>
+        <div class="matrix-legend" aria-label="字段状态图例">
+          <span><i class="draft"></i>草稿</span>
+          <span><i class="pending"></i>待确认</span>
+          <span><i class="confirmed"></i>已确认</span>
+          <span>单元格顶部显示相对父级操作，正文显示本层直接定义。</span>
+        </div>
+      </section>
+
+      <section class="library-panel" data-library-panel="review" aria-labelledby="review-queue-title" hidden>
+        <div class="library-panel-head">
+          <div>
+            <p class="eyebrow">REVIEW QUEUE</p>
+            <h3 id="review-queue-title">待确认字段</h3>
+            <p>这里集中显示尚未冻结的字段；确认后会记录时间与变更内容。</p>
+          </div>
+          <button type="button" class="button button-secondary" id="refresh-review-queue">
+            刷新队列
+          </button>
+        </div>
+        <div class="review-queue" id="review-queue">
+          <p class="loading-copy">正在整理待确认内容…</p>
+        </div>
+      </section>
+    </section>
+    </div>
+  </main>
+
+  <dialog class="field-editor" id="field-editor" aria-labelledby="field-editor-title">
+    <form id="field-editor-form">
+      <div class="field-editor-head">
+        <div>
+          <span id="field-editor-path">模型节点</span>
+          <h3 id="field-editor-title">编辑公式字段</h3>
+        </div>
+        <button type="button" class="editor-close" id="field-editor-close" aria-label="关闭编辑面板">×</button>
+      </div>
+
+      <div class="editor-inheritance-preview">
+        <span>父级有效结果</span>
+        <strong id="field-editor-parent">体验公式基础字段</strong>
+      </div>
+
+      <div class="field-editor-grid">
+        <label>
+          <span>相对父级操作</span>
+          <select id="field-editor-operation" required></select>
+        </label>
+        <label>
+          <span>内容状态</span>
+          <select id="field-editor-status" required>
+            <option value="draft">草稿</option>
+            <option value="pending">待确认</option>
+            <option value="confirmed">已确认</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="editor-field">
+        <span>约束短标签</span>
+        <input id="field-editor-label" maxlength="80" required>
+      </label>
+
+      <label class="editor-field">
+        <span>字段描述</span>
+        <textarea id="field-editor-summary" rows="6" maxlength="1200" required></textarea>
+      </label>
+
+      <label class="editor-field">
+        <span>本次调整备注</span>
+        <textarea id="field-editor-note" rows="3" maxlength="600"
+          placeholder="说明为什么这样修改，或记录仍需核实的问题。"></textarea>
+      </label>
+
+      <div class="field-editor-message" id="field-editor-message" aria-live="polite"></div>
+
+      <div class="field-editor-actions">
+        <button type="button" class="button button-secondary" id="field-editor-cancel">取消</button>
+        <button type="submit" class="button button-secondary" id="field-editor-save">保存调整</button>
+        <button type="button" class="button button-primary" id="field-editor-confirm">人工确认</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="product-detail-dialog" id="product-detail" aria-labelledby="product-detail-title">
+    <article>
+      <button type="button" class="editor-close product-detail-close" id="product-detail-close"
+        aria-label="关闭游戏资料">×</button>
+      <div id="product-detail-content">
+        <p class="loading-copy">正在载入游戏资料…</p>
+      </div>
+    </article>
+  </dialog>
+
+  <div class="data-toast" id="data-toast" role="status" aria-live="polite" hidden></div>
+
+  <footer>
+    <p>R_RougeSlot · 202607 新版知识架构</p>
+    <p>体验模型 → 机制母型 → 品类原型 → 品类变体 → 具体产品</p>
+  </footer>
+
+  <div class="fatal-message" id="fatal-message" hidden>
+    数据暂时无法载入。请通过项目的本地网页地址访问此页面。
+  </div>
+
+  <script>
+    (() => {
+      const tabIds = ["model", "atlas", "library"];
+      const pages = [...document.querySelectorAll("[data-tab-page]")];
+      const links = [...document.querySelectorAll("[data-nav]")];
+
+      function currentTab() {
+        const hash = window.location.hash.slice(1);
+        if (tabIds.includes(hash)) return hash;
+        if (hash === "model-content" || hash === "top") return "model";
+        return "model";
+      }
+
+      function activateTab() {
+        const active = currentTab();
+        pages.forEach((page) => {
+          page.hidden = page.dataset.tabPage !== active;
+        });
+        links.forEach((link) => {
+          const selected = link.dataset.nav === active;
+          link.classList.toggle("active", selected);
+          link.setAttribute("aria-current", selected ? "page" : "false");
+        });
+
+        if (tabIds.includes(window.location.hash.slice(1))) {
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }
+      }
+
+      window.addEventListener("hashchange", activateTab);
+      activateTab();
+    })();
+  </script>
+  <script type="module" src="./assets/app.js?v=20260725-20"></script>
+</body>
+</html>

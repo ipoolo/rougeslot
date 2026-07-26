@@ -1,0 +1,65 @@
+{
+  "version": "202607-draft.4",
+  "items": [
+    {
+      "id": "variant.lucky-city",
+      "name": "幸运城市",
+      "type": "category_variant",
+      "status": "structure_ready_content_pending",
+      "order": 10,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.lucky-city"
+      ],
+      "summary": "“Slot 数值型 - 幸运房东”的 0D 多重集变体：保留数值构筑循环，但不使用原型的 2D Slot 网格。",
+      "definition": "《幸运城市》继承“Slot 数值型 - 幸运房东”的可构筑池、数值产出与长期决策，但覆写原型的空间结构：Show_TP 为 0D 多重集，不建立二维位置与邻接关系。",
+      "formula_changes": {
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+        },
+        "Put": {
+          "operation": "override",
+          "constraint_label": "无空间落位",
+          "summary": "覆写《幸运房东》的 2D 自动落位；结果进入 0D 多重集，不产生位置、方向或邻接关系。"
+        },
+        "Show_TP": {
+          "operation": "override",
+          "constraint_label": "0D 多重集",
+          "summary": "覆写《幸运房东》的 2D Slot 网格；只保留成员类型、数量和重复关系，不读取二维位置。"
+        },
+        "C1": {
+          "operation": "override",
+          "constraint_label": "无网格邻接",
+          "summary": "因 Show_TP 改为 0D 多重集，C₁ 不得继承《幸运房东》的网格邻接；具体数量、类型或生产关系等待继续拆解。"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 5,
+        "changed_fields": 3,
+        "note": "已确认 Show_TP 为 0D 多重集，并同步覆写 Put 与 C1 的空间前提；其余差异继续按公式字段补充。"
+      }
+    }
+  ]
+}
