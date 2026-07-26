@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、品类变体图谱。">
   <title>持续爱干 · 游戏体验模型与原型图谱</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260726-21">
+  <link rel="stylesheet" href="./assets/styles.css?v=20260726-29">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -23,7 +23,7 @@
       <a href="#atlas" data-nav="atlas">原型图谱</a>
       <a href="#library" data-nav="library">游戏库</a>
     </nav>
-    <span class="version-label">202607 · draft.19</span>
+    <span class="version-label">202607 · draft.24</span>
   </header>
 
   <main id="main">
@@ -31,7 +31,7 @@
     <section class="hero" id="top">
       <div class="hero-intro">
         <div class="hero-title">
-          <p class="eyebrow">00 · EXPERIENCE MODEL</p>
+          <p class="eyebrow">00 · 体验模型总览</p>
           <h1>双峰多巴胺<br><em>体验公式</em></h1>
         </div>
         <div class="hero-thesis">
@@ -46,76 +46,69 @@
           <span>一次 Spin 的双峰体验，与多次 Spin 后的构筑循环</span>
           <span class="status-dot">主干已确认</span>
         </div>
-        <div class="hero-formula">
-          <span class="formula-bracket">[</span>
-          <span class="formula-peak-group peak-one-group">
-            <span class="formula-peak-label">
-              <b>多巴胺峰值 ①</b>
-              <small>结果揭晓 · 控制感</small>
+        <div class="hero-pressure-domain">
+          <div class="hero-pressure-domain-head">
+            <span>
+              <b>P(t) · 目标压力域</b>
+              <small>目标 · 期限 · 当前差距 · 失败代价</small>
             </span>
-            <span class="formula-group-row">
-              <span class="formula-stage stage-one">Random<small>@ Pool_Symbol</small></span>
-              <span class="formula-arrow">→</span>
-              <span class="formula-stage stage-one">Put<small>@ Show_TP</small></span>
-            </span>
-          </span>
-          <span class="formula-arrow">→</span>
-          <span class="formula-peak-group peak-two-group">
-            <span class="formula-peak-label">
-              <b>多巴胺峰值 ②</b>
-              <small>协同识别 · 结算</small>
-            </span>
-            <span class="formula-group-row">
-              <span class="formula-stage stage-two">Combo<small>(C₁ → C₂?) @ Show_TP</small></span>
-            </span>
-          </span>
-          <span class="formula-bracket">]ₙ</span>
-          <span class="formula-arrow">→</span>
-          <span class="formula-peak-group build-loop-group">
-            <span class="formula-peak-label">
-              <b>长期循环</b>
-              <small>不是第三峰值</small>
-            </span>
-            <span class="formula-group-row">
-              <span class="formula-stage stage-build">BD<small>构筑决策</small></span>
-            </span>
-          </span>
-        </div>
-
-        <div class="formula-dataflow" aria-label="从单次 Spin 到下一构筑周期的完整数据流">
-          <span>Pool_Symbol</span>
-          <i>Random</i>
-          <span>SingleSpin_Symbol</span>
-          <i>Put @ Show_TP</i>
-          <span>Show_State</span>
-          <i>Combo(C₁ → C₂?) @ Show_TP</i>
-          <span>Spin_Result</span>
-          <i>累计 × N</i>
-          <span>BD</span>
-          <i>修改参数</i>
-          <span>下一周期</span>
-        </div>
-
-        <div class="formula-annotations">
-          <div class="formula-note note-experience">
-            <span class="note-index">体验映射</span>
-            <strong>双峰发生在一次 Spin 内</strong>
-            <p>第一峰来自 Random + Put 的结果揭晓与控制感；第二峰来自 Combo 的协同识别与结算。</p>
+            <strong>为每次结果提供“够不够”的判断，但不参与单次符号运算</strong>
           </div>
-          <div class="formula-note note-scope">
-            <span class="note-index">@ 作用域</span>
-            <strong>随机域与承载域分开</strong>
-            <p>Random 只直接读取 Pool_Symbol；Put 与 Combo 则共同使用同一个 Show_TP。</p>
+          <div class="hero-formula">
+            <span class="formula-bracket">[</span>
+            <span class="formula-peak-group peak-one-group">
+              <span class="formula-peak-label">
+                <b>多巴胺峰值 ①</b>
+                <small>结果揭晓 · 控制感</small>
+              </span>
+              <span class="formula-group-row">
+                <span class="formula-stage stage-one">Random<small>@ Pool_Symbol</small></span>
+                <span class="formula-arrow">→</span>
+                <span class="formula-stage stage-one">Put<small>@ Show_TP</small></span>
+              </span>
+            </span>
+            <span class="formula-arrow">→</span>
+            <span class="formula-peak-group peak-two-group">
+              <span class="formula-peak-label">
+                <b>多巴胺峰值 ②</b>
+                <small>协同识别 · 结算</small>
+              </span>
+              <span class="formula-group-row">
+                <span class="formula-stage stage-two">Combo<small>(C₁ → C₂?) @ Show_TP</small></span>
+              </span>
+            </span>
+            <span class="formula-bracket">]ₙ</span>
+            <span class="formula-arrow">→</span>
+            <span class="formula-peak-group build-loop-group">
+              <span class="formula-peak-label">
+                <b>长期循环</b>
+                <small>不是第三峰值</small>
+              </span>
+              <span class="formula-group-row">
+                <span class="formula-stage stage-build">BD<small>构筑决策</small></span>
+              </span>
+            </span>
+          </div>
+          <p class="hero-pressure-domain-foot">
+            P(t) 是可选的外层边界；它可以拥有独立于 N 的目标检查周期。
+          </p>
+        </div>
+
+        <div class="formula-annotations formula-summary-annotations">
+          <div class="formula-note note-experience">
+            <span class="note-index">多巴胺峰值 ①</span>
+            <strong>随机结果被揭晓</strong>
+            <p>Random + Put 把等待变成可见结果，形成揭晓与呈现的第一峰。</p>
           </div>
           <div class="formula-note note-combo">
-            <span class="note-index">C₁ / C₂</span>
-            <strong>基础协同与结果演绎</strong>
-            <p>C₁ 产生低学习成本的基础协同结果；可选的 C₂ 再对结果进行修饰，或转译为战斗、资源与状态等结果系统。</p>
+            <span class="note-index">多巴胺峰值 ②</span>
+            <strong>协同被识别并结算</strong>
+            <p>Combo 把符号协同转化为数值、战斗、资源或状态结果，形成第二峰。</p>
           </div>
           <div class="formula-note note-cycle">
-            <span class="note-index">N → BD</span>
-            <strong>短循环进入长期构筑</strong>
-            <p>当下层启用 BD 时，N ≥ 1 且动态决定；未启用构筑的机制可以令 N 与 BD 不适用。</p>
+            <span class="note-index">长期循环</span>
+            <strong>构筑更新下一轮期待</strong>
+            <p>BD 不是第三峰值；它在周期边界修改后续条件，让玩家再次期待下一轮。</p>
           </div>
         </div>
         <p class="model-positioning">本模型本质上是对这类游戏的抽象假设。</p>
@@ -127,21 +120,336 @@
           机制母型、品类原型与品类变体，都必须说明自己约束或改变了哪个公式字段。
         </p>
         <div class="hero-actions">
-          <a class="button button-primary" href="#model-content">逐项理解公式</a>
-          <a class="button button-secondary" href="#atlas">查看逐层约束</a>
+          <a class="button button-primary" href="#model-case">看《幸运房东》案例</a>
+          <a class="button button-secondary" href="#model-content">查看抽象字段</a>
         </div>
       </div>
+    </section>
+
+    <section class="section case-study-section" id="model-case">
+      <div class="section-heading case-study-heading">
+        <div>
+          <p class="eyebrow">01 · 案例讲解</p>
+          <h2>《幸运房东》的一次 Spin，<br>如何对应体验公式</h2>
+        </div>
+        <p>
+          双峰多巴胺体验模型来自对《幸运房东》等装置、随机、协同与构筑类游戏的共同抽象。
+          《幸运房东》是首个解释样本，不是模型的唯一来源。
+        </p>
+      </div>
+
+      <section class="case-model-shell" id="luck-landlord-case" aria-labelledby="luck-landlord-case-title">
+        <header class="case-model-head">
+          <div>
+            <span class="case-kicker">REPRESENTATIVE CASE · 幸运房东</span>
+            <h3 id="luck-landlord-case-title">把玩家实际经历，与公式字段逐步对齐</h3>
+          </div>
+          <nav class="case-preset-controls" aria-label="幸运房东案例观察方式">
+            <button type="button" data-case-preset="all" aria-pressed="true">完整流程</button>
+            <button type="button" data-case-preset="pressure" aria-pressed="false">目标压力 · P(t)</button>
+            <button type="button" data-case-preset="pool" aria-pressed="false">当前符号池</button>
+            <button type="button" data-case-preset="reveal" aria-pressed="false">第一峰 · 揭晓</button>
+            <button type="button" data-case-preset="settle" aria-pressed="false">第二峰 · 结算</button>
+            <button type="button" data-case-preset="build" aria-pressed="false">构筑更新</button>
+          </nav>
+        </header>
+
+        <section class="case-game-evidence" aria-labelledby="case-game-evidence-title">
+          <div class="case-evidence-head">
+            <div>
+              <span>GAME EVIDENCE · 官方游戏画面</span>
+              <strong id="case-game-evidence-title">先看玩家在游戏里做什么，再看它如何被抽象</strong>
+            </div>
+            <a href="https://store.steampowered.com/app/1404850/" target="_blank" rel="noreferrer">
+              Steam 官方页面 ↗
+            </a>
+          </div>
+
+          <div class="case-evidence-grid">
+            <button type="button" class="case-evidence-card evidence-board"
+              data-case-select="reveal" aria-pressed="false">
+              <span class="case-evidence-image">
+                <img
+                  src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1404850/ss_9ffe2163998d8302d215c05da91cd30cf84f8c2b.600x338.jpg?t=1769555096"
+                  alt="《幸运房东》的 Slot 主界面，中央是五列符号，左右显示当前道具与资源"
+                  loading="lazy" referrerpolicy="no-referrer">
+                <i>点击聚焦第一峰</i>
+              </span>
+              <span class="case-evidence-copy">
+                <small>真实界面 01 · Spin 主舞台</small>
+                <strong>符号被抽取并自动进入 3 × 5 Slot</strong>
+                <em>Random → Put @ Show_TP；落位后的盘面继续交给 C₁ 判定。</em>
+                <span class="case-evidence-tags">
+                  <b>Random</b><b>Put</b><b>2D Show_TP</b>
+                </span>
+              </span>
+            </button>
+
+            <button type="button" class="case-evidence-card evidence-settle"
+              data-case-select="settle" aria-pressed="false">
+              <span class="case-evidence-image evidence-settle-image">
+                <img
+                  src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1404850/ss_9ffe2163998d8302d215c05da91cd30cf84f8c2b.600x338.jpg?t=1769555096"
+                  alt="《幸运房东》的单次 Spin 结算画面：中央盘面用于符号协同，两侧道具修饰结果，左下显示累计金币"
+                  loading="lazy" referrerpolicy="no-referrer">
+                <span class="evidence-callout callout-c1"><b>C₁</b> 盘面协同</span>
+                <span class="evidence-callout callout-c2"><b>C₂</b> 道具修饰</span>
+                <span class="evidence-callout callout-result"><b>Result</b> 收入</span>
+                <i>点击聚焦第二峰</i>
+              </span>
+              <span class="case-evidence-copy">
+                <small>真实界面 02 · 本次 Spin 结算</small>
+                <strong>同一游戏画面里，可以定位 Combo 的三个组成部分</strong>
+                <em>Combo 不是抽象黑盒：盘面先产生基础结果，道具再演绎结果，最后把本次收入呈现给玩家。</em>
+                <span class="case-evidence-mapping">
+                  <span><b>C₁</b><i>中央 3 × 5 盘面：直接产出、数量阈值与邻接协同</i></span>
+                  <span><b>C₂</b><i>两侧已持有道具：增强、修饰或改变 C₁ 基础结果</i></span>
+                  <span><b>Spin_Result</b><i>金币增长与结算表演：玩家实际看到的本次输出</i></span>
+                </span>
+                <span class="case-evidence-tags">
+                  <b>C₁ · 符号协同</b><b>C₂ · 结果演绎</b><b>Spin_Result</b>
+                </span>
+              </span>
+            </button>
+
+            <button type="button" class="case-evidence-card evidence-build"
+              data-case-select="build" aria-pressed="false">
+              <span class="case-evidence-image">
+                <img
+                  src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1404850/ss_e01ef39d1da89e595001e878ec457ae410b48bd0.600x338.jpg?t=1769555096"
+                  alt="《幸运房东》一次 Spin 后的三选一添加符号界面"
+                  loading="lazy" referrerpolicy="no-referrer">
+                <i>点击聚焦构筑更新</i>
+              </span>
+              <span class="case-evidence-copy">
+                <small>真实界面 03 · 每次 Spin 后</small>
+                <strong>从三个候选中选择新符号</strong>
+                <em>本案例主线采用 N = 1；这次 BD 会直接改变下一轮 Pool_Symbol。</em>
+                <span class="case-evidence-tags">
+                  <b>N = 1</b><b>BD</b><b>Pool_Symbol</b>
+                </span>
+              </span>
+            </button>
+
+            <button type="button" class="case-evidence-card evidence-build"
+              data-case-select="build" aria-pressed="false">
+              <span class="case-evidence-image">
+                <img
+                  src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1404850/ss_325ef3cb7c3dc32f1d8b1e2dcaeb8c7fcd8e5c55.600x338.jpg?t=1769555096"
+                  alt="《幸运房东》的三选一添加道具界面，道具会改变后续符号效果"
+                  loading="lazy" referrerpolicy="no-referrer">
+                <i>点击聚焦构筑更新</i>
+              </span>
+              <span class="case-evidence-copy">
+                <small>真实界面 04 · 阶段性道具选择</small>
+                <strong>BD 获得道具，后续持续演绎结算结果</strong>
+                <em>获得道具发生在构筑节点；道具生效后进入后续 Spin 的 C₂。</em>
+                <span class="case-evidence-tags">
+                  <b>BD</b><b>道具池</b><b>后续 C₂</b>
+                </span>
+              </span>
+            </button>
+
+            <button type="button" class="case-evidence-card evidence-pressure"
+              data-case-select="pressure" aria-pressed="false">
+              <span class="case-evidence-image">
+                <img
+                  src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1404850/ss_ef5c598e1ddd6582211cd6112906eb13fbcf1d07.600x338.jpg?t=1769555096"
+                  alt="《幸运房东》的房租到期支付界面"
+                  loading="lazy" referrerpolicy="no-referrer">
+                <i>点击聚焦 P(t)</i>
+              </span>
+              <span class="case-evidence-copy">
+                <small>真实界面 05 · 若干次 Spin 后</small>
+                <strong>支付房租，检查此前累计收入是否达标</strong>
+                <em>这是更长的目标压力周期，不与每次 Spin 后选择符号的 N = 1 混为同一个周期。</em>
+                <span class="case-evidence-tags">
+                  <b>P(t)</b><b>跨 Spin 累计</b><b>房租检查</b>
+                </span>
+              </span>
+            </button>
+          </div>
+        </section>
+
+        <div class="case-map-scroll">
+          <div class="case-canonical-map" aria-label="幸运房东单次 Spin 的完整案例流程">
+            <div class="case-map-label">
+              <span>玩家实际经历</span>
+              <small>从当前符号池，到下一次 Spin</small>
+            </div>
+
+            <div class="case-game-track">
+              <section class="case-zone zone-source" data-case-zone="source">
+                <span class="case-zone-label">本轮输入</span>
+                <button type="button" class="case-node node-object"
+                  data-case-node="pool" data-case-select="pool" aria-pressed="false">
+                  <small>当前拥有</small>
+                  <strong>符号池</strong>
+                  <em>可持续增加／删除</em>
+                </button>
+              </section>
+
+              <span class="case-edge" data-case-edge="pool-random" aria-hidden="true">→</span>
+
+              <section class="case-zone zone-reveal" data-case-zone="reveal">
+                <span class="case-zone-label">多巴胺峰值 ① · 揭晓</span>
+                <button type="button" class="case-node node-operation"
+                  data-case-node="random" data-case-select="reveal" aria-pressed="false">
+                  <small>装置操作</small>
+                  <strong>随机抽取</strong>
+                  <em>从当前符号池产生结果</em>
+                </button>
+                <span class="case-edge" data-case-edge="random-symbol" aria-hidden="true">→</span>
+                <button type="button" class="case-node node-object"
+                  data-case-node="spin-symbol" data-case-select="reveal" aria-pressed="false">
+                  <small>本次结果</small>
+                  <strong>出现的符号</strong>
+                  <em>SingleSpin_Symbol</em>
+                </button>
+                <span class="case-edge" data-case-edge="symbol-put" aria-hidden="true">→</span>
+                <button type="button" class="case-node node-operation"
+                  data-case-node="put" data-case-select="reveal" aria-pressed="false">
+                  <small>自动 Put</small>
+                  <strong>落入 Slot</strong>
+                  <em>写入 3 × 5 网格</em>
+                </button>
+                <span class="case-edge" data-case-edge="put-state" aria-hidden="true">→</span>
+                <button type="button" class="case-node node-object"
+                  data-case-node="show-state" data-case-select="reveal" aria-pressed="false">
+                  <small>当前盘面</small>
+                  <strong>符号落位完成</strong>
+                  <em>Show_State</em>
+                </button>
+              </section>
+
+              <span class="case-edge" data-case-edge="state-c1" aria-hidden="true">→</span>
+
+              <section class="case-zone zone-settle" data-case-zone="settle">
+                <span class="case-zone-label">多巴胺峰值 ② · 结算</span>
+                <button type="button" class="case-node node-rule"
+                  data-case-node="c1" data-case-select="settle" aria-pressed="false">
+                  <small>C₁ · 符号协同</small>
+                  <strong>基础产出</strong>
+                  <em>直接产出／阈值／邻接</em>
+                </button>
+                <span class="case-edge" data-case-edge="c1-c2" aria-hidden="true">→</span>
+                <button type="button" class="case-node node-rule"
+                  data-case-node="c2" data-case-select="settle" aria-pressed="false">
+                  <small>C₂ · 结果演绎</small>
+                  <strong>道具修饰</strong>
+                  <em>增强或改变基础结果</em>
+                </button>
+                <span class="case-edge" data-case-edge="c2-result" aria-hidden="true">→</span>
+                <button type="button" class="case-node node-result"
+                  data-case-node="spin-result" data-case-select="settle" aria-pressed="false">
+                  <small>Spin_Result</small>
+                  <strong>获得本次收入</strong>
+                  <em>看见最终数值与表演</em>
+                </button>
+              </section>
+
+              <span class="case-edge" data-case-edge="result-n" aria-hidden="true">→</span>
+
+              <section class="case-zone zone-build" data-case-zone="build">
+                <span class="case-zone-label">长期循环 · 更新期待</span>
+                <button type="button" class="case-node node-cycle"
+                  data-case-node="n" data-case-select="build" aria-pressed="false">
+                  <small>本案例主线</small>
+                  <strong>N = 1</strong>
+                  <em>完成一次 Spin</em>
+                </button>
+                <span class="case-edge" data-case-edge="n-bd" aria-hidden="true">→</span>
+                <button type="button" class="case-node node-cycle"
+                  data-case-node="bd" data-case-select="build" aria-pressed="false">
+                  <small>BD · 构筑决策</small>
+                  <strong>选择新符号</strong>
+                  <em>其他节点可删除符号／获得道具</em>
+                </button>
+                <span class="case-edge" data-case-edge="bd-next" aria-hidden="true">↺</span>
+                <button type="button" class="case-node node-next"
+                  data-case-node="next" data-case-select="build" aria-pressed="false">
+                  <small>参数已变化</small>
+                  <strong>下一次 Spin</strong>
+                  <em>重新进入 Random</em>
+                </button>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-formula-panel">
+            <div class="case-map-label formula-lane-label">
+              <span>对应体验公式</span>
+              <small>公式固定显示在滚动区域外；同名字段仍与上方流程同步高亮</small>
+            </div>
+
+            <div class="case-formula-pressure-domain" data-case-zone="pressure">
+              <div class="case-formula-pressure-head">
+                <button type="button" data-case-node="pressure"
+                  data-case-select="pressure" aria-pressed="false">P(t) · 房租目标压力</button>
+                <span class="case-edge" data-case-edge="pressure-result">判断 Spin_Result 是否足够</span>
+                <span class="case-edge" data-case-edge="pressure-bd">影响 BD 构筑方向</span>
+                <small>房租金额 · 剩余 Spin · 金币缺口 · 未达标后果</small>
+              </div>
+              <div class="case-formula-track" aria-label="房租目标压力包裹的幸运房东体验公式">
+                <span class="case-formula-bracket">[</span>
+              <span class="case-formula-stage" data-case-zone="reveal">
+                <button type="button" data-case-node="random" data-case-select="reveal" aria-pressed="false">Random</button>
+                <span>@</span>
+                <button type="button" data-case-node="pool" data-case-select="pool" aria-pressed="false">Pool_Symbol</button>
+              </span>
+              <span class="case-edge" data-case-edge="pool-random" aria-hidden="true">→</span>
+              <span class="case-formula-stage" data-case-zone="reveal">
+                <button type="button" data-case-node="put" data-case-select="reveal" aria-pressed="false">Put</button>
+                <span>@</span>
+                <button type="button" data-case-node="show-tp" data-case-select="reveal" aria-pressed="false">Show_TP · 2D 网格</button>
+              </span>
+              <span class="case-edge" data-case-edge="state-c1" aria-hidden="true">→</span>
+              <span class="case-formula-stage formula-combo-stage" data-case-zone="settle">
+                <span>Combo(</span>
+                <button type="button" data-case-node="c1" data-case-select="settle" aria-pressed="false">C₁</button>
+                <span>→</span>
+                <button type="button" data-case-node="c2" data-case-select="settle" aria-pressed="false">C₂</button>
+                <span>) @</span>
+                <button type="button" data-case-node="show-tp" data-case-select="settle" aria-pressed="false">Show_TP · 2D 网格</button>
+              </span>
+              <span class="case-formula-bracket">]</span>
+              <button type="button" class="case-formula-cycle"
+                data-case-node="n" data-case-select="build" aria-pressed="false">N = 1</button>
+              <span class="case-edge" data-case-edge="n-bd" aria-hidden="true">→</span>
+                <button type="button" class="case-formula-cycle"
+                  data-case-node="bd" data-case-select="build" aria-pressed="false">BD</button>
+              </div>
+              <p>P(t) 的房租检查周期独立于公式中的 N = 1；前者检查目标，后者决定何时进入一次构筑选择。</p>
+            </div>
+        </div>
+
+        <div class="case-selection-info" data-case-info aria-live="polite">
+          <span data-case-info-label>完整案例</span>
+          <strong data-case-info-title>房租压力 P(t) 包裹完整循环；一次 Spin 内完成揭晓与结算，再通过构筑更新随机条件。</strong>
+          <p data-case-info-copy>上方是玩家实际经历，下方是同一流程在体验公式中的位置；P(t) 与 N = 1 分别表示外层压力和构筑频率。</p>
+        </div>
+
+        <aside class="case-pressure-note">
+          <span>P(t) · 外层目标压力</span>
+          <strong>若干次 Spin 后支付房租</strong>
+          <p>
+            房租检查决定玩家能否继续，并形成跨多次 Spin 的目标压力；它不与主流程中
+            “每次 Spin 后选择新符号”的 N = 1 混为同一个周期。
+          </p>
+        </aside>
+      </section>
     </section>
 
     <section class="section model-section" id="model-content">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">01 · 体验模型的抽象架构</p>
+          <p class="eyebrow">02 · 体验模型的抽象架构</p>
           <h2>三个体验阶段：<br>揭晓 → 结算 → 构筑</h2>
         </div>
         <p>
-          公式保留 Random、Put、Combo 与可选的 BD 接口；当下层启用构筑循环时，
-          玩家体验可以归纳为三个阶段。
+          P(t) 作为可选外层条件包裹 Random、Put、Combo 与 BD；
+          内部玩家体验仍然归纳为揭晓、结算与构筑三个阶段。
         </p>
       </div>
 
@@ -155,6 +463,13 @@
             查看完整循环
           </button>
         </div>
+
+        <button type="button" class="timeline-pressure-domain"
+          data-experience-preset="pressure" data-experience-stage="pressure" aria-pressed="false">
+          <span>P(t) · 目标压力域</span>
+          <strong>目标、期限、当前差距与失败代价持续包裹完整体验循环</strong>
+          <small>它赋予结果意义，但不作为第四个体验阶段；目标检查周期与 N 分开记录。</small>
+        </button>
 
         <div class="experience-timeline-scroll">
           <div class="experience-timeline" aria-label="体验阶段时间轴">
@@ -198,8 +513,8 @@
 
         <div class="experience-timeline-info" data-experience-info aria-live="polite">
           <span data-experience-info-label>完整循环</span>
-          <strong data-experience-info-title>揭晓与结算构成单次 Spin 的双峰，连续 N 次后进入构筑。</strong>
-          <p data-experience-info-copy>构筑通过 BD 修改可配置参数，再把玩家送回下一周期的 Random。</p>
+          <strong data-experience-info-title>P(t) 赋予结果目标意义；揭晓与结算形成双峰，连续 N 次后进入构筑。</strong>
+          <p data-experience-info-copy>目标压力域包裹完整循环，但不充当操作步骤；构筑通过 BD 修改可配置参数，再回到下一周期。</p>
         </div>
       </section>
 
@@ -338,36 +653,158 @@
     </div>
 
     <div class="tab-page" data-tab-page="atlas" hidden>
-    <section class="section atlas-section" id="atlas-content">
-      <div class="section-heading atlas-heading">
+    <section class="section atlas-method-section" id="atlas-method">
+      <div class="section-heading atlas-method-heading">
         <div>
-          <p class="eyebrow">02 · 原型继承分析</p>
-          <h2>沿公式逐层收窄，而不是复制整套说明</h2>
+          <p class="eyebrow">00 · 原型图谱分析架构</p>
+          <h2>一套体验模型，如何向下<br>分化成多个机制与品类</h2>
         </div>
         <p>
-          横向先看“有多少、有哪些”，选中节点后再看它继承了什么、
-          改变了什么，以及变化落在公式的哪个位置。
+          这不是一条固定的 Slot 链。每个父节点都可以拥有多个子节点；
+          每条分支仍然回到同一组体验公式字段，记录自己新增或改变的约束。
         </p>
       </div>
 
-      <section class="atlas-formula-panel" aria-labelledby="atlas-formula-title">
-        <div class="atlas-formula-head">
-          <div>
-            <p class="eyebrow">FORMULA CONSTRAINT VIEW</p>
-            <h3 id="atlas-formula-title">当前节点如何约束体验公式</h3>
+      <div class="atlas-method-formula" aria-label="原型图谱共同继承的体验公式">
+        <span>共同分析底座</span>
+        <strong>P(t) ⟦ [ Random @ Pool_Symbol → Put @ Show_TP → Combo(C₁ → C₂?) @ Show_TP ]ₙ → BD ⟧</strong>
+        <small>P(t) 是可选外层目标压力；每条分支都要说明它是否启用、如何检查，以及它与 N 的区别。</small>
+      </div>
+
+      <div class="atlas-cardinality-rule">
+        <span>最重要的结构规则</span>
+        <strong>每一层向下都是一对多：一个父节点，可以分化出多个子节点。</strong>
+        <p>子节点继承父级已有约束，只记录自己进一步固定、收窄、扩展、覆写或禁用的字段。</p>
+      </div>
+
+      <div class="atlas-cardinality-diagram" aria-label="体验模型向机制母型、品类原型与品类变体一对多展开">
+        <section class="cardinality-column cardinality-model">
+          <header>
+            <span>00 · 体验模型</span>
+            <strong>定义共同体验与完整公式</strong>
+            <small>当前模型数：1</small>
+          </header>
+          <div class="cardinality-node-stack">
+            <article class="cardinality-node is-recorded">
+              <small>当前已录入</small>
+              <strong>双峰多巴胺体验模型</strong>
+              <p>回答：我们想让玩家经历怎样的短循环与长期期待？</p>
+            </article>
           </div>
-          <div class="atlas-formula-legend" aria-label="公式约束图例">
-            <span><i class="mechanism"></i>机制母型</span>
-            <span><i class="prototype"></i>品类原型</span>
-            <span><i class="variant"></i>品类变体</span>
-            <span><i class="direct-change"></i>当前层变化</span>
-            <span><i class="inherited"></i>继承未改</span>
+        </section>
+
+        <div class="cardinality-connector">
+          <strong>1 → N</strong>
+          <span aria-hidden="true">→</span>
+          <small>同一体验模型可被多种装置机制实现</small>
+        </div>
+
+        <section class="cardinality-column cardinality-mechanism">
+          <header>
+            <span>01 · 机制母型</span>
+            <strong>加入装置先验与第一层约束</strong>
+            <small>每个模型可拥有多个</small>
+          </header>
+          <div class="cardinality-node-stack">
+            <article class="cardinality-node is-recorded">
+              <small>当前已录入</small>
+              <strong>Slot母体</strong>
+              <p>以符号池、随机抽取与装置落位作为玩家熟悉的先验。</p>
+            </article>
+            <article class="cardinality-node is-placeholder">
+              <small>未来扩展位置</small>
+              <strong>其他机制母型</strong>
+              <p>可以是另一种装置原型，不需要继承 Slot。</p>
+            </article>
           </div>
+        </section>
+
+        <div class="cardinality-connector">
+          <strong>每个母型 1 → N</strong>
+          <span aria-hidden="true">→</span>
+          <small>一个母型内部可分化多个品类原型</small>
         </div>
-        <div id="atlas-formula-map" aria-live="polite">
-          <p class="loading-copy">正在载入公式约束…</p>
+
+        <section class="cardinality-column cardinality-prototype">
+          <header>
+            <span>02 · 品类原型</span>
+            <strong>固化一组可复用的品类规则</strong>
+            <small>每个母型可拥有多个</small>
+          </header>
+          <div class="cardinality-node-stack">
+            <article class="cardinality-node is-recorded">
+              <small>Slot 下当前已录入</small>
+              <strong>Slot 数值型 - 幸运房东</strong>
+              <p>把 Slot 扩展为可构筑符号池、数值协同与持续 BD。</p>
+            </article>
+            <article class="cardinality-node is-placeholder">
+              <small>未来扩展位置</small>
+              <strong>Slot 的其他品类原型</strong>
+              <p>同一母型可以按结果系统与核心循环继续分化。</p>
+            </article>
+          </div>
+        </section>
+
+        <div class="cardinality-connector">
+          <strong>每个原型 1 → N</strong>
+          <span aria-hidden="true">→</span>
+          <small>一个原型可以产生多个局部变体</small>
         </div>
-      </section>
+
+        <section class="cardinality-column cardinality-variant">
+          <header>
+            <span>03 · 品类变体</span>
+            <strong>继承原型，只记录局部差异</strong>
+            <small>每个原型可拥有多个</small>
+          </header>
+          <div class="cardinality-node-stack">
+            <article class="cardinality-node is-recorded">
+              <small>当前已录入</small>
+              <strong>幸运城市</strong>
+              <p>继承数值构筑，但把 Show_TP 覆写为 0D 多重集。</p>
+            </article>
+            <article class="cardinality-node is-placeholder">
+              <small>未来扩展位置</small>
+              <strong>同原型的其他品类变体</strong>
+              <p>可以覆写不同字段，但仍共享同一个品类原型身份。</p>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <div class="atlas-example-path">
+        <div>
+          <span>当前数据库只录入的一条示例路径</span>
+          <strong>它用来演示分析方法，不代表图谱只能这样生长。</strong>
+        </div>
+        <p>
+          <b>双峰多巴胺</b><i>→</i>
+          <b>Slot母体</b><i>→</i>
+          <b>Slot 数值型 - 幸运房东</b><i>→</i>
+          <b>幸运城市</b>
+        </p>
+      </div>
+
+      <div class="atlas-method-principle">
+        <strong>分析规则</strong>
+        <p>
+          每个下层节点必须逐字段声明：继承、固定、收窄、扩展、覆写或禁用；同一父节点下面可以并列存在多个子节点。
+          具体产品作为实例与分析证据进入游戏库，不额外制造一层继承关系。
+        </p>
+      </div>
+    </section>
+
+    <section class="section atlas-section" id="atlas-content">
+      <div class="section-heading atlas-heading">
+        <div>
+          <p class="eyebrow">01 · 原型图谱目录</p>
+          <h2>先看有多少、有哪些，<br>再进入具体路径</h2>
+        </div>
+        <p>
+          先选择机制母型，再进入它的品类原型与品类变体；
+          完成选择后，下方会解释当前路径如何约束公式。
+        </p>
+      </div>
 
       <div class="atlas-stats" id="atlas-stats" aria-label="图谱数量统计"></div>
 
@@ -422,6 +859,41 @@
         </section>
       </div>
 
+      <div class="atlas-subsection-heading">
+        <div>
+          <p class="eyebrow">02 · 当前路径的逐层约束</p>
+          <h3>沿同一条公式收窄，而不是复制整套说明</h3>
+        </div>
+        <p>查看当前路径继承了什么、改变了什么，以及变化落在公式的哪个字段。</p>
+      </div>
+
+      <section class="atlas-formula-panel" aria-labelledby="atlas-formula-title">
+        <div class="atlas-formula-head">
+          <div>
+            <p class="eyebrow">FORMULA CONSTRAINT VIEW</p>
+            <h3 id="atlas-formula-title">当前节点如何约束体验公式</h3>
+          </div>
+          <div class="atlas-formula-legend" aria-label="公式约束图例">
+            <span><i class="mechanism"></i>机制母型</span>
+            <span><i class="prototype"></i>品类原型</span>
+            <span><i class="variant"></i>品类变体</span>
+            <span><i class="direct-change"></i>当前层变化</span>
+            <span><i class="inherited"></i>继承未改</span>
+          </div>
+        </div>
+        <div id="atlas-formula-map" aria-live="polite">
+          <p class="loading-copy">正在载入公式约束…</p>
+        </div>
+      </section>
+
+      <div class="atlas-subsection-heading atlas-detail-heading">
+        <div>
+          <p class="eyebrow">03 · 节点详情与相对变化</p>
+          <h3>只看当前层相对父级改了什么</h3>
+        </div>
+        <p>节点详情同时保留完整继承路径、当前有效结果和关联产品证据。</p>
+      </div>
+
       <div class="node-inspector">
         <nav class="breadcrumb" id="atlas-breadcrumb" aria-label="当前图谱路径"></nav>
         <article id="node-detail" aria-live="polite">
@@ -465,7 +937,7 @@
         <button type="button" data-library-view="matrix" aria-pressed="false">
           <span>02</span>
           <strong>公式数据表</strong>
-          <small>横向检查八个字段</small>
+          <small>横向检查九个字段</small>
         </button>
         <button type="button" data-library-view="review" aria-pressed="false">
           <span>03</span>
@@ -646,11 +1118,13 @@
       function currentTab() {
         const hash = window.location.hash.slice(1);
         if (tabIds.includes(hash)) return hash;
-        if (hash === "model-content" || hash === "top") return "model";
+        if (hash === "model-content" || hash === "model-case" || hash === "top") return "model";
+        if (hash === "atlas-content" || hash === "atlas-method") return "atlas";
         return "model";
       }
 
       function activateTab() {
+        const hash = window.location.hash.slice(1);
         const active = currentTab();
         pages.forEach((page) => {
           page.hidden = page.dataset.tabPage !== active;
@@ -661,8 +1135,15 @@
           link.setAttribute("aria-current", selected ? "page" : "false");
         });
 
-        if (tabIds.includes(window.location.hash.slice(1))) {
+        if (tabIds.includes(hash)) {
           window.scrollTo({ top: 0, behavior: "instant" });
+        } else if (hash) {
+          window.requestAnimationFrame(() => {
+            document.getElementById(hash)?.scrollIntoView({
+              block: "start",
+              behavior: "instant"
+            });
+          });
         }
       }
 
@@ -670,6 +1151,6 @@
       activateTab();
     })();
   </script>
-  <script type="module" src="./assets/app.js?v=20260725-20"></script>
+  <script type="module" src="./assets/app.js?v=20260726-29"></script>
 </body>
 </html>

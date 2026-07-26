@@ -29,6 +29,7 @@ const allowedOperations = new Set([
 ]);
 const allowedReviewStatuses = new Set(["draft", "pending", "confirmed"]);
 const formulaFields = [
+  "P_t",
   "Pool_Symbol",
   "Random",
   "Put",

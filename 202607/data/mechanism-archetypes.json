@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.4",
+  "version": "202607-draft.5",
   "items": [
     {
       "id": "mechanism.slot",
@@ -10,6 +10,13 @@
       "summary": "以符号池、随机抽取和装置化承载空间为先验的机制母型。",
       "definition": "Slot 不是某一款具体游戏，而是一组玩家已经具备认知先验的装置规则：从符号池产生随机结果，由装置完成主要放置，再在承载空间中识别符号协同。",
       "formula_constraints": {
+        "P_t": {
+          "operation": "default",
+          "constraint_label": "外层目标可选",
+          "summary": "Slot 机制母型本身不固定具体目标压力；具体游戏可以使用余额、分数目标、关卡期限或其他软硬目标包裹循环，也可以不启用明确的失败压力。",
+          "review_status": "pending",
+          "review_note": "已确认 P(t) 属于公式外层边界；Slot 层的具体默认范围仍需通过更多传统 Slot 案例校准。"
+        },
         "Pool_Symbol": {
           "operation": "fix",
           "constraint_label": "固定符号池",
@@ -59,6 +66,7 @@
         }
       },
       "open_axes": [
+        "P(t) 是否启用硬目标、期限、失败代价与递增曲线",
         "2D 网格的尺寸、形状与可用区域",
         "固定符号池与随机概率的具体配置",
         "支付线、相同符号、连续符号、支付表与经典特殊符号等 C1 规则",

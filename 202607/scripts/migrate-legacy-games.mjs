@@ -115,10 +115,14 @@ function formulaObservations(game) {
   const { qualitative, pressure_params: pressure, scores, summary } = game.analysis;
   const checkpoint = qualitative.checkpoint_mechanism;
   const field = (value, sourceFields) => ({
-    value,
+    value: value || "旧版资料未记录；等待按新版字段人工拆解。",
     source_fields: sourceFields,
     review_status: "draft"
   });
+  const pressureSummary = Object.entries(pressure ?? {})
+    .filter(([, value]) => value !== null && value !== undefined && value !== "")
+    .map(([key, value]) => `${key}=${typeof value === "object" ? JSON.stringify(value) : value}`)
+    .join(" · ");
 
   return {
     product_id: productId(game.slug),
@@ -126,6 +130,17 @@ function formulaObservations(game) {
     mapping_status: "mechanical_import_unconfirmed",
     review_status: "draft",
     fields: {
+      P_t: field(
+        [
+          checkpoint ? `目标检查：${checkpoint}` : null,
+          pressureSummary ? `旧版压力参数：${pressureSummary}` : null,
+          "注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。"
+        ].filter(Boolean).join("；"),
+        [
+          "analysis.qualitative.checkpoint_mechanism",
+          "analysis.pressure_params"
+        ]
+      ),
       Pool_Symbol: field(
         qualitative.pool_base_desc,
         ["analysis.qualitative.pool_base_desc"]
@@ -159,20 +174,15 @@ function formulaObservations(game) {
         ["analysis.qualitative.combo_modifier"]
       ),
       N: field(
+        "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
         [
-          pressure?.N ? `旧版压力参数 N=${pressure.N}` : null,
-          checkpoint
-        ].filter(Boolean).join("；"),
-        [
-          "analysis.pressure_params.N",
-          "analysis.qualitative.checkpoint_mechanism"
+          "新版迁移规则：N 与 P(t) 分离"
         ]
       ),
       BD: field(
-        [qualitative.rpbd_construction, checkpoint].filter(Boolean).join("；"),
+        qualitative.rpbd_construction,
         [
-          "analysis.qualitative.rpbd_construction",
-          "analysis.qualitative.checkpoint_mechanism"
+          "analysis.qualitative.rpbd_construction"
         ]
       )
     },
@@ -299,9 +309,10 @@ const output = {
     items: products
   },
   observations: {
-    version: "202607-draft.1",
+    version: "202607-draft.2",
     mapping_policy: "mechanical_import_unconfirmed",
     formula_fields: [
+      "P_t",
       "Pool_Symbol",
       "Random",
       "Put",

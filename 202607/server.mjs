@@ -13,6 +13,7 @@ const migrationReportPath = join(dataRoot, "migration-report.json");
 const apiPrefix = "/202607/api/";
 
 const FORMULA_FIELDS = new Set([
+  "P_t",
   "Pool_Symbol",
   "Random",
   "Put",

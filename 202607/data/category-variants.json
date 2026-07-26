@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.4",
+  "version": "202607-draft.5",
   "items": [
     {
       "id": "variant.lucky-city",
@@ -14,6 +14,13 @@
       "summary": "“Slot 数值型 - 幸运房东”的 0D 多重集变体：保留数值构筑循环，但不使用原型的 2D Slot 网格。",
       "definition": "《幸运城市》继承“Slot 数值型 - 幸运房东”的可构筑池、数值产出与长期决策，但覆写原型的空间结构：Show_TP 为 0D 多重集，不建立二维位置与邻接关系。",
       "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承“Slot 数值型 - 幸运房东”的外层目标压力结构；《幸运城市》的具体目标、期限与失败代价等待继续拆解。",
+          "review_status": "draft",
+          "review_note": ""
+        },
         "Pool_Symbol": {
           "operation": "inherit",
           "constraint_label": "继承原型",
@@ -56,7 +63,7 @@
         }
       },
       "inheritance_summary": {
-        "inherited_fields": 5,
+        "inherited_fields": 6,
         "changed_fields": 3,
         "note": "已确认 Show_TP 为 0D 多重集，并同步覆写 Put 与 C1 的空间前提；其余差异继续按公式字段补充。"
       }

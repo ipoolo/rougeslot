@@ -1,4 +1,5 @@
 const FORMULA_FIELDS = [
+  "P_t",
   "Pool_Symbol",
   "Random",
   "Put",
@@ -10,6 +11,7 @@ const FORMULA_FIELDS = [
 ];
 
 const TERM_KEYS = [
+  "P_t",
   "Pool_Symbol",
   "Random",
   "SingleSpin_Symbol",
@@ -25,6 +27,7 @@ const TERM_KEYS = [
 ];
 
 const TERM_VISUAL_TYPES = {
+  P_t: "context",
   Pool_Symbol: "object",
   Random: "operation",
   SingleSpin_Symbol: "object",
@@ -40,6 +43,7 @@ const TERM_VISUAL_TYPES = {
 };
 
 const FIELD_LABELS = {
+  P_t: "目标压力域",
   Pool_Symbol: "符号池",
   Random: "随机抽取",
   Put: "放置／安置",
@@ -80,13 +84,20 @@ const REVIEW_STATUS_LABELS = {
   confirmed: "已确认"
 };
 
+function formulaDisplayKey(field) {
+  if (field === "P_t") return "P(t)";
+  if (field === "C1") return "C₁";
+  if (field === "C2") return "C₂?";
+  return field;
+}
+
 const NODE_TYPE_ORDER = {
   mechanism_archetype: 1,
   category_prototype: 2,
   category_variant: 3
 };
 
-const DATA_VERSION = "20260725-20";
+const DATA_VERSION = "20260726-29";
 
 const DATA_FILES = {
   model: `./data/experience-model.json?v=${DATA_VERSION}`,
@@ -105,7 +116,7 @@ const state = {
   selectedPrototypeId: null,
   selectedVariantId: null,
   detailLevel: "variant",
-  selectedTermKey: "Pool_Symbol",
+  selectedTermKey: "P_t",
   query: "",
   filter: "all",
   libraryView: "products",
@@ -119,6 +130,7 @@ const state = {
 };
 
 const elements = {
+  luckLandlordCase: document.querySelector("#luck-landlord-case"),
   experienceTimeline: document.querySelector("#experience-timeline"),
   fieldFormulaMap: document.querySelector("#field-formula-map"),
   termControls: document.querySelector("#formula-controls"),
@@ -173,8 +185,13 @@ const elements = {
 const EXPERIENCE_STAGE_PRESETS = {
   all: {
     label: "完整循环",
-    title: "揭晓与结算构成单次 Spin 的双峰，连续 N 次后进入构筑。",
-    copy: "构筑通过 BD 修改可配置参数，再把玩家送回下一周期的 Random。"
+    title: "P(t) 赋予结果目标意义；揭晓与结算形成双峰，连续 N 次后进入构筑。",
+    copy: "目标压力域包裹完整循环，但不充当操作步骤；构筑通过 BD 修改可配置参数，再回到下一周期。"
+  },
+  pressure: {
+    label: "外层条件 · P(t)",
+    title: "目标、期限、当前差距与失败代价，让每一次结果产生“够不够”的判断。",
+    copy: "P(t) 包裹 Spin 与 BD 的完整循环。它的检查周期独立于 N：N 只表示触发一次 BD 之前的连续 Spin 数量。"
   },
   reveal: {
     label: "阶段 01 · 揭晓",
@@ -193,12 +210,125 @@ const EXPERIENCE_STAGE_PRESETS = {
   }
 };
 
+const LUCK_LANDLORD_CASE_PRESETS = {
+  all: {
+    label: "完整案例",
+    title: "房租压力 P(t) 包裹完整循环；一次 Spin 内完成揭晓与结算，再通过构筑更新随机条件。",
+    copy: "上方是玩家实际经历，下方是同一流程在体验公式中的位置；P(t) 与 N=1 分别表示外层压力和构筑频率。",
+    nodes: [],
+    edges: [],
+    zones: []
+  },
+  pressure: {
+    label: "目标压力 · P(t)",
+    title: "房租金额、剩余 Spin、当前金币缺口与失败后果，共同构成外层目标压力域。",
+    copy: "房租检查赋予每次 Spin_Result 达标意义，并影响玩家的 BD 方向；它不等于 N，也不是 Random、Put、Combo 或 BD 旁边的第五个步骤。",
+    nodes: ["pressure", "spin-result", "bd"],
+    edges: ["c2-result", "pressure-result", "pressure-bd"],
+    zones: ["pressure", "settle", "build"]
+  },
+  pool: {
+    label: "当前符号池",
+    title: "Pool_Symbol 是本次 Random 唯一直接读取的候选符号集合。",
+    copy: "《幸运房东》的符号池不是固定库存：BD 可以加入或删除符号，从而改变下一次随机会抽到什么；它不负责决定符号怎样落位。",
+    nodes: ["pool"],
+    edges: ["pool-random"],
+    zones: ["source"]
+  },
+  reveal: {
+    label: "第一峰 · 揭晓",
+    title: "Random 产生本次符号，自动 Put 把它们写入 2D Slot 网格。",
+    copy: "该阶段从 Pool_Symbol 开始，到 Show_State 形成结束。玩家关心“抽到了什么、怎样落下”；协同判定尚未发生。",
+    nodes: ["pool", "random", "spin-symbol", "put", "show-tp", "show-state"],
+    edges: ["pool-random", "random-symbol", "symbol-put", "put-state"],
+    zones: ["source", "reveal"]
+  },
+  settle: {
+    label: "第二峰 · 结算",
+    title: "C₁ 先产生基础数值，C₂ 再由道具增强或改变结果。",
+    copy: "C₁ 读取直接产出、数量阈值和邻接关系；C₂ 位于基础结果之后，最终形成 Spin_Result。它不重新负责随机抽取或落位。",
+    nodes: ["show-state", "show-tp", "c1", "c2", "spin-result"],
+    edges: ["state-c1", "c1-c2", "c2-result"],
+    zones: ["settle"]
+  },
+  build: {
+    label: "构筑更新",
+    title: "本案例主线采用 N = 1：每完成一次 Spin，就进入一次符号选择类 BD。",
+    copy: "符号选择直接更新后续 Pool_Symbol；删除和道具继续修改 Pool_Symbol、C₁ 与 C₂。房租压力属于 P(t)，不与 N = 1 混用。",
+    nodes: ["spin-result", "n", "bd", "next", "pool"],
+    edges: ["result-n", "n-bd", "bd-next"],
+    zones: ["build", "source"]
+  }
+};
+
+function selectLuckLandlordCasePreset(key = "all") {
+  const root = elements.luckLandlordCase;
+  const preset = LUCK_LANDLORD_CASE_PRESETS[key] ?? LUCK_LANDLORD_CASE_PRESETS.all;
+  if (!root) return;
+
+  const focused = key !== "all";
+  root.dataset.caseSelection = key;
+  root.classList.toggle("is-case-focused", focused);
+
+  root.querySelectorAll("[data-case-node]").forEach((node) => {
+    node.classList.toggle("is-focused", focused && preset.nodes.includes(node.dataset.caseNode));
+    node.classList.toggle("is-context", focused && !preset.nodes.includes(node.dataset.caseNode));
+  });
+
+  root.querySelectorAll("[data-case-edge]").forEach((edge) => {
+    edge.classList.toggle("is-focused", focused && preset.edges.includes(edge.dataset.caseEdge));
+    edge.classList.toggle("is-context", focused && !preset.edges.includes(edge.dataset.caseEdge));
+  });
+
+  root.querySelectorAll("[data-case-zone]").forEach((zone) => {
+    const selectedZone = preset.zones.includes(zone.dataset.caseZone);
+    const persistentOuterContext = zone.dataset.caseZone === "pressure" && key !== "pressure";
+    zone.classList.toggle("is-focused", focused && selectedZone);
+    zone.classList.toggle(
+      "is-context",
+      focused && !selectedZone && !persistentOuterContext
+    );
+  });
+
+  root.querySelectorAll("[data-case-preset], [data-case-select]").forEach((control) => {
+    const controlKey = control.dataset.casePreset ?? control.dataset.caseSelect;
+    const selected = controlKey === key;
+    control.classList.toggle("is-active", selected);
+    control.setAttribute("aria-pressed", String(selected));
+  });
+
+  const label = root.querySelector("[data-case-info-label]");
+  const title = root.querySelector("[data-case-info-title]");
+  const copy = root.querySelector("[data-case-info-copy]");
+  if (label) label.textContent = preset.label;
+  if (title) title.textContent = preset.title;
+  if (copy) copy.textContent = preset.copy;
+}
+
+function bindLuckLandlordCase() {
+  const root = elements.luckLandlordCase;
+  if (!root) return;
+
+  root.querySelectorAll("[data-case-preset], [data-case-select]").forEach((control) => {
+    control.addEventListener("click", () => {
+      selectLuckLandlordCasePreset(
+        control.dataset.casePreset ?? control.dataset.caseSelect
+      );
+    });
+  });
+
+  selectLuckLandlordCasePreset("all");
+}
+
 function selectExperienceStage(key = "all") {
   const root = elements.experienceTimeline;
   const preset = EXPERIENCE_STAGE_PRESETS[key] ?? EXPERIENCE_STAGE_PRESETS.all;
   if (!root) return;
 
   const focused = key !== "all";
+  const focusedStages = key === "pressure"
+    ? ["pressure", "reveal", "settle", "build"]
+    : [key];
   root.dataset.experienceSelection = key;
   root.classList.toggle("is-stage-focused", focused);
 
@@ -209,8 +339,9 @@ function selectExperienceStage(key = "all") {
   });
 
   document.querySelectorAll("[data-experience-stage]").forEach((stage) => {
-    stage.classList.toggle("is-focused", stage.dataset.experienceStage === key);
-    stage.classList.toggle("is-context", focused && stage.dataset.experienceStage !== key);
+    const involved = focusedStages.includes(stage.dataset.experienceStage);
+    stage.classList.toggle("is-focused", focused && involved);
+    stage.classList.toggle("is-context", focused && !involved);
   });
 
   const label = root.querySelector("[data-experience-info-label]");
@@ -556,7 +687,7 @@ function productFormulaObservationMarkup(observation) {
           return `
             <article>
               <header>
-                <code>${escapeHtml(field === "C1" ? "C₁" : field === "C2" ? "C₂?" : field)}</code>
+                <code>${escapeHtml(formulaDisplayKey(field))}</code>
                 <span>${escapeHtml(FIELD_LABELS[field])}</span>
               </header>
               <p>${escapeHtml(entry.value)}</p>
@@ -750,7 +881,7 @@ function renderFormulaMatrix() {
         </th>
         ${fields.map((field) => `
           <th scope="col">
-            <code>${escapeHtml(field === "C1" ? "C₁" : field === "C2" ? "C₂?" : field)}</code>
+            <code>${escapeHtml(formulaDisplayKey(field))}</code>
             <small>${escapeHtml(FIELD_LABELS[field])}</small>
           </th>
         `).join("")}
@@ -814,7 +945,7 @@ function renderReviewQueue() {
           <small>${escapeHtml(TYPE_LABELS[item.node.type])}</small>
           <strong>${escapeHtml(item.node.name)}</strong>
         </span>
-        <code>${escapeHtml(item.field === "C1" ? "C₁" : item.field === "C2" ? "C₂?" : item.field)}</code>
+        <code>${escapeHtml(formulaDisplayKey(item.field))}</code>
         <span class="review-item-copy">
           <strong>${escapeHtml(item.entry.constraint_label ?? FIELD_LABELS[item.field])}</strong>
           <small>${escapeHtml(item.entry.summary)}</small>
@@ -937,7 +1068,7 @@ function renderTermControls() {
       data-term-key="${escapeHtml(key)}"
       aria-pressed="${state.selectedTermKey === key}"
     >
-      ${escapeHtml(key)}
+      ${escapeHtml(formulaDisplayKey(key))}
     </button>
   `).join("");
 
@@ -977,6 +1108,7 @@ function renderFieldFormulaMap() {
   const showTpSelected = selected === "Show_TP";
   const term = state.data.termByKey.get(selected);
   const activeStages = {
+    P_t: ["random", "put", "combo", "bd"],
     Pool_Symbol: ["random"],
     Random: ["random"],
     SingleSpin_Symbol: ["random", "put"],
@@ -991,6 +1123,7 @@ function renderFieldFormulaMap() {
     BD: ["bd"]
   }[selected] ?? [];
   const activeEdges = {
+    P_t: ["random-put", "put-combo", "cycle-bd"],
     SingleSpin_Symbol: ["random-put"],
     Put: ["random-put"],
     Show_TP: ["put-combo"],
@@ -999,6 +1132,7 @@ function renderFieldFormulaMap() {
     BD: ["cycle-bd"]
   }[selected] ?? [];
   const locationCopies = {
+    P_t: "包裹完整 Spin → BD 循环的外层边界条件",
     Pool_Symbol: "Random 的唯一直接内容域",
     Random: "单次 Spin 的第一步 · 第一峰",
     SingleSpin_Symbol: "Random 输出、Put 输入 · 流程中间数据",
@@ -1013,6 +1147,7 @@ function renderFieldFormulaMap() {
     BD: "N 次 Spin 后的构筑决策"
   };
   const flowLocationCopies = {
+    P_t: "外层包裹完整流程；依据 Spin_Result 判断目标差距，并影响 BD 方向",
     Pool_Symbol: "流程起点：候选符号池",
     Random: "Pool_Symbol → Random → SingleSpin_Symbol",
     SingleSpin_Symbol: "Random → SingleSpin_Symbol → Put",
@@ -1027,6 +1162,18 @@ function renderFieldFormulaMap() {
     BD: "累计 × N → BD → 修改参数 → 下一周期"
   };
   const activeFlowEdges = {
+    P_t: [
+      "pool-random",
+      "random-single",
+      "single-put",
+      "put-state",
+      "state-combo",
+      "combo-result",
+      "result-n",
+      "n-bd",
+      "bd-modify",
+      "modify-next"
+    ],
     Pool_Symbol: ["pool-random"],
     Random: ["pool-random", "random-single"],
     SingleSpin_Symbol: ["random-single", "single-put"],
@@ -1053,13 +1200,20 @@ function renderFieldFormulaMap() {
       <small>字段在体验公式中的结构位置</small>
     </div>
     <div class="model-type-legend" aria-label="节点类型颜色">
+      <span class="context"><i></i>外层条件</span>
       <span class="object"><i></i>数据对象</span>
       <span class="operation"><i></i>操作步骤</span>
       <span class="rule"><i></i>协同／规则</span>
       <span class="cycle"><i></i>周期／构筑</span>
     </div>
-    <div class="interactive-formula is-focused ${selected === "N" ? "cycle-is-active" : ""}">
-      <div class="interactive-formula-track">
+    <div class="interactive-pressure-domain ${selected === "P_t" ? "has-active" : ""}">
+      <div class="interactive-pressure-head">
+        ${formulaToken("P_t", "P(t)")}
+        <span>目标 · 期限 · 当前差距 · 失败代价</span>
+        <small>包裹完整循环，不是第五个操作</small>
+      </div>
+      <div class="interactive-formula is-focused ${selected === "N" ? "cycle-is-active" : ""}">
+        <div class="interactive-formula-track">
         <span class="interactive-bracket ${selected === "N" ? "active" : ""}">[</span>
         <div class="interactive-stage ${activeStages.includes("random") ? "has-active" : ""}">
           ${formulaToken("Random")}
@@ -1089,6 +1243,7 @@ function renderFieldFormulaMap() {
         <div class="interactive-stage ${activeStages.includes("bd") ? "has-active" : ""}">
           ${formulaToken("BD")}
         </div>
+        </div>
       </div>
     </div>
     <div class="model-view-label flow-label">
@@ -1096,7 +1251,12 @@ function renderFieldFormulaMap() {
       <small>对象 → 操作 → 对象；与公式字段同步定位</small>
     </div>
     <div class="interactive-flow-scroll">
-      <div class="interactive-data-flow is-focused" aria-label="从符号池到下一周期的完整数据流程">
+      <div class="flow-pressure-domain ${selected === "P_t" ? "has-active" : ""}">
+        <div class="flow-pressure-head">
+          ${flowToken("P_t", "P(t)")}
+          <span>外层持续判断：当前结果离目标还有多远？下一次 BD 应该怎样回应？</span>
+        </div>
+        <div class="interactive-data-flow is-focused ${selected === "P_t" ? "pressure-is-active" : ""}" aria-label="目标压力域包裹的完整数据流程">
         <div class="flow-lane">
           <span class="flow-step flow-object ${selected === "Pool_Symbol" ? "has-active" : ""}">
             ${flowToken("Pool_Symbol")}
@@ -1160,12 +1320,13 @@ function renderFieldFormulaMap() {
             <small>重新进入 Random</small>
           </span>
         </div>
+        </div>
       </div>
     </div>
     <div class="formula-selection-feedback">
       <span class="selection-badge">当前字段</span>
       <div>
-        <strong>${escapeHtml(selected)} · ${escapeHtml(term?.name ?? "")}</strong>
+        <strong>${escapeHtml(formulaDisplayKey(selected))} · ${escapeHtml(term?.name ?? "")}</strong>
         <p>${escapeHtml(term?.definition ?? "")}</p>
         <small>公式位置：${escapeHtml(locationCopies[selected])}</small>
         <small>流程位置：${escapeHtml(flowLocationCopies[selected])}</small>
@@ -1639,42 +1800,54 @@ function renderAtlasFormula() {
       <p>
         ${parent
           ? (changedFields.length
-            ? changedFields.map((field) => escapeHtml(field === "C1" ? "C₁" : field === "C2" ? "C₂" : field)).join(" · ")
+            ? changedFields.map((field) => escapeHtml(formulaDisplayKey(field))).join(" · ")
             : "没有直接变化，全部继承上层")
           : "以下内容是下层品类原型继续约束的起点"}
       </p>
     </div>
-    <div class="atlas-formula-scroll">
-      <div class="atlas-constraint-formula depth-${path.length}" aria-label="${escapeHtml(node.name)}的逐层公式约束">
-        <span class="atlas-formula-bracket">[</span>
-        <span class="atlas-formula-stage">
-          ${atlasFormulaField(node, "Random")}
-          <span class="atlas-formula-scope">@</span>
-          ${atlasFormulaField(node, "Pool_Symbol")}
+    <div class="atlas-pressure-domain depth-${path.length}">
+      <div class="atlas-pressure-domain-head">
+        <span>
+          <small>外层边界条件</small>
+          <strong>目标压力域包裹完整循环，不参与单次符号运算</strong>
         </span>
-        <span class="atlas-formula-arrow">→</span>
-        <span class="atlas-formula-stage">
-          ${atlasFormulaField(node, "Put")}
-          <span class="atlas-formula-scope">@</span>
-          ${atlasFormulaField(node, "Show_TP")}
-        </span>
-        <span class="atlas-formula-arrow">→</span>
-        <span class="atlas-formula-stage combo">
-          <span class="atlas-formula-fixed">Combo(</span>
-          ${atlasFormulaField(node, "C1", "C₁")}
-          <span class="atlas-formula-fixed">→</span>
-          ${atlasFormulaField(node, "C2", "C₂?")}
-          <span class="atlas-formula-fixed">)</span>
-          <span class="atlas-formula-scope">@</span>
-          ${atlasFormulaField(node, "Show_TP")}
-        </span>
-        <span class="atlas-formula-bracket">]</span>
-        ${atlasFormulaField(node, "N", "ₙ")}
-        <span class="atlas-formula-arrow">→</span>
-        <span class="atlas-formula-stage">
-          ${atlasFormulaField(node, "BD")}
-        </span>
+        ${atlasFormulaField(node, "P_t", "P(t)")}
       </div>
+      <div class="atlas-formula-scroll">
+        <div class="atlas-constraint-formula depth-${path.length}" aria-label="${escapeHtml(node.name)}的逐层公式约束">
+          <span class="atlas-formula-bracket">[</span>
+          <span class="atlas-formula-stage">
+            ${atlasFormulaField(node, "Random")}
+            <span class="atlas-formula-scope">@</span>
+            ${atlasFormulaField(node, "Pool_Symbol")}
+          </span>
+          <span class="atlas-formula-arrow">→</span>
+          <span class="atlas-formula-stage">
+            ${atlasFormulaField(node, "Put")}
+            <span class="atlas-formula-scope">@</span>
+            ${atlasFormulaField(node, "Show_TP")}
+          </span>
+          <span class="atlas-formula-arrow">→</span>
+          <span class="atlas-formula-stage combo">
+            <span class="atlas-formula-fixed">Combo(</span>
+            ${atlasFormulaField(node, "C1", "C₁")}
+            <span class="atlas-formula-fixed">→</span>
+            ${atlasFormulaField(node, "C2", "C₂?")}
+            <span class="atlas-formula-fixed">)</span>
+            <span class="atlas-formula-scope">@</span>
+            ${atlasFormulaField(node, "Show_TP")}
+          </span>
+          <span class="atlas-formula-bracket">]</span>
+          ${atlasFormulaField(node, "N", "ₙ")}
+          <span class="atlas-formula-arrow">→</span>
+          <span class="atlas-formula-stage">
+            ${atlasFormulaField(node, "BD")}
+          </span>
+        </div>
+      </div>
+      <p class="atlas-pressure-domain-note">
+        P(t) 可以具有独立于 N 的目标检查周期；例如《幸运房东》的房租检查不等于每次 Spin 后触发 BD 的 N = 1。
+      </p>
     </div>
     <div class="atlas-formula-note">
       <strong>正在查看：${escapeHtml(pathCopy)}</strong>
@@ -1962,7 +2135,7 @@ function openFieldEditor(nodeId, field) {
   state.editingField = { nodeId, field };
 
   elements.fieldEditorPath.textContent = `${TYPE_LABELS[node.type]} · ${path}`;
-  elements.fieldEditorTitle.textContent = `${field === "C1" ? "C₁" : field === "C2" ? "C₂?" : field} · ${FIELD_LABELS[field]}`;
+  elements.fieldEditorTitle.textContent = `${formulaDisplayKey(field)} · ${FIELD_LABELS[field]}`;
   elements.fieldEditorParent.textContent = parentEntry
     ? `${parentEntry.label}｜${parentEntry.summary}`
     : "体验公式基础字段；当前节点负责给出第一层约束。";
@@ -2072,7 +2245,7 @@ function bindLibrary() {
   elements.fieldFilter.innerHTML = `
     <option value="all">全部字段</option>
     ${FORMULA_FIELDS.map((field) => `
-      <option value="${escapeHtml(field)}">${escapeHtml(field)} · ${escapeHtml(FIELD_LABELS[field])}</option>
+      <option value="${escapeHtml(field)}">${escapeHtml(formulaDisplayKey(field))} · ${escapeHtml(FIELD_LABELS[field])}</option>
     `).join("")}
   `;
 
@@ -2135,6 +2308,7 @@ function bindLibrary() {
 
 async function init() {
   try {
+    bindLuckLandlordCase();
     bindExperienceTimeline();
     state.data = await loadData();
     setDefaultSelection();

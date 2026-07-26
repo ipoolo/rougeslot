@@ -1,7 +1,96 @@
 {
-  "version": "202607-draft.3",
+  "version": "202607-draft.4",
   "status": "core_confirmed",
   "terms": [
+    {
+      "key": "P_t",
+      "name": "目标压力域",
+      "kind": "outer_context",
+      "status": "working_definition",
+      "definition": "以目标、期限、当前差距与失败代价包裹完整 Spin → BD 循环的可选外层边界条件。",
+      "inputs": [
+        "当前目标或达标阈值",
+        "剩余时间或剩余轮数",
+        "当前累计进度",
+        "失败代价与压力增长规则"
+      ],
+      "outputs": [
+        "Spin_Result 是否足够的价值判断",
+        "BD 的构筑方向",
+        "进入下一周期的紧迫度"
+      ],
+      "formula_location": "包裹完整 [Spin]ₙ → BD 循环的最外层",
+      "contents": [
+        "目标或达标阈值",
+        "距离目标的当前差距",
+        "期限与检查时点",
+        "失败后果",
+        "随进度变化的压力曲线"
+      ],
+      "boundaries": [
+        "P(t) 不是 Random、Put、Combo 或 BD 旁边的第五个操作",
+        "P(t) 不直接参与符号抽取、放置或协同计算",
+        "P(t) 的目标检查周期独立于 N；N 只表示触发一次 BD 前的连续 Spin 数量",
+        "没有明确硬性失败压力的游戏，可以采用软目标或令 P(t) 不适用"
+      ],
+      "detail_sections": [
+        {
+          "title": "P(t) 需要记录什么",
+          "items": [
+            {
+              "name": "目标 T(t)",
+              "description": "玩家当前需要达到的分数、资源、生存、击败目标或其他进度阈值。"
+            },
+            {
+              "name": "期限 H(t)",
+              "description": "距离检查目标还剩多少时间、Spin、回合或关卡；H 与 N 必须分别记录。"
+            },
+            {
+              "name": "差距 Δ(t)",
+              "description": "当前累计结果与目标之间的距离，用于判断本次 Spin_Result 是否让局面变好。"
+            },
+            {
+              "name": "失败代价 L(t)",
+              "description": "未达标时失去什么，以及目标是否在后续阶段递增、收紧或改变。"
+            }
+          ]
+        },
+        {
+          "title": "P(t) 怎样影响体验",
+          "items": [
+            {
+              "name": "赋予结果意义",
+              "description": "相同的 Spin_Result 在不同压力状态下，可能被感受为足够、危险或需要立即调整。"
+            },
+            {
+              "name": "塑造构筑方向",
+              "description": "玩家在 BD 中的选择会回应当前差距与期限，例如追求稳定产出、爆发收益或风险控制。"
+            },
+            {
+              "name": "维持下一轮期待",
+              "description": "压力没有替代双峰，而是让玩家在结算后仍有理由继续开始下一轮。"
+            }
+          ]
+        },
+        {
+          "title": "分析时必须回答",
+          "items": [
+            {
+              "name": "当前目标是什么？",
+              "description": "写清目标、阈值和玩家能否直接观察当前差距。"
+            },
+            {
+              "name": "什么时候检查？",
+              "description": "记录独立的目标检查周期，不使用 N 代替更长的压力期限。"
+            },
+            {
+              "name": "失败会怎样？",
+              "description": "说明失败、重试、损失、退出或软性惩罚，以及下一阶段压力如何变化。"
+            }
+          ]
+        }
+      ]
+    },
     {
       "key": "Pool_Symbol",
       "name": "符号池",
@@ -891,6 +980,7 @@
       ],
       "formula_location": "N 次 Spin 之后",
       "possible_targets": [
+        "P(t) 中规则允许由玩家改变的目标、期限、容错或风险参数",
         "Pool_Symbol",
         "Random 参数",
         "Put 参数",
@@ -904,7 +994,7 @@
       "invariant": "BD 可以修改后续循环参数，但不改变 Random → Put → Combo → BD 的核心流程身份。",
       "calibration": [
         "各下层节点对 BD 可修改字段的允许与禁止范围",
-        "BD 与压力、目标、Checkpoint 的具体关系"
+        "BD 如何回应 P(t)，以及哪些游戏允许 BD 直接修改目标压力参数"
       ],
       "detail_sections": [
         {
@@ -962,7 +1052,7 @@
             },
             {
               "name": "选择修改哪个公式字段？",
-              "description": "每个 BD 行为都必须映射到 Pool_Symbol、Random、Put、Show_TP、C₁、C₂ 或 N。"
+              "description": "每个 BD 行为都必须映射到 P(t)、Pool_Symbol、Random、Put、Show_TP、C₁、C₂ 或 N。"
             },
             {
               "name": "影响从何时开始？",

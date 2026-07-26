@@ -1,17 +1,29 @@
 {
-  "version": "202607-draft.3",
+  "version": "202607-draft.4",
   "status": "core_confirmed",
   "name": "双峰多巴胺体验模型",
   "experience_goal": "持续爱干",
   "model_positioning": "本模型本质上是对这类游戏的抽象假设。",
   "formula": {
-    "display": "[ Random@Pool_Symbol → Put@Show_TP → Combo(C1→C2?)@Show_TP ]_N → BD",
+    "display": "P(t) ⟦ [ Random@Pool_Symbol → Put@Show_TP → Combo(C1→C2?)@Show_TP ]_N → BD ⟧",
+    "core_display": "[ Random@Pool_Symbol → Put@Show_TP → Combo(C1→C2?)@Show_TP ]_N → BD",
+    "outer_context": {
+      "key": "P_t",
+      "display": "P(t)",
+      "name": "目标压力域",
+      "optional": true,
+      "role": "以目标、期限、当前差距与失败代价包裹完整循环，为每次结果和构筑选择提供价值判断。",
+      "is_operation_step": false,
+      "period_is_independent_from_n": true
+    },
     "scope_operator": {
       "symbol": "@",
       "name": "作用域／承载域标记",
       "is_multiplication": false
     },
     "confirmed_scope_rules": [
+      "P(t) 包裹完整 Spin → BD 循环，但不参与单次符号运算",
+      "P(t) 的目标检查周期与 N 分开定义",
       "Random 只直接作用于 Pool_Symbol",
       "Put 发生在 Show_TP 上",
       "Combo 与 Put 共用同一个 Show_TP"
@@ -89,6 +101,18 @@
     "build_state_symbol_is_primary_term": false
   },
   "confirmed_term_rules": {
+    "P_t": {
+      "name": "目标压力域",
+      "optional": true,
+      "description": "以目标、期限、当前差距与失败代价包裹完整循环；不作为第五个操作步骤，也不把目标检查周期混入 N。",
+      "components": [
+        "目标或阈值",
+        "期限或检查时点",
+        "当前差距",
+        "失败代价",
+        "压力增长曲线"
+      ]
+    },
     "SingleSpin_Symbol": {
       "strict_multiset": false,
       "description": "可以是单个符号、一组无序符号，或由具体机制定义的其他结构。"
@@ -132,6 +156,7 @@
   "stable_items": [
     "体验目标为持续爱干",
     "体验模型为双峰多巴胺",
+    "P(t) 作为可选目标压力域包裹完整循环，并与 N 分开定义",
     "单次 Spin 核心流程为 Random → Put → Combo；启用长期构筑时再进入 N → BD",
     "Random 只直接作用于 Pool_Symbol",
     "Put 与 Combo 共用 Show_TP",
@@ -150,6 +175,10 @@
     "下层节点必须回到公式字段"
   ],
   "pending_decisions": [
+    {
+      "id": "pressure_domain_subtypes",
+      "question": "P(t) 的硬目标、软目标、期限、失败代价与增长曲线需要怎样形成正式子类型？"
+    },
     {
       "id": "put_boundary_cases",
       "question": "微手动与全手动在边界案例中如何判定？"

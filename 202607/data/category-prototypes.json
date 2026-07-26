@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.5",
+  "version": "202607-draft.6",
   "items": [
     {
       "id": "prototype.slot-numeric",
@@ -16,6 +16,13 @@
       "summary": "从《幸运房东》提炼：构筑符号池，在 2D Slot 网格中通过符号产出、阈值与邻接协同获得数值。",
       "definition": "本品类原型以《幸运房东》为提炼来源：保留 Slot 的自动随机与装置落位，把固定符号池改为可构筑符号池，并加入符号直接产出、阈值／邻接协同、道具结果演绎以及 Spin 后构筑决策。",
       "formula_changes": {
+        "P_t": {
+          "operation": "fix",
+          "constraint_label": "房租目标压力",
+          "summary": "采用《幸运房东》的房租压力：以当前房租、剩余 Spin、金币缺口和未达标后果包裹完整循环；房租检查周期独立于每次 Spin 后触发构筑选择的 N = 1。",
+          "review_status": "pending",
+          "review_note": "外层压力结构已确认；具体房租数列、增长率与检查节奏等待产品资料逐项确认。"
+        },
         "Pool_Symbol": {
           "operation": "override",
           "constraint_label": "可构筑符号池",
@@ -59,6 +66,7 @@
       },
       "identity_rules": [
         "以《幸运房东》作为本品类原型的提炼来源和代表产品",
+        "使用房租目标压力 P(t) 赋予每次 Spin_Result 达标意义，但不把房租检查周期写入 N",
         "Pool_Symbol 可由玩家持续增加、删除或调整",
         "装置自动把本次结果 Put 到 2D Slot 网格",
         "C1 同时包含符号直接产出、数量阈值与网格邻接",

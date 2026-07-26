@@ -1,7 +1,8 @@
 {
-  "version": "202607-draft.1",
+  "version": "202607-draft.2",
   "mapping_policy": "mechanical_import_unconfirmed",
   "formula_fields": [
+    "P_t",
     "Pool_Symbol",
     "Random",
     "Put",
@@ -18,6 +19,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：房租机制：每 5 次 spin 触发 checkpoint · 达标分数才能继续 · 目标分数型 · 补充：M=17（共 17 个 floor 的房租 checkpoint）；N=5（每 5 spin 一关）；T0=5（首周房租 5 金币，scoring-rubric 实测）；r≈1.7（前期翻倍 5→10→20，后期略缓和到 ~1.5）；无显式 boss 关。；旧版压力参数：M=17 · N=5 · T0=5 · r=1.7；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "200+ 符号 · 3×5 slot 转动 · 稀有度梯度（普 60% / 非 25% / 稀 12% / 极稀 3%）",
           "source_fields": [
@@ -62,18 +71,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；房租机制：每 5 次 spin 触发 checkpoint · 达标分数才能继续 · 目标分数型 · 补充：M=17（共 17 个 floor 的房租 checkpoint）；N=5（每 5 spin 一关）；T0=5（首周房租 5 金币，scoring-rubric 实测）；r≈1.7（前期翻倍 5→10→20，后期略缓和到 ~1.5）；无显式 boss 关。",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "商店三选一买符号 / 付费删符号 / 升级 · 玩家在主舞台直接看到变化；房租机制：每 5 次 spin 触发 checkpoint · 达标分数才能继续 · 目标分数型 · 补充：M=17（共 17 个 floor 的房租 checkpoint）；N=5（每 5 spin 一关）；T0=5（首周房租 5 金币，scoring-rubric 实测）；r≈1.7（前期翻倍 5→10→20，后期略缓和到 ~1.5）；无显式 boss 关。",
+          "value": "商店三选一买符号 / 付费删符号 / 升级 · 玩家在主舞台直接看到变化",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -106,6 +113,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：触发周期 = 每个 Blind（小盲/大盲/Boss 盲）一次结算。达标条件 = 累计分数 ≥ 该 Blind 目标分（小盲 T₀，大盲 1.5×T₀，Boss 盲 2×T₀ 并附带 debuff 如'红牌不计分''首张丢弃'等）。未达标后果 = 直接 Game Over，整局重开。难度曲线：每 Ante 目标分按 r≈2.0 指数膨胀，从 Ante 1 的 300 分到 Ante 8 的数百万分；Boss 盲在每个 Ante 末尾叠加 m_boss 的特殊规则惩罚，是构筑被针对的主要压力源。 · 补充：M=24（8 Ante × 3 Blind 的小盲/大盲/Boss盲）；N=3（每 Blind 实际 2-4 手浮动均值）；T0=300（Ante 1 small blind 目标分）；r=2.0（每 Ante 翻倍）；m_boss=2.0（Boss Blind 目标 ×2 + 附带 debuff 如红牌不计分/首张丢弃）。；旧版压力参数：M=24 · N=3 · T0=300 · r=2.0 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 52 张标准扑克牌库（可被改造卡/封印/版图等修饰），玩家每回合从牌库抽 8 张到手，从中选 1-5 张组成扑克手牌出牌；牌库可加牌/删牌/复制牌，单局规模 40-70 张。稀有度梯度由花色/点数/特殊改造（金/钢/玻璃/石头）和封印（红/紫/金/蓝）共同构成。",
           "source_fields": [
@@ -150,18 +165,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；触发周期 = 每个 Blind（小盲/大盲/Boss 盲）一次结算。达标条件 = 累计分数 ≥ 该 Blind 目标分（小盲 T₀，大盲 1.5×T₀，Boss 盲 2×T₀ 并附带 debuff 如'红牌不计分''首张丢弃'等）。未达标后果 = 直接 Game Over，整局重开。难度曲线：每 Ante 目标分按 r≈2.0 指数膨胀，从 Ante 1 的 300 分到 Ante 8 的数百万分；Boss 盲在每个 Ante 末尾叠加 m_boss 的特殊规则惩罚，是构筑被针对的主要压力源。 · 补充：M=24（8 Ante × 3 Blind 的小盲/大盲/Boss盲）；N=3（每 Blind 实际 2-4 手浮动均值）；T0=300（Ante 1 small blind 目标分）；r=2.0（每 Ante 翻倍）；m_boss=2.0（Boss Blind 目标 ×2 + 附带 debuff 如红牌不计分/首张丢弃）。",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "每个 Blind 击败后进入商店阶段：默认 2 个 Joker/消耗/卡牌槽位三选购买 + 1 个牌包 + 1 个凭证（首次出现）；刷新成本起始 5 金币每次刷新后翻倍，回合内累积。RPBD 操作：买 Joker（5-8 金）/ 买消耗品（3-6 金）/ 买改造卡 / 买卡包（4-6 金）/ 卖出 Joker 换半价金币 / 用塔罗或灵气改造手中扑克牌。决策周期 = 每打完 1 个 Blind（约 2-4 手牌）即一次商店，单局 8 个 Ante × 3 Blind = 约 24 次商店决策。；触发周期 = 每个 Blind（小盲/大盲/Boss 盲）一次结算。达标条件 = 累计分数 ≥ 该 Blind 目标分（小盲 T₀，大盲 1.5×T₀，Boss 盲 2×T₀ 并附带 debuff 如'红牌不计分''首张丢弃'等）。未达标后果 = 直接 Game Over，整局重开。难度曲线：每 Ante 目标分按 r≈2.0 指数膨胀，从 Ante 1 的 300 分到 Ante 8 的数百万分；Boss 盲在每个 Ante 末尾叠加 m_boss 的特殊规则惩罚，是构筑被针对的主要压力源。 · 补充：M=24（8 Ante × 3 Blind 的小盲/大盲/Boss盲）；N=3（每 Blind 实际 2-4 手浮动均值）；T0=300（Ante 1 small blind 目标分）；r=2.0（每 Ante 翻倍）；m_boss=2.0（Boss Blind 目标 ×2 + 附带 debuff 如红牌不计分/首张丢弃）。",
+          "value": "每个 Blind 击败后进入商店阶段：默认 2 个 Joker/消耗/卡牌槽位三选购买 + 1 个牌包 + 1 个凭证（首次出现）；刷新成本起始 5 金币每次刷新后翻倍，回合内累积。RPBD 操作：买 Joker（5-8 金）/ 买消耗品（3-6 金）/ 买改造卡 / 买卡包（4-6 金）/ 卖出 Joker 换半价金币 / 用塔罗或灵气改造手中扑克牌。决策周期 = 每打完 1 个 Blind（约 2-4 手牌）即一次商店，单局 8 个 Ante × 3 Blind = 约 24 次商店决策。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -194,6 +207,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：触发周期 = 每个战斗节点一次。达标条件 = 在自身 HP > 0 时把所有敌人 HP 打到 0；未达标 = HP 归零直接 Game Over，整局重开。难度曲线：每章 3 章（act），每章末有 Boss，act 间敌人 HP 与伤害线性提升 + 新机制（中毒、护甲、召唤）；m_boss 体现为 Boss HP 显著高于普通敌人 + 特殊机制。属于经典'血量爬塔族'压力曲线，比纯目标分游戏（LBL/Balatro）压力曲线略平缓，但 boss 战的多机制叠加保证 8 分张力。 · 补充：M≈30（3 act × 约 10 战斗节点，估算待校核）；N=4（每场战斗约 3-5 回合均值）；T0≈15（首场敌人 HP，估算）；r≈1.05（线性递增）；m_boss≈3.0（Boss HP 与机制显著加强）。[M/T0 估算待校核]；旧版压力参数：M=30 · N=4 · T0=15 · r=1.05 · m_boss=3.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = Orb（弹球）池，约 70+ 种 Orb（待校核 Steam 页未列具体数字，社区 wiki 数据）。每场 run 玩家从初始 4-5 个 Orb 起手，战斗中按顺序循环投出（不是真随机抽，而是有序队列 + 偶发洗牌），每次战斗回合投 1 颗 Orb 到弹球台上。Orb 分类：攻击型（普通伤害）、Crit 型（命中关键钉加倍）、效果型（毒/燃烧/护盾）、稀有型（特殊机制）；稀有度梯度普通/非普通/稀有/传说四档（待校核命名）。",
           "source_fields": [
@@ -238,18 +259,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=4；触发周期 = 每个战斗节点一次。达标条件 = 在自身 HP > 0 时把所有敌人 HP 打到 0；未达标 = HP 归零直接 Game Over，整局重开。难度曲线：每章 3 章（act），每章末有 Boss，act 间敌人 HP 与伤害线性提升 + 新机制（中毒、护甲、召唤）；m_boss 体现为 Boss HP 显著高于普通敌人 + 特殊机制。属于经典'血量爬塔族'压力曲线，比纯目标分游戏（LBL/Balatro）压力曲线略平缓，但 boss 战的多机制叠加保证 8 分张力。 · 补充：M≈30（3 act × 约 10 战斗节点，估算待校核）；N=4（每场战斗约 3-5 回合均值）；T0≈15（首场敌人 HP，估算）；r≈1.05（线性递增）；m_boss≈3.0（Boss HP 与机制显著加强）。[M/T0 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "决策周期 = 经典 StS 节点地图，每个节点（普通战 / 精英战 / 商店 / 事件 / Boss）后做一次决策。RPBD 操作：战斗后从 3 选 1 加新 Orb 入池 / 商店买 Orb（约 50 金）/ 商店买 Relic（约 100-150 金）/ 商店付费删 Orb（约 75 金）/ 事件偶发 Orb 升级。商店刷新需付费（约 50 金，待校核），单局通常 6-10 次商店决策。；触发周期 = 每个战斗节点一次。达标条件 = 在自身 HP > 0 时把所有敌人 HP 打到 0；未达标 = HP 归零直接 Game Over，整局重开。难度曲线：每章 3 章（act），每章末有 Boss，act 间敌人 HP 与伤害线性提升 + 新机制（中毒、护甲、召唤）；m_boss 体现为 Boss HP 显著高于普通敌人 + 特殊机制。属于经典'血量爬塔族'压力曲线，比纯目标分游戏（LBL/Balatro）压力曲线略平缓，但 boss 战的多机制叠加保证 8 分张力。 · 补充：M≈30（3 act × 约 10 战斗节点，估算待校核）；N=4（每场战斗约 3-5 回合均值）；T0≈15（首场敌人 HP，估算）；r≈1.05（线性递增）；m_boss≈3.0（Boss HP 与机制显著加强）。[M/T0 估算待校核]",
+          "value": "决策周期 = 经典 StS 节点地图，每个节点（普通战 / 精英战 / 商店 / 事件 / Boss）后做一次决策。RPBD 操作：战斗后从 3 选 1 加新 Orb 入池 / 商店买 Orb（约 50 金）/ 商店买 Relic（约 100-150 金）/ 商店付费删 Orb（约 75 金）/ 事件偶发 Orb 升级。商店刷新需付费（约 50 金，待校核），单局通常 6-10 次商店决策。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -282,6 +301,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：触发周期 = 每关 N 次 spin（N 通常为 3-5 球），玩家需在 N 球内累计金币 ≥ 该关目标。未达标后果 = 直接出局结束 run。难度曲线：每关目标金额按指数递增（待校核 r 具体数值，体感 r≈1.6-1.8），关卡末段有 Boss/特殊关棋盘（如 Pyramid / Danger Wheel）施加全局负面规则；m_boss 体现为 Boss 关棋盘本身改写物理布局，不是数值倍率。 · 补充：M≈12（约 4 Stage × 3 Round，估算待校核）；N=4（每关 3-5 球均值）；T0≈200（首关目标金额估算）；r≈1.7（指数 1.6-1.8 区间均值）；m_boss≈1.5（Boss 关换棋盘 + 负面规则）。[M/T0 估算待校核]；旧版压力参数：M=12 · N=4 · T0=200 · r=1.7 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 145+ Triggers（Steam 页确认数字），即玩家在 RPBD 阶段放置到棋盘上的功能格子（普通槽位、记分槽位、倍率槽位、特殊触发器），每次 spin 不'抽'而是把 1 颗弹珠从顶部投下，让物理引擎决定它依次撞击哪些 Triggers，每次 run 内棋盘上的 Trigger 数量会随构筑递增到约 20-40 个；分类含通用 Trigger / 主题 Trigger（金币/水果/动物等家族）/ 稀有 Trigger（待校核具体梯度）。",
           "source_fields": [
@@ -326,18 +353,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=4；触发周期 = 每关 N 次 spin（N 通常为 3-5 球），玩家需在 N 球内累计金币 ≥ 该关目标。未达标后果 = 直接出局结束 run。难度曲线：每关目标金额按指数递增（待校核 r 具体数值，体感 r≈1.6-1.8），关卡末段有 Boss/特殊关棋盘（如 Pyramid / Danger Wheel）施加全局负面规则；m_boss 体现为 Boss 关棋盘本身改写物理布局，不是数值倍率。 · 补充：M≈12（约 4 Stage × 3 Round，估算待校核）；N=4（每关 3-5 球均值）；T0≈200（首关目标金额估算）；r≈1.7（指数 1.6-1.8 区间均值）；m_boss≈1.5（Boss 关换棋盘 + 负面规则）。[M/T0 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "决策周期 = 每完成一关（产够目标金额）后进入构筑阶段：从 3 选 1 / 5 选 1 中挑选新 Trigger 放入棋盘空槽 + 偶发 Boon 奖励 + Boss 后稀有奖励。RPBD 操作：选新 Trigger 摆位（位置决定弹珠路径概率）/ 在事件房使用金币交换 / 棋盘格子有限因此后期需要做覆盖与替换决策（待校核是否有显式删除）。商店刷新机制以'选择卡牌池'为主，不是开放式商店。；触发周期 = 每关 N 次 spin（N 通常为 3-5 球），玩家需在 N 球内累计金币 ≥ 该关目标。未达标后果 = 直接出局结束 run。难度曲线：每关目标金额按指数递增（待校核 r 具体数值，体感 r≈1.6-1.8），关卡末段有 Boss/特殊关棋盘（如 Pyramid / Danger Wheel）施加全局负面规则；m_boss 体现为 Boss 关棋盘本身改写物理布局，不是数值倍率。 · 补充：M≈12（约 4 Stage × 3 Round，估算待校核）；N=4（每关 3-5 球均值）；T0≈200（首关目标金额估算）；r≈1.7（指数 1.6-1.8 区间均值）；m_boss≈1.5（Boss 关换棋盘 + 负面规则）。[M/T0 估算待校核]",
+          "value": "决策周期 = 每完成一关（产够目标金额）后进入构筑阶段：从 3 选 1 / 5 选 1 中挑选新 Trigger 放入棋盘空槽 + 偶发 Boon 奖励 + Boss 后稀有奖励。RPBD 操作：选新 Trigger 摆位（位置决定弹珠路径概率）/ 在事件房使用金币交换 / 棋盘格子有限因此后期需要做覆盖与替换决策（待校核是否有显式删除）。商店刷新机制以'选择卡牌池'为主，不是开放式商店。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -370,6 +395,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：每个 episode 是一条层级链，沿层向下打怪到 boss（命运女神 Lady Luck）。每场战斗血量条作为 checkpoint，HP 归零 = 当局结束。难度按层数线性递增，最终层 boss 加强。M ≈ 6-7 层、N=1（每节点一战）、r 偏线性、m_boss 中等。 · 补充：M≈15（每个 episode 约 10-15 战斗，估算）；N=1（每节点 1 战）；T0≈15（首场敌人 HP 估算）；r≈1.05（线性血量爬塔）；m_boss≈1.5（命运女神 boss 加强）。[T0 估算待校核]；旧版压力参数：M=15 · N=1 · T0=15 · r=1.05 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 当前角色的手骰集合，每回合开局摇 N 颗骰子（角色相关，约 2-6 颗，待校核）。骰面是标准 1-6（Robot 用 blackjack 累加获骰，Witch 把骰子塞进咒语槽产生不同效果）。无显式稀有度——骰子本身是消耗资源，差异在装备消耗骰子的方式上。",
           "source_fields": [
@@ -414,18 +447,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；每个 episode 是一条层级链，沿层向下打怪到 boss（命运女神 Lady Luck）。每场战斗血量条作为 checkpoint，HP 归零 = 当局结束。难度按层数线性递增，最终层 boss 加强。M ≈ 6-7 层、N=1（每节点一战）、r 偏线性、m_boss 中等。 · 补充：M≈15（每个 episode 约 10-15 战斗，估算）；N=1（每节点 1 战）；T0≈15（首场敌人 HP 估算）；r≈1.05（线性血量爬塔）；m_boss≈1.5（命运女神 boss 加强）。[T0 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "地牢式地图，节点含战斗/商店/事件/宝箱。商店买装备、买药水、卖装备换金币；事件提供骰子升级或换装备。每个职业有 6 个 episode（关卡剧本），每个 episode 约 10-15 战斗。决策粒度：每场战斗后（~2 分钟）。；每个 episode 是一条层级链，沿层向下打怪到 boss（命运女神 Lady Luck）。每场战斗血量条作为 checkpoint，HP 归零 = 当局结束。难度按层数线性递增，最终层 boss 加强。M ≈ 6-7 层、N=1（每节点一战）、r 偏线性、m_boss 中等。 · 补充：M≈15（每个 episode 约 10-15 战斗，估算）；N=1（每节点 1 战）；T0≈15（首场敌人 HP 估算）；r≈1.05（线性血量爬塔）；m_boss≈1.5（命运女神 boss 加强）。[T0 估算待校核]",
+          "value": "地牢式地图，节点含战斗/商店/事件/宝箱。商店买装备、买药水、卖装备换金币；事件提供骰子升级或换装备。每个职业有 6 个 episode（关卡剧本），每个 episode 约 10-15 战斗。决策粒度：每场战斗后（~2 分钟）。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -458,6 +489,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：20 关卡每关战斗为 checkpoint，全队血量 0 = 当局结束（Perma Death）。难度按关线性递增，第 20 关是最终 boss。多难度模式提供 m_boss 缩放。M=20、N=1、r 线性、m_boss 通过模式拉伸。结构紧凑，失败点清晰。 · 补充：M=20（20 关）；N=1（每关 1 战）；T0≈5（首关敌人 HP 估算）；r≈1.1（线性递增）；m_boss≈1.5（每 5 关一个 boss）。[T0 估算待校核]；旧版压力参数：M=20 · N=1 · T0=5 · r=1.1 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 当前队伍 5 个英雄的骰子集合，每回合 5 颗骰子（每英雄 1 颗）。每颗骰子 6 个面，骰面是技能图标（剑、盾、治疗、魔法、空白等），由英雄职业决定。128+ 英雄职业（含解锁），骰面随职业差异化；稀有度梯度通过英雄星级（普/稀/传说）。",
           "source_fields": [
@@ -502,18 +541,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；20 关卡每关战斗为 checkpoint，全队血量 0 = 当局结束（Perma Death）。难度按关线性递增，第 20 关是最终 boss。多难度模式提供 m_boss 缩放。M=20、N=1、r 线性、m_boss 通过模式拉伸。结构紧凑，失败点清晰。 · 补充：M=20（20 关）；N=1（每关 1 战）；T0≈5（首关敌人 HP 估算）；r≈1.1（线性递增）；m_boss≈1.5（每 5 关一个 boss）。[T0 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "地图共 20 关卡，每关 1 场战斗 + 关后选择（升级英雄 / 商店买物品 / 治疗）。每 5 关左右一个 boss。商店三选一卖物品和英雄升级；可花金币替换队伍中的英雄（招募）。决策粒度：每关战斗后（~1-2 分钟）。；20 关卡每关战斗为 checkpoint，全队血量 0 = 当局结束（Perma Death）。难度按关线性递增，第 20 关是最终 boss。多难度模式提供 m_boss 缩放。M=20、N=1、r 线性、m_boss 通过模式拉伸。结构紧凑，失败点清晰。 · 补充：M=20（20 关）；N=1（每关 1 战）；T0≈5（首关敌人 HP 估算）；r≈1.1（线性递增）；m_boss≈1.5（每 5 关一个 boss）。[T0 估算待校核]",
+          "value": "地图共 20 关卡，每关 1 场战斗 + 关后选择（升级英雄 / 商店买物品 / 治疗）。每 5 关左右一个 boss。商店三选一卖物品和英雄升级；可花金币替换队伍中的英雄（招募）。决策粒度：每关战斗后（~1-2 分钟）。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -546,6 +583,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：每层 ~10 节点 × 3 层 = 单局 ~30 战斗节点（待校核）。达标条件 = 把 boss 的腐化条打满（净化胜利）；自身腐化值满则失败。Boss 难度按层级跳跃，最终 boss 腐化条 + 多阶段。M≈3、N≈8-10、r 接近线性偏跳跃；16 个难度等级控制 T0/m_boss 缩放。 · 补充：M=3（3 层）；N≈10（每层约 10 节点）；T0≈30（首场 boss 腐化条估算）；r≈1.2（层间跳跃）；m_boss≈2.0（最终 boss 多阶段）。[T0/r 估算待校核]；旧版压力参数：M=3 · N=10 · T0=30 · r=1.2 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 玩家所选神谕的骰子集合（手骰），单局可从 350+ 骰子池中构筑。骰子按风险分 3 类：安全（低数值、稳定净化）、平衡（中庸双面）、高风险（高数值但可能腐化自身）。每位神谕初始骰子数约 5-6 颗（待校核），稀有度梯度普通/稀有/传说三档。",
           "source_fields": [
@@ -590,18 +635,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=10；每层 ~10 节点 × 3 层 = 单局 ~30 战斗节点（待校核）。达标条件 = 把 boss 的腐化条打满（净化胜利）；自身腐化值满则失败。Boss 难度按层级跳跃，最终 boss 腐化条 + 多阶段。M≈3、N≈8-10、r 接近线性偏跳跃；16 个难度等级控制 T0/m_boss 缩放。 · 补充：M=3（3 层）；N≈10（每层约 10 节点）；T0≈30（首场 boss 腐化条估算）；r≈1.2（层间跳跃）；m_boss≈2.0（最终 boss 多阶段）。[T0/r 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "节点地图（StS 风格）含战斗/精英/事件/商店/休息。商店三选一买骰、买祝福、买哨卫升级；可付费删除骰子或祝福。事件可换骰、强化骰面、获得腐化代价的高数值骰。决策周期 = 每场战斗后（约 3-5 分钟一次）。；每层 ~10 节点 × 3 层 = 单局 ~30 战斗节点（待校核）。达标条件 = 把 boss 的腐化条打满（净化胜利）；自身腐化值满则失败。Boss 难度按层级跳跃，最终 boss 腐化条 + 多阶段。M≈3、N≈8-10、r 接近线性偏跳跃；16 个难度等级控制 T0/m_boss 缩放。 · 补充：M=3（3 层）；N≈10（每层约 10 节点）；T0≈30（首场 boss 腐化条估算）；r≈1.2（层间跳跃）；m_boss≈2.0（最终 boss 多阶段）。[T0/r 估算待校核]",
+          "value": "节点地图（StS 风格）含战斗/精英/事件/商店/休息。商店三选一买骰、买祝福、买哨卫升级；可付费删除骰子或祝福。事件可换骰、强化骰面、获得腐化代价的高数值骰。决策周期 = 每场战斗后（约 3-5 分钟一次）。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -634,6 +677,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：3 幕 × 5 boss 的爬塔结构：每场战斗 = 一个 checkpoint，HP 归 0 即 GG。压力曲线为血量爬塔（敌人血量 + 伤害递增），boss 关 m_boss 显著加强。多样性靠敌人技能字典 + 3 幕环境差异。 · 补充：M=15（3 幕 × 5 boss + 战斗节点）；N=1（每节点 1 战）；T0≈15（首场敌人 HP 估算）；r≈1.1（线性血量爬塔）；m_boss=2.0（boss HP 翻倍）。[T0 估算待校核]；旧版压力参数：M=15 · N=1 · T0=15 · r=1.1 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 31 种独特骰子（不同面值/技能字典，攻击/治疗/护甲/魔法等类）+ 约 3×3 棋盘格（待校核，主装置层是网格）。每回合先掷骰（多重集），再放入棋盘格执行邻位加成。稀有度梯度（普/稀/传，由 relic 解锁），新骰子来自层间事件和 boss 奖励。",
           "source_fields": [
@@ -678,18 +729,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；3 幕 × 5 boss 的爬塔结构：每场战斗 = 一个 checkpoint，HP 归 0 即 GG。压力曲线为血量爬塔（敌人血量 + 伤害递增），boss 关 m_boss 显著加强。多样性靠敌人技能字典 + 3 幕环境差异。 · 补充：M=15（3 幕 × 5 boss + 战斗节点）；N=1（每节点 1 战）；T0≈15（首场敌人 HP 估算）；r≈1.1（线性血量爬塔）；m_boss=2.0（boss HP 翻倍）。[T0 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "类 StS 地牢推进：节点选择（战斗/事件/精英/商店/boss），战斗胜利后从 3 个奖励中选 1（新骰子 / relic / 金币）。商店可买 relic / potion / 删骰子。决策周期 = 每个节点一次，玩家根据棋盘协同方向（攻向/治向/混合）筛选骰子和 relic。；3 幕 × 5 boss 的爬塔结构：每场战斗 = 一个 checkpoint，HP 归 0 即 GG。压力曲线为血量爬塔（敌人血量 + 伤害递增），boss 关 m_boss 显著加强。多样性靠敌人技能字典 + 3 幕环境差异。 · 补充：M=15（3 幕 × 5 boss + 战斗节点）；N=1（每节点 1 战）；T0≈15（首场敌人 HP 估算）；r≈1.1（线性血量爬塔）；m_boss=2.0（boss HP 翻倍）。[T0 估算待校核]",
+          "value": "类 StS 地牢推进：节点选择（战斗/事件/精英/商店/boss），战斗胜利后从 3 个奖励中选 1（新骰子 / relic / 金币）。商店可买 relic / potion / 删骰子。决策周期 = 每个节点一次，玩家根据棋盘协同方向（攻向/治向/混合）筛选骰子和 relic。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -722,6 +771,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：8 个 progression 层 + 每层多关 boss 关；每关有'本巡前必须达到 X 番'的硬性目标，未达成 = GG。压力曲线指数（番数门槛随关卡指数上扬），boss 关附加规则限制（禁某番型、限制副露等）。 · 补充：M=8（8 个 progression 层）；N≈5（每关约 5 巡）；T0≈1（首关番数门槛）；r=2.0（番数指数膨胀，2^番）；m_boss≈2.0（boss 关附加规则限制）。[T0/N 估算待校核]；旧版压力参数：M=8 · N=5 · T0=1 · r=2.0 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 麻将牌山（136 张标准牌 + 花/Dora 等扩展，按地域规则数百种构型，待校核）。每局起始抽 13 张手牌、每巡补 1 张；摸打节奏与日麻一致。稀有度梯度由番种字典提供（小番 1-2 番、中番 4-6 番、大番役满级），而非牌本身。",
           "source_fields": [
@@ -766,18 +823,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；8 个 progression 层 + 每层多关 boss 关；每关有'本巡前必须达到 X 番'的硬性目标，未达成 = GG。压力曲线指数（番数门槛随关卡指数上扬），boss 关附加规则限制（禁某番型、限制副露等）。 · 补充：M=8（8 个 progression 层）；N≈5（每关约 5 巡）；T0≈1（首关番数门槛）；r=2.0（番数指数膨胀，2^番）；m_boss≈2.0（boss 关附加规则限制）。[T0/N 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "每完成一关（达成番数目标）后进入商店：3-4 选 1 购买 artifact / 升级牌 / 换牌组配方；金币来自超额番数。可付费删/换 artifact 控制构筑方向。决策周期 = 每关一次（约 5-10 分钟），玩家根据下一关番数门槛和已有 artifact 协同来选购。；8 个 progression 层 + 每层多关 boss 关；每关有'本巡前必须达到 X 番'的硬性目标，未达成 = GG。压力曲线指数（番数门槛随关卡指数上扬），boss 关附加规则限制（禁某番型、限制副露等）。 · 补充：M=8（8 个 progression 层）；N≈5（每关约 5 巡）；T0≈1（首关番数门槛）；r=2.0（番数指数膨胀，2^番）；m_boss≈2.0（boss 关附加规则限制）。[T0/N 估算待校核]",
+          "value": "每完成一关（达成番数目标）后进入商店：3-4 选 1 购买 artifact / 升级牌 / 换牌组配方；金币来自超额番数。可付费删/换 artifact 控制构筑方向。决策周期 = 每关一次（约 5-10 分钟），玩家根据下一关番数门槛和已有 artifact 协同来选购。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -810,6 +865,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：波次推进式：每波目标产出量（推下边缘的总价值），未达标 = GG。8 难度等级 + Endless 模式。压力曲线为分段递增（每幕跳一档），boss 波带额外约束（特定硬币失效、目标值翻倍，待校核）。 · 补充：M=8（8 难度等级 / 8 stages）；N≈3（每 stage 约 3 波）；T0≈50（首波目标产出值估算）；r≈1.4（分段递增，每幕跳一档）；m_boss≈2.0（boss 波带额外约束）。[T0/r 估算待校核]；旧版压力参数：M=8 · N=3 · T0=50 · r=1.4 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 150 种独特硬币（如 Seed Coin / Water Coin / Cat Coin / Rat Coin / MultiCoin / TNT Coin），每种自带特效。每局通过商店和事件逐步把硬币塞进自己的'投币机'（玩家牌组），每次投币一次性投入数枚到推币机面板。稀有度梯度（普/稀/史诗/传说）由商店 tier 控制（具体分布待校核）。",
           "source_fields": [
@@ -854,18 +917,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；波次推进式：每波目标产出量（推下边缘的总价值），未达标 = GG。8 难度等级 + Endless 模式。压力曲线为分段递增（每幕跳一档），boss 波带额外约束（特定硬币失效、目标值翻倍，待校核）。 · 补充：M=8（8 难度等级 / 8 stages）；N≈3（每 stage 约 3 波）；T0≈50（首波目标产出值估算）；r≈1.4（分段递增，每幕跳一档）；m_boss≈2.0（boss 波带额外约束）。[T0/r 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "每波次结束进入商店：3 选 1 买硬币 / 买 power-up / 卖硬币换钱 / 镀膜某硬币。决策周期 = 每波（约 1-3 分钟一次），玩家需在'增加投币库存的丰度'与'强化既有协同'之间权衡。可解锁 6 角色提供差异化起手。；波次推进式：每波目标产出量（推下边缘的总价值），未达标 = GG。8 难度等级 + Endless 模式。压力曲线为分段递增（每幕跳一档），boss 波带额外约束（特定硬币失效、目标值翻倍，待校核）。 · 补充：M=8（8 难度等级 / 8 stages）；N≈3（每 stage 约 3 波）；T0≈50（首波目标产出值估算）；r≈1.4（分段递增，每幕跳一档）；m_boss≈2.0（boss 波带额外约束）。[T0/r 估算待校核]",
+          "value": "每波次结束进入商店：3 选 1 买硬币 / 买 power-up / 卖硬币换钱 / 镀膜某硬币。决策周期 = 每波（约 1-3 分钟一次），玩家需在'增加投币库存的丰度'与'强化既有协同'之间权衡。可解锁 6 角色提供差异化起手。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -898,6 +959,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：敌人血量 checkpoint：每场战斗给敌人血量目标，N 次旋转（每回合 1 旋）打到 0 即过。20 个难度等级缩放 T0 和 m_boss。Boss 缺位/弱（页面未强调 boss 多样性），导致后期磨血感强、紧张曲线平。M ≈ 6-10 战斗、N 浮动、r 偏线性、m_boss 弱。 · 补充：M≈10（约 10 战斗）；N≈5（每场 5 旋）；T0≈30（首战敌人 HP 估算）；r≈1.1（线性磨血条）；m_boss≈1.5（boss 弱化是 structure 7 的原因之一）。[全部估算待校核]；旧版压力参数：M=10 · N=5 · T0=30 · r=1.1 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 玩家轮盘上摆放的 100+ 动物瓷砖（Steam 页明确：13 个动物种类 × 100+ 瓷砖变体）。轮盘格数约 8-12 格（待校核），玩家从仓库选瓷砖填格。稀有度梯度通过动物等级（幼/成/王者三档，待校核）。每次旋转一个指针落位 1 格，但邻位会被附带触发。",
           "source_fields": [
@@ -942,18 +1011,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；敌人血量 checkpoint：每场战斗给敌人血量目标，N 次旋转（每回合 1 旋）打到 0 即过。20 个难度等级缩放 T0 和 m_boss。Boss 缺位/弱（页面未强调 boss 多样性），导致后期磨血感强、紧张曲线平。M ≈ 6-10 战斗、N 浮动、r 偏线性、m_boss 弱。 · 补充：M≈10（约 10 战斗）；N≈5（每场 5 旋）；T0≈30（首战敌人 HP 估算）；r≈1.1（线性磨血条）；m_boss≈1.5（boss 弱化是 structure 7 的原因之一）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "节点地图含战斗、商店、事件。商店买动物瓷砖、买卡带、付费换瓷砖位；可丢弃瓷砖回收金币。事件可升级动物（幼→成→王）、组合两瓷砖。决策粒度：每场战斗后（~2-3 分钟）。100+ 瓷砖 + 100+ 卡带导致初见信息过载——这是 pool=6 的核心反例钉点。；敌人血量 checkpoint：每场战斗给敌人血量目标，N 次旋转（每回合 1 旋）打到 0 即过。20 个难度等级缩放 T0 和 m_boss。Boss 缺位/弱（页面未强调 boss 多样性），导致后期磨血感强、紧张曲线平。M ≈ 6-10 战斗、N 浮动、r 偏线性、m_boss 弱。 · 补充：M≈10（约 10 战斗）；N≈5（每场 5 旋）；T0≈30（首战敌人 HP 估算）；r≈1.1（线性磨血条）；m_boss≈1.5（boss 弱化是 structure 7 的原因之一）。[全部估算待校核]",
+          "value": "节点地图含战斗、商店、事件。商店买动物瓷砖、买卡带、付费换瓷砖位；可丢弃瓷砖回收金币。事件可升级动物（幼→成→王）、组合两瓷砖。决策粒度：每场战斗后（~2-3 分钟）。100+ 瓷砖 + 100+ 卡带导致初见信息过载——这是 pool=6 的核心反例钉点。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -986,6 +1053,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：21 回合制 + 每关目标分数；失败条件 = 抽球次数耗尽前未达标即 GG。压力曲线为目标分数递增（关卡进度推进，目标分阶梯上扬），boss 关附加约束（待校核）。 · 补充：M=21（21 回合）；N=1（每回合 1 摇号）；T0≈50（首关目标分估算）；r≈1.2（目标分阶梯上扬）；无明确 boss 关。[T0 估算待校核]；旧版压力参数：M=21 · N=1 · T0=50 · r=1.2；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "基础池 = 宾果球库（标准 75 球，B/I/N/G/O 5 列各 15 球，待校核）+ 30+ 张可定制宾果卡（5×5 网格，含 free 格，待校核）。每回合从球库摸出若干球（每回合数量待校核），玩家可把球放在卡上对应数字位。",
           "source_fields": [
@@ -1030,18 +1105,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；21 回合制 + 每关目标分数；失败条件 = 抽球次数耗尽前未达标即 GG。压力曲线为目标分数递增（关卡进度推进，目标分阶梯上扬），boss 关附加约束（待校核）。 · 补充：M=21（21 回合）；N=1（每回合 1 摇号）；T0≈50（首关目标分估算）；r≈1.2（目标分阶梯上扬）；无明确 boss 关。[T0 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "完成关卡后进商店：购买 blotter（永久改卡）/ 购买被动道具 / 定制 30+ 张卡的格子布局。决策周期 = 每关一次。玩家在'调整卡面分布以提高连线概率'与'购买后期爆发道具'间权衡，构筑深度由 blotter × passive item 的组合空间提供。；21 回合制 + 每关目标分数；失败条件 = 抽球次数耗尽前未达标即 GG。压力曲线为目标分数递增（关卡进度推进，目标分阶梯上扬），boss 关附加约束（待校核）。 · 补充：M=21（21 回合）；N=1（每回合 1 摇号）；T0≈50（首关目标分估算）；r≈1.2（目标分阶梯上扬）；无明确 boss 关。[T0 估算待校核]",
+          "value": "完成关卡后进商店：购买 blotter（永久改卡）/ 购买被动道具 / 定制 30+ 张卡的格子布局。决策周期 = 每关一次。玩家在'调整卡面分布以提高连线概率'与'购买后期爆发道具'间权衡，构筑深度由 blotter × passive item 的组合空间提供。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1074,6 +1147,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：时代分数 checkpoint：每个时代要求达到指定分数，未达标则\"帝国统治坍塌\"（GG）；具体周期/曲线待校核，倾向指数递增 · 补充：M≈5（约 5 个时代，估算）；N≈10（每时代约 10 spin）；T0≈100（首时代分数门槛估算）；r≈2.0（时代分指数）；无显式 boss 关。[全部估算待校核]；旧版压力参数：M=5 · N=10 · T0=100 · r=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "老虎机符号池（具体规模约 30-50 种待校核）；符号代表帝国资源（食物、士兵、金币、人口等）；稀有度梯度未披露",
           "source_fields": [
@@ -1118,18 +1199,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=10；时代分数 checkpoint：每个时代要求达到指定分数，未达标则\"帝国统治坍塌\"（GG）；具体周期/曲线待校核，倾向指数递增 · 补充：M≈5（约 5 个时代，估算）；N≈10（每时代约 10 spin）；T0≈100（首时代分数门槛估算）；r≈2.0（时代分指数）；无显式 boss 关。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "时代结算后进入科技树点选（类似商店三选一或自由分配）；不同领袖在新局起手提供差异化；具体增删符号成本待校核；时代分数 checkpoint：每个时代要求达到指定分数，未达标则\"帝国统治坍塌\"（GG）；具体周期/曲线待校核，倾向指数递增 · 补充：M≈5（约 5 个时代，估算）；N≈10（每时代约 10 spin）；T0≈100（首时代分数门槛估算）；r≈2.0（时代分指数）；无显式 boss 关。[全部估算待校核]",
+          "value": "时代结算后进入科技树点选（类似商店三选一或自由分配）；不同领袖在新局起手提供差异化；具体增删符号成本待校核",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1162,6 +1241,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：敌人波次/路线节点推进，6 种关卡 + 8 boss 作为周期性硬 checkpoint；未达标 → 战斗失败 → roguelike 重开 · 补充：M=8（8 boss）；N≈5（每 boss 约 5 spin）；T0≈50（首关目标估算）；r≈1.3（线性偏跳跃）；m_boss≈1.8（boss 比普通敌人强）。[T0/N 估算待校核]；旧版压力参数：M=8 · N=5 · T0=50 · r=1.3 · m_boss=1.8；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "120+ 图标符号池；图标对应攻击/金币/技能/防御等类型；稀有度梯度未明确披露但 4 角色 × 120 图标暗示分级",
           "source_fields": [
@@ -1206,18 +1293,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；敌人波次/路线节点推进，6 种关卡 + 8 boss 作为周期性硬 checkpoint；未达标 → 战斗失败 → roguelike 重开 · 补充：M=8（8 boss）；N≈5（每 boss 约 5 spin）；T0≈50（首关目标估算）；r≈1.3（线性偏跳跃）；m_boss≈1.8（boss 比普通敌人强）。[T0/N 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "路线节点间选择不同事件/商店；可获得新图标加入符号池、升级现有图标；4 角色提供元构筑变体；敌人波次/路线节点推进，6 种关卡 + 8 boss 作为周期性硬 checkpoint；未达标 → 战斗失败 → roguelike 重开 · 补充：M=8（8 boss）；N≈5（每 boss 约 5 spin）；T0≈50（首关目标估算）；r≈1.3（线性偏跳跃）；m_boss≈1.8（boss 比普通敌人强）。[T0/N 估算待校核]",
+          "value": "路线节点间选择不同事件/商店；可获得新图标加入符号池、升级现有图标；4 角色提供元构筑变体",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1250,6 +1335,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：每轮还债 checkpoint：到期必须凑齐债务额，未达标则\"真实的毁灭\"（永久死亡 + 恐怖叙事惩罚）；债务指数递增，多结局路线 · 补充：M≈6（约 6 周还债，估算）；N≈3（每周 3 spin）；T0≈100（首周债务估算）；r≈2.0（指数还债压力）；无显式 boss 关，永久死亡 + 多结局路线。[全部估算待校核]；旧版压力参数：M=6 · N=3 · T0=100 · r=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "第一人称老虎机符号池（约 3 列规格，符号种类待校核约 15-25 种），符号涵盖四叶草、$、数字、骷髅等主题元素；稀有度梯度未披露但页面强调\"运势如滚雪球\"暗示有等级",
           "source_fields": [
@@ -1294,18 +1387,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；每轮还债 checkpoint：到期必须凑齐债务额，未达标则\"真实的毁灭\"（永久死亡 + 恐怖叙事惩罚）；债务指数递增，多结局路线 · 补充：M≈6（约 6 周还债，估算）；N≈3（每周 3 spin）；T0≈100（首周债务估算）；r≈2.0（指数还债压力）；无显式 boss 关，永久死亡 + 多结局路线。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "每轮结束在密室内的商店/抽卡获得新护身符（charms），可能存在弃置/替换机制（待校核）；跨局解锁系统提供元进展；每轮还债 checkpoint：到期必须凑齐债务额，未达标则\"真实的毁灭\"（永久死亡 + 恐怖叙事惩罚）；债务指数递增，多结局路线 · 补充：M≈6（约 6 周还债，估算）；N≈3（每周 3 spin）；T0≈100（首周债务估算）；r≈2.0（指数还债压力）；无显式 boss 关，永久死亡 + 多结局路线。[全部估算待校核]",
+          "value": "每轮结束在密室内的商店/抽卡获得新护身符（charms），可能存在弃置/替换机制（待校核）；跨局解锁系统提供元进展",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1338,6 +1429,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：20 个挑战关卡作为周期 checkpoint；分数达标推进，未达标失败重开；难度曲线由律动骰子自调节，可能偏温和——boss/指数压力描述弱 · 补充：M=20（20 个挑战关卡）；N≈3（每关约 3 投）；T0≈50（首关分数门槛估算）；r≈1.2（律动骰子自调节，温和递增）；m_boss≈2.0（最终 boss 估算）。[T0/N 估算待校核]；旧版压力参数：M=20 · N=3 · T0=50 · r=1.2 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "300 个不同技能的骰子构成基础池（顶级规模）；29 个起始骰组提供差异化开局；50 个律动骰子作为变体；骰面对应攻击/防御/技能图标——稀有度梯度通过技能强度隐式分级",
           "source_fields": [
@@ -1382,18 +1481,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；20 个挑战关卡作为周期 checkpoint；分数达标推进，未达标失败重开；难度曲线由律动骰子自调节，可能偏温和——boss/指数压力描述弱 · 补充：M=20（20 个挑战关卡）；N≈3（每关约 3 投）；T0≈50（首关分数门槛估算）；r≈1.2（律动骰子自调节，温和递增）；m_boss≈2.0（最终 boss 估算）。[T0/N 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "20 个挑战关卡 + 每日刷新挑战中获取新骰子，加入骰子博物馆；锻造工坊允许复制/删除/升级骰面——RPBD 决策深度高；20 个挑战关卡作为周期 checkpoint；分数达标推进，未达标失败重开；难度曲线由律动骰子自调节，可能偏温和——boss/指数压力描述弱 · 补充：M=20（20 个挑战关卡）；N≈3（每关约 3 投）；T0≈50（首关分数门槛估算）；r≈1.2（律动骰子自调节，温和递增）；m_boss≈2.0（最终 boss 估算）。[T0/N 估算待校核]",
+          "value": "20 个挑战关卡 + 每日刷新挑战中获取新骰子，加入骰子博物馆；锻造工坊允许复制/删除/升级骰面——RPBD 决策深度高",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1426,6 +1523,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：冒险模式节点推进 + 讨伐魔王作为终极 boss；战斗失败重开；具体波次密度和压力曲线偏平缓——挂机属性可能稀释紧张感 · 补充：M≈10（约 10 关 + 终极 boss）；N≈5（每关多波）；T0≈100（首关目标产出估算）；r≈1.3（线性偏挂机化）；m_boss≈3.0（讨伐魔王 boss 强）。[全部估算待校核]；旧版压力参数：M=10 · N=5 · T0=100 · r=1.3 · m_boss=3.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "推币机硬币池：包含基础币 + 特殊币（转转乐、叠叠乐、JP123 触发币、全盘大奖币等）；稀有度由触发概率隐式分级；具体币种数待校核",
           "source_fields": [
@@ -1470,18 +1575,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；冒险模式节点推进 + 讨伐魔王作为终极 boss；战斗失败重开；具体波次密度和压力曲线偏平缓——挂机属性可能稀释紧张感 · 补充：M≈10（约 10 关 + 终极 boss）；N≈5（每关多波）；T0≈100（首关目标产出估算）；r≈1.3（线性偏挂机化）；m_boss≈3.0（讨伐魔王 boss 强）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "招募勇者 → 选择天赋 → 装备洗炼/强化/重铸 → 编队站位调整；冒险模式下每个关卡/村庄升级为 RPBD 决策点；冒险模式节点推进 + 讨伐魔王作为终极 boss；战斗失败重开；具体波次密度和压力曲线偏平缓——挂机属性可能稀释紧张感 · 补充：M≈10（约 10 关 + 终极 boss）；N≈5（每关多波）；T0≈100（首关目标产出估算）；r≈1.3（线性偏挂机化）；m_boss≈3.0（讨伐魔王 boss 强）。[全部估算待校核]",
+          "value": "招募勇者 → 选择天赋 → 装备洗炼/强化/重铸 → 编队站位调整；冒险模式下每个关卡/村庄升级为 RPBD 决策点",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1514,6 +1617,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：段末生死对决（boss 战），敌人随推进逐渐增强；线性/指数难度递增（待校核），失败结束本局 · 补充：M≈8（约 8 段，估算）；N≈5（每段约 5 旋转）；T0≈50（首段目标估算）；r≈1.5（段间递增）；m_boss≈2.0（段末生死对决）。[全部估算待校核]；旧版压力参数：M=8 · N=5 · T0=50 · r=1.5 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "4×5 棋盘格子，棋子来自不同区域（彩色工坊/宝藏海湾/命运赌场等），约 30-50 种棋子和宝物（待校核）；具体稀有度梯度未公开",
           "source_fields": [
@@ -1558,18 +1669,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；段末生死对决（boss 战），敌人随推进逐渐增强；线性/指数难度递增（待校核），失败结束本局 · 补充：M≈8（约 8 段，估算）；N≈5（每段约 5 旋转）；T0≈50（首段目标估算）；r≈1.5（段间递增）；m_boss≈2.0（段末生死对决）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "段间在彩色工坊接订单换奖励、宝藏海湾开箱、命运赌场博弈；玩家选择不同区域路径决定下一段补什么棋子和宝物，形成卡牌构筑+地图选路的双层决策；段末生死对决（boss 战），敌人随推进逐渐增强；线性/指数难度递增（待校核），失败结束本局 · 补充：M≈8（约 8 段，估算）；N≈5（每段约 5 旋转）；T0≈50（首段目标估算）；r≈1.5（段间递增）；m_boss≈2.0（段末生死对决）。[全部估算待校核]",
+          "value": "段间在彩色工坊接订单换奖励、宝藏海湾开箱、命运赌场博弈；玩家选择不同区域路径决定下一段补什么棋子和宝物，形成卡牌构筑+地图选路的双层决策",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1602,6 +1711,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：日夜循环作为 checkpoint 节奏；推测有阶段性目标（资源/进度），失败条件未公开（待校核） · 补充：M≈10（约 10 天）；N≈3（每天约 3 spin）；T0≈50（首日目标资源估算）；r≈1.4（日夜循环递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=3 · T0=50 · r=1.4；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "拉霸机符号池（岛民/资源/建筑符号），规模约 40-60 种（待校核）；分普通/稀有度梯度未公开但牌组系统暗示存在分级",
           "source_fields": [
@@ -1646,18 +1763,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；日夜循环作为 checkpoint 节奏；推测有阶段性目标（资源/进度），失败条件未公开（待校核） · 补充：M≈10（约 10 天）；N≈3（每天约 3 spin）；T0≈50（首日目标资源估算）；r≈1.4（日夜循环递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "白天指挥岛民工作（消化 spin 产出），晚上规划小岛（购买建筑/选技能）；商店/事件机制提供构筑选择；日夜循环作为 checkpoint 节奏；推测有阶段性目标（资源/进度），失败条件未公开（待校核） · 补充：M≈10（约 10 天）；N≈3（每天约 3 spin）；T0≈50（首日目标资源估算）；r≈1.4（日夜循环递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "白天指挥岛民工作（消化 spin 产出），晚上规划小岛（购买建筑/选技能）；商店/事件机制提供构筑选择",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1690,6 +1805,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：击败强敌作为段末 boss 战，推进结构隐含波次推进；具体血量/目标数值未公开（待校核） · 补充：M≈8（约 8 段，估算）；N≈5（每段约 5 spin）；T0≈50（首段目标估算）；r≈1.4（中世纪推进递增）；m_boss≈2.0（段末强敌）。[全部估算待校核]；旧版压力参数：M=8 · N=5 · T0=50 · r=1.4 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "150+ 卡牌 + 60+ 英雄卡，含冒险者/法师/野兽/建筑等类型分组；6 种领主开局配置作为初始构筑差异；稀有度梯度未公开（待校核）",
           "source_fields": [
@@ -1734,18 +1857,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；击败强敌作为段末 boss 战，推进结构隐含波次推进；具体血量/目标数值未公开（待校核） · 补充：M≈8（约 8 段，估算）；N≈5（每段约 5 spin）；T0≈50（首段目标估算）；r≈1.4（中世纪推进递增）；m_boss≈2.0（段末强敌）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "段间从牌库中抽卡构筑、6 种领主开局选择、锻造与建造决策；roguelike 抽卡而非传统商店；击败强敌作为段末 boss 战，推进结构隐含波次推进；具体血量/目标数值未公开（待校核） · 补充：M≈8（约 8 段，估算）；N≈5（每段约 5 spin）；T0≈50（首段目标估算）；r≈1.4（中世纪推进递增）；m_boss≈2.0（段末强敌）。[全部估算待校核]",
+          "value": "段间从牌库中抽卡构筑、6 种领主开局选择、锻造与建造决策；roguelike 抽卡而非传统商店",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1778,6 +1899,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：对抗各种强大敌人，3 职业 + 区域效果 + 随机事件构成 roguelike 推进；敌人有独特能力，具体血量/目标未公开（待校核） · 补充：M≈10（约 10 战斗，估算）；N≈3（每战 3 旋）；T0≈30（首战敌人 HP 估算）；r≈1.2（roguelike 推进）；m_boss≈1.5（区域 boss）。[全部估算待校核]；旧版压力参数：M=10 · N=3 · T0=30 · r=1.2 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "300+ 神秘符号（武器和装备化为符号），规模庞大；3 个职业各自起手不同，稀有度梯度未公开但池规模暗示有分级（待校核）",
           "source_fields": [
@@ -1822,18 +1951,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；对抗各种强大敌人，3 职业 + 区域效果 + 随机事件构成 roguelike 推进；敌人有独特能力，具体血量/目标未公开（待校核） · 补充：M≈10（约 10 战斗，估算）；N≈3（每战 3 旋）；T0≈30（首战敌人 HP 估算）；r≈1.2（roguelike 推进）；m_boss≈1.5（区域 boss）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "商店购买/删除符号 + 技能选择 + 随机事件抉择 + 区域风险收益选择；构筑维度多但池过载风险高（300+ 符号 vs 轮盘英雄 100+ 反例）；对抗各种强大敌人，3 职业 + 区域效果 + 随机事件构成 roguelike 推进；敌人有独特能力，具体血量/目标未公开（待校核） · 补充：M≈10（约 10 战斗，估算）；N≈3（每战 3 旋）；T0≈30（首战敌人 HP 估算）；r≈1.2（roguelike 推进）；m_boss≈1.5（区域 boss）。[全部估算待校核]",
+          "value": "商店购买/删除符号 + 技能选择 + 随机事件抉择 + 区域风险收益选择；构筑维度多但池过载风险高（300+ 符号 vs 轮盘英雄 100+ 反例）",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1866,6 +1993,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：15 位 Boss 分为 5 个类别（每类 3 关），失败重开；具体目标值/增长率未公开 · 补充：M=15（15 位 Boss × 5 类别）；N≈3（每 boss 约 3 旋）；T0≈50（首关目标估算）；r≈1.3（boss 间递增）；m_boss≈1.5（每类末 boss 加强）。[T0/N 估算待校核]；旧版压力参数：M=15 · N=3 · T0=50 · r=1.3 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "10+ 种球（不同效果）+ 玩家自建的轮盘格子（数字、颜色可改、可冻结/吃掉）+ 50+ 种下注选项；池规模中等，球种数量明显少于 LBL 这类",
           "source_fields": [
@@ -1910,18 +2045,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；15 位 Boss 分为 5 个类别（每类 3 关），失败重开；具体目标值/增长率未公开 · 补充：M=15（15 位 Boss × 5 类别）；N≈3（每 boss 约 3 旋）；T0≈50（首关目标估算）；r≈1.3（boss 间递增）；m_boss≈1.5（每类末 boss 加强）。[T0/N 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "每轮后做决定升级牌组：选球、改轮盘格子、买徽章、选职业专长；玩家对装置本体可改是与轮盘英雄的关键差异；15 位 Boss 分为 5 个类别（每类 3 关），失败重开；具体目标值/增长率未公开 · 补充：M=15（15 位 Boss × 5 类别）；N≈3（每 boss 约 3 旋）；T0≈50（首关目标估算）；r≈1.3（boss 间递增）；m_boss≈1.5（每类末 boss 加强）。[T0/N 估算待校核]",
+          "value": "每轮后做决定升级牌组：选球、改轮盘格子、买徽章、选职业专长；玩家对装置本体可改是与轮盘英雄的关键差异",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -1954,6 +2087,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：回合数倒计时为 0 时僵尸进攻；防御值 < 僵尸数则 GG；类塔防波次结构，每波难度递增，具体增长率/M 数页面未公开 · 补充：M≈10（约 10 波塔防，估算）；N=1（每回合 1 spin）；T0≈30（首波僵尸数估算）；r≈1.3（每波难度递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=1 · T0=30 · r=1.3；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "从仓库'最多随机选择 15 个符号'落到黑板上；不同守卫拥有不同的初始符号集和最佳组合策略；具体符号种类数和稀有度梯度页面未公开",
           "source_fields": [
@@ -1998,18 +2139,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；回合数倒计时为 0 时僵尸进攻；防御值 < 僵尸数则 GG；类塔防波次结构，每波难度递增，具体增长率/M 数页面未公开 · 补充：M≈10（约 10 波塔防，估算）；N=1（每回合 1 spin）；T0≈30（首波僵尸数估算）；r≈1.3（每波难度递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "每回合可使用'重新滚动''删除'工具调整符号组合 + 选择守护者英雄 + 在阶段间增删符号；决策粒度比 LBL 更细（局内可重抽）；回合数倒计时为 0 时僵尸进攻；防御值 < 僵尸数则 GG；类塔防波次结构，每波难度递增，具体增长率/M 数页面未公开 · 补充：M≈10（约 10 波塔防，估算）；N=1（每回合 1 spin）；T0≈30（首波僵尸数估算）；r≈1.3（每波难度递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "每回合可使用'重新滚动''删除'工具调整符号组合 + 选择守护者英雄 + 在阶段间增删符号；决策粒度比 LBL 更细（局内可重抽）",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2042,6 +2181,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：还贷压力：每段需赚到目标金额还贷；'债务高得吓人'暗示指数级增长但具体 r 值未公开；目标分族结构清晰 · 补充：M≈8（约 8 段还贷期，估算）；N≈5（每段约 5 季）；T0≈100（首段贷款估算）；r≈1.8（指数还贷压力，'债务高得吓人'）；无显式 boss 关。[全部估算待校核]；旧版压力参数：M=8 · N=5 · T0=100 · r=1.8；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "作物/卡牌池（具体数量未公开）；通过 drafting 进入玩家牌组，每张牌代表一种作物/操作；稀有度分级页面未提及",
           "source_fields": [
@@ -2086,18 +2233,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；还贷压力：每段需赚到目标金额还贷；'债务高得吓人'暗示指数级增长但具体 r 值未公开；目标分族结构清晰 · 补充：M≈8（约 8 段还贷期，估算）；N≈5（每段约 5 季）；T0≈100（首段贷款估算）；r≈1.8（指数还贷压力，'债务高得吓人'）；无显式 boss 关。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "drafting 选卡（季末/段末加入新卡）+ 移除卡 + 升级卡；自动结算让 RPBD 时长成为主要游戏时间；还贷压力：每段需赚到目标金额还贷；'债务高得吓人'暗示指数级增长但具体 r 值未公开；目标分族结构清晰 · 补充：M≈8（约 8 段还贷期，估算）；N≈5（每段约 5 季）；T0≈100（首段贷款估算）；r≈1.8（指数还贷压力，'债务高得吓人'）；无显式 boss 关。[全部估算待校核]",
+          "value": "drafting 选卡（季末/段末加入新卡）+ 移除卡 + 升级卡；自动结算让 RPBD 时长成为主要游戏时间",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2130,6 +2275,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：周期性给猫神'上贡'：每段达标金币才能继续；'是持续压榨还是早日解放'暗示玩家可选不同结束节奏，结构性 GG 阈值清晰但增长曲线未公开 · 补充：M≈10（约 10 段进贡周期，估算）；N≈7（每段约 7 天）；T0≈100（首段进贡金币估算）；r≈1.5（递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=7 · T0=100 · r=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "100+ 动物（每只独特能力）+ 7 大动物家族（流派分类）+ 10+ 地形卡 + 20+ 玩具；基础池规模偏大，存在'过载池'风险，但家族流派分类减轻信息密度",
           "source_fields": [
@@ -2174,18 +2327,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=7；周期性给猫神'上贡'：每段达标金币才能继续；'是持续压榨还是早日解放'暗示玩家可选不同结束节奏，结构性 GG 阈值清晰但增长曲线未公开 · 补充：M≈10（约 10 段进贡周期，估算）；N≈7（每段约 7 天）；T0≈100（首段进贡金币估算）；r≈1.5（递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "玩家主动管理动物牌组（添加/移除）+ 每阶段选道具/地形/玩具；不是传统 drafting 而是持续管理；周期性给猫神'上贡'：每段达标金币才能继续；'是持续压榨还是早日解放'暗示玩家可选不同结束节奏，结构性 GG 阈值清晰但增长曲线未公开 · 补充：M≈10（约 10 段进贡周期，估算）；N≈7（每段约 7 天）；T0≈100（首段进贡金币估算）；r≈1.5（递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "玩家主动管理动物牌组（添加/移除）+ 每阶段选道具/地形/玩具；不是传统 drafting 而是持续管理",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2218,6 +2369,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：随机生成的狩猎地图，4 章节，每章末 Boss 战；战败后退出本局 · 补充：M=4（4 章节）；N≈10（每章约 10 战）；T0≈30（首战敌人 HP 估算）；r≈1.5（章节间跳跃）；m_boss=2.0（章末 Boss）。[T0/N 估算待校核]；旧版压力参数：M=4 · N=10 · T0=30 · r=1.5 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "100+ 棋子 + 圣物，按等级/职业分类；每回合从池抽取若干棋子放入战场格子",
           "source_fields": [
@@ -2262,18 +2421,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=10；随机生成的狩猎地图，4 章节，每章末 Boss 战；战败后退出本局 · 补充：M=4（4 章节）；N≈10（每章约 10 战）；T0≈30（首战敌人 HP 估算）；r≈1.5（章节间跳跃）；m_boss=2.0（章末 Boss）。[T0/N 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "回合间在地图节点选择（战斗/商店/附魔/事件），商店购买棋子和圣物，附魔升级单位；每回合获得新棋子；随机生成的狩猎地图，4 章节，每章末 Boss 战；战败后退出本局 · 补充：M=4（4 章节）；N≈10（每章约 10 战）；T0≈30（首战敌人 HP 估算）；r≈1.5（章节间跳跃）；m_boss=2.0（章末 Boss）。[T0/N 估算待校核]",
+          "value": "回合间在地图节点选择（战斗/商店/附魔/事件），商店购买棋子和圣物，附魔升级单位；每回合获得新棋子",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2306,6 +2463,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：最终期限内累积金币达目标 → 通过；典型目标分族（资金条曲线待校核） · 补充：M≈10（约 10 回合期限，估算）；N≈3（每回合约 3 招募）；T0≈100（首回合金币目标估算）；r≈1.3（线性递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=3 · T0=100 · r=1.3；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "150+ 市民卡，每个有独特能力与喜好；按职业/类型分类，稀有度梯度（待校核）",
           "source_fields": [
@@ -2350,18 +2515,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；最终期限内累积金币达目标 → 通过；典型目标分族（资金条曲线待校核） · 补充：M≈10（约 10 回合期限，估算）；N≈3（每回合约 3 招募）；T0≈100（首回合金币目标估算）；r≈1.3（线性递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "回合内招募市民、建设产业链、购买道具；最终期限前不断扩充和优化卡组；最终期限内累积金币达目标 → 通过；典型目标分族（资金条曲线待校核） · 补充：M≈10（约 10 回合期限，估算）；N≈3（每回合约 3 招募）；T0≈100（首回合金币目标估算）；r≈1.3（线性递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "回合内招募市民、建设产业链、购买道具；最终期限前不断扩充和优化卡组",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2394,6 +2557,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：周财务目标制（每周需达标资金），未达标 GG；目标曲线待校核 · 补充：M≈10（约 10 周财务期，估算）；N≈5（每周约 5 出牌）；T0≈1000（首周资金目标估算）；r≈1.5（周间递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=5 · T0=1000 · r=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "120+ 操作卡牌（拉升/抛售/操纵），按效果分类；不同角色初始牌组差异",
           "source_fields": [
@@ -2438,18 +2609,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=5；周财务目标制（每周需达标资金），未达标 GG；目标曲线待校核 · 补充：M≈10（约 10 周财务期，估算）；N≈5（每周约 5 出牌）；T0≈1000（首周资金目标估算）；r≈1.5（周间递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "盘后交易市场不同卡池抽取手牌，购买卡牌和药丸；周间调整牌组应对下周财务目标；周财务目标制（每周需达标资金），未达标 GG；目标曲线待校核 · 补充：M≈10（约 10 周财务期，估算）；N≈5（每周约 5 出牌）；T0≈1000（首周资金目标估算）；r≈1.5（周间递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "盘后交易市场不同卡池抽取手牌，购买卡牌和药丸；周间调整牌组应对下周财务目标",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2482,6 +2651,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：多层地牢血量爬塔，每层有敌人战斗 + boss；HP 归零 GG · 补充：M≈10（约 10 层地牢，估算）；N≈3（每层约 3 战）；T0≈30（首层敌人 HP 估算）；r≈1.3（层间血量爬塔）；m_boss≈2.0（层末 boss）。[全部估算待校核]；旧版压力参数：M=10 · N=3 · T0=30 · r=1.3 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "卡牌池（约 N 待校核），按法力消耗分类，可通过升级解锁新卡",
           "source_fields": [
@@ -2526,18 +2703,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；多层地牢血量爬塔，每层有敌人战斗 + boss；HP 归零 GG · 补充：M≈10（约 10 层地牢，估算）；N≈3（每层约 3 战）；T0≈30（首层敌人 HP 估算）；r≈1.3（层间血量爬塔）；m_boss≈2.0（层末 boss）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "地牢探索中拾取卡牌和宝石；遇到宝箱/事件节点扩充牌组；铲子等道具影响地图通路；多层地牢血量爬塔，每层有敌人战斗 + boss；HP 归零 GG · 补充：M≈10（约 10 层地牢，估算）；N≈3（每层约 3 战）；T0≈30（首层敌人 HP 估算）；r≈1.3（层间血量爬塔）；m_boss≈2.0（层末 boss）。[全部估算待校核]",
+          "value": "地牢探索中拾取卡牌和宝石；遇到宝箱/事件节点扩充牌组；铲子等道具影响地图通路",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2570,6 +2745,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：地牢分章节推进 + 多种 boss 关；失败 GG 进入下一周目；难度曲线由 boss 多样性提供 · 补充：M≈8（约 8 章节地牢，估算）；N≈3（每章约 3 房间）；T0≈20（首层敌人 HP 估算）；r≈1.2（线性递增）；m_boss≈1.5（章末 boss）。[全部估算待校核]；旧版压力参数：M=8 · N=3 · T0=20 · r=1.2 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "100+ 张卡牌池 · 每次进入地牢翻开网格中的卡牌（敌人/物品/陷阱/事件） · 卡牌按稀有度分级（普通/稀有/传说，待校核）",
           "source_fields": [
@@ -2614,18 +2797,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=3；地牢分章节推进 + 多种 boss 关；失败 GG 进入下一周目；难度曲线由 boss 多样性提供 · 补充：M≈8（约 8 章节地牢，估算）；N≈3（每章约 3 房间）；T0≈20（首层敌人 HP 估算）；r≈1.2（线性递增）；m_boss≈1.5（章末 boss）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "段间商店购买/升级卡牌、收集零件、调整牌组；多角色多模式提供构筑分支；地牢分章节推进 + 多种 boss 关；失败 GG 进入下一周目；难度曲线由 boss 多样性提供 · 补充：M≈8（约 8 章节地牢，估算）；N≈3（每章约 3 房间）；T0≈20（首层敌人 HP 估算）；r≈1.2（线性递增）；m_boss≈1.5（章末 boss）。[全部估算待校核]",
+          "value": "段间商店购买/升级卡牌、收集零件、调整牌组；多角色多模式提供构筑分支",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2658,6 +2839,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：ambition（目标达成）作为胜利条件 + 多种隐藏 ambition；回合数限制提供压力曲线 · 补充：M≈10（约 10 回合限制，估算）；N=1（每回合 1 投骰）；T0≈10（首回合资源目标估算）；r≈1.1（线性递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=1 · T0=10 · r=1.1；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "起始少量村民（骰子工人）+ 多种工人类型；每回合骰子点数随机决定可用动作（数值 1-6 标准骰）",
           "source_fields": [
@@ -2702,18 +2891,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；ambition（目标达成）作为胜利条件 + 多种隐藏 ambition；回合数限制提供压力曲线 · 补充：M≈10（约 10 回合限制，估算）；N=1（每回合 1 投骰）；T0≈10（首回合资源目标估算）；r≈1.1（线性递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "每回合根据骰子结果决策：建造哪个建筑、放置哪个工人、走哪条 ambition；含 Draft 模式增加构筑限制；ambition（目标达成）作为胜利条件 + 多种隐藏 ambition；回合数限制提供压力曲线 · 补充：M≈10（约 10 回合限制，估算）；N=1（每回合 1 投骰）；T0≈10（首回合资源目标估算）；r≈1.1（线性递增）；无明确 boss 关。[全部估算待校核]",
+          "value": "每回合根据骰子结果决策：建造哪个建筑、放置哪个工人、走哪条 ambition；含 Draft 模式增加构筑限制",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2746,6 +2933,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：9 个地牢 × 50 层结构，每个地牢引入新规则；失败回起点；boss 关作为章节末 · 补充：M=50（50 层）；N=1（每层 1 路径）；T0≈10（首层难度估算）；r≈1.05（线性递增）；m_boss≈1.3（章节末 boss 适度加强）。[T0 估算待校核]；旧版压力参数：M=50 · N=1 · T0=10 · r=1.05 · m_boss=1.3；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "卡牌网格中的元素（敌人/金币/buff/陷阱）；玩家每回合只能向右或向下移动一格；'制胜之道无随机'宣言意味着布局可见、抽取确定",
           "source_fields": [
@@ -2790,18 +2985,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；9 个地牢 × 50 层结构，每个地牢引入新规则；失败回起点；boss 关作为章节末 · 补充：M=50（50 层）；N=1（每层 1 路径）；T0≈10（首层难度估算）；r≈1.05（线性递增）；m_boss≈1.3（章节末 boss 适度加强）。[T0 估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "段间在层间商店选神器/升级；解锁更多神器作为元进度；9 个地牢 × 50 层结构，每个地牢引入新规则；失败回起点；boss 关作为章节末 · 补充：M=50（50 层）；N=1（每层 1 路径）；T0≈10（首层难度估算）；r≈1.05（线性递增）；m_boss≈1.3（章节末 boss 适度加强）。[T0 估算待校核]",
+          "value": "段间在层间商店选神器/升级；解锁更多神器作为元进度",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2834,6 +3027,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：波次推进 + 自动战斗结算;失败 GG;具体 boss 关数和难度曲线待校核 · 补充：M≈10（约 10 波次，估算）；N=1（每波 1 spin 出棋）；T0≈30（首波敌人血量估算）；r≈1.3（波次推进）；m_boss≈1.5（boss 关加强）。[全部估算待校核]；旧版压力参数：M=10 · N=1 · T0=30 · r=1.3 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "150 棋子 · 19 种类（斗士/法师/野兽/恶魔等）· 含合成棋（哥布林+白银=哥布林商人，兽人步兵+狼=狼骑士）;稀有度梯度待校核",
           "source_fields": [
@@ -2878,18 +3079,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；波次推进 + 自动战斗结算;失败 GG;具体 boss 关数和难度曲线待校核 · 补充：M≈10（约 10 波次，估算）；N=1（每波 1 spin 出棋）；T0≈30（首波敌人血量估算）；r≈1.3（波次推进）；m_boss≈1.5（boss 关加强）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "战斗间 reroll/选择保留棋子 + 物品商店 + 合成决策;多角色提供起手分支；波次推进 + 自动战斗结算;失败 GG;具体 boss 关数和难度曲线待校核 · 补充：M≈10（约 10 波次，估算）；N=1（每波 1 spin 出棋）；T0≈30（首波敌人血量估算）；r≈1.3（波次推进）；m_boss≈1.5（boss 关加强）。[全部估算待校核]",
+          "value": "战斗间 reroll/选择保留棋子 + 物品商店 + 合成决策;多角色提供起手分支",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
@@ -2922,6 +3121,14 @@
       "mapping_status": "mechanical_import_unconfirmed",
       "review_status": "draft",
       "fields": {
+        "P_t": {
+          "value": "目标检查：回合制：在限定回合内击败冒险者保住宝石;否则宝石被偷;每波冒险者强度递增 · 补充：M≈10（约 10 回合保护宝石期，估算）；N=1（每回合 1 spin 出随从）；T0≈30（首波冒险者强度估算）；r≈1.2（每波递增）；m_boss≈1.5（高难度冒险者 boss）。[全部估算待校核]；旧版压力参数：M=10 · N=1 · T0=30 · r=1.2 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "source_fields": [
+            "analysis.qualitative.checkpoint_mechanism",
+            "analysis.pressure_params"
+          ],
+          "review_status": "draft"
+        },
         "Pool_Symbol": {
           "value": "240 种随从（极大池）· 战斗前随机出现到阵营槽位（用户确认 slot/spin 装置）· 稀有度梯度未明示;池规模接近轮盘英雄过载风险线",
           "source_fields": [
@@ -2966,18 +3173,16 @@
           "review_status": "draft"
         },
         "N": {
-          "value": "旧版压力参数 N=1；回合制：在限定回合内击败冒险者保住宝石;否则宝石被偷;每波冒险者强度递增 · 补充：M≈10（约 10 回合保护宝石期，估算）；N=1（每回合 1 spin 出随从）；T0≈30（首波冒险者强度估算）；r≈1.2（每波递增）；m_boss≈1.5（高难度冒险者 boss）。[全部估算待校核]",
+          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
-            "analysis.pressure_params.N",
-            "analysis.qualitative.checkpoint_mechanism"
+            "新版迁移规则：N 与 P(t) 分离"
           ],
           "review_status": "draft"
         },
         "BD": {
-          "value": "战斗后选财宝（基于阵容） + 重新 spin 随从池（待校核 reroll 机制）;'魔王视角'反派叙事；回合制：在限定回合内击败冒险者保住宝石;否则宝石被偷;每波冒险者强度递增 · 补充：M≈10（约 10 回合保护宝石期，估算）；N=1（每回合 1 spin 出随从）；T0≈30（首波冒险者强度估算）；r≈1.2（每波递增）；m_boss≈1.5（高难度冒险者 boss）。[全部估算待校核]",
+          "value": "战斗后选财宝（基于阵容） + 重新 spin 随从池（待校核 reroll 机制）;'魔王视角'反派叙事",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction",
-            "analysis.qualitative.checkpoint_mechanism"
+            "analysis.qualitative.rpbd_construction"
           ],
           "review_status": "draft"
         }
