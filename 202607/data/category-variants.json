@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.7",
+  "version": "202607-draft.8",
   "items": [
     {
       "id": "variant.slotbound-demo",
@@ -1404,75 +1404,75 @@
       "variant_role": "product_variant",
       "status": "structure_ready_content_pending",
       "order": 1785222861975,
-      "prototype_id": "prototype.slot-plus-combat",
+      "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
         "product.rogue-slots"
       ],
-      "summary": "“Slot+战斗型”下的具体游戏变体：以老虎机作为地下城主的牌组构建 Roguelike，把武器、金币与诅咒遗物装入转轮，每次 Spin 触发攻击、能力和效果。",
-      "definition": "本节点以《Rogue Slots》作为“Slot+战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "summary": "“Slot改·战斗型”下的具体游戏变体：已按最新分类清单调整父级，公式差异等待重新确认。",
+      "definition": "本节点以《Rogue Slots》作为“Slot改·战斗型”下的具体游戏变体。其父级已按最新分类调整，请重新确认相对原型的公式变化。",
       "formula_changes": {
         "P_t": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 P_t 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 P_t 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         },
         "Pool_Symbol": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 Pool_Symbol 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         },
         "Random": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 Random 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 Random 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         },
         "Put": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 Put 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 Put 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         },
         "Show_TP": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 Show_TP 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 Show_TP 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         },
         "C1": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 C1 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 C1 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         },
         "C2": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 C2 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 C2 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         },
         "N": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 N 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 N 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         },
         "BD": {
           "operation": "inherit",
-          "constraint_label": "继承父级",
-          "summary": "Rogue Slots暂时继承父级的 BD 有效结果；等待人工调整。",
-          "review_status": "draft",
-          "review_note": ""
+          "constraint_label": "继承新原型",
+          "summary": "Rogue Slots暂时继承“Slot改·战斗型”的 BD 有效结果；等待人工复核。",
+          "review_status": "pending",
+          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。"
         }
       },
       "inheritance_summary": {
@@ -1480,7 +1480,8 @@
         "changed_fields": 0,
         "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
       },
-      "created_at": "2026-07-28T07:14:21.975Z"
+      "created_at": "2026-07-28T07:14:21.975Z",
+      "updated_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "variant.custom-ms4blk85-wj4pu",
@@ -1642,6 +1643,516 @@
         "note": "当前确认的核心创新落在 Random：随机只决定候选范围，玩家决定最终 SingleSpin_Symbol。"
       },
       "created_at": "2026-07-28T12:00:00.000Z"
+    },
+    {
+      "id": "variant.devils-due",
+      "name": "Devils Due",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785223000010,
+      "prototype_id": "prototype.slot-plus-numeric",
+      "product_ids": [
+        "product.devils-due"
+      ],
+      "summary": "“Slot+数值型”下的具体游戏变体：具体公式差异等待人工拆解。",
+      "definition": "本节点以《Devils Due》作为“Slot+数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项确认它相对原型的变化。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 P_t 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 Pool_Symbol 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 Random 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 Put 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 Show_TP 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 C1 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 C2 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 N 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Devils Due暂时继承“Slot+数值型”的 BD 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "依据最新分类清单建立结构，默认继承全部父级字段，等待人工比较。"
+      },
+      "created_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "variant.peglotto-demo",
+      "name": "PegLotto! Demo",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785223000020,
+      "prototype_id": "prototype.slot-plus-numeric",
+      "product_ids": [
+        "product.peglotto-demo"
+      ],
+      "summary": "“Slot+数值型”下的具体游戏变体：具体公式差异等待人工拆解。",
+      "definition": "本节点以《PegLotto! Demo》作为“Slot+数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项确认它相对原型的变化。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 P_t 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 Pool_Symbol 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 Random 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 Put 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 Show_TP 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 C1 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 C2 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 N 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "PegLotto! Demo暂时继承“Slot+数值型”的 BD 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "依据最新分类清单建立结构，默认继承全部父级字段，等待人工比较。"
+      },
+      "created_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "variant.spin-tactics-demo",
+      "name": "Spin Tactics Demo",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785223000030,
+      "prototype_id": "prototype.slot-plus-numeric",
+      "product_ids": [
+        "product.spin-tactics-demo"
+      ],
+      "summary": "“Slot+数值型”下的具体游戏变体：具体公式差异等待人工拆解。",
+      "definition": "本节点以《Spin Tactics Demo》作为“Slot+数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项确认它相对原型的变化。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 P_t 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 Pool_Symbol 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 Random 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 Put 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 Show_TP 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 C1 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 C2 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 N 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Spin Tactics Demo暂时继承“Slot+数值型”的 BD 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "依据最新分类清单建立结构，默认继承全部父级字段，等待人工比较。"
+      },
+      "created_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "variant.lever-warrior-bow-and-magic",
+      "name": "拉杆战士：弓箭与魔法",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785223000040,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.lever-warrior-bow-and-magic"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：具体公式差异等待人工拆解。",
+      "definition": "本节点以《拉杆战士：弓箭与魔法》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项确认它相对原型的变化。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 P_t 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 Pool_Symbol 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 Random 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 Put 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 Show_TP 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 C1 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 C2 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 N 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "拉杆战士：弓箭与魔法暂时继承“Slot改·战斗型”的 BD 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "依据最新分类清单建立结构，默认继承全部父级字段，等待人工比较。"
+      },
+      "created_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "variant.hoptale-demo",
+      "name": "Hoptale Demo",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785223000050,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.hoptale-demo"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：具体公式差异等待人工拆解。",
+      "definition": "本节点以《Hoptale Demo》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项确认它相对原型的变化。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 P_t 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 Pool_Symbol 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 Random 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 Put 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 Show_TP 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 C1 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 C2 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 N 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Hoptale Demo暂时继承“Slot改·战斗型”的 BD 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "依据最新分类清单建立结构，默认继承全部父级字段，等待人工比较。"
+      },
+      "created_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "variant.re-spin-die-repeat-demo",
+      "name": "Re: Spin. Die. Repeat. Demo",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785223000060,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.re-spin-die-repeat-demo"
+      ],
+      "summary": "“Slot改·数值型”下的具体游戏变体：具体公式差异等待人工拆解。",
+      "definition": "本节点以《Re: Spin. Die. Repeat. Demo》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项确认它相对原型的变化。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 P_t 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 Pool_Symbol 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 Random 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 Put 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 Show_TP 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 C1 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 C2 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 N 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承品类原型",
+          "summary": "Re: Spin. Die. Repeat. Demo暂时继承“Slot改·数值型”的 BD 有效结果；等待人工拆解与确认。",
+          "review_status": "pending",
+          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "依据最新分类清单建立结构，默认继承全部父级字段，等待人工比较。"
+      },
+      "created_at": "2026-07-28T14:30:00.000Z"
     }
   ]
 }

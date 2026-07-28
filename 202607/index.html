@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、品类变体图谱。">
   <title>持续爱干 · 游戏体验模型与原型图谱</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260728-4">
-  <link rel="stylesheet" href="./assets/insights.css?v=20260728-7">
+  <link rel="stylesheet" href="./assets/styles.css?v=20260728-6">
+  <link rel="stylesheet" href="./assets/insights.css?v=20260728-9">
   <link rel="stylesheet" href="./assets/ecosystem.css?v=20260728-21">
 </head>
 <body>
@@ -1005,6 +1005,23 @@
             <h3 id="product-catalog-title">全部具体产品</h3>
           </div>
           <div class="product-catalog-tools">
+            <button
+              type="button"
+              class="product-mother-filter is-active"
+              id="library-mother-filter"
+              aria-pressed="true"
+              aria-label="取消 Slot 母体筛选，显示全部游戏"
+            >
+              <span class="product-mother-filter-kicker">机制母型</span>
+              <strong>Slot 母体</strong>
+              <span class="product-mother-filter-state" aria-hidden="true">✓</span>
+            </button>
+            <label class="product-filter product-prototype-filter">
+              <span>品类原型</span>
+              <select id="library-prototype-filter" aria-label="按品类原型筛选游戏">
+                <option value="all">全部品类原型</option>
+              </select>
+            </label>
             <label class="product-filter">
               <span>分类状态</span>
               <select id="library-product-filter">
@@ -1237,6 +1254,48 @@
             让玩家不用回忆教程也能判断本次抽取得好不好。
           </p>
         </div>
+
+        <section class="minimum-loop-definition" aria-labelledby="minimum-loop-title">
+          <header>
+            <div>
+              <span>MINIMUM REWARD LOOP</span>
+              <h3 id="minimum-loop-title">最小爽环由 R + P + C₁ 组成</h3>
+            </div>
+            <p>
+              它负责让玩家连续完成“抽到结果 → 看见结果 → 立即判断好坏”，
+              是不应被教学、查阅和复杂计算打断的最短体验闭环。
+            </p>
+          </header>
+
+          <div class="minimum-loop-flow" aria-label="最小爽环的数据与体验流程">
+            <article>
+              <span>R · RANDOM</span>
+              <strong>抽到什么</strong>
+              <small>从 Pool_Symbol 产生本次结果</small>
+            </article>
+            <i aria-hidden="true">→</i>
+            <article>
+              <span>P · PUT</span>
+              <strong>怎样呈现</strong>
+              <small>把结果写入 Show_TP，形成可观察状态</small>
+            </article>
+            <i aria-hidden="true">→</i>
+            <article>
+              <span>C₁ · 协同识别</span>
+              <strong>结果好不好</strong>
+              <small>依靠基础协同建立即时的价值判断</small>
+            </article>
+          </div>
+
+          <div class="minimum-loop-boundary">
+            <b>改动 R、P 或 C₁ 时</b>
+            <p>
+              改动带来的学习必须是<strong>直观的、有先验的</strong>：
+              玩家应能借助常识、物理关系、成熟品类认知或清晰的视觉反馈立即理解，
+              而不是停下来读说明、记忆例外或完成复杂计算后，才能知道本次结果好不好。
+            </p>
+          </div>
+        </section>
 
         <div class="prior-case-grid">
           <article class="prior-case-card prior-case-good">
@@ -1682,6 +1741,6 @@
       activateTab();
     })();
   </script>
-  <script type="module" src="./assets/app.js?v=20260728-21"></script>
+  <script type="module" src="./assets/app.js?v=20260728-22"></script>
 </body>
 </html>

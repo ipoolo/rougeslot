@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.7",
+  "version": "202607-draft.8",
   "migration": {
     "source": "data/games.json",
     "imported_at": "2026-07-25",
@@ -45,7 +45,7 @@
         "Put：auto_place",
         "C₁：threshold + adjacency"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
       "legacy_source": {
         "slug": "luck-be-a-landlord",
         "framework_version": "v5",
@@ -55,7 +55,7 @@
       "evidence": [
         "用户已确认其作为“Slot改·数值型”的品类原型来源、基石游戏和代表产品。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.134Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.lucky-mayor",
@@ -96,7 +96,7 @@
         "Put：auto_place",
         "C₁：type_dict"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
       "legacy_source": {
         "slug": "lucky-mayor",
         "framework_version": "v5",
@@ -109,7 +109,7 @@
         "用户于 2026-07-27 确认“幸运城市”与《幸运市长》为同一产品，并采用官方名称《幸运市长》。",
         "用户已确认其 Show_TP 为 0D 多重集，不建立二维位置与邻接关系。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.136Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.slotbound-demo",
@@ -145,7 +145,7 @@
         "Items 与 Cores 调整概率、属性和协同",
         "自动战斗防守、审判波次与 Boss 波次"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+战斗型”。",
       "evidence": [
         "Steam 商店页将游戏描述为结合 3×3 Slot、Roguelite 防守和自动战斗策略的作品。",
         "Steam 商店页说明 Spin 用于召唤单位，单位可以吸收进化，Items 与 Cores 用于影响概率、属性与协同。",
@@ -153,7 +153,7 @@
       ],
       "record_type": "game",
       "classification_status": "confirmed",
-      "last_classified_at": "2026-07-28T06:52:49.097Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.balatro",
@@ -657,7 +657,7 @@
         "Put：auto_place",
         "C₁：line_complete + type_dict"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
       "legacy_source": {
         "slug": "spinera",
         "framework_version": "v5",
@@ -668,7 +668,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.104Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.spin-hero",
@@ -709,7 +709,7 @@
         "Put：auto_place",
         "C₁：type_dict + threshold"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "legacy_source": {
         "slug": "spin-hero",
         "framework_version": "v5",
@@ -720,7 +720,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.115Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.cloverpit",
@@ -762,7 +762,7 @@
         "Put：auto_place",
         "C₁：line_complete + type_dict + cascade"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
       "legacy_source": {
         "slug": "cloverpit",
         "framework_version": "v5",
@@ -774,7 +774,7 @@
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未逐字段人工确认。",
         "用户已确认其作为“Slot+数值型”的基石游戏与代表产品。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.110Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.dice-player-one",
@@ -901,7 +901,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
       "legacy_source": {
         "slug": "luckland",
         "framework_version": "v5",
@@ -912,7 +912,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.130Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.lucky-island",
@@ -953,7 +953,7 @@
         "Put：auto_place",
         "C₁：type_dict + threshold"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
       "legacy_source": {
         "slug": "lucky-island",
         "framework_version": "v5",
@@ -964,7 +964,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.132Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.lucky-lord",
@@ -1048,7 +1048,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "legacy_source": {
         "slug": "lucky-hero",
         "framework_version": "v5",
@@ -1059,7 +1059,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.124Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.bingle-bingle",
@@ -1143,7 +1143,7 @@
         "Put：manual_place",
         "C₁：line_complete + type_dict"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
       "legacy_source": {
         "slug": "die-shou-wei-cheng",
         "framework_version": "v5",
@@ -1154,7 +1154,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.128Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.crop-rotation",
@@ -1195,7 +1195,7 @@
         "Put：manual_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
       "legacy_source": {
         "slug": "crop-rotation",
         "framework_version": "v5",
@@ -1206,7 +1206,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.126Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.cat-god-ranch",
@@ -1247,7 +1247,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "保留用户此前确认：《猫神牧场》属于 Slot改·数值型变体；本次同步刷新变体摘要。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
       "legacy_source": {
         "slug": "cat-god-ranch",
         "framework_version": "v5",
@@ -1259,7 +1259,7 @@
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。",
         "用户于 2026-07-27 确认其品类归属为“Slot改·数值型”。"
       ],
-      "last_classified_at": "2026-07-28T06:55:30.329Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.lucky-hunter",
@@ -1300,7 +1300,7 @@
         "Put：auto_place",
         "C₁：adjacency + threshold + type_dict"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "legacy_source": {
         "slug": "lucky-hunter",
         "framework_version": "v5",
@@ -1311,7 +1311,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.122Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.insider-trading",
@@ -1561,7 +1561,7 @@
         "Put：manual_place",
         "C₁：type_dict + adjacency + threshold"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "legacy_source": {
         "slug": "dog-and-goblin",
         "framework_version": "v5",
@@ -1572,7 +1572,7 @@
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.112Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.endgame-of-devil",
@@ -1613,7 +1613,7 @@
         "Put：auto_place",
         "C₁：type_dict + adjacency"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "legacy_source": {
         "slug": "endgame-of-devil",
         "framework_version": "v5",
@@ -1625,7 +1625,7 @@
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未逐字段人工确认。",
         "用户已确认其作为“Slot改·战斗型”的基石游戏与代表产品。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.119Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.runeborn",
@@ -1667,13 +1667,13 @@
         "符文匹配连接",
         "遗物与符文效果放大伤害"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
       "evidence": [
         "Steam 商店页：游戏将老虎机玩法与牌组构建结合。",
         "Steam 商店页：玩家通过保留、重随机与符文连接形成伤害。",
         "用户于 2026-07-28 确认其属于 Slot+数值型。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.107Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.slots-and-daggers",
@@ -1715,13 +1715,13 @@
         "Spin 结果直接推进敌我战斗",
         "战后升级老虎机与符号配置"
       ],
-      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "evidence": [
         "Steam 商店页：复古奇幻 Roguelike 发生在老虎机装置中。",
         "Steam 商店页：游戏融合老虎机与奇幻 RPG 战斗。",
         "用户于 2026-07-28 确认其属于 Slot改·战斗型。"
       ],
-      "last_classified_at": "2026-07-28T06:52:49.117Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.rogue-slots",
@@ -1738,7 +1738,7 @@
         "mechanism.slot"
       ],
       "prototype_ids": [
-        "prototype.slot-plus-combat"
+        "prototype.slot-transform-combat"
       ],
       "variant_ids": [
         "variant.custom-ms4blk7r-3gb76"
@@ -1763,13 +1763,13 @@
         "每次 Spin 触发攻击、能力与效果",
         "超过 30 种物品形成构筑组合"
       ],
-      "classification_note": "用户于 2026-07-28 按补充分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "evidence": [
         "Steam 商店页：牌组构建 Roguelike，以老虎机作为 Dungeon Master。",
         "Steam 商店页：每次 Spin 会触发攻击、能力和效果。",
         "用户于 2026-07-28 确认其属于 Slot+战斗型。"
       ],
-      "last_classified_at": "2026-07-28T07:14:21.975Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.spinny-dungeon",
@@ -1811,13 +1811,13 @@
         "武器、植物、魔法物品与伙伴共同构筑",
         "怪物逼近红区形成战斗压力"
       ],
-      "classification_note": "用户于 2026-07-28 按补充分类截图确认该游戏的品类原型归属。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "evidence": [
         "Steam 商店页：slot machine roguelike、deckbuilder 与 auto battler 的结合。",
         "Steam 商店页：每次 Spin 后棋盘上的内容随机重新排列。",
         "用户于 2026-07-28 确认其属于 Slot改·战斗型。"
       ],
-      "last_classified_at": "2026-07-28T07:14:21.989Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
     {
       "id": "product.slot-or-not",
@@ -1862,14 +1862,242 @@
         "玩家从 Choice_Pool 主动选择，组成 SingleSpin_Symbol",
         "结果继续进入回合制 Slot 战斗"
       ],
-      "classification_note": "用户于 2026-07-28 确认其属于 Slot改·战斗型，并指出其在单次 Spin 的 Random 环节采用候选池与主动选择。",
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "evidence": [
         "Steam 商店页：deck-building turn-based slot machine battling adventure。",
         "Steam 商店页：玩家把装备加入 drawing pool，并根据结果攻击或防御。",
         "用户确认流程：Pool_Symbol → Choice_Pool → 玩家主动选择 → SingleSpin_Symbol。",
         "用户确认其属于 Slot改·战斗型。"
       ],
-      "last_classified_at": "2026-07-28T12:00:00.000Z"
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "product.devils-due",
+      "name": "Devils Due",
+      "name_en": "Devils Due",
+      "type": "product",
+      "record_type": "game",
+      "status": "classification_confirmed_content_pending",
+      "order": 490,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-plus-numeric"
+      ],
+      "variant_ids": [
+        "variant.devils-due"
+      ],
+      "classification_status": "confirmed",
+      "summary": "已依据最新分类清单归入“Slot+数值型”；具体玩法与公式字段等待补录。",
+      "source_url": "https://store.steampowered.com/app/3907520/Devils_Due/",
+      "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3907520/fe419c334a88e04fcdb130fe7193ca97c85e40db/capsule_616x353_alt_assets_0.jpg?t=1775658131",
+      "developer": "Data Illusion Studios",
+      "release_year": 2025,
+      "tags": [
+        "Slot",
+        "待补充资料"
+      ],
+      "core_loop": "待补录",
+      "observed_mechanics": [],
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
+      "evidence": [
+        "用户提供的 2026-07-28 最新品类分类截图。"
+      ],
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "product.peglotto-demo",
+      "name": "PegLotto! Demo",
+      "name_en": "PegLotto! Demo",
+      "type": "product",
+      "record_type": "game",
+      "status": "classification_confirmed_content_pending",
+      "order": 500,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-plus-numeric"
+      ],
+      "variant_ids": [
+        "variant.peglotto-demo"
+      ],
+      "classification_status": "confirmed",
+      "summary": "已依据最新分类清单归入“Slot+数值型”；具体玩法与公式字段等待补录。",
+      "source_url": "https://store.steampowered.com/app/4372270/PegLotto_Demo/",
+      "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4372270/9a0b6f39f5b4004333d9fec78ae25e61b7c521f4/capsule_616x353.jpg?t=1773815564",
+      "developer": "Ludica Inc",
+      "release_year": 2026,
+      "tags": [
+        "Slot",
+        "待补充资料"
+      ],
+      "core_loop": "待补录",
+      "observed_mechanics": [],
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
+      "evidence": [
+        "用户提供的 2026-07-28 最新品类分类截图。"
+      ],
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "product.spin-tactics-demo",
+      "name": "Spin Tactics Demo",
+      "name_en": "Spin Tactics Demo",
+      "type": "product",
+      "record_type": "game",
+      "status": "classification_confirmed_content_pending",
+      "order": 510,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-plus-numeric"
+      ],
+      "variant_ids": [
+        "variant.spin-tactics-demo"
+      ],
+      "classification_status": "confirmed",
+      "summary": "已依据最新分类清单归入“Slot+数值型”；具体玩法与公式字段等待补录。",
+      "source_url": "https://store.steampowered.com/app/3856990/Spin_Tactics/",
+      "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3856990/5fbc06fbaabd02d94292b925c8b7fb1ed6538ae1/capsule_616x353.jpg?t=1785228780",
+      "developer": "Dead Broke Games",
+      "release_year": 2026,
+      "tags": [
+        "Slot",
+        "待补充资料"
+      ],
+      "core_loop": "待补录",
+      "observed_mechanics": [],
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
+      "evidence": [
+        "用户提供的 2026-07-28 最新品类分类截图。"
+      ],
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "product.lever-warrior-bow-and-magic",
+      "name": "拉杆战士：弓箭与魔法",
+      "name_en": "Spin Forward",
+      "type": "product",
+      "record_type": "game",
+      "status": "classification_confirmed_content_pending",
+      "order": 520,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.lever-warrior-bow-and-magic"
+      ],
+      "classification_status": "confirmed",
+      "summary": "已依据最新分类清单归入“Slot改·战斗型”；具体玩法与公式字段等待补录。",
+      "source_url": "https://store.steampowered.com/app/3343940/Spin_Forward/",
+      "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3343940/ed803d67053b4ea66674307ba3d5bcacb5320075/capsule_616x353_schinese.jpg?t=1761150597",
+      "developer": "Bean and Pea Studio",
+      "release_year": 2025,
+      "tags": [
+        "Slot",
+        "待补充资料"
+      ],
+      "core_loop": "待补录",
+      "observed_mechanics": [],
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
+      "evidence": [
+        "用户提供的 2026-07-28 最新品类分类截图。"
+      ],
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "product.hoptale-demo",
+      "name": "Hoptale Demo",
+      "name_en": "Hoptale Demo",
+      "type": "product",
+      "record_type": "game",
+      "status": "classification_confirmed_content_pending",
+      "order": 530,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.hoptale-demo"
+      ],
+      "classification_status": "confirmed",
+      "summary": "已依据最新分类清单归入“Slot改·战斗型”；具体玩法与公式字段等待补录。",
+      "source_url": "https://store.steampowered.com/app/4094560/Hoptale_Demo/",
+      "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4094560/045f0c485d628f6529362d7019bd32e52607a4bd/capsule_616x353.jpg?t=1777352669",
+      "developer": "LotteGames",
+      "release_year": 2025,
+      "tags": [
+        "Slot",
+        "待补充资料"
+      ],
+      "core_loop": "待补录",
+      "observed_mechanics": [],
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
+      "evidence": [
+        "用户提供的 2026-07-28 最新品类分类截图。"
+      ],
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
+    },
+    {
+      "id": "product.re-spin-die-repeat-demo",
+      "name": "Re: Spin. Die. Repeat. Demo",
+      "name_en": "Re: Spin. Die. Repeat. Demo",
+      "type": "product",
+      "record_type": "game",
+      "status": "classification_confirmed_content_pending",
+      "order": 540,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-numeric"
+      ],
+      "variant_ids": [
+        "variant.re-spin-die-repeat-demo"
+      ],
+      "classification_status": "confirmed",
+      "summary": "已依据最新分类清单归入“Slot改·数值型”；具体玩法与公式字段等待补录。",
+      "source_url": "https://store.steampowered.com/app/3345680/Re_Spin_Die_Repeat/",
+      "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3345680/ecc33098ed386c9ec362b198cbb52e39c6d1e36a/capsule_616x353.jpg?t=1782245564",
+      "developer": "Isekai Interactive",
+      "release_year": 2026,
+      "tags": [
+        "Slot",
+        "待补充资料"
+      ],
+      "core_loop": "待补录",
+      "observed_mechanics": [],
+      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
+      "evidence": [
+        "用户提供的 2026-07-28 最新品类分类截图。"
+      ],
+      "last_classified_at": "2026-07-28T14:30:00.000Z"
     }
   ]
 }

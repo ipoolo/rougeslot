@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.3",
+  "version": "202607-draft.4",
   "items": [
     {
       "prototype_id": "prototype.slot-plus-combat",
@@ -47,19 +47,6 @@
           "status": "confirmed",
           "changed_fields": [],
           "position_note": "基石位置：保留传统 Slot C₁，再用多兵种、位置关系和紧凑战斗时序形成第二次结果揭晓。"
-        },
-        {
-          "product_id": "product.rogue-slots",
-          "x": 46,
-          "y": 42,
-          "role": "member",
-          "status": "draft",
-          "changed_fields": [
-            "Pool_Symbol",
-            "C2",
-            "BD"
-          ],
-          "position_note": "暂定位置：Spin 触发攻击、能力与物品效果，但战斗时序和最终结果悬念仍需结合完整局内流程确认。"
         }
       ],
       "niches": [
@@ -146,6 +133,33 @@
             "BD"
           ],
           "position_note": "暂定位置：符文连接、遗物与额外效果形成较深的数值放大，并由战斗失败提供硬阈值。"
+        },
+        {
+          "product_id": "product.devils-due",
+          "x": 52,
+          "y": 58,
+          "role": "member",
+          "status": "pending",
+          "changed_fields": [],
+          "position_note": "依据最新分类清单进入当前品类；二维生态坐标为待确认的初始占位。"
+        },
+        {
+          "product_id": "product.peglotto-demo",
+          "x": 18,
+          "y": 66,
+          "role": "member",
+          "status": "pending",
+          "changed_fields": [],
+          "position_note": "依据最新分类清单进入当前品类；二维生态坐标为待确认的初始占位。"
+        },
+        {
+          "product_id": "product.spin-tactics-demo",
+          "x": 46,
+          "y": 34,
+          "role": "member",
+          "status": "pending",
+          "changed_fields": [],
+          "position_note": "依据最新分类清单进入当前品类；二维生态坐标为待确认的初始占位。"
         }
       ],
       "niches": [
@@ -315,6 +329,33 @@
             "BD"
           ],
           "position_note": "暂定位置：已确认 Random 使用“随机候选池＋玩家主动选择”的两阶段抽取；C₁ 可读性和 C₂ 战斗悬念坐标仍需逐局校准。"
+        },
+        {
+          "product_id": "product.rogue-slots",
+          "x": 44,
+          "y": 46,
+          "role": "member",
+          "status": "pending",
+          "changed_fields": [],
+          "position_note": "依据最新分类清单进入当前品类；二维生态坐标为待确认的初始占位。"
+        },
+        {
+          "product_id": "product.lever-warrior-bow-and-magic",
+          "x": 34,
+          "y": 70,
+          "role": "member",
+          "status": "pending",
+          "changed_fields": [],
+          "position_note": "依据最新分类清单进入当前品类；二维生态坐标为待确认的初始占位。"
+        },
+        {
+          "product_id": "product.hoptale-demo",
+          "x": 58,
+          "y": 66,
+          "role": "member",
+          "status": "pending",
+          "changed_fields": [],
+          "position_note": "依据最新分类清单进入当前品类；二维生态坐标为待确认的初始占位。"
         }
       ],
       "innovations": [
@@ -499,6 +540,15 @@
             "BD"
           ],
           "position_note": "暂定位置：卡牌与作物协同弱化 Slot 邻接中心，升级、被动和贷款压力形成中高叠层。"
+        },
+        {
+          "product_id": "product.re-spin-die-repeat-demo",
+          "x": 38,
+          "y": 34,
+          "role": "member",
+          "status": "pending",
+          "changed_fields": [],
+          "position_note": "依据最新分类清单进入当前品类；二维生态坐标为待确认的初始占位。"
         }
       ],
       "niches": [

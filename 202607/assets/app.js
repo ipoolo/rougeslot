@@ -97,7 +97,7 @@ const NODE_TYPE_ORDER = {
   category_variant: 3
 };
 
-const DATA_VERSION = "20260728-21";
+const DATA_VERSION = "20260728-23";
 
 const DATA_FILES = {
   model: `./data/experience-model.json?v=${DATA_VERSION}`,
@@ -123,6 +123,8 @@ const state = {
   libraryView: "products",
   libraryProductQuery: "",
   libraryProductFilter: "all",
+  librarySlotMotherOnly: true,
+  libraryPrototypeFilter: "all",
   libraryLevelFilter: "all",
   libraryFieldFilter: "all",
   dataServiceOnline: false,
@@ -168,6 +170,8 @@ const elements = {
   libraryPanels: [...document.querySelectorAll("[data-library-panel]")],
   productSearch: document.querySelector("#library-product-search"),
   productFilter: document.querySelector("#library-product-filter"),
+  motherFilter: document.querySelector("#library-mother-filter"),
+  prototypeFilter: document.querySelector("#library-prototype-filter"),
   productResultSummary: document.querySelector("#product-result-summary"),
   productCatalog: document.querySelector("#product-catalog"),
   levelFilter: document.querySelector("#library-level-filter"),
@@ -685,8 +689,49 @@ function renderLibraryStats() {
 
 function renderProductCatalog() {
   const query = state.libraryProductQuery.toLowerCase();
+  const availablePrototypes = state.data.prototypes
+    .filter((prototype) => (
+      !state.librarySlotMotherOnly
+      || prototype.primary_mother_id === "mechanism.slot"
+    ))
+    .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, "zh-CN"));
+  const selectedPrototype = state.data.prototypeById.get(state.libraryPrototypeFilter);
+  if (
+    state.libraryPrototypeFilter !== "all"
+    && !availablePrototypes.some((prototype) => prototype.id === state.libraryPrototypeFilter)
+  ) {
+    state.libraryPrototypeFilter = "all";
+  }
+  elements.prototypeFilter.innerHTML = `
+    <option value="all">全部品类原型</option>
+    ${availablePrototypes.map((prototype) => `
+      <option value="${escapeHtml(prototype.id)}">${escapeHtml(prototype.name)}</option>
+    `).join("")}
+  `;
+  elements.prototypeFilter.value = state.libraryPrototypeFilter;
+
+  const slotMotherProductCount = state.data.products.filter((product) =>
+    product.mother_ids?.includes("mechanism.slot")
+  ).length;
+  const prototypeProductCount = state.libraryPrototypeFilter === "all"
+    ? 0
+    : state.data.products.filter((product) =>
+      product.prototype_ids?.includes(state.libraryPrototypeFilter)
+    ).length;
   const products = state.data.products
     .filter((product) => {
+      if (
+        state.librarySlotMotherOnly
+        && !product.mother_ids?.includes("mechanism.slot")
+      ) {
+        return false;
+      }
+      if (
+        state.libraryPrototypeFilter !== "all"
+        && !product.prototype_ids?.includes(state.libraryPrototypeFilter)
+      ) {
+        return false;
+      }
       const filter = state.libraryProductFilter;
       if (
         filter !== "all"
@@ -716,10 +761,25 @@ function renderProductCatalog() {
     })
     .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, "zh-CN"));
 
+  elements.motherFilter.classList.toggle("is-active", state.librarySlotMotherOnly);
+  elements.motherFilter.setAttribute("aria-pressed", String(state.librarySlotMotherOnly));
+  elements.motherFilter.setAttribute(
+    "aria-label",
+    state.librarySlotMotherOnly
+      ? "取消 Slot 母体筛选，显示全部游戏"
+      : "筛选 Slot 母体所属游戏"
+  );
+  elements.motherFilter.querySelector(".product-mother-filter-state").textContent =
+    state.librarySlotMotherOnly ? "✓" : "+";
+
   elements.productResultSummary.innerHTML = `
     <strong>${products.length}</strong>
     <span> / ${state.data.products.length} 款正式游戏</span>
     <small>
+      ${state.librarySlotMotherOnly ? `Slot 母体共 ${slotMotherProductCount} 款；` : "当前显示全部母体；"}
+      ${state.libraryPrototypeFilter !== "all"
+        ? `${escapeHtml(selectedPrototype?.name ?? "所选品类原型")}共 ${prototypeProductCount} 款；`
+        : "全部品类原型；"}
       旧版迁入 ${state.data.migrationReport.result.formal_legacy_games} 款；
       设计样例 ${state.data.migrationReport.result.design_samples} 条，不计入游戏数量。
     </small>
@@ -3800,6 +3860,16 @@ function bindLibrary() {
 
   elements.productFilter.addEventListener("change", () => {
     state.libraryProductFilter = elements.productFilter.value;
+    renderProductCatalog();
+  });
+
+  elements.motherFilter.addEventListener("click", () => {
+    state.librarySlotMotherOnly = !state.librarySlotMotherOnly;
+    renderProductCatalog();
+  });
+
+  elements.prototypeFilter.addEventListener("change", () => {
+    state.libraryPrototypeFilter = elements.prototypeFilter.value;
     renderProductCatalog();
   });
 

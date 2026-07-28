@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.3",
+  "version": "202607-draft.4",
   "mapping_policy": "legacy_mechanical_import_plus_retained_new_product_observations",
   "formula_fields": [
     "P_t",
@@ -3446,47 +3446,65 @@
       "fields": {
         "P_t": {
           "value": "以地下城敌人、生命消耗与战斗失败构成目标压力；具体波次与失败代价等待逐局确认。",
-          "source_fields": ["Steam 商店页：Dungeon Master 与战斗循环"],
+          "source_fields": [
+            "Steam 商店页：Dungeon Master 与战斗循环"
+          ],
           "review_status": "pending"
         },
         "Pool_Symbol": {
           "value": "由武器、金币、诅咒遗物及其他可获得物品组成可构筑的转轮内容。",
-          "source_fields": ["Steam 商店页：weapons, coins, cursed relics"],
+          "source_fields": [
+            "Steam 商店页：weapons, coins, cursed relics"
+          ],
           "review_status": "pending"
         },
         "Random": {
           "value": "传统 Slot 式 Spin 从当前转轮配置中产生符号结果。",
-          "source_fields": ["Steam 商店页：slot machine"],
+          "source_fields": [
+            "Steam 商店页：slot machine"
+          ],
           "review_status": "pending"
         },
         "Put": {
           "value": "装置自动完成转轮停止和结果呈现，玩家主要在 Spin 之前配置内容。",
-          "source_fields": ["Steam 商店页与官方截图"],
+          "source_fields": [
+            "Steam 商店页与官方截图"
+          ],
           "review_status": "pending"
         },
         "Show_TP": {
           "value": "使用 Slot 转轮／窗口承载本次符号结果，具体支付关系等待逐局拆解。",
-          "source_fields": ["Steam 商店页与官方截图"],
+          "source_fields": [
+            "Steam 商店页与官方截图"
+          ],
           "review_status": "pending"
         },
         "C1": {
           "value": "延续传统 Slot 的即时读数与组合认知；用户将其归为 Slot+战斗型。",
-          "source_fields": ["用户确认：Slot+战斗型"],
+          "source_fields": [
+            "用户确认：Slot+战斗型"
+          ],
           "review_status": "confirmed"
         },
         "C2": {
           "value": "将符号结果进一步转译为攻击、能力与物品效果，形成战斗表现。",
-          "source_fields": ["Steam 商店页：each spin triggers attacks, abilities, and effects"],
+          "source_fields": [
+            "Steam 商店页：each spin triggers attacks, abilities, and effects"
+          ],
           "review_status": "pending"
         },
         "N": {
           "value": "触发一次构筑决策前的连续 Spin 数量等待逐局确认。",
-          "source_fields": ["202607 公式定义"],
+          "source_fields": [
+            "202607 公式定义"
+          ],
           "review_status": "pending"
         },
         "BD": {
           "value": "通过获得与配置物品改变后续 Pool_Symbol、协同和战斗效果。",
-          "source_fields": ["Steam 商店页：超过 30 种物品"],
+          "source_fields": [
+            "Steam 商店页：超过 30 种物品"
+          ],
           "review_status": "pending"
         }
       },
@@ -3502,47 +3520,65 @@
       "fields": {
         "P_t": {
           "value": "怪物持续逼近 RED ZONE，进入红区构成直接战斗压力与失败风险。",
-          "source_fields": ["Steam 商店页：monsters approach the RED ZONE"],
+          "source_fields": [
+            "Steam 商店页：monsters approach the RED ZONE"
+          ],
           "review_status": "pending"
         },
         "Pool_Symbol": {
           "value": "由武器、植物、魔法物品、伙伴等可构筑对象组成。",
-          "source_fields": ["Steam 商店页：weapons, plants, magical artifacts, companions"],
+          "source_fields": [
+            "Steam 商店页：weapons, plants, magical artifacts, companions"
+          ],
           "review_status": "pending"
         },
         "Random": {
           "value": "每次 Spin 会随机重新排列棋盘上的构筑对象，改变当轮组合与战斗状态。",
-          "source_fields": ["Steam 商店页：randomly rearranged after every spin"],
+          "source_fields": [
+            "Steam 商店页：randomly rearranged after every spin"
+          ],
           "review_status": "pending"
         },
         "Put": {
           "value": "装置自动将对象重新排列到棋盘位置，玩家不直接控制每次落位。",
-          "source_fields": ["Steam 商店页：randomly rearranged on the board"],
+          "source_fields": [
+            "Steam 商店页：randomly rearranged on the board"
+          ],
           "review_status": "pending"
         },
         "Show_TP": {
           "value": "以带有位置关系的棋盘承载构筑对象与战斗单位，具体网格规则等待逐局确认。",
-          "source_fields": ["Steam 商店页与官方截图"],
+          "source_fields": [
+            "Steam 商店页与官方截图"
+          ],
           "review_status": "pending"
         },
         "C1": {
           "value": "不只沿用传统 Slot 支付线，而是读取棋盘中对象的位置、组合和功能关系；用户将其归为 Slot改·战斗型。",
-          "source_fields": ["用户确认：Slot改·战斗型"],
+          "source_fields": [
+            "用户确认：Slot改·战斗型"
+          ],
           "review_status": "confirmed"
         },
         "C2": {
           "value": "把棋盘组合结果转译为自动战斗过程，攻击逼近红区的怪物。",
-          "source_fields": ["Steam 商店页：auto battler 与 RED ZONE"],
+          "source_fields": [
+            "Steam 商店页：auto battler 与 RED ZONE"
+          ],
           "review_status": "pending"
         },
         "N": {
           "value": "进入一次构筑选择前的连续 Spin／战斗数量等待逐局确认。",
-          "source_fields": ["202607 公式定义"],
+          "source_fields": [
+            "202607 公式定义"
+          ],
           "review_status": "pending"
         },
         "BD": {
           "value": "选择和组合武器、植物、魔法物品与伙伴，持续改变后续 Pool_Symbol、棋盘协同及战斗能力。",
-          "source_fields": ["Steam 商店页：deckbuilder"],
+          "source_fields": [
+            "Steam 商店页：deckbuilder"
+          ],
           "review_status": "pending"
         }
       },
@@ -3618,6 +3654,450 @@
           "value": "获得、携带和调整装备与饰品，持续改变后续 Pool_Symbol、候选选择空间与战斗能力。",
           "source_fields": [
             "Steam 商店页：40+ playable items、49 trinkets"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.devils-due",
+      "mapping_status": "classification_confirmed_content_pending",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，P_t 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，Random 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，Put 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，Show_TP 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，C1 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C2": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，C2 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，N 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "待拆解：已确认《Devils Due》的品类归属，BD 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.peglotto-demo",
+      "mapping_status": "classification_confirmed_content_pending",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，P_t 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，Random 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，Put 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，Show_TP 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，C1 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C2": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，C2 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，N 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，BD 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.spin-tactics-demo",
+      "mapping_status": "classification_confirmed_content_pending",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，P_t 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，Random 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，Put 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，Show_TP 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，C1 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C2": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，C2 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，N 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，BD 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.lever-warrior-bow-and-magic",
+      "mapping_status": "classification_confirmed_content_pending",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，P_t 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，Random 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，Put 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，Show_TP 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，C1 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C2": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，C2 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，N 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，BD 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.hoptale-demo",
+      "mapping_status": "classification_confirmed_content_pending",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，P_t 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，Random 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，Put 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，Show_TP 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，C1 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C2": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，C2 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，N 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "待拆解：已确认《Hoptale Demo》的品类归属，BD 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.re-spin-die-repeat-demo",
+      "mapping_status": "classification_confirmed_content_pending",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，P_t 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Random 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Put 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Show_TP 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，C1 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "C2": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，C2 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，N 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，BD 的具体表现尚待补录。",
+          "source_fields": [
+            "用户提供的 2026-07-28 最新品类分类截图"
           ],
           "review_status": "pending"
         }

@@ -2,6 +2,216 @@
   "version": "202607-draft.1",
   "items": [
     {
+      "id": "change.202607281430.devils-due",
+      "timestamp": "2026-07-28T14:30:00.000Z",
+      "action": "apply_latest_category_classification",
+      "product_id": "product.devils-due",
+      "product_name": "Devils Due",
+      "before": {
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.devils-due"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "after": {
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.devils-due"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "note": "依据用户提供的最新四组分类截图同步。"
+    },
+    {
+      "id": "change.202607281430.peglotto-demo",
+      "timestamp": "2026-07-28T14:30:00.000Z",
+      "action": "apply_latest_category_classification",
+      "product_id": "product.peglotto-demo",
+      "product_name": "PegLotto! Demo",
+      "before": {
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.peglotto-demo"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "after": {
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.peglotto-demo"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "note": "依据用户提供的最新四组分类截图同步。"
+    },
+    {
+      "id": "change.202607281430.spin-tactics-demo",
+      "timestamp": "2026-07-28T14:30:00.000Z",
+      "action": "apply_latest_category_classification",
+      "product_id": "product.spin-tactics-demo",
+      "product_name": "Spin Tactics Demo",
+      "before": {
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.spin-tactics-demo"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "after": {
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.spin-tactics-demo"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "note": "依据用户提供的最新四组分类截图同步。"
+    },
+    {
+      "id": "change.202607281430.lever-warrior-bow-and-magic",
+      "timestamp": "2026-07-28T14:30:00.000Z",
+      "action": "apply_latest_category_classification",
+      "product_id": "product.lever-warrior-bow-and-magic",
+      "product_name": "拉杆战士：弓箭与魔法",
+      "before": {
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.lever-warrior-bow-and-magic"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "after": {
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.lever-warrior-bow-and-magic"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "note": "依据用户提供的最新四组分类截图同步。"
+    },
+    {
+      "id": "change.202607281430.hoptale-demo",
+      "timestamp": "2026-07-28T14:30:00.000Z",
+      "action": "apply_latest_category_classification",
+      "product_id": "product.hoptale-demo",
+      "product_name": "Hoptale Demo",
+      "before": {
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.hoptale-demo"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "after": {
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.hoptale-demo"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "note": "依据用户提供的最新四组分类截图同步。"
+    },
+    {
+      "id": "change.202607281430.rogue-slots",
+      "timestamp": "2026-07-28T14:30:00.000Z",
+      "action": "apply_latest_category_classification",
+      "product_id": "product.rogue-slots",
+      "product_name": "Rogue Slots",
+      "before": {
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4blk7r-3gb76"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "after": {
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4blk7r-3gb76"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "note": "依据用户提供的最新四组分类截图同步。"
+    },
+    {
+      "id": "change.202607281430.re-spin-die-repeat-demo",
+      "timestamp": "2026-07-28T14:30:00.000Z",
+      "action": "apply_latest_category_classification",
+      "product_id": "product.re-spin-die-repeat-demo",
+      "product_name": "Re: Spin. Die. Repeat. Demo",
+      "before": {
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.re-spin-die-repeat-demo"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "after": {
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.re-spin-die-repeat-demo"
+        ],
+        "relation_types": [
+          "variant_instance"
+        ]
+      },
+      "note": "依据用户提供的最新四组分类截图同步。"
+    },
+    {
       "id": "change.20260728071421991.x1rjxt",
       "timestamp": "2026-07-28T07:14:21.989Z",
       "action": "update_product_classification",
