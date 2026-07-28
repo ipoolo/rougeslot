@@ -1,6 +1,6 @@
 {
-  "version": "202607-draft.2",
-  "mapping_policy": "mechanical_import_unconfirmed",
+  "version": "202607-draft.3",
+  "mapping_policy": "legacy_mechanical_import_plus_retained_new_product_observations",
   "formula_fields": [
     "P_t",
     "Pool_Symbol",
@@ -1192,11 +1192,12 @@
           "review_status": "draft"
         },
         "C2": {
-          "value": "科技树解锁后对资源产出施加全局修饰（如\"农业 → 食物 +50%\"）；多科技叠加（具体叠乘 vs 叠加待校核）",
+          "value": "C₁的 Slot 结果被转译为资源后，C₂主要进入类文明的资源分配、科技发展与经营策略。这个阶段偏向分析和规划，没有形成未知结果逐步揭晓的二次开奖过程，因此第二个多巴胺峰值表现较弱。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "用户于 2026-07-28 确认的洞察二案例"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
@@ -3207,6 +3208,423 @@
       "source": {
         "framework_version": "v5",
         "analysis_updated_at": "2026-04-29"
+      }
+    },
+    {
+      "product_id": "product.slotbound-demo",
+      "mapping_status": "working_definition_user_confirmed_classification",
+      "review_status": "pending",
+      "fields": {
+        "P_t": {
+          "value": "工作定义：以审判波次、Boss 波次、敌我生存状态与失败后果构成战斗目标压力；具体曲线等待逐项人工确认。",
+          "source_fields": [
+            "产品资料：自动战斗防守、审判波次与 Boss 波次",
+            "用户确认：Slot+战斗型"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "工作定义：保持 Slot+ 类的固定核心符号池身份；单位、Items 与 Cores 如何分层进入符号池或修饰池等待正式拆解。",
+          "source_fields": [
+            "产品资料：3×3 Slot 召唤单位",
+            "Slot+战斗型工作定义"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "3×3 Slot Spin 从当前预设池产生单位或符号结果；核心 Random 职责继承 Slot 母体。",
+          "source_fields": [
+            "产品资料：Spin 3×3 Slot 召唤单位",
+            "用户确认：R 不做核心改变"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "装置自动把本次 Spin 结果写入 3×3 Slot 舞台；玩家不决定主要落位。",
+          "source_fields": [
+            "产品资料：3×3 Slot",
+            "用户确认：Put 不做核心改变"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "工作定义：使用 3×3 的 2D Slot 网格承载符号、支付线与单位结果。",
+          "source_fields": [
+            "产品资料：3×3 Slot"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "匹配传统 Slot 支付线并触发单位与 Core 的基础协同；工作定义暂按 Slot C₁ 继承处理。",
+          "source_fields": [
+            "产品资料：匹配支付线并触发单位与 Core 协同",
+            "用户确认：C₁ 不做核心改变"
+          ],
+          "review_status": "pending"
+        },
+        "C2": {
+          "value": "把 C₁ 的支付线与单位基础结果演绎为召唤、单位属性、职业进化、伤害、防御和自动战斗状态。",
+          "source_fields": [
+            "产品资料：单位吸收、升星、职业进化与自动战斗",
+            "用户确认：Slot+战斗型"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "启用进入一次构筑决策前的 Spin／战斗周期；具体 N 与波次对应关系等待人工确认。",
+          "source_fields": [
+            "Slot+战斗型工作定义"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "Items、Cores、单位吸收、升星与分支职业进化构成后续构筑决策，主要修改概率、单位属性与战斗型 C₂。",
+          "source_fields": [
+            "产品资料：Items、Cores、单位成长与职业进化"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-26"
+      }
+    },
+    {
+      "product_id": "product.runeborn",
+      "mapping_status": "new_record_partially_confirmed",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "以持续增强的敌人与战斗失败作为目标压力；具体检查周期和曲线等待逐局分析。",
+          "source_fields": [
+            "Steam 商店页：迎战随机敌人"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "由多本符文秘典中的符文列构成；可通过构筑增加、移除或修改符文，并由饰品继续修饰。",
+          "source_fields": [
+            "Steam 商店页：构筑符文秘典"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "老虎机式随机产生符文结果，并允许保留符文和重新随机以提高匹配概率。",
+          "source_fields": [
+            "Steam 商店页：匹配元素符文"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "装置将随机结果写入各符文列；玩家主要通过保留与重随机干预，而非自由空间放置。",
+          "source_fields": [
+            "Steam 商店页：每本符文书包含五个符文列"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "以多列符文与链路节点共同承载本次结果；具体拓扑边界等待结合游戏画面确认。",
+          "source_fields": [
+            "Steam 商店页：符文列与链路刻印"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "延续老虎机的匹配认知，通过同元素符文的匹配与连接形成基础结果；用户将其归为 Slot+数值型。",
+          "source_fields": [
+            "Steam 商店页：匹配连接元素符文",
+            "用户确认：Slot+数值型"
+          ],
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "value": "遗物、光环、项链和符文额外效果逐个触发，放大基础符文连接并转译为大数值伤害。",
+          "source_fields": [
+            "Steam 商店页：饰品协同与符文额外效果"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "进入一次构筑决策前的连续 Spin 数量等待逐局拆解，暂不把敌人或章节周期直接等同于 N。",
+          "source_fields": [
+            "202607 公式定义"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "通过商人、敌人选择、符文增删修改与饰品选择持续调整后续符文池和协同结果。",
+          "source_fields": [
+            "Steam 商店页：构筑符文秘典、收集饰品、随机敌人"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.slots-and-daggers",
+      "mapping_status": "new_record_partially_confirmed",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "以奇幻敌人的生命、伤害与战斗失败作为目标压力；具体波次曲线等待逐局分析。",
+          "source_fields": [
+            "Steam 商店页：老虎机中的奇幻 Roguelike"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "由武器、护盾、金币及其他功能符号构成可成长的老虎机符号池。",
+          "source_fields": [
+            "Steam 商店页与官方介绍"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "装置从当前配置的符号池进行老虎机 Spin，生成本回合的攻击、防御与资源结果。",
+          "source_fields": [
+            "Steam 商店页：Fun slot machine"
+          ],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "Spin 结果由老虎机自动写入转轮位置，玩家不直接决定主要落位。",
+          "source_fields": [
+            "Steam 商店页：slot machine"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "以老虎机转轮序列承载符号结果；具体列数和空间规则等待逐局确认。",
+          "source_fields": [
+            "Steam 商店页与游戏截图"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "围绕武器与功能符号建立本作自己的触发和组合规则；用户将其归为 Slot改·战斗型。",
+          "source_fields": [
+            "用户确认：Slot改·战斗型"
+          ],
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "value": "把 Spin 与符号组合结果转译为攻击、防御、资源获得和敌我战斗状态。",
+          "source_fields": [
+            "Steam 商店页：slot machine + fantasy RPG"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "一次构筑决策前的 Spin／战斗回合数等待逐局分析。",
+          "source_fields": [
+            "202607 公式定义"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "战后使用奖励升级老虎机、扩充符号配置或强化战斗能力，影响后续 Random、Pool_Symbol 与 C2。",
+          "source_fields": [
+            "Steam 商店页与官方介绍"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.rogue-slots",
+      "mapping_status": "new_record_partially_confirmed",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "以地下城敌人、生命消耗与战斗失败构成目标压力；具体波次与失败代价等待逐局确认。",
+          "source_fields": ["Steam 商店页：Dungeon Master 与战斗循环"],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "由武器、金币、诅咒遗物及其他可获得物品组成可构筑的转轮内容。",
+          "source_fields": ["Steam 商店页：weapons, coins, cursed relics"],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "传统 Slot 式 Spin 从当前转轮配置中产生符号结果。",
+          "source_fields": ["Steam 商店页：slot machine"],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "装置自动完成转轮停止和结果呈现，玩家主要在 Spin 之前配置内容。",
+          "source_fields": ["Steam 商店页与官方截图"],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "使用 Slot 转轮／窗口承载本次符号结果，具体支付关系等待逐局拆解。",
+          "source_fields": ["Steam 商店页与官方截图"],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "延续传统 Slot 的即时读数与组合认知；用户将其归为 Slot+战斗型。",
+          "source_fields": ["用户确认：Slot+战斗型"],
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "value": "将符号结果进一步转译为攻击、能力与物品效果，形成战斗表现。",
+          "source_fields": ["Steam 商店页：each spin triggers attacks, abilities, and effects"],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "触发一次构筑决策前的连续 Spin 数量等待逐局确认。",
+          "source_fields": ["202607 公式定义"],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "通过获得与配置物品改变后续 Pool_Symbol、协同和战斗效果。",
+          "source_fields": ["Steam 商店页：超过 30 种物品"],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.spinny-dungeon",
+      "mapping_status": "new_record_partially_confirmed",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "怪物持续逼近 RED ZONE，进入红区构成直接战斗压力与失败风险。",
+          "source_fields": ["Steam 商店页：monsters approach the RED ZONE"],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "由武器、植物、魔法物品、伙伴等可构筑对象组成。",
+          "source_fields": ["Steam 商店页：weapons, plants, magical artifacts, companions"],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "每次 Spin 会随机重新排列棋盘上的构筑对象，改变当轮组合与战斗状态。",
+          "source_fields": ["Steam 商店页：randomly rearranged after every spin"],
+          "review_status": "pending"
+        },
+        "Put": {
+          "value": "装置自动将对象重新排列到棋盘位置，玩家不直接控制每次落位。",
+          "source_fields": ["Steam 商店页：randomly rearranged on the board"],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "以带有位置关系的棋盘承载构筑对象与战斗单位，具体网格规则等待逐局确认。",
+          "source_fields": ["Steam 商店页与官方截图"],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "不只沿用传统 Slot 支付线，而是读取棋盘中对象的位置、组合和功能关系；用户将其归为 Slot改·战斗型。",
+          "source_fields": ["用户确认：Slot改·战斗型"],
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "value": "把棋盘组合结果转译为自动战斗过程，攻击逼近红区的怪物。",
+          "source_fields": ["Steam 商店页：auto battler 与 RED ZONE"],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "进入一次构筑选择前的连续 Spin／战斗数量等待逐局确认。",
+          "source_fields": ["202607 公式定义"],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "选择和组合武器、植物、魔法物品与伙伴，持续改变后续 Pool_Symbol、棋盘协同及战斗能力。",
+          "source_fields": ["Steam 商店页：deckbuilder"],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
+      }
+    },
+    {
+      "product_id": "product.slot-or-not",
+      "mapping_status": "new_record_partially_confirmed",
+      "review_status": "draft",
+      "fields": {
+        "P_t": {
+          "value": "以回合制战斗中的敌人生命、玩家生存与关卡推进构成目标压力；具体检查周期和失败代价等待逐局确认。",
+          "source_fields": [
+            "Steam 商店页：turn-based slot machine battling adventure"
+          ],
+          "review_status": "pending"
+        },
+        "Pool_Symbol": {
+          "value": "由玩家携带并投入抽取池的装备与物品组成；官方资料记录 40+ 可用物品，并由饰品进一步改变构筑。",
+          "source_fields": [
+            "Steam 商店页：40+ playable items 与 drawing pool"
+          ],
+          "review_status": "pending"
+        },
+        "Random": {
+          "value": "候选池式 Random：Pool_Symbol → Random 生成 Choice_Pool → 玩家主动选择 → SingleSpin_Symbol。随机性决定可选范围，玩家决策决定本次最终结果。",
+          "source_fields": [
+            "用户确认：单次 Spin 的 Random 创新"
+          ],
+          "review_status": "confirmed"
+        },
+        "Put": {
+          "value": "玩家在 Random 内完成结果选择后，本次装备结果进入 Slot 战斗；是否还存在独立空间安置选择等待逐局确认。",
+          "source_fields": [
+            "用户确认的 Random 流程",
+            "Steam 商店页与官方截图"
+          ],
+          "review_status": "pending"
+        },
+        "Show_TP": {
+          "value": "Slot 装置与回合制战斗界面共同承载本次装备结果；具体空间拓扑和位置关系等待逐局确认。",
+          "source_fields": [
+            "Steam 商店页与官方截图"
+          ],
+          "review_status": "pending"
+        },
+        "C1": {
+          "value": "装备类型、组合与物品效果形成自有基础协同，不以传统 Slot 支付线为核心；用户将其归为 Slot改·战斗型。",
+          "source_fields": [
+            "用户确认：Slot改·战斗型",
+            "Steam 商店页：wild synergies"
+          ],
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "value": "把选择出的装备结果转译为攻击、防御与敌我战斗状态，形成回合制战斗演绎。",
+          "source_fields": [
+            "Steam 商店页：attack/defend based on the outcome"
+          ],
+          "review_status": "pending"
+        },
+        "N": {
+          "value": "触发一次装备构筑决策前的连续 Spin／战斗回合数量等待逐局确认。",
+          "source_fields": [
+            "202607 公式定义"
+          ],
+          "review_status": "pending"
+        },
+        "BD": {
+          "value": "获得、携带和调整装备与饰品，持续改变后续 Pool_Symbol、候选选择空间与战斗能力。",
+          "source_fields": [
+            "Steam 商店页：40+ playable items、49 trinkets"
+          ],
+          "review_status": "pending"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-07-28"
       }
     }
   ]

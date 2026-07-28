@@ -217,6 +217,7 @@ function normalizeDesignSample(game) {
 
 const legacyDocument = await readJson(paths.legacy);
 const currentProductsDocument = await readJson(paths.products);
+const currentObservationsDocument = await readJson(paths.observations);
 const sourceGames = legacyDocument.games;
 const formalGames = sourceGames.filter((game) => !designSampleSlugs.has(game.slug));
 const designSamples = sourceGames.filter((game) => designSampleSlugs.has(game.slug));
@@ -243,7 +244,14 @@ const products = [...importedProducts, ...newOnlyProducts]
   }))
   .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, "zh-CN"));
 
-const observations = formalGames.map(formulaObservations);
+const importedObservations = formalGames.map(formulaObservations);
+const importedObservationProductIds = new Set(
+  importedObservations.map((observation) => observation.product_id)
+);
+const retainedNewObservations = currentObservationsDocument.items.filter(
+  (observation) => !importedObservationProductIds.has(observation.product_id)
+);
+const observations = [...importedObservations, ...retainedNewObservations];
 const samples = designSamples.map(normalizeDesignSample);
 
 const missingMetadata = {
@@ -272,6 +280,7 @@ const report = {
     ).length,
     retained_new_products: newOnlyProducts.length,
     final_formal_products: products.length,
+    retained_new_formula_observations: retainedNewObservations.length,
     formula_observation_records: observations.length
   },
   classification: {
@@ -286,7 +295,13 @@ const report = {
       legacy_slug: "luck-be-a-landlord",
       target_product_id: "product.luck-be-a-landlord",
       action: "merge",
-      note: "保留新版已确认的 Slot → Slot 数值型 - 幸运房东关系，并补入旧版基础资料与分析来源。"
+      note: "保留新版已确认的 Slot母体 → Slot改·数值型 → 幸运房东关系，并补入旧版基础资料与分析来源。"
+    },
+    {
+      legacy_slug: "lucky-mayor",
+      target_product_id: "product.lucky-mayor",
+      action: "merge_alias",
+      note: "将早期占位名称“幸运城市”并入 Steam 官方名称《幸运市长》，保留旧版完整资料并确认其为 0D 多重集品类变体实例。"
     }
   ],
   output_files: [
@@ -300,7 +315,7 @@ const report = {
 
 const output = {
   products: {
-    version: "202607-draft.6",
+    version: "202607-draft.7",
     migration: {
       source: "data/games.json",
       imported_at: importedAt,
@@ -309,8 +324,8 @@ const output = {
     items: products
   },
   observations: {
-    version: "202607-draft.2",
-    mapping_policy: "mechanical_import_unconfirmed",
+    version: "202607-draft.3",
+    mapping_policy: "legacy_mechanical_import_plus_retained_new_product_observations",
     formula_fields: [
       "P_t",
       "Pool_Symbol",

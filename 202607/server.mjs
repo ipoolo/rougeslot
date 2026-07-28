@@ -9,6 +9,9 @@ const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dataRoot = join(projectRoot, "202607", "data");
 const changeLogPath = join(dataRoot, "change-log.json");
 const productsPath = join(dataRoot, "products.json");
+const mechanismsPath = join(dataRoot, "mechanism-archetypes.json");
+const prototypesPath = join(dataRoot, "category-prototypes.json");
+const variantsPath = join(dataRoot, "category-variants.json");
 const migrationReportPath = join(dataRoot, "migration-report.json");
 const apiPrefix = "/202607/api/";
 
@@ -36,6 +39,13 @@ const OPERATIONS = new Set([
 ]);
 
 const REVIEW_STATUSES = new Set(["draft", "pending", "confirmed"]);
+const CLASSIFICATION_STATUSES = new Set(["unreviewed", "partial", "confirmed"]);
+const RELATION_ROLES = new Set([
+  "member",
+  "representative",
+  "cornerstone",
+  "variant_instance"
+]);
 
 const collections = [
   {
@@ -225,6 +235,443 @@ async function updateFormulaField(request, response) {
   }
 }
 
+function nodeId(type) {
+  const prefix = {
+    mechanism_archetype: "mechanism",
+    category_prototype: "prototype",
+    category_variant: "variant"
+  }[type];
+  return `${prefix}.custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
+function nextOrder(items) {
+  return Math.max(0, ...items.map((item) => Number(item.order) || 0)) + 10;
+}
+
+function emptyFingerprint(operation, nodeName) {
+  return Object.fromEntries([...FORMULA_FIELDS].map((field) => [
+    field,
+    {
+      operation,
+      constraint_label: operation === "inherit" ? "继承父级" : "待定义",
+      summary: operation === "inherit"
+        ? `${nodeName}暂时继承父级的 ${field} 有效结果；等待人工调整。`
+        : `${nodeName}的 ${field} 第一层约束等待人工定义。`,
+      review_status: "draft",
+      review_note: ""
+    }
+  ]));
+}
+
+function createVariantFromProduct(prototype, product, role, timestamp) {
+  return {
+    id: nodeId("category_variant"),
+    name: product.name,
+    type: "category_variant",
+    variant_role: role === "cornerstone" ? "cornerstone" : "product_variant",
+    status: "structure_ready_content_pending",
+    order: Date.now(),
+    prototype_id: prototype.id,
+    product_ids: [product.id],
+    summary: role === "cornerstone"
+      ? `“${prototype.name}”的基石变体：作为品类公式比较基准，默认继承品类原型约束。`
+      : `“${prototype.name}”下的具体游戏变体：${product.summary}`.slice(0, 240),
+    definition: `本节点以《${product.name}》作为“${prototype.name}”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。`,
+    formula_changes: emptyFingerprint("inherit", product.name),
+    inheritance_summary: {
+      inherited_fields: FORMULA_FIELDS.size,
+      changed_fields: 0,
+      note: "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+    },
+    created_at: timestamp
+  };
+}
+
+function rebaseVariantToPrototype(variant, prototype, role, timestamp) {
+  const parentChanged = variant.prototype_id !== prototype.id;
+  variant.name = variant.name.trim();
+  variant.prototype_id = prototype.id;
+  variant.variant_role = role === "cornerstone" ? "cornerstone" : "product_variant";
+  variant.updated_at = timestamp;
+  if (!parentChanged) return;
+
+  for (const [field, entry] of Object.entries(variant.formula_changes ?? {})) {
+    entry.review_status = "pending";
+    entry.review_note = [
+      entry.review_note,
+      `父级已调整为“${prototype.name}”，需要重新确认本字段相对新父级的关系。`
+    ].filter(Boolean).join(" ");
+    if (entry.operation === "inherit") {
+      entry.constraint_label = "继承新原型";
+      entry.summary = `${variant.name}暂时继承“${prototype.name}”的 ${field} 有效结果；等待人工复核。`;
+    }
+  }
+}
+
+async function updateProductClassification(request, response) {
+  try {
+    const input = await readRequestJson(request);
+    const productId = text(input.product_id, "product_id", 120);
+    const prototypeId = typeof input.prototype_id === "string"
+      ? input.prototype_id.trim()
+      : "";
+    const relationRole = text(input.relation_role ?? "member", "relation_role", 40);
+    const classificationStatus = text(
+      input.classification_status ?? "confirmed",
+      "classification_status",
+      40
+    );
+    const note = text(input.note ?? "", "review_note", 600);
+
+    if (!RELATION_ROLES.has(relationRole)) {
+      throw new Error(`未知产品角色：${relationRole}`);
+    }
+    if (!CLASSIFICATION_STATUSES.has(classificationStatus)) {
+      throw new Error(`未知分类状态：${classificationStatus}`);
+    }
+
+    const [products, mechanisms, prototypes, variants] = await Promise.all([
+      readJson(productsPath),
+      readJson(mechanismsPath),
+      readJson(prototypesPath),
+      readJson(variantsPath)
+    ]);
+    const productIndex = products.items.findIndex((item) => item.id === productId);
+    if (productIndex < 0) throw new Error(`找不到产品：${productId}`);
+    const product = products.items[productIndex];
+    const before = structuredClone({
+      relation_types: product.relation_types,
+      mother_ids: product.mother_ids,
+      prototype_ids: product.prototype_ids,
+      variant_ids: product.variant_ids,
+      classification_status: product.classification_status,
+      classification_note: product.classification_note
+    });
+
+    let prototype = null;
+    let mechanism = null;
+    if (prototypeId) {
+      prototype = prototypes.items.find((item) => item.id === prototypeId);
+      if (!prototype) throw new Error(`找不到品类原型：${prototypeId}`);
+      mechanism = mechanisms.items.find((item) => item.id === prototype.primary_mother_id);
+      if (!mechanism) throw new Error(`${prototype.name} 缺少所属机制母型`);
+    }
+    const normalizedRole = prototype && relationRole === "cornerstone"
+      ? "cornerstone"
+      : prototype
+        ? "variant_instance"
+        : "member";
+
+    for (const item of prototypes.items) {
+      item.representative_product_ids = (item.representative_product_ids ?? [])
+        .filter((id) => id !== productId);
+    }
+    const previousVariant = variants.items.find((item) =>
+      item.id === (product.variant_ids ?? [])[0]
+      || (item.product_ids ?? []).includes(productId)
+    );
+    for (const item of variants.items) {
+      item.product_ids = (item.product_ids ?? []).filter((id) => id !== productId);
+    }
+
+    let variant = null;
+    if (prototype) {
+      if (previousVariant && previousVariant.product_ids.length === 0) {
+        variant = previousVariant;
+        variant.product_ids = [productId];
+        variant.name = product.name;
+        rebaseVariantToPrototype(variant, prototype, normalizedRole, new Date().toISOString());
+      } else {
+        variant = createVariantFromProduct(
+          prototype,
+          product,
+          normalizedRole,
+          new Date().toISOString()
+        );
+        variants.items.push(variant);
+      }
+      variant.summary = normalizedRole === "cornerstone"
+        ? `“${prototype.name}”的基石变体：作为品类公式比较基准，默认继承品类原型约束。`
+        : `“${prototype.name}”下的具体游戏变体：${product.summary}`.slice(0, 240);
+      variant.definition = `本节点以《${product.name}》作为“${prototype.name}”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。`;
+
+      if (normalizedRole === "cornerstone") {
+        const previousCornerstones = new Set(prototype.representative_product_ids ?? []);
+        prototype.representative_product_ids = [productId];
+        for (const item of variants.items) {
+          if (item.prototype_id === prototype.id && item.id !== variant.id) {
+            item.variant_role = "product_variant";
+          }
+        }
+        for (const otherProduct of products.items) {
+          if (
+            previousCornerstones.has(otherProduct.id)
+            && otherProduct.id !== productId
+          ) {
+            otherProduct.relation_types = ["variant_instance"];
+          }
+        }
+      }
+    }
+
+    variants.items = variants.items.filter((item) =>
+      (item.product_ids ?? []).length > 0
+    );
+
+    const relationTypes = normalizedRole === "cornerstone"
+      ? ["source", "representative"]
+      : normalizedRole === "variant_instance"
+          ? ["variant_instance"]
+          : [];
+
+    const timestamp = new Date().toISOString();
+    const after = {
+      relation_types: relationTypes,
+      mother_ids: mechanism ? [mechanism.id] : [],
+      prototype_ids: prototype ? [prototype.id] : [],
+      variant_ids: variant ? [variant.id] : [],
+      classification_status: prototype ? classificationStatus : "unreviewed",
+      classification_note: note || (prototype
+        ? `人工归类到“${prototype.name}”，角色为${normalizedRole === "cornerstone" ? "基石游戏" : "变体游戏"}；所属机制母型与品类变体映射由系统自动维护。`
+        : "人工清除模型归属，等待重新分类。")
+    };
+    Object.assign(product, after);
+    product.last_classified_at = timestamp;
+
+    await Promise.all([
+      atomicWriteJson(productsPath, products),
+      atomicWriteJson(prototypesPath, prototypes),
+      atomicWriteJson(variantsPath, variants)
+    ]);
+    await appendChange({
+      id: changeId(),
+      timestamp,
+      action: "update_product_classification",
+      product_id: productId,
+      product_name: product.name,
+      before,
+      after,
+      note
+    });
+
+    sendJson(response, 200, {
+      ok: true,
+      product_id: productId,
+      variant_id: variant?.id ?? null,
+      classification: after
+    });
+  } catch (error) {
+    sendJson(response, 400, { ok: false, error: error.message });
+  }
+}
+
+async function createModelNode(request, response) {
+  try {
+    const input = await readRequestJson(request);
+    const type = text(input.type, "type", 40);
+    const parentId = typeof input.parent_id === "string" ? input.parent_id.trim() : "";
+    const timestamp = new Date().toISOString();
+    let path;
+    let document;
+    let item;
+    let linkedProduct = null;
+    let productsDocument = null;
+
+    if (type === "mechanism_archetype") {
+      const name = text(input.name, "name", 80);
+      const summary = text(input.summary, "summary", 240);
+      const definition = text(input.definition, "definition", 1200);
+      path = mechanismsPath;
+      document = await readJson(path);
+      item = {
+        id: nodeId(type),
+        name,
+        type,
+        status: "working",
+        order: nextOrder(document.items),
+        summary,
+        definition,
+        formula_constraints: emptyFingerprint("default", name),
+        open_axes: ["等待通过公式字段编辑器补充开放变量。"],
+        created_at: timestamp
+      };
+    } else if (type === "category_prototype") {
+      const name = text(input.name, "name", 80);
+      const summary = text(input.summary, "summary", 240);
+      const definition = text(input.definition, "definition", 1200);
+      const mechanisms = await readJson(mechanismsPath);
+      if (!mechanisms.items.some((entry) => entry.id === parentId)) {
+        throw new Error("创建品类原型前必须选择有效的机制母型");
+      }
+      path = prototypesPath;
+      document = await readJson(path);
+      item = {
+        id: nodeId(type),
+        name,
+        name_status: "working",
+        type,
+        status: "working",
+        order: nextOrder(document.items),
+        primary_mother_id: parentId,
+        composed_mother_ids: [],
+        representative_product_ids: [],
+        classification_axes: {},
+        summary,
+        definition,
+        formula_changes: emptyFingerprint("inherit", name),
+        identity_rules: ["等待通过公式字段编辑器补充身份规则。"],
+        created_at: timestamp
+      };
+    } else if (type === "category_variant") {
+      throw new Error("品类变体由具体游戏的品类归属自动生成，请在游戏库或图谱管理中配置游戏");
+    } else {
+      throw new Error(`未知节点类型：${type}`);
+    }
+
+    document.items.push(item);
+    await Promise.all([
+      atomicWriteJson(path, document),
+      ...(productsDocument ? [atomicWriteJson(productsPath, productsDocument)] : [])
+    ]);
+    await appendChange({
+      id: changeId(),
+      timestamp,
+      action: "create_model_node",
+      node_id: item.id,
+      node_name: item.name,
+      node_type: item.type,
+      parent_id: parentId || null,
+      product_id: linkedProduct?.id ?? null,
+      product_name: linkedProduct?.name ?? null,
+      after: item
+    });
+    sendJson(response, 201, { ok: true, node: item });
+  } catch (error) {
+    sendJson(response, 400, { ok: false, error: error.message });
+  }
+}
+
+async function updateModelNode(request, response) {
+  try {
+    const input = await readRequestJson(request);
+    const nodeIdValue = text(input.node_id, "node_id", 120);
+    const name = text(input.name, "name", 80);
+    const summary = text(input.summary, "summary", 240);
+    const definition = text(input.definition, "definition", 1200);
+    const parentId = typeof input.parent_id === "string" ? input.parent_id.trim() : "";
+    const target = await locateNode(nodeIdValue);
+    if (!target || !["mechanism_archetype", "category_prototype"].includes(target.type)) {
+      throw new Error("只有机制母型与品类原型支持手动编辑");
+    }
+
+    const before = structuredClone(target.node);
+    const timestamp = new Date().toISOString();
+    target.node.name = name;
+    target.node.summary = summary;
+    target.node.definition = definition;
+    target.node.updated_at = timestamp;
+
+    let products = null;
+    if (target.type === "category_prototype") {
+      const mechanisms = await readJson(mechanismsPath);
+      if (!mechanisms.items.some((item) => item.id === parentId)) {
+        throw new Error("品类原型必须选择有效的机制母型");
+      }
+      const parentChanged = target.node.primary_mother_id !== parentId;
+      target.node.primary_mother_id = parentId;
+      if (parentChanged) {
+        products = await readJson(productsPath);
+        for (const product of products.items) {
+          if ((product.prototype_ids ?? []).includes(target.node.id)) {
+            product.mother_ids = [parentId];
+          }
+        }
+        for (const entry of Object.values(target.node.formula_changes ?? {})) {
+          entry.review_status = "pending";
+          entry.review_note = [
+            entry.review_note,
+            "所属机制母型发生变化，需要重新确认相对父级的字段关系。"
+          ].filter(Boolean).join(" ");
+        }
+      }
+    }
+
+    await Promise.all([
+      atomicWriteJson(target.path, target.document),
+      ...(products ? [atomicWriteJson(productsPath, products)] : [])
+    ]);
+    await appendChange({
+      id: changeId(),
+      timestamp,
+      action: "update_model_node",
+      node_id: target.node.id,
+      node_name: target.node.name,
+      node_type: target.type,
+      before,
+      after: target.node
+    });
+    sendJson(response, 200, { ok: true, node: target.node });
+  } catch (error) {
+    sendJson(response, 400, { ok: false, error: error.message });
+  }
+}
+
+async function deleteModelNode(request, response) {
+  try {
+    const input = await readRequestJson(request);
+    const nodeIdValue = text(input.node_id, "node_id", 120);
+    const target = await locateNode(nodeIdValue);
+    if (!target || !["mechanism_archetype", "category_prototype"].includes(target.type)) {
+      throw new Error("只有机制母型与品类原型支持手动删除");
+    }
+
+    const [prototypes, variants, products] = await Promise.all([
+      readJson(prototypesPath),
+      readJson(variantsPath),
+      readJson(productsPath)
+    ]);
+
+    if (target.type === "mechanism_archetype") {
+      const children = prototypes.items.filter((item) => item.primary_mother_id === target.node.id);
+      const linkedProducts = products.items.filter((item) =>
+        (item.mother_ids ?? []).includes(target.node.id)
+      );
+      if (children.length || linkedProducts.length) {
+        throw new Error(
+          `无法删除“${target.node.name}”：仍有 ${children.length} 个品类原型、${linkedProducts.length} 款游戏。请先移动下级关系。`
+        );
+      }
+    } else {
+      const childVariants = variants.items.filter((item) => item.prototype_id === target.node.id);
+      const linkedProducts = products.items.filter((item) =>
+        (item.prototype_ids ?? []).includes(target.node.id)
+      );
+      if (childVariants.length || linkedProducts.length) {
+        throw new Error(
+          `无法删除“${target.node.name}”：仍有 ${childVariants.length} 个游戏变体、${linkedProducts.length} 款游戏。请先调整游戏归属。`
+        );
+      }
+    }
+
+    const removed = target.document.items.splice(target.index, 1)[0];
+    const timestamp = new Date().toISOString();
+    await atomicWriteJson(target.path, target.document);
+    await appendChange({
+      id: changeId(),
+      timestamp,
+      action: "delete_model_node",
+      node_id: removed.id,
+      node_name: removed.name,
+      node_type: target.type,
+      before: removed,
+      after: null
+    });
+    sendJson(response, 200, { ok: true, deleted: removed.id });
+  } catch (error) {
+    sendJson(response, 400, { ok: false, error: error.message });
+  }
+}
+
 async function serveStatic(url, response) {
   let decodedPath;
   try {
@@ -299,6 +746,26 @@ const server = createServer(async (request, response) => {
 
   if (url.pathname === `${apiPrefix}update-field` && request.method === "POST") {
     await updateFormulaField(request, response);
+    return;
+  }
+
+  if (url.pathname === `${apiPrefix}update-product-classification` && request.method === "POST") {
+    await updateProductClassification(request, response);
+    return;
+  }
+
+  if (url.pathname === `${apiPrefix}create-node` && request.method === "POST") {
+    await createModelNode(request, response);
+    return;
+  }
+
+  if (url.pathname === `${apiPrefix}update-node` && request.method === "POST") {
+    await updateModelNode(request, response);
+    return;
+  }
+
+  if (url.pathname === `${apiPrefix}delete-node` && request.method === "POST") {
+    await deleteModelNode(request, response);
     return;
   }
 

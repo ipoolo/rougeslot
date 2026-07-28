@@ -1,0 +1,524 @@
+{
+  "version": "202607-draft.3",
+  "items": [
+    {
+      "prototype_id": "prototype.slot-plus-combat",
+      "cornerstone_product_id": "product.slotbound-demo",
+      "summary": "以《Slotbound Demo》为基石，比较保留 Slot 核心 C₁ 的产品如何在 C₂ 中形成战斗演绎与第二次结果揭晓。",
+      "analysis_basis": {
+        "inheritance_summary": "Random、自动 Put、Show_TP 与 Slot C₁ 保持可读，主要变化集中在 C₂、P(t)、N 与 BD。",
+        "cornerstone_role": "《Slotbound Demo》用多兵种、位置和战斗时序把 Slot 结果演绎成有悬念的战斗过程，作为品类比较基准。",
+        "differentiation_fields": [
+          "C2",
+          "P_t",
+          "N",
+          "BD"
+        ],
+        "axis_rationale": "横轴观察 C₂ 是否产生结果悬念，纵轴观察战斗表现从轻量触发到多单位时序表演的密度。"
+      },
+      "axes": {
+        "x": {
+          "key": "second_reveal_uncertainty",
+          "label": "C₂ 二次揭晓强度",
+          "low": "确定结果／即时展示",
+          "high": "过程悬念／结果未知",
+          "source_fields": [
+            "C2",
+            "P_t"
+          ]
+        },
+        "y": {
+          "key": "combat_presentation_density",
+          "label": "战斗表演密度",
+          "low": "单次触发／轻演绎",
+          "high": "多单位／时序战斗",
+          "source_fields": [
+            "Show_TP",
+            "C2"
+          ]
+        }
+      },
+      "positions": [
+        {
+          "product_id": "product.slotbound-demo",
+          "x": 82,
+          "y": 82,
+          "role": "cornerstone",
+          "status": "confirmed",
+          "changed_fields": [],
+          "position_note": "基石位置：保留传统 Slot C₁，再用多兵种、位置关系和紧凑战斗时序形成第二次结果揭晓。"
+        },
+        {
+          "product_id": "product.rogue-slots",
+          "x": 46,
+          "y": 42,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "Pool_Symbol",
+            "C2",
+            "BD"
+          ],
+          "position_note": "暂定位置：Spin 触发攻击、能力与物品效果，但战斗时序和最终结果悬念仍需结合完整局内流程确认。"
+        }
+      ],
+      "niches": [
+        {
+          "id": "niche.slot-plus-combat-readable-suspense",
+          "x": 74,
+          "y": 52,
+          "label": "高悬念 × 轻信息密度",
+          "status": "hypothesis",
+          "hypothesis": "保持 Slot C₁ 即时可读，同时用短时序、少单位的战斗过程制造第二次开奖；需要验证是否能兼顾速度与悬念。"
+        }
+      ]
+    },
+    {
+      "prototype_id": "prototype.slot-plus-numeric",
+      "cornerstone_product_id": "product.cloverpit",
+      "summary": "以《四叶草深渊》为基石，比较保留 Slot 核心 C₁ 的产品如何用倍率、连锁、资源转译和目标压力放大数值结果。",
+      "analysis_basis": {
+        "inheritance_summary": "Random、自动 Put、2D Slot 网格与 Slot C₁ 保持可读，主要变化集中在数值型 C₂、P(t) 与 BD。",
+        "cornerstone_role": "《四叶草深渊》用护身符和多层叠乘形成爆炸数值，同时以债务检查维持强压力，作为品类比较基准。",
+        "differentiation_fields": [
+          "C2",
+          "P_t",
+          "BD"
+        ],
+        "axis_rationale": "横轴观察 C₂ 从资源直译到爆炸叠乘的放大程度，纵轴观察数值结果与外层失败压力的耦合强度。"
+      },
+      "axes": {
+        "x": {
+          "key": "numeric_amplification",
+          "label": "C₂ 数值放大深度",
+          "low": "资源直译／轻倍率",
+          "high": "连锁叠乘／爆炸数值",
+          "source_fields": [
+            "C2",
+            "BD"
+          ]
+        },
+        "y": {
+          "key": "pressure_coupling",
+          "label": "目标压力耦合",
+          "low": "经营规划／软目标",
+          "high": "债务／战斗硬阈值",
+          "source_fields": [
+            "P_t",
+            "N"
+          ]
+        }
+      },
+      "positions": [
+        {
+          "product_id": "product.cloverpit",
+          "x": 88,
+          "y": 90,
+          "role": "cornerstone",
+          "status": "confirmed",
+          "changed_fields": [],
+          "position_note": "基石位置：护身符、连锁与多层倍率形成爆炸数值，债务到期检查构成强硬失败压力。"
+        },
+        {
+          "product_id": "product.spinera",
+          "x": 28,
+          "y": 48,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "P_t",
+            "C2",
+            "N",
+            "BD"
+          ],
+          "position_note": "暂定位置：Slot 结果主要被转译为文明资源与策略规划，数值叠乘和二次开奖较弱，目标压力偏阶段经营。"
+        },
+        {
+          "product_id": "product.runeborn",
+          "x": 74,
+          "y": 72,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "Pool_Symbol",
+            "Show_TP",
+            "C2",
+            "BD"
+          ],
+          "position_note": "暂定位置：符文连接、遗物与额外效果形成较深的数值放大，并由战斗失败提供硬阈值。"
+        }
+      ],
+      "niches": [
+        {
+          "id": "niche.slot-plus-numeric-readable-burst",
+          "x": 76,
+          "y": 56,
+          "label": "高倍率 × 中等压力",
+          "status": "hypothesis",
+          "hypothesis": "维持爆炸数值，但降低债务或死亡压力，让玩家更多关注构筑表达；需验证是否会削弱持续驱动力。"
+        }
+      ]
+    },
+    {
+      "prototype_id": "prototype.slot-transform-combat",
+      "cornerstone_product_id": "product.endgame-of-devil",
+      "summary": "以《魔王终局》为基石，比较改写 Pool_Symbol 与 C₁ 的战斗产品如何平衡先验可读性和 C₂ 的第二次揭晓。",
+      "analysis_basis": {
+        "inheritance_summary": "保留 Spin、Random 与自动 Put 的装置认知，但 Pool_Symbol 和 C₁ 可以改写为棋子、阵营、邻接或羁绊规则。",
+        "cornerstone_role": "《魔王终局》用紧凑 2D 棋盘把 C₁ 与战斗时序结合，强化第二峰，但也提高第一峰的阅读复杂度。",
+        "differentiation_fields": [
+          "Pool_Symbol",
+          "Show_TP",
+          "C1",
+          "C2",
+          "BD"
+        ],
+        "axis_rationale": "横轴统一观察 C₂ 从确定展示到时序战斗悬念的强度，纵轴观察自定义 C₁ 是否仍能借助常识立即读懂。"
+      },
+      "axes": {
+        "x": {
+          "key": "second_reveal_strength",
+          "label": "C₂ 第二次揭晓",
+          "low": "直接可算／确定展示",
+          "high": "时序战斗／结果悬念",
+          "source_fields": [
+            "C2",
+            "P_t"
+          ]
+        },
+        "y": {
+          "key": "c1_prior_readability",
+          "label": "C₁ 先验可读性",
+          "low": "自定义规则／学习成本",
+          "high": "常识协同／即时可读",
+          "source_fields": [
+            "Show_TP",
+            "C1"
+          ]
+        }
+      },
+      "positions": [
+        {
+          "product_id": "product.endgame-of-devil",
+          "x": 78,
+          "y": 55,
+          "role": "cornerstone",
+          "status": "confirmed",
+          "changed_fields": [],
+          "position_note": "基石位置：阵营与邻接需要一定学习，但紧凑的 2D 战斗时序带来较强的第二次揭晓。"
+        },
+        {
+          "product_id": "product.spin-hero",
+          "x": 18,
+          "y": 84,
+          "role": "member",
+          "status": "confirmed",
+          "changed_fields": [
+            "Pool_Symbol",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "符号效果较容易读懂，但攻击与血量结果大多可提前计算，C₂ 更接近确定答案的播放。"
+        },
+        {
+          "product_id": "product.lucky-hero",
+          "x": 48,
+          "y": 78,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "Pool_Symbol",
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "暂定位置：武器和装备具有较强常识映射，技能与区域效果增加演绎，但战斗悬念仍需逐局确认。"
+        },
+        {
+          "product_id": "product.lucky-hunter",
+          "x": 68,
+          "y": 34,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "Pool_Symbol",
+            "Random",
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "暂定位置：三消、合成和职业协同增加 C₁ 层数，自动战斗提供较强的结果过程。"
+        },
+        {
+          "product_id": "product.dog-and-goblin",
+          "x": 88,
+          "y": 16,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "Pool_Symbol",
+            "Random",
+            "Show_TP",
+            "C1",
+            "C2",
+            "N",
+            "BD"
+          ],
+          "position_note": "暂定位置：种族、职业、邻接和合成形成多层 C₁，自动战斗带来结果悬念，但即时阅读成本较高。"
+        },
+        {
+          "product_id": "product.slots-and-daggers",
+          "x": 26,
+          "y": 56,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "Pool_Symbol",
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "暂定位置：武器、护盾和金币具有直接常识映射，战斗结果更偏即时数值转译。"
+        },
+        {
+          "product_id": "product.spinny-dungeon",
+          "x": 88,
+          "y": 84,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "Pool_Symbol",
+            "Random",
+            "Put",
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "暂定位置：武器、植物与伙伴有较强常识映射，棋盘重排后进入自动战斗，RED ZONE 强化结果悬念。"
+        },
+        {
+          "product_id": "product.slot-or-not",
+          "x": 68,
+          "y": 58,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "Pool_Symbol",
+            "Random",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "暂定位置：已确认 Random 使用“随机候选池＋玩家主动选择”的两阶段抽取；C₁ 可读性和 C₂ 战斗悬念坐标仍需逐局校准。"
+        }
+      ],
+      "innovations": [
+        {
+          "id": "innovation.slot-or-not-choice-pool-random",
+          "product_id": "product.slot-or-not",
+          "status": "worth_following",
+          "title": "候选池式 Random",
+          "primary_field": "Random",
+          "related_fields": [
+            "Pool_Symbol"
+          ],
+          "baseline_flow": "Pool_Symbol → Random → SingleSpin_Symbol",
+          "variant_flow": "Pool_Symbol → Random 生成 Choice_Pool → 玩家主动选择 → SingleSpin_Symbol",
+          "summary": "少数直接改写单次 Spin 第一峰的产品：随机性只决定可选范围，玩家主动选择决定最终进入本次 Spin 的结果。",
+          "experience_value": "在保留随机揭晓的同时增强控制感、策略性与结果归因。",
+          "design_risk": "候选数量或选择时间过长，会中断连续 Spin 的即时揭晓与多巴胺循环。",
+          "validation_question": "Choice_Pool 的规模与选择时长应控制在什么范围，才能增强控制感而不拖慢第一峰？"
+        }
+      ],
+      "niches": [
+        {
+          "id": "niche.transform-combat-readable-second-reveal",
+          "x": 82,
+          "y": 82,
+          "label": "强二次揭晓 × 高可读",
+          "status": "hypothesis",
+          "hypothesis": "用常识化 C₁ 控制学习成本，再用紧凑时序战斗制造第二峰；需要防止战斗过程反过来拖慢第一峰。"
+        }
+      ]
+    },
+    {
+      "prototype_id": "prototype.slot-numeric",
+      "cornerstone_product_id": "product.luck-be-a-landlord",
+      "summary": "以《幸运房东》为基石，比较同属“Slot改·数值型”的产品怎样修改公式字段，并用空间拓扑和协同叠层观察当前生态位。",
+      "analysis_basis": {
+        "inheritance_summary": "保留 Spin、Random 与自动 Put 的装置认知，但 Pool_Symbol、Show_TP 和 C₁ 可以被改写为新的数值构筑系统。",
+        "cornerstone_role": "《幸运房东》以 2D Slot 网格、邻接 C₁ 和道具修饰建立品类基准。",
+        "differentiation_fields": [
+          "Pool_Symbol",
+          "Put",
+          "Show_TP",
+          "C1",
+          "C2",
+          "BD"
+        ],
+        "axis_rationale": "横轴统一观察 C₂ 从直接产出到跨系统资源网络的演绎深度，纵轴观察数值协同对空间位置的依赖。"
+      },
+      "axes": {
+        "x": {
+          "key": "synergy_depth",
+          "label": "C₂／协同系统叠层深度",
+          "low": "直接产出／轻修饰",
+          "high": "资源网络／跨系统协同",
+          "source_fields": [
+            "Pool_Symbol",
+            "C1",
+            "C2",
+            "BD"
+          ]
+        },
+        "y": {
+          "key": "spatial_topology",
+          "label": "空间拓扑依赖",
+          "low": "0D 聚合／无位置",
+          "high": "2D 邻接／空间关系",
+          "source_fields": [
+            "Put",
+            "Show_TP",
+            "C1"
+          ]
+        }
+      },
+      "positions": [
+        {
+          "product_id": "product.luck-be-a-landlord",
+          "x": 44,
+          "y": 74,
+          "role": "cornerstone",
+          "status": "confirmed",
+          "changed_fields": [],
+          "position_note": "基石位置：2D Slot 网格、邻接 C₁ 与道具修饰形成品类比较基准。"
+        },
+        {
+          "product_id": "product.lucky-mayor",
+          "x": 62,
+          "y": 14,
+          "role": "member",
+          "status": "confirmed",
+          "changed_fields": [
+            "P_t",
+            "Pool_Symbol",
+            "Random",
+            "Put",
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "把基石的 2D 网格改成 0D 多重集，主要依赖类型、数量和产业链关系形成协同。"
+        },
+        {
+          "product_id": "product.cat-god-ranch",
+          "x": 88,
+          "y": 88,
+          "role": "member",
+          "status": "confirmed",
+          "changed_fields": [
+            "P_t",
+            "Pool_Symbol",
+            "Random",
+            "C1",
+            "C2",
+            "N",
+            "BD"
+          ],
+          "position_note": "保留 2D 邻接承载，并把动物类型、产出链和进贡压力叠成更深的资源网络。"
+        },
+        {
+          "product_id": "product.luckland",
+          "x": 70,
+          "y": 76,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "P_t",
+            "Pool_Symbol",
+            "Show_TP",
+            "C1",
+            "C2",
+            "N",
+            "BD"
+          ],
+          "position_note": "暂定位置：4×5 棋盘和区域棋子保持高空间依赖，天赋、宝物与区域主题形成较深叠层。"
+        },
+        {
+          "product_id": "product.lucky-island",
+          "x": 54,
+          "y": 46,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "P_t",
+            "Pool_Symbol",
+            "C1",
+            "C2",
+            "N",
+            "BD"
+          ],
+          "position_note": "暂定位置：仍有 2D 装置承载，但协同更多依赖职业、资源和建筑类型，而非纯邻接。"
+        },
+        {
+          "product_id": "product.die-shou-wei-cheng",
+          "x": 24,
+          "y": 58,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "P_t",
+            "Pool_Symbol",
+            "C1",
+            "C2",
+            "N",
+            "BD"
+          ],
+          "position_note": "暂定位置：格子化符号组合产生防御值，空间依赖较高；英雄与工具修饰的系统层数中等。"
+        },
+        {
+          "product_id": "product.crop-rotation",
+          "x": 80,
+          "y": 28,
+          "role": "member",
+          "status": "draft",
+          "changed_fields": [
+            "P_t",
+            "Pool_Symbol",
+            "Random",
+            "Show_TP",
+            "C1",
+            "C2",
+            "N",
+            "BD"
+          ],
+          "position_note": "暂定位置：卡牌与作物协同弱化 Slot 邻接中心，升级、被动和贷款压力形成中高叠层。"
+        }
+      ],
+      "niches": [
+        {
+          "id": "niche.low-space-light-system",
+          "x": 24,
+          "y": 34,
+          "label": "轻叠层 × 低空间依赖",
+          "status": "sparse",
+          "hypothesis": "用极低观察成本保留可构筑池，只通过数量阈值与少量全局修饰形成快速结算。"
+        },
+        {
+          "id": "niche.partitioned-network",
+          "x": 90,
+          "y": 48,
+          "label": "高资源网络 × 分区承载",
+          "status": "hypothesis",
+          "hypothesis": "在不回到完整 2D 邻接的前提下，用少量可读分区承载高叠层产业协同。"
+        }
+      ]
+    }
+  ]
+}

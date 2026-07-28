@@ -2,6 +2,1865 @@
   "version": "202607-draft.1",
   "items": [
     {
+      "id": "change.20260728071421991.x1rjxt",
+      "timestamp": "2026-07-28T07:14:21.989Z",
+      "action": "update_product_classification",
+      "product_id": "product.spinny-dungeon",
+      "product_name": "Spinny Dungeon",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "pending",
+        "classification_note": ""
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4blk85-wj4pu"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按补充分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按补充分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728071421977.671nql",
+      "timestamp": "2026-07-28T07:14:21.975Z",
+      "action": "update_product_classification",
+      "product_id": "product.rogue-slots",
+      "product_name": "Rogue Slots",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "pending",
+        "classification_note": ""
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4blk7r-3gb76"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按补充分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按补充分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065530330.p73qr1",
+      "timestamp": "2026-07-28T06:55:30.329Z",
+      "action": "update_product_classification",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4430m6-dycxc"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4430m6-dycxc"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "保留用户此前确认：《猫神牧场》属于 Slot改·数值型变体；本次同步刷新变体摘要。"
+      },
+      "note": "保留用户此前确认：《猫神牧场》属于 Slot改·数值型变体；本次同步刷新变体摘要。"
+    },
+    {
+      "id": "change.20260728065249137.vly89k",
+      "timestamp": "2026-07-28T06:52:49.136Z",
+      "action": "update_product_classification",
+      "product_id": "product.lucky-mayor",
+      "product_name": "幸运市长",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.lucky-mayor"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认“幸运城市”与《幸运市长》是同一款游戏；以 Steam 官方名称《幸运市长》合并记录，并作为“Slot改·数值型”下的 0D 多重集品类变体实例。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.lucky-mayor"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249135.d4k4e1",
+      "timestamp": "2026-07-28T06:52:49.134Z",
+      "action": "update_product_classification",
+      "product_id": "product.luck-be-a-landlord",
+      "product_name": "幸运房东",
+      "before": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.luck-be-a-landlord"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《幸运房东》是“Slot改·数值型”的基石游戏与代表产品；具体公式字段仍保留逐项人工确认能力。"
+      },
+      "after": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.luck-be-a-landlord"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249133.s9l6zh",
+      "timestamp": "2026-07-28T06:52:49.132Z",
+      "action": "update_product_classification",
+      "product_id": "product.lucky-island",
+      "product_name": "幸运岛",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atung-qdotg"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249131.t6l20h",
+      "timestamp": "2026-07-28T06:52:49.130Z",
+      "action": "update_product_classification",
+      "product_id": "product.luckland",
+      "product_name": "幸运大陆",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atune-6ml6f"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249129.caio30",
+      "timestamp": "2026-07-28T06:52:49.128Z",
+      "action": "update_product_classification",
+      "product_id": "product.die-shou-wei-cheng",
+      "product_name": "死守危城",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atunc-236pv"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249127.fd59xf",
+      "timestamp": "2026-07-28T06:52:49.126Z",
+      "action": "update_product_classification",
+      "product_id": "product.crop-rotation",
+      "product_name": "轮作法",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atuna-iwolq"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249124.26ng14",
+      "timestamp": "2026-07-28T06:52:49.124Z",
+      "action": "update_product_classification",
+      "product_id": "product.lucky-hero",
+      "product_name": "幸运勇者",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atun8-bcmye"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249122.1wo96e",
+      "timestamp": "2026-07-28T06:52:49.122Z",
+      "action": "update_product_classification",
+      "product_id": "product.lucky-hunter",
+      "product_name": "幸运猎人",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atun6-6s54z"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249120.rlv1uo",
+      "timestamp": "2026-07-28T06:52:49.119Z",
+      "action": "update_product_classification",
+      "product_id": "product.endgame-of-devil",
+      "product_name": "魔王终局",
+      "before": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.endgame-of-devil"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《魔王终局》是“Slot改·战斗型”的基石游戏与代表产品；其可构筑棋子池和自有 C₁ 覆写传统 Slot 规则，C₂ 负责战斗结果演绎。"
+      },
+      "after": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.endgame-of-devil"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249118.g1540g",
+      "timestamp": "2026-07-28T06:52:49.117Z",
+      "action": "update_product_classification",
+      "product_id": "product.slots-and-daggers",
+      "product_name": "命运转轮",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "等待按照用户给出的 Slot改·战斗型分类写入图谱。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atun1-t6nby"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249115.ayv8yu",
+      "timestamp": "2026-07-28T06:52:49.115Z",
+      "action": "update_product_classification",
+      "product_id": "product.spin-hero",
+      "product_name": "拉杆英雄",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atumz-i0j6x"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249113.5ve9mu",
+      "timestamp": "2026-07-28T06:52:49.112Z",
+      "action": "update_product_classification",
+      "product_id": "product.dog-and-goblin",
+      "product_name": "狗与哥布林",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms46plmn-clrp8"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "迁移为独立游戏变体；品类原型归属保持不变。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms46plmn-clrp8"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249110.hayhbv",
+      "timestamp": "2026-07-28T06:52:49.110Z",
+      "action": "update_product_classification",
+      "product_id": "product.cloverpit",
+      "product_name": "四叶草深渊",
+      "before": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.cloverpit"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《四叶草深渊》是“Slot+数值型”的基石游戏与代表产品；其 Slot Random、自动 Put 与传统 C₁ 保持母体核心，C₂ 负责数值结果演绎。"
+      },
+      "after": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.cloverpit"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249108.gjoc5o",
+      "timestamp": "2026-07-28T06:52:49.107Z",
+      "action": "update_product_classification",
+      "product_id": "product.runeborn",
+      "product_name": "死而符生",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "等待按照用户给出的 Slot+数值型分类写入图谱。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4atumr-muzwe"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249104.vyn0xo",
+      "timestamp": "2026-07-28T06:52:49.104Z",
+      "action": "update_product_classification",
+      "product_id": "product.spinera",
+      "product_name": "帝国轮盘",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4ag70p-7b1s4"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户确认《帝国轮盘》属于 Slot+数值型变体；C₂主要表现为类文明策略与资源经营，缺少二次开奖过程。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4ag70p-7b1s4"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728065249098.by80th",
+      "timestamp": "2026-07-28T06:52:49.097Z",
+      "action": "update_product_classification",
+      "product_id": "product.slotbound-demo",
+      "product_name": "Slotbound Demo",
+      "before": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.slotbound-demo"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《Slotbound》是“Slot+战斗型”的基石游戏与代表产品；其 Slot Random、自动 Put 与传统 C₁ 保持母体核心，C₂ 负责战斗结果演绎。"
+      },
+      "after": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.slotbound-demo"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+      },
+      "note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。"
+    },
+    {
+      "id": "change.20260728064211977.njlh82",
+      "timestamp": "2026-07-28T06:42:11.977Z",
+      "action": "update_product_classification",
+      "product_id": "product.spinera",
+      "product_name": "帝国轮盘",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4ag70p-7b1s4"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户确认《帝国轮盘》属于 Slot+数值型变体；C₂主要表现为类文明策略与资源经营，缺少二次开奖过程。"
+      },
+      "note": "用户确认《帝国轮盘》属于 Slot+数值型变体；C₂主要表现为类文明策略与资源经营，缺少二次开奖过程。"
+    },
+    {
+      "id": "change.20260728052508237.riu642",
+      "timestamp": "2026-07-28T05:25:08.235Z",
+      "action": "update_product_classification",
+      "product_id": "product.luck-be-a-landlord",
+      "product_name": "幸运房东",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.luck-be-a-landlord"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《幸运房东》是“Slot改·数值型”的基石游戏与代表产品；具体公式字段仍保留逐项人工确认能力。"
+      },
+      "after": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.luck-be-a-landlord"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《幸运房东》是“Slot改·数值型”的基石游戏与代表产品；具体公式字段仍保留逐项人工确认能力。"
+      },
+      "note": "用户已确认《幸运房东》是“Slot改·数值型”的基石游戏与代表产品；具体公式字段仍保留逐项人工确认能力。"
+    },
+    {
+      "id": "change.20260728052450577.zczkon",
+      "timestamp": "2026-07-28T05:24:50.575Z",
+      "action": "update_product_classification",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4430m6-dycxc"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "after": {
+        "relation_types": [
+          "source",
+          "representative"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4430m6-dycxc"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+    },
+    {
+      "id": "change.20260728052420230.usjynf",
+      "timestamp": "2026-07-28T05:24:20.228Z",
+      "action": "update_product_classification",
+      "product_id": "product.balatro",
+      "product_name": "小丑牌",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms46plme-si3r0"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "迁移为独立游戏变体；品类原型归属保持不变。"
+      },
+      "after": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "迁移为独立游戏变体；品类原型归属保持不变。"
+      },
+      "note": "迁移为独立游戏变体；品类原型归属保持不变。"
+    },
+    {
+      "id": "change.20260728045732351.q6akbs",
+      "timestamp": "2026-07-28T04:57:32.351Z",
+      "action": "update_product_classification",
+      "product_id": "product.dog-and-goblin",
+      "product_name": "狗与哥布林",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.endgame-of-devil"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms46plmn-clrp8"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "迁移为独立游戏变体；品类原型归属保持不变。"
+      },
+      "note": "迁移为独立游戏变体；品类原型归属保持不变。"
+    },
+    {
+      "id": "change.20260728045732343.528qvc",
+      "timestamp": "2026-07-28T04:57:32.342Z",
+      "action": "update_product_classification",
+      "product_id": "product.balatro",
+      "product_name": "小丑牌",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.slotbound-demo"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.custom-ms46plme-si3r0"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "迁移为独立游戏变体；品类原型归属保持不变。"
+      },
+      "note": "迁移为独立游戏变体；品类原型归属保持不变。"
+    },
+    {
+      "id": "change.20260728045345691.k3v6b5",
+      "timestamp": "2026-07-28T04:53:45.691Z",
+      "action": "delete_model_node",
+      "node_id": "prototype.custom-ms4465t0-hc04e",
+      "node_name": "测试 2",
+      "node_type": "category_prototype",
+      "before": {
+        "id": "prototype.custom-ms4465t0-hc04e",
+        "name": "测试 2",
+        "name_status": "working",
+        "type": "category_prototype",
+        "status": "working",
+        "order": 60,
+        "primary_mother_id": "mechanism.slot",
+        "composed_mother_ids": [],
+        "representative_product_ids": [],
+        "classification_axes": {},
+        "summary": "测试 2 是",
+        "definition": "测试 2",
+        "formula_changes": {
+          "P_t": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 P_t 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": "",
+            "last_modified_at": "2026-07-28T03:46:38.179Z"
+          },
+          "Pool_Symbol": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Random": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 Random 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Put": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 Put 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Show_TP": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C1": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 C1 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C2": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 C2 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "N": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 N 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "BD": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 BD 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          }
+        },
+        "identity_rules": [
+          "等待通过公式字段编辑器补充身份规则。"
+        ],
+        "created_at": "2026-07-28T03:46:26.147Z"
+      },
+      "after": null
+    },
+    {
+      "id": "change.20260728045345683.wazdmi",
+      "timestamp": "2026-07-28T04:53:45.678Z",
+      "action": "delete_model_node",
+      "node_id": "prototype.custom-ms444miw-ro66d",
+      "node_name": "测试",
+      "node_type": "category_prototype",
+      "before": {
+        "id": "prototype.custom-ms444miw-ro66d",
+        "name": "测试",
+        "name_status": "working",
+        "type": "category_prototype",
+        "status": "working",
+        "order": 50,
+        "primary_mother_id": "mechanism.slot",
+        "composed_mother_ids": [],
+        "representative_product_ids": [],
+        "classification_axes": {},
+        "summary": "测试",
+        "definition": "测试",
+        "formula_changes": {
+          "P_t": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 P_t 有效结果；等待人工调整。",
+            "review_status": "confirmed",
+            "review_note": "",
+            "last_modified_at": "2026-07-28T03:45:17.663Z",
+            "confirmed_at": "2026-07-28T03:45:17.663Z"
+          },
+          "Pool_Symbol": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Random": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 Random 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Put": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 Put 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Show_TP": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C1": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 C1 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C2": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 C2 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "N": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 N 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "BD": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 BD 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          }
+        },
+        "identity_rules": [
+          "等待通过公式字段编辑器补充身份规则。"
+        ],
+        "created_at": "2026-07-28T03:45:14.502Z"
+      },
+      "after": null
+    },
+    {
+      "id": "change.20260728042530219.opb590",
+      "timestamp": "2026-07-28T04:25:30.217Z",
+      "action": "update_product_classification",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "before": {
+        "relation_types": [
+          "member"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4430m6-dycxc"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+    },
+    {
+      "id": "change.20260728035752095.gp46jf",
+      "timestamp": "2026-07-28T03:57:52.093Z",
+      "action": "update_product_classification",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.luck-be-a-landlord"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "after": {
+        "relation_types": [
+          "member"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+    },
+    {
+      "id": "change.20260728035701302.9jt0xv",
+      "timestamp": "2026-07-28T03:57:01.300Z",
+      "action": "update_product_classification",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.luck-be-a-landlord"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.luck-be-a-landlord"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+    },
+    {
+      "id": "change.20260728035526948.fqmwr5",
+      "timestamp": "2026-07-28T03:55:26.945Z",
+      "action": "update_product_classification",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4430m6-dycxc"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.luck-be-a-landlord"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+    },
+    {
+      "id": "change.20260728035200161.vdjtsf",
+      "timestamp": "2026-07-28T03:52:00.160Z",
+      "action": "update_product_classification",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4430m6-dycxc"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.custom-ms4430m6-dycxc"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+      },
+      "note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。 已从游戏库选择并建立“Slot改·数值型”下的品类变体《猫神牧场》。"
+    },
+    {
+      "id": "change.20260728035127713.v4c9jg",
+      "timestamp": "2026-07-28T03:51:27.711Z",
+      "action": "update_product_classification",
+      "product_id": "product.dog-and-goblin",
+      "product_name": "狗与哥布林",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-transform-combat"
+        ],
+        "variant_ids": [
+          "variant.endgame-of-devil"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+    },
+    {
+      "id": "change.20260728035028349.gkvmoy",
+      "timestamp": "2026-07-28T03:50:28.348Z",
+      "action": "update_product_classification",
+      "product_id": "product.balatro",
+      "product_name": "小丑牌",
+      "before": {
+        "relation_types": [
+          "member"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.slotbound-demo"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+    },
+    {
+      "id": "change.20260728034638180.4llww7",
+      "timestamp": "2026-07-28T03:46:38.179Z",
+      "action": "update",
+      "node_id": "prototype.custom-ms4465t0-hc04e",
+      "node_name": "测试 2",
+      "node_type": "category_prototype",
+      "field": "P_t",
+      "before": {
+        "operation": "inherit",
+        "constraint_label": "继承父级",
+        "summary": "测试 2暂时继承父级的 P_t 有效结果；等待人工调整。",
+        "review_status": "draft",
+        "review_note": ""
+      },
+      "after": {
+        "operation": "inherit",
+        "constraint_label": "继承父级",
+        "summary": "测试 2暂时继承父级的 P_t 有效结果；等待人工调整。",
+        "review_status": "draft",
+        "review_note": "",
+        "last_modified_at": "2026-07-28T03:46:38.179Z"
+      },
+      "note": ""
+    },
+    {
+      "id": "change.20260728034626149.9ekdra",
+      "timestamp": "2026-07-28T03:46:26.147Z",
+      "action": "create_model_node",
+      "node_id": "prototype.custom-ms4465t0-hc04e",
+      "node_name": "测试 2",
+      "node_type": "category_prototype",
+      "parent_id": "mechanism.slot",
+      "product_id": null,
+      "product_name": null,
+      "after": {
+        "id": "prototype.custom-ms4465t0-hc04e",
+        "name": "测试 2",
+        "name_status": "working",
+        "type": "category_prototype",
+        "status": "working",
+        "order": 60,
+        "primary_mother_id": "mechanism.slot",
+        "composed_mother_ids": [],
+        "representative_product_ids": [],
+        "classification_axes": {},
+        "summary": "测试 2 是",
+        "definition": "测试 2",
+        "formula_changes": {
+          "P_t": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 P_t 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Pool_Symbol": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Random": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 Random 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Put": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 Put 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Show_TP": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C1": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 C1 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C2": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 C2 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "N": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 N 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "BD": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试 2暂时继承父级的 BD 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          }
+        },
+        "identity_rules": [
+          "等待通过公式字段编辑器补充身份规则。"
+        ],
+        "created_at": "2026-07-28T03:46:26.147Z"
+      }
+    },
+    {
+      "id": "change.20260728034517664.f9itfp",
+      "timestamp": "2026-07-28T03:45:17.663Z",
+      "action": "confirm",
+      "node_id": "prototype.custom-ms444miw-ro66d",
+      "node_name": "测试",
+      "node_type": "category_prototype",
+      "field": "P_t",
+      "before": {
+        "operation": "inherit",
+        "constraint_label": "继承父级",
+        "summary": "测试暂时继承父级的 P_t 有效结果；等待人工调整。",
+        "review_status": "draft",
+        "review_note": ""
+      },
+      "after": {
+        "operation": "inherit",
+        "constraint_label": "继承父级",
+        "summary": "测试暂时继承父级的 P_t 有效结果；等待人工调整。",
+        "review_status": "confirmed",
+        "review_note": "",
+        "last_modified_at": "2026-07-28T03:45:17.663Z",
+        "confirmed_at": "2026-07-28T03:45:17.663Z"
+      },
+      "note": ""
+    },
+    {
+      "id": "change.20260728034514506.9evezh",
+      "timestamp": "2026-07-28T03:45:14.502Z",
+      "action": "create_model_node",
+      "node_id": "prototype.custom-ms444miw-ro66d",
+      "node_name": "测试",
+      "node_type": "category_prototype",
+      "parent_id": "mechanism.slot",
+      "product_id": null,
+      "product_name": null,
+      "after": {
+        "id": "prototype.custom-ms444miw-ro66d",
+        "name": "测试",
+        "name_status": "working",
+        "type": "category_prototype",
+        "status": "working",
+        "order": 50,
+        "primary_mother_id": "mechanism.slot",
+        "composed_mother_ids": [],
+        "representative_product_ids": [],
+        "classification_axes": {},
+        "summary": "测试",
+        "definition": "测试",
+        "formula_changes": {
+          "P_t": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 P_t 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Pool_Symbol": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Random": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 Random 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Put": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 Put 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Show_TP": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C1": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 C1 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C2": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 C2 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "N": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 N 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "BD": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "测试暂时继承父级的 BD 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          }
+        },
+        "identity_rules": [
+          "等待通过公式字段编辑器补充身份规则。"
+        ],
+        "created_at": "2026-07-28T03:45:14.502Z"
+      }
+    },
+    {
+      "id": "change.20260728034441400.qltls7",
+      "timestamp": "2026-07-28T03:44:41.398Z",
+      "action": "update_product_classification",
+      "product_id": "product.balatro",
+      "product_name": "小丑牌",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.slotbound-demo"
+        ],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "member"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+    },
+    {
+      "id": "change.20260728034359455.c9pau7",
+      "timestamp": "2026-07-28T03:43:59.451Z",
+      "action": "create_model_node",
+      "node_id": "variant.custom-ms4430m6-dycxc",
+      "node_name": "猫神牧场",
+      "node_type": "category_variant",
+      "parent_id": "prototype.slot-numeric",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "after": {
+        "id": "variant.custom-ms4430m6-dycxc",
+        "name": "猫神牧场",
+        "type": "category_variant",
+        "variant_role": "product_variant",
+        "status": "structure_ready_content_pending",
+        "order": 30,
+        "prototype_id": "prototype.slot-numeric",
+        "product_ids": [
+          "product.cat-god-ranch"
+        ],
+        "summary": "“Slot改·数值型”下的具体游戏变体：构筑动物牌组每日产出货币向猫神进贡的牧场 roguelike",
+        "definition": "本节点以《猫神牧场》作为“Slot改·数值型”下的具体游戏变体。创建时默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+        "formula_changes": {
+          "P_t": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 P_t 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Pool_Symbol": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Random": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 Random 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Put": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 Put 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "Show_TP": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C1": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 C1 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "C2": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 C2 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "N": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 N 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          },
+          "BD": {
+            "operation": "inherit",
+            "constraint_label": "继承父级",
+            "summary": "猫神牧场暂时继承父级的 BD 有效结果；等待人工调整。",
+            "review_status": "draft",
+            "review_note": ""
+          }
+        },
+        "inheritance_summary": {
+          "inherited_fields": 9,
+          "changed_fields": 0,
+          "note": "从游戏库产品建立，默认继承全部父级字段，等待人工比较和调整。"
+        },
+        "created_at": "2026-07-28T03:43:59.451Z"
+      }
+    },
+    {
+      "id": "change.20260728034307391.rwpl7m",
+      "timestamp": "2026-07-28T03:43:07.389Z",
+      "action": "update_product_classification",
+      "product_id": "product.balatro",
+      "product_name": "小丑牌",
+      "before": {
+        "relation_types": [],
+        "mother_ids": [],
+        "prototype_ids": [],
+        "variant_ids": [],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-plus-combat"
+        ],
+        "variant_ids": [
+          "variant.slotbound-demo"
+        ],
+        "classification_status": "unreviewed",
+        "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+      },
+      "note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。"
+    },
+    {
+      "id": "change.20260727154756000.cornerstone-variants",
+      "timestamp": "2026-07-27T15:47:56.000Z",
+      "action": "promote_cornerstone_products_to_variants",
+      "node_type": "category_variant",
+      "variant_ids": [
+        "variant.slotbound-demo",
+        "variant.cloverpit",
+        "variant.endgame-of-devil",
+        "variant.luck-be-a-landlord"
+      ],
+      "product_ids": [
+        "product.slotbound-demo",
+        "product.cloverpit",
+        "product.endgame-of-devil",
+        "product.luck-be-a-landlord"
+      ],
+      "note": "用户确认基石游戏应作为对应品类原型下的一种正式品类变体，计入变体数量，并与其他变体使用相同的公式继承、选择和详情交互。"
+    },
+    {
+      "id": "change.20260727141909963.4x0g65",
+      "timestamp": "2026-07-27T14:19:09.960Z",
+      "action": "update_product_classification",
+      "product_id": "product.lucky-mayor",
+      "product_name": "幸运市长",
+      "before": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.lucky-mayor"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认“幸运城市”与《幸运市长》是同一款游戏；以 Steam 官方名称《幸运市长》合并记录，并作为“Slot改·数值型”下的 0D 多重集品类变体实例。"
+      },
+      "after": {
+        "relation_types": [
+          "variant_instance"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [
+          "variant.lucky-mayor"
+        ],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认“幸运城市”与《幸运市长》是同一款游戏；以 Steam 官方名称《幸运市长》合并记录，并作为“Slot改·数值型”下的 0D 多重集品类变体实例。"
+      },
+      "note": "用户已确认“幸运城市”与《幸运市长》是同一款游戏；以 Steam 官方名称《幸运市长》合并记录，并作为“Slot改·数值型”下的 0D 多重集品类变体实例。"
+    },
+    {
+      "id": "change.20260727140651845.7zzqrp",
+      "timestamp": "2026-07-27T14:06:51.843Z",
+      "action": "update_product_classification",
+      "product_id": "product.cat-god-ranch",
+      "product_name": "猫神牧场",
+      "before": {
+        "relation_types": [
+          "member"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。"
+      },
+      "after": {
+        "relation_types": [
+          "member"
+        ],
+        "mother_ids": [
+          "mechanism.slot"
+        ],
+        "prototype_ids": [
+          "prototype.slot-numeric"
+        ],
+        "variant_ids": [],
+        "classification_status": "confirmed",
+        "classification_note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。"
+      },
+      "note": "用户已确认《猫神牧场》属于“Slot改·数值型”；当前作为该品类原型的成员产品，不单独建立品类变体。"
+    },
+    {
       "id": "change.20260726113354418.6ba7um",
       "timestamp": "2026-07-26T11:33:54.416Z",
       "action": "confirm",

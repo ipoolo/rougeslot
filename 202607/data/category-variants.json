@@ -1,35 +1,339 @@
 {
-  "version": "202607-draft.5",
+  "version": "202607-draft.7",
   "items": [
     {
-      "id": "variant.lucky-city",
-      "name": "幸运城市",
+      "id": "variant.slotbound-demo",
+      "name": "Slotbound Demo",
       "type": "category_variant",
-      "status": "structure_ready_content_pending",
+      "variant_role": "cornerstone",
+      "status": "reference_confirmed",
       "order": 10,
-      "prototype_id": "prototype.slot-numeric",
+      "prototype_id": "prototype.slot-plus-combat",
       "product_ids": [
-        "product.lucky-city"
+        "product.slotbound-demo"
       ],
-      "summary": "“Slot 数值型 - 幸运房东”的 0D 多重集变体：保留数值构筑循环，但不使用原型的 2D Slot 网格。",
-      "definition": "《幸运城市》继承“Slot 数值型 - 幸运房东”的可构筑池、数值产出与长期决策，但覆写原型的空间结构：Show_TP 为 0D 多重集，不建立二维位置与邻接关系。",
+      "summary": "“Slot+战斗型”的基石变体：作为品类公式比较基准，默认继承品类原型约束。",
+      "definition": "本节点以《Slotbound Demo》作为“Slot+战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
       "formula_changes": {
         "P_t": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承“Slot 数值型 - 幸运房东”的外层目标压力结构；《幸运城市》的具体目标、期限与失败代价等待继续拆解。",
+          "summary": "作为基石变体，继承“Slot+战斗型”的战斗目标压力；具体敌人、波次与失败条件见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+战斗型”的固定符号池身份；具体符号配置见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+战斗型”的 Slot Random；具体概率与抽取实现见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+战斗型”的自动 Put；具体落位表现见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+战斗型”的 2D Slot 网格；具体盘面尺寸见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+战斗型”的 Slot 基础协同；具体支付线规则见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+战斗型”的战斗结果演绎；具体单位与战斗时序见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+战斗型”的战斗间构筑周期；具体节奏见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+战斗型”的构筑决策范围；具体单位、道具与进化选择见产品公式观察。",
+          "review_status": "confirmed"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "基石变体用于把品类原型落到具体基石游戏；九个字段在图谱层全部继承，产品级实现细节见游戏库。"
+      },
+      "updated_at": "2026-07-28T06:52:49.097Z"
+    },
+    {
+      "id": "variant.cloverpit",
+      "name": "四叶草深渊",
+      "type": "category_variant",
+      "variant_role": "cornerstone",
+      "status": "reference_confirmed",
+      "order": 10,
+      "prototype_id": "prototype.slot-plus-numeric",
+      "product_ids": [
+        "product.cloverpit"
+      ],
+      "summary": "“Slot+数值型”的基石变体：作为品类公式比较基准，默认继承品类原型约束。",
+      "definition": "本节点以《四叶草深渊》作为“Slot+数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的数值目标压力；具体债务与期限见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的固定符号池身份；具体符号配置见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的 Slot Random；具体概率与抽取实现见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的自动 Put；具体落位表现见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的 2D Slot 网格；具体盘面尺寸见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的 Slot 基础协同；具体支付线规则见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的数值结果演绎；具体倍率、连击与护身符见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的数值阶段构筑周期；具体节奏见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot+数值型”的构筑决策范围；具体护身符、倍率与概率选择见产品公式观察。",
+          "review_status": "confirmed"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "基石变体用于把品类原型落到具体基石游戏；九个字段在图谱层全部继承，产品级实现细节见游戏库。"
+      },
+      "updated_at": "2026-07-28T06:52:49.110Z"
+    },
+    {
+      "id": "variant.endgame-of-devil",
+      "name": "魔王终局",
+      "type": "category_variant",
+      "variant_role": "cornerstone",
+      "status": "reference_confirmed",
+      "order": 10,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.endgame-of-devil"
+      ],
+      "summary": "“Slot改·战斗型”的基石变体：作为品类公式比较基准，默认继承品类原型约束。",
+      "definition": "本节点以《魔王终局》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”的战斗目标压力；具体敌人、波次与失败条件见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”的可构筑棋子／随从池；具体池内容见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”从当前构筑池抽取的职责；具体概率见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”的自动 Put；具体落位表现见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”的 2D 装置舞台；具体棋盘尺寸见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”的自有棋子与阵容协同；具体协同规则见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”的战斗结果演绎；具体战斗时序见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”的战斗间构筑周期；具体节奏见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·战斗型”的棋子、升级与阵容构筑；具体选项见产品公式观察。",
+          "review_status": "confirmed"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "基石变体用于把品类原型落到具体基石游戏；九个字段在图谱层全部继承，产品级实现细节见游戏库。"
+      },
+      "updated_at": "2026-07-28T06:52:49.119Z"
+    },
+    {
+      "id": "variant.luck-be-a-landlord",
+      "name": "幸运房东",
+      "type": "category_variant",
+      "variant_role": "cornerstone",
+      "status": "reference_confirmed",
+      "order": 10,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.luck-be-a-landlord"
+      ],
+      "summary": "“Slot改·数值型”的基石变体：作为品类公式比较基准，默认继承品类原型约束。",
+      "definition": "本节点以《幸运房东》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”的房租数值压力；具体房租、期限与失败条件见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”的可构筑符号池；具体符号与稀有度见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”从当前构筑池抽取的职责；具体概率见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”的自动 Put；具体落位表现见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”的 2D Slot 网格；具体盘面尺寸见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”的直接产出、阈值与邻接协同；具体符号规则见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”的道具数值演绎；具体道具修饰见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”的 N = 1 构筑周期；具体节奏见产品公式观察。",
+          "review_status": "confirmed"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "作为基石变体，继承“Slot改·数值型”的选符号、删符号与获得道具决策；具体选项见产品公式观察。",
+          "review_status": "confirmed"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "基石变体用于把品类原型落到具体基石游戏；九个字段在图谱层全部继承，产品级实现细节见游戏库。"
+      },
+      "updated_at": "2026-07-28T06:52:49.134Z"
+    },
+    {
+      "id": "variant.lucky-mayor",
+      "name": "幸运市长",
+      "type": "category_variant",
+      "status": "structure_ready_content_pending",
+      "order": 20,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.lucky-mayor"
+      ],
+      "summary": "“Slot改·数值型”下的具体游戏变体：招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
+      "definition": "本节点以《幸运市长》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承“Slot改·数值型”的外层数值目标压力；《幸运市长》的具体目标、期限与失败代价等待继续拆解。",
           "review_status": "draft",
           "review_note": ""
         },
         "Pool_Symbol": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+          "summary": "继承“Slot改·数值型”的可构筑符号池；具体变化待拆解。"
         },
         "Random": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+          "summary": "继承“Slot改·数值型”的动态池抽取职责；具体变化待拆解。"
         },
         "Put": {
           "operation": "override",
@@ -49,24 +353,1295 @@
         "C2": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+          "summary": "继承“Slot改·数值型”的数值结果演绎；具体变化待拆解。"
         },
         "N": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+          "summary": "继承“Slot改·数值型”的构筑周期；具体变化待拆解。"
         },
         "BD": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承“Slot 数值型 - 幸运房东”；具体变化待拆解。"
+          "summary": "继承“Slot改·数值型”的构筑决策；具体变化待拆解。"
         }
       },
       "inheritance_summary": {
         "inherited_fields": 6,
         "changed_fields": 3,
         "note": "已确认 Show_TP 为 0D 多重集，并同步覆写 Put 与 C1 的空间前提；其余差异继续按公式字段补充。"
-      }
+      },
+      "variant_role": "product_variant",
+      "updated_at": "2026-07-28T06:52:49.136Z"
+    },
+    {
+      "id": "variant.custom-ms4430m6-dycxc",
+      "name": "猫神牧场",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 30,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.cat-god-ranch"
+      ],
+      "summary": "“Slot改·数值型”下的具体游戏变体：构筑动物牌组每日产出货币向猫神进贡的牧场 roguelike",
+      "definition": "本节点以《猫神牧场》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "猫神牧场暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "从游戏库产品建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T03:43:59.451Z",
+      "updated_at": "2026-07-28T06:55:30.329Z"
+    },
+    {
+      "id": "variant.custom-ms46plmn-clrp8",
+      "name": "狗与哥布林",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785214652351,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.dog-and-goblin"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：spin 随机出棋子位置 + 150 棋子 combo 自动战斗",
+      "definition": "本节点以《狗与哥布林》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "狗与哥布林暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T04:57:32.351Z",
+      "updated_at": "2026-07-28T06:52:49.112Z"
+    },
+    {
+      "id": "variant.custom-ms4ag70p-7b1s4",
+      "name": "帝国轮盘",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785220931977,
+      "prototype_id": "prototype.slot-plus-numeric",
+      "product_ids": [
+        "product.spinera"
+      ],
+      "summary": "“Slot+数值型”下的具体游戏变体：老虎机 spin 产出资源，分配建造兵种与奇迹推动帝国科技树",
+      "definition": "本节点以《帝国轮盘》作为“Slot+数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "帝国轮盘暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:42:11.976Z",
+      "updated_at": "2026-07-28T06:52:49.104Z"
+    },
+    {
+      "id": "variant.custom-ms4atumr-muzwe",
+      "name": "死而符生",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569107,
+      "prototype_id": "prototype.slot-plus-numeric",
+      "product_ids": [
+        "product.runeborn"
+      ],
+      "summary": "“Slot+数值型”下的具体游戏变体：老虎机与牌组构建结合的 Roguelite，通过符文匹配、连接和遗物修饰形成大数值战斗结果。",
+      "definition": "本节点以《死而符生》作为“Slot+数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死而符生暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.107Z"
+    },
+    {
+      "id": "variant.custom-ms4atumz-i0j6x",
+      "name": "拉杆英雄",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569115,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.spin-hero"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：老虎机符号构筑驱动自动战斗，每局拉杆推进 roguelike 闯关",
+      "definition": "本节点以《拉杆英雄》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "拉杆英雄暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.115Z"
+    },
+    {
+      "id": "variant.custom-ms4atun1-t6nby",
+      "name": "命运转轮",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569117,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.slots-and-daggers"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：发生在老虎机装置中的复古奇幻 Roguelike，通过武器与功能符号的 Spin 结果推进战斗。",
+      "definition": "本节点以《命运转轮》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "命运转轮暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.117Z"
+    },
+    {
+      "id": "variant.custom-ms4atun6-6s54z",
+      "name": "幸运猎人",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569122,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.lucky-hunter"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：三消合并构筑棋子阵容，自走棋自动战斗对抗灾变怪物",
+      "definition": "本节点以《幸运猎人》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运猎人暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.122Z"
+    },
+    {
+      "id": "variant.custom-ms4atun8-bcmye",
+      "name": "幸运勇者",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569124,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.lucky-hero"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：武器装备化为符号，转动命运轮盘构筑组合击败敌人",
+      "definition": "本节点以《幸运勇者》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运勇者暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.124Z"
+    },
+    {
+      "id": "variant.custom-ms4atuna-iwolq",
+      "name": "轮作法",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569126,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.crop-rotation"
+      ],
+      "summary": "“Slot改·数值型”下的具体游戏变体：drafting 卡牌组建自动农场，自动结算还清贷款",
+      "definition": "本节点以《轮作法》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "轮作法暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.126Z"
+    },
+    {
+      "id": "variant.custom-ms4atunc-236pv",
+      "name": "死守危城",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569128,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.die-shou-wei-cheng"
+      ],
+      "summary": "“Slot改·数值型”下的具体游戏变体：构筑符号组合产出防御值抵挡僵尸潮的牌组构建塔防",
+      "definition": "本节点以《死守危城》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "死守危城暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.128Z"
+    },
+    {
+      "id": "variant.custom-ms4atune-6ml6f",
+      "name": "幸运大陆",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569130,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.luckland"
+      ],
+      "summary": "“Slot改·数值型”下的具体游戏变体：旋转棋盘格子蓄能触发卡牌效果，构筑卡组推进 roguelike 闯关",
+      "definition": "本节点以《幸运大陆》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运大陆暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.130Z"
+    },
+    {
+      "id": "variant.custom-ms4atung-qdotg",
+      "name": "幸运岛",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785221569132,
+      "prototype_id": "prototype.slot-numeric",
+      "product_ids": [
+        "product.lucky-island"
+      ],
+      "summary": "“Slot改·数值型”下的具体游戏变体：老虎机分派岛民工作产出资源，规划海岛建设应对 roguelike 事件",
+      "definition": "本节点以《幸运岛》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "幸运岛暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T06:52:49.132Z"
+    },
+    {
+      "id": "variant.custom-ms4blk7r-3gb76",
+      "name": "Rogue Slots",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785222861975,
+      "prototype_id": "prototype.slot-plus-combat",
+      "product_ids": [
+        "product.rogue-slots"
+      ],
+      "summary": "“Slot+战斗型”下的具体游戏变体：以老虎机作为地下城主的牌组构建 Roguelike，把武器、金币与诅咒遗物装入转轮，每次 Spin 触发攻击、能力和效果。",
+      "definition": "本节点以《Rogue Slots》作为“Slot+战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Rogue Slots暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T07:14:21.975Z"
+    },
+    {
+      "id": "variant.custom-ms4blk85-wj4pu",
+      "name": "Spinny Dungeon",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785222861989,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.spinny-dungeon"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：老虎机 Roguelike、牌组构建与自动战斗的结合；每次 Spin 后，武器、植物、魔法物品和伙伴会在棋盘上重新随机排列。",
+      "definition": "本节点以《Spinny Dungeon》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 P_t 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 Pool_Symbol 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 Random 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 Put 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 Show_TP 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 C1 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 C2 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 N 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承父级",
+          "summary": "Spinny Dungeon暂时继承父级的 BD 有效结果；等待人工调整。",
+          "review_status": "draft",
+          "review_note": ""
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 9,
+        "changed_fields": 0,
+        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+      },
+      "created_at": "2026-07-28T07:14:21.989Z"
+    },
+    {
+      "id": "variant.slot-or-not",
+      "name": "Slot or Not",
+      "type": "category_variant",
+      "variant_role": "product_variant",
+      "status": "structure_ready_content_pending",
+      "order": 1785223000000,
+      "prototype_id": "prototype.slot-transform-combat",
+      "product_ids": [
+        "product.slot-or-not"
+      ],
+      "summary": "“Slot改·战斗型”下的具体游戏变体：把单次 Spin 的 Random 拆成随机候选与玩家主动选择两个步骤。",
+      "definition": "本节点以《Slot or Not》作为“Slot改·战斗型”下的具体游戏变体。它保留随机性，但不再让 Random 直接产生最终 SingleSpin_Symbol，而是先形成 Choice_Pool，再由玩家主动选择。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承战斗压力",
+          "summary": "继承品类原型的敌我战斗与失败压力；具体关卡周期等待继续拆解。",
+          "review_status": "draft"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承可构筑装备池",
+          "summary": "继承品类原型的可构筑池，具体由玩家携带并投入抽取池的装备组成。",
+          "review_status": "pending"
+        },
+        "Random": {
+          "operation": "override",
+          "constraint_label": "候选池式 Random",
+          "summary": "把“直接随机输出”覆写为“随机生成 Choice_Pool → 玩家主动选择 → 形成 SingleSpin_Symbol”。",
+          "review_status": "confirmed"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承结果安置",
+          "summary": "玩家选择完成后，结果如何进入 Slot 战斗舞台仍继承品类原型，具体表现等待确认。",
+          "review_status": "draft"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承战斗承载",
+          "summary": "继承品类原型的装置与战斗承载关系，具体拓扑等待逐局确认。",
+          "review_status": "draft"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承装备协同",
+          "summary": "以装备类型与组合形成自有基础协同，具体成立条件等待逐局确认。",
+          "review_status": "draft"
+        },
+        "C2": {
+          "operation": "inherit",
+          "constraint_label": "继承战斗演绎",
+          "summary": "把本次选择与组合结果转译为攻击、防御和敌我状态变化。",
+          "review_status": "pending"
+        },
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承构筑周期",
+          "summary": "触发一次构筑决策前的连续 Spin 数量等待逐局确认。",
+          "review_status": "draft"
+        },
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承装备构筑",
+          "summary": "通过获得装备与饰品持续改变后续 Pool_Symbol、协同和战斗能力。",
+          "review_status": "pending"
+        }
+      },
+      "inheritance_summary": {
+        "inherited_fields": 8,
+        "changed_fields": 1,
+        "note": "当前确认的核心创新落在 Random：随机只决定候选范围，玩家决定最终 SingleSpin_Symbol。"
+      },
+      "created_at": "2026-07-28T12:00:00.000Z"
     }
   ]
 }

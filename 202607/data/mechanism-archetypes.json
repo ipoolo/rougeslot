@@ -1,14 +1,58 @@
 {
-  "version": "202607-draft.5",
+  "version": "202607-draft.6",
   "items": [
     {
       "id": "mechanism.slot",
-      "name": "Slot",
+      "name": "Slot母体",
       "type": "mechanism_archetype",
       "status": "working",
       "order": 10,
-      "summary": "以符号池、随机抽取和装置化承载空间为先验的机制母型。",
-      "definition": "Slot 不是某一款具体游戏，而是一组玩家已经具备认知先验的装置规则：从符号池产生随机结果，由装置完成主要放置，再在承载空间中识别符号协同。",
+      "summary": "以拉霸机、老虎机与赌博机长期传播所形成的大众认知为先验的机制母型。",
+      "definition": "Slot 母体不是某一款具体游戏，而是一组建立在广泛社会认知之上的装置规则。拉霸机、老虎机与赌博机经过长期传播，使大量玩家即使没有接受专门教学，也能预期“启动装置 → 随机结果停落 → 按符号组合判奖”的基本过程。本模型把这套强先验认知抽象为：从符号池产生随机结果，由装置完成主要放置，再在承载空间中识别符号协同。",
+      "visual_evidence": [
+        {
+          "id": "mechanical-origin",
+          "image_url": "./assets/media/slot-archetype/liberty-bell.jpg",
+          "image_fit": "contain",
+          "alt": "一台经典 Liberty Bell 机械拉霸机，正面包含拉杆、三个实体卷轴与符号窗口",
+          "eyebrow": "机械原型",
+          "title": "拉杆、卷轴与实体停落",
+          "caption": "早期机械 Slot 已经把 Random 与 Put 变成可观察的装置动作：玩家启动拉杆，等待卷轴逐个停止，再读取符号组合。",
+          "source_name": "Nazox · Wikimedia Commons",
+          "source_url": "https://commons.wikimedia.org/wiki/File:Liberty_bell.jpg",
+          "license": "CC BY-SA 3.0"
+        },
+        {
+          "id": "mass-diffusion",
+          "image_url": "./assets/media/slot-archetype/casino-slots.jpg",
+          "image_fit": "cover",
+          "alt": "赌场内成排摆放的现代电子 Slot 机器，屏幕和控制面板呈现多种主题",
+          "eyebrow": "大众传播",
+          "title": "外观变化，认知顺序不变",
+          "caption": "现代电子 Slot 可以更换主题、屏幕与反馈方式，但仍保留“启动 → 转动 → 停落 → 判奖”的共同认知序列。",
+          "source_name": "Raul654 · Wikimedia Commons",
+          "source_url": "https://commons.wikimedia.org/wiki/File:Casino_slots.jpg",
+          "license": "CC BY-SA 3.0"
+        }
+      ],
+      "prior_recognition_sequence": [
+        {
+          "label": "启动装置",
+          "detail": "拉杆或按钮"
+        },
+        {
+          "label": "等待停落",
+          "detail": "随机过程可见"
+        },
+        {
+          "label": "读取组合",
+          "detail": "符号与支付线"
+        },
+        {
+          "label": "判断好坏",
+          "detail": "无需重新学习"
+        }
+      ],
       "formula_constraints": {
         "P_t": {
           "operation": "default",

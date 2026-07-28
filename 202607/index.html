@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、品类变体图谱。">
   <title>持续爱干 · 游戏体验模型与原型图谱</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260726-29">
+  <link rel="stylesheet" href="./assets/styles.css?v=20260728-4">
+  <link rel="stylesheet" href="./assets/insights.css?v=20260728-7">
+  <link rel="stylesheet" href="./assets/ecosystem.css?v=20260728-21">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -21,9 +23,11 @@
     <nav class="main-nav" aria-label="主要导航">
       <a href="#model" data-nav="model">体验模型</a>
       <a href="#atlas" data-nav="atlas">原型图谱</a>
+      <a href="#ecosystem" data-nav="ecosystem">品类生态</a>
       <a href="#library" data-nav="library">游戏库</a>
+      <a href="#insights" data-nav="insights">核心洞察</a>
     </nav>
-    <span class="version-label">202607 · draft.24</span>
+    <span class="version-label">202607 · draft.27</span>
   </header>
 
   <main id="main">
@@ -74,7 +78,7 @@
                 <small>协同识别 · 结算</small>
               </span>
               <span class="formula-group-row">
-                <span class="formula-stage stage-two">Combo<small>(C₁ → C₂?) @ Show_TP</small></span>
+                <span class="formula-stage stage-two">Combo<small>(C₁ → C₂) @ Show_TP</small></span>
               </span>
             </span>
             <span class="formula-bracket">]ₙ</span>
@@ -447,10 +451,6 @@
           <p class="eyebrow">02 · 体验模型的抽象架构</p>
           <h2>三个体验阶段：<br>揭晓 → 结算 → 构筑</h2>
         </div>
-        <p>
-          P(t) 作为可选外层条件包裹 Random、Put、Combo 与 BD；
-          内部玩家体验仍然归纳为揭晓、结算与构筑三个阶段。
-        </p>
       </div>
 
       <section class="experience-timeline-shell" id="experience-timeline" aria-labelledby="experience-timeline-title">
@@ -561,7 +561,7 @@
             <span class="peak-tag">多巴胺第二峰</span>
           </div>
           <h3>协同识别与结算</h3>
-          <code>Combo(C₁ → C₂?)</code>
+          <code>Combo(C₁ → C₂)</code>
           <button type="button" class="stage-visual stage-visual-settle"
             data-experience-preset="settle" aria-pressed="false"
             aria-label="聚焦结算阶段：识别符号协同并生成单次结果">
@@ -662,12 +662,13 @@
         <p>
           这不是一条固定的 Slot 链。每个父节点都可以拥有多个子节点；
           每条分支仍然回到同一组体验公式字段，记录自己新增或改变的约束。
+          Slot 母体目前先按“怎样继承核心 × 结果怎样表现”分成四个品类原型。
         </p>
       </div>
 
       <div class="atlas-method-formula" aria-label="原型图谱共同继承的体验公式">
         <span>共同分析底座</span>
-        <strong>P(t) ⟦ [ Random @ Pool_Symbol → Put @ Show_TP → Combo(C₁ → C₂?) @ Show_TP ]ₙ → BD ⟧</strong>
+        <strong>P(t) ⟦ [ Random @ Pool_Symbol → Put @ Show_TP → Combo(C₁ → C₂) @ Show_TP ]ₙ → BD ⟧</strong>
         <small>P(t) 是可选外层目标压力；每条分支都要说明它是否启用、如何检查，以及它与 N 的区别。</small>
       </div>
 
@@ -733,14 +734,14 @@
           </header>
           <div class="cardinality-node-stack">
             <article class="cardinality-node is-recorded">
-              <small>Slot 下当前已录入</small>
-              <strong>Slot 数值型 - 幸运房东</strong>
-              <p>把 Slot 扩展为可构筑符号池、数值协同与持续 BD。</p>
+              <small>Slot 母体下当前已录入 4 个</small>
+              <strong>Slot+／Slot改 × 战斗／数值</strong>
+              <p>先区分是否改写 Slot 核心，再区分结果采用战斗还是数值表现。</p>
             </article>
             <article class="cardinality-node is-placeholder">
               <small>未来扩展位置</small>
               <strong>Slot 的其他品类原型</strong>
-              <p>同一母型可以按结果系统与核心循环继续分化。</p>
+              <p>二维矩阵不是上限；新的核心继承方式或结果模式仍可继续增加。</p>
             </article>
           </div>
         </section>
@@ -760,7 +761,7 @@
           <div class="cardinality-node-stack">
             <article class="cardinality-node is-recorded">
               <small>当前已录入</small>
-              <strong>幸运城市</strong>
+              <strong>幸运市长</strong>
               <p>继承数值构筑，但把 Show_TP 覆写为 0D 多重集。</p>
             </article>
             <article class="cardinality-node is-placeholder">
@@ -772,24 +773,43 @@
         </section>
       </div>
 
+      <section class="slot-prototype-system" aria-labelledby="slot-prototype-system-title">
+        <header>
+          <div>
+            <span>SLOT PROTOTYPE SYSTEM · 2 × 2</span>
+            <h3 id="slot-prototype-system-title">Slot 母体怎样分成四个品类原型</h3>
+          </div>
+          <p>
+            纵向看“是否改写 Slot 核心”，横向看“结果如何表现与验证”。
+            C₂ 负责结果演绎；P(t) 负责判断结果是否足够。
+          </p>
+        </header>
+        <div class="slot-prototype-matrix" id="slot-prototype-matrix" aria-label="Slot 母体四品类原型矩阵">
+          <p class="loading-copy">正在载入四个品类原型…</p>
+        </div>
+        <div class="slot-prototype-matrix-info" id="slot-prototype-matrix-info" aria-live="polite">
+          <p>点击任一品类原型，查看它继承和改变了哪些公式字段。</p>
+        </div>
+      </section>
+
       <div class="atlas-example-path">
         <div>
-          <span>当前数据库只录入的一条示例路径</span>
-          <strong>它用来演示分析方法，不代表图谱只能这样生长。</strong>
+          <span>当前数据库的 Slot 核心分支</span>
+          <strong>四款基石游戏分别定义四个品类原型；品类变体继续从对应原型向下生长。</strong>
         </div>
-        <p>
-          <b>双峰多巴胺</b><i>→</i>
-          <b>Slot母体</b><i>→</i>
-          <b>Slot 数值型 - 幸运房东</b><i>→</i>
-          <b>幸运城市</b>
-        </p>
+        <div class="atlas-example-branches">
+          <p><b>Slot+战斗型</b><i>→</i><b>Slotbound</b></p>
+          <p><b>Slot+数值型</b><i>→</i><b>四叶草深渊</b></p>
+          <p><b>Slot改·战斗型</b><i>→</i><b>魔王终局</b></p>
+          <p><b>Slot改·数值型</b><i>→</i><b>幸运房东</b><i>→</i><b>幸运市长</b></p>
+        </div>
       </div>
 
       <div class="atlas-method-principle">
         <strong>分析规则</strong>
         <p>
           每个下层节点必须逐字段声明：继承、固定、收窄、扩展、覆写或禁用；同一父节点下面可以并列存在多个子节点。
-          具体产品作为实例与分析证据进入游戏库，不额外制造一层继承关系。
+          基石游戏与代表游戏作为原型的提炼来源和分析证据进入游戏库，不额外制造一层继承关系。
         </p>
       </div>
     </section>
@@ -903,6 +923,33 @@
     </section>
     </div>
 
+    <div class="tab-page ecosystem-page" data-tab-page="ecosystem" hidden>
+      <section class="section ecosystem-section" id="ecosystem-content">
+        <div class="section-heading ecosystem-heading">
+          <div>
+            <p class="eyebrow">00 · 品类生态分析</p>
+            <h1>同一品类原型内，<br>产品分别改了什么？</h1>
+          </div>
+          <p>
+            先以品类基石产品作为公式基准，再横向比较成员产品修改的字段；
+            最后把主要变化压缩到二维坐标，观察已有聚类与尚未占据的生态位。
+          </p>
+        </div>
+
+        <section class="ecosystem-prototype-picker" aria-labelledby="ecosystem-picker-title">
+          <header>
+            <span>01 · 选择品类原型</span>
+            <h2 id="ecosystem-picker-title">每个品类拥有独立的比较空间</h2>
+          </header>
+          <div id="ecosystem-prototype-list" class="ecosystem-prototype-list"></div>
+        </section>
+
+        <section class="ecosystem-workbench" id="ecosystem-workbench" aria-live="polite">
+          <p class="loading-copy">正在载入品类生态数据…</p>
+        </section>
+      </section>
+    </div>
+
     <div class="tab-page" data-tab-page="library" hidden>
     <section class="section library-section" id="library-content">
       <div class="section-heading library-heading">
@@ -943,6 +990,11 @@
           <span>03</span>
           <strong>待确认队列</strong>
           <small>集中完成人工确认</small>
+        </button>
+        <button type="button" data-library-view="graph" aria-pressed="false">
+          <span>04</span>
+          <strong>图谱管理</strong>
+          <small>管理母型、原型与游戏归属</small>
         </button>
       </nav>
 
@@ -1028,7 +1080,373 @@
           <p class="loading-copy">正在整理待确认内容…</p>
         </div>
       </section>
+
+      <section class="library-panel" data-library-panel="graph" aria-labelledby="graph-manager-title" hidden>
+        <div class="library-panel-head">
+          <div>
+            <p class="eyebrow">PROTOTYPE GRAPH MANAGER</p>
+            <h3 id="graph-manager-title">图谱节点与游戏归属管理</h3>
+            <p>机制母型与品类原型在这里增、删、改、查；具体游戏可在这里或游戏目录中设置所属原型与基石／变体角色，品类变体映射由系统自动生成。</p>
+          </div>
+          <button type="button" class="button button-primary" data-create-node="mechanism_archetype">
+            + 新建机制母型
+          </button>
+        </div>
+        <div class="graph-manager" id="graph-manager">
+          <p class="loading-copy">正在载入图谱结构…</p>
+        </div>
+      </section>
     </section>
+    </div>
+
+    <div class="tab-page" data-tab-page="insights" hidden>
+      <section class="section insights-section" id="insights-content">
+        <div class="insights-hero">
+          <div>
+            <p class="eyebrow">00 · 核心洞察总览</p>
+            <h1>C₁ 立即可读，<br><em>C₂ 二次揭晓</em></h1>
+          </div>
+          <div class="insights-thesis">
+            <span>总原则</span>
+            <strong>学习负责放大，不负责放行</strong>
+            <p>
+              玩家应当依靠先验知识直接进入最小爽环；新的规则、构筑和策略可以放大结果，
+              但不能挡在“抽取 → 看见 → 识别好坏”的入口。
+            </p>
+          </div>
+        </div>
+
+        <section class="insight-model-shell" id="insight-model"
+          aria-labelledby="insight-model-title">
+          <div class="insight-model-head">
+            <div>
+              <span>CANONICAL INSIGHT MAP</span>
+              <h2 id="insight-model-title">最小爽环与第二次开奖</h2>
+            </div>
+            <div class="insight-model-controls" aria-label="核心洞察视角">
+              <button type="button" data-insight-preset="all" aria-pressed="true">总原则</button>
+              <button type="button" data-insight-preset="c1" aria-pressed="false">洞察 1 · C₁</button>
+              <button type="button" data-insight-preset="c2" aria-pressed="false">洞察 2 · C₂</button>
+              <button type="button" data-insight-preset="hybrid" aria-pressed="false">高风险 · Slot改+战斗</button>
+            </div>
+          </div>
+
+          <div class="insight-canonical-map" aria-label="C₁ 即时识别与 C₂ 二次揭晓的完整关系">
+            <section class="insight-zone insight-zone-first" data-insight-zone="first-peak">
+              <header>
+                <span>多巴胺峰值 ①</span>
+                <strong>先验驱动的即时识别</strong>
+              </header>
+              <div class="insight-node-row">
+                <button type="button" class="insight-node node-prior"
+                  data-insight-node="prior" data-insight-select="c1" aria-pressed="false">
+                  <small>已有认知</small>
+                  <strong>先验知识</strong>
+                  <span>无需教学即可调用</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="prior-reveal" aria-hidden="true">→</i>
+                <button type="button" class="insight-node node-reveal"
+                  data-insight-node="reveal" data-insight-select="c1" aria-pressed="false">
+                  <small>装置揭晓</small>
+                  <strong>Random + Put</strong>
+                  <span>抽到什么、怎样呈现</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="reveal-c1" aria-hidden="true">→</i>
+                <button type="button" class="insight-node node-c1"
+                  data-insight-node="c1" data-insight-select="c1" aria-pressed="false">
+                  <small>基础协同</small>
+                  <strong>C₁ · 看懂好坏</strong>
+                  <span>第一眼形成“大奖认知”</span>
+                </button>
+              </div>
+              <p>这里不应该插入必须先学会才能继续的规则。</p>
+            </section>
+
+            <i class="insight-edge insight-edge-major"
+              data-insight-edge="c1-c2" aria-hidden="true">→</i>
+
+            <section class="insight-zone insight-zone-second" data-insight-zone="second-peak">
+              <header>
+                <span>多巴胺峰值 ②</span>
+                <strong>不确定结果的阶段性揭晓</strong>
+              </header>
+              <div class="insight-node-row">
+                <button type="button" class="insight-node node-c2"
+                  data-insight-node="c2" data-insight-select="c2" aria-pressed="false">
+                  <small>结果演绎</small>
+                  <strong>C₂ · 开奖过程</strong>
+                  <span>预测不断被过程更新</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="c2-result" aria-hidden="true">→</i>
+                <button type="button" class="insight-node node-result"
+                  data-insight-node="result" data-insight-select="c2" aria-pressed="false">
+                  <small>最终答案</small>
+                  <strong>Spin_Result</strong>
+                  <span>悬念在这里封闭</span>
+                </button>
+              </div>
+              <p>只有动画而没有主观不确定性，不足以形成第二次开奖。</p>
+            </section>
+
+            <section class="insight-zone insight-zone-long" data-insight-zone="long-cycle">
+              <header>
+                <span>结果之后 · 长循环放大器</span>
+                <strong>学习、构筑与压力验证不能堵在最小爽环入口</strong>
+              </header>
+              <div class="insight-long-flow">
+                <button type="button" class="insight-node node-pressure"
+                  data-insight-node="pressure" data-insight-select="all" aria-pressed="false">
+                  <small>够不够</small>
+                  <strong>P(t) · 压力验证</strong>
+                </button>
+                <i class="insight-edge" data-insight-edge="result-pressure" aria-hidden="true">→</i>
+                <button type="button" class="insight-node node-learning"
+                  data-insight-node="learning" data-insight-select="c1" aria-pressed="false">
+                  <small>结果之后</small>
+                  <strong>学习／构筑／BD</strong>
+                </button>
+                <i class="insight-edge" data-insight-edge="learning-next" aria-hidden="true">→</i>
+                <span class="insight-next-cycle">放大下一轮</span>
+              </div>
+            </section>
+          </div>
+
+          <div class="insight-selection-info" data-insight-info aria-live="polite">
+            <span data-insight-info-label>总原则</span>
+            <div>
+              <strong data-insight-info-title>C₁ 负责立即可读，C₂ 负责保留不确定性并二次揭晓。</strong>
+              <p data-insight-info-copy>
+                学习、构筑和压力验证位于结果之后或循环外层，用来放大体验，不应成为进入最小爽环的通行证。
+              </p>
+              <small data-insight-info-boundary>
+                边界：C₂ 负责结果如何被演绎；P(t) 负责判断最终结果是否足够。
+              </small>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="section insights-section insight-principle-section" id="insight-prior">
+        <div class="section-heading insight-heading">
+          <div>
+            <p class="eyebrow">01 · 洞察一</p>
+            <h2>最小爽环不可被<br>学习成本阻断</h2>
+          </div>
+          <p>
+            Slot改 可以替换传统支付线，但新 C₁ 必须继续借用常识、物理关系或成熟品类认知，
+            让玩家不用回忆教程也能判断本次抽取得好不好。
+          </p>
+        </div>
+
+        <div class="prior-case-grid">
+          <article class="prior-case-card prior-case-good">
+            <header>
+              <span>可读样板</span>
+              <strong>《幸运房东》</strong>
+            </header>
+            <div class="prior-mini-map map-adjacency" aria-label="二维邻近协同示意">
+              <i>🐝</i><i>🌻</i><i>🐱</i>
+              <i>🌻</i><i class="is-hit">🐝</i><i>🥛</i>
+              <i>🍒</i><i>🐱</i><i class="is-hit">🥛</i>
+            </div>
+            <h3>改写支付线，但借用了现实世界的关系</h3>
+            <p>
+              相邻、数量、猫与牛奶、蜜蜂与花等关系可以被快速识别。
+              玩家先看懂基础协同，再逐步学习道具和例外。
+            </p>
+            <footer><b>C₁变化</b><span>支付线 → 2D 邻近／语义协同</span></footer>
+          </article>
+
+          <article class="prior-case-card prior-case-risk">
+            <header>
+              <span>认知风险</span>
+              <strong>《幸运市长》</strong>
+            </header>
+            <div class="prior-mini-map map-regions" aria-label="四个一维区域与资源协同示意">
+              <div><i>A</i><i>→</i><i>B</i><i>→</i><i>C</i></div>
+              <div><i>D</i><i>→</i><i>E</i><i>→</i><i>F</i></div>
+              <div><i>G</i><i>→</i><i>H</i><i>→</i><i>I</i></div>
+              <div><i>J</i><i>→</i><i>K</i><i>→</i><i>L</i></div>
+              <b>资源跨区修饰</b>
+            </div>
+            <h3>四个 1D 区域与额外资源协同同时进入 C₁</h3>
+            <p>
+              玩家需要跨区域记忆规则，基础大奖不再能被第一眼识别。
+              如果资源只是在基础协同后修改结果，应优先下沉到 C₂。
+            </p>
+            <footer><b>C₁风险</b><span>区域数量 × 关系层数 × 跨区依赖</span></footer>
+          </article>
+        </div>
+
+        <div class="insight-rule-banner">
+          <span>规则 01</span>
+          <strong>可以改 Slot 的规则，但不能改掉 Slot 的即时可读性。</strong>
+          <p>学习内容应解释“怎样变得更强”，而不是解释“刚才到底有没有中奖”。</p>
+        </div>
+      </section>
+
+      <section class="section insights-section insight-reveal-section" id="insight-reveal">
+        <div class="section-heading insight-heading">
+          <div>
+            <p class="eyebrow">02 · 洞察二</p>
+            <h2>C₂ 是基于 C₁ 结果的二次揭晓<br>不是结算动画，也不是重新开奖</h2>
+          </div>
+          <p>
+            C₁ 首先建立本次结果的价值锚点，让玩家知道“这次大概抽得怎么样”。
+            C₂ 不推翻或重置 C₁，也不引入一套与 C₁ 无关的新结果；它是在 C₁ 已经确定的基础上，
+            通过过程逐步释放结果信息，让玩家持续预测：“这次好结果，最终能兑现得多好？”
+          </p>
+        </div>
+
+        <div class="c2-reveal-definition" aria-label="C₁、C₂ 与最终结果的关系">
+          <div class="c2-reveal-flow">
+            <div class="c2-reveal-step c2-step-anchor">
+              <span>C₁</span>
+              <strong>建立价值锚点</strong>
+              <small>我已经知道“这次抽得不错”</small>
+            </div>
+            <i aria-hidden="true">→</i>
+            <div class="c2-reveal-step c2-step-reveal">
+              <span>C₂</span>
+              <strong>二次揭晓 C₁ 的兑现程度</strong>
+              <small>但还不知道“最终能兑现得多好”</small>
+            </div>
+            <i aria-hidden="true">→</i>
+            <div class="c2-reveal-step c2-step-result">
+              <span>Spin_Result</span>
+              <strong>最终封闭</strong>
+              <small>结果被完整确认</small>
+            </div>
+          </div>
+          <div class="c2-boundary-grid">
+            <p><b>只是结算动画</b>只有确定结果的播放，没有期待。</p>
+            <p><b>接近重新开奖</b>推翻 C₁，或引入与 C₁ 无关的新随机。</p>
+            <p><b>有效的 C₂</b>保留不确定性，但它必须来自 C₁ 结果的后续展开。</p>
+          </div>
+        </div>
+
+        <div class="reveal-case-group reveal-case-group-bad">
+          <div class="reveal-case-group-heading">
+            <span>BAD CASE</span>
+            <h3>没有延续 C₁ 的二次揭晓</h3>
+            <p>结果过早封闭，只剩答案播放；转入策略规划，也无法延续结果期待。</p>
+          </div>
+          <div class="reveal-case-grid reveal-case-grid-three">
+            <article class="reveal-case-card reveal-case-bad">
+              <header><span>BAD CASE 01</span><strong>拉杆英雄 · Slot改</strong></header>
+              <div class="reveal-mini-flow">
+                <b>12 攻击</b><i>+</i><b>8 增益</b><i>=</i><strong>20 伤害</strong>
+              </div>
+              <h3>确定答案的播放</h3>
+              <p>
+                血量与攻击力已经直接展示，玩家在战斗开始前就能算出结果。
+                后续表演没有预测变化，只是在播放一个已经知道的答案。
+              </p>
+              <footer>第二峰风险：<b>主观不确定性接近于零</b></footer>
+            </article>
+
+            <article class="reveal-case-card reveal-case-bad">
+              <header><span>BAD CASE 02</span><strong>帝国轮盘 · Slot+数值</strong></header>
+              <div class="reveal-mini-flow strategy-flow">
+                <b>Slot 产出</b><i>→</i><b>资源数值</b><i>→</i><b>文明策略</b><i>→</i><strong>规划决策</strong>
+              </div>
+              <h3>策略接管了 C₂，却没有再次开奖</h3>
+              <p>
+                它属于 Slot+数值型变体，但 C₂主要表现为类文明的资源分配与策略经营。
+                玩家进入的是分析和规划状态，而不是等待未知结果逐步揭晓，因此第二峰表现较弱。
+              </p>
+              <footer>第二峰风险：<b>有策略深度，但缺少结果期待过程</b></footer>
+            </article>
+
+            <article class="reveal-case-card reveal-case-bad">
+              <header><span>BAD CASE 03</span><strong>PegLotto!</strong></header>
+              <div class="reveal-mini-flow pinball-flow">
+                <b>C₁ 结果</b><i>→</i><b>重置起点</b><i>→</i><b>弹珠长时演算</b><i>→</i><strong>新结果</strong>
+              </div>
+              <h3>C₂ 推翻 C₁，接近重新开奖</h3>
+              <p>
+                C₁ 建立的结果价值没有被延续；进入弹珠机后，结果由新的弹射过程重新决定。
+                表演时间长、路径与碰撞复杂，玩家更像开始第二场独立开奖，而不是等待 C₁ 兑现。
+              </p>
+              <footer>第二峰风险：<b>C₁ 价值被重置 + 过程过长</b></footer>
+            </article>
+          </div>
+        </div>
+
+        <div class="reveal-case-group reveal-case-group-good">
+          <div class="reveal-case-group-heading">
+            <span>GOOD CASE</span>
+            <h3>沿 C₁ 结果继续揭晓</h3>
+            <p>每一步都承接 C₁，逐步揭晓兑现程度，直到 Spin_Result 封闭。</p>
+          </div>
+          <div class="reveal-case-grid">
+            <article class="reveal-case-card reveal-case-reference">
+              <header><span>GOOD CASE 01</span><strong>Slotbound · Slot+</strong></header>
+              <div class="reveal-mini-flow battle-timeline">
+                <b>多兵种</b><i>→</i><b>位置／顺序</b><i>→</i><b>局部交互</b><i>→</i><strong>胜负？</strong>
+              </div>
+              <h3>紧凑的二维战斗时序</h3>
+              <p>
+                传统 Slot C₁继续承担第一峰；C₂不直接提前展示全部数值，
+                而是通过战斗过程分批揭晓结果，让胜负预测持续变化。
+              </p>
+              <footer>第二峰来源：<b>可理解因果 + 尚未封闭的结果</b></footer>
+            </article>
+
+            <article class="reveal-case-card reveal-case-good">
+              <header><span>GOOD CASE 02</span><strong>魔王终局 · Slot改</strong></header>
+              <div class="reveal-mini-flow grid-battle">
+                <b>阵形</b><i>→</i><b>相邻交战</b><i>→</i><b>连续反应</b><i>→</i><strong>结果</strong>
+              </div>
+              <h3>把数值加减变成空间战斗揭晓</h3>
+              <p>
+                C₂的二维紧凑战斗强化了第二峰；但战斗与组合共用棋盘，
+                会提高 C₁的大奖识别复杂度，因此必须控制棋盘与关系规模。
+              </p>
+              <footer>核心取舍：<b>强化 C₂，同时保护 C₁</b></footer>
+            </article>
+          </div>
+        </div>
+
+        <div class="insight-rule-banner rule-banner-c2">
+          <span>规则 02</span>
+          <strong>C₂ 必须继承 C₁ 的价值锚点，并逐步揭晓它最终能兑现到什么程度。</strong>
+          <p>第二峰来自“我已经知道自己抽得不错，但还不知道最终能兑现得多好”，而不是系统突然增加另一套随机结果。</p>
+        </div>
+      </section>
+
+      <section class="section insights-section insight-check-section" id="insight-checks">
+        <div class="section-heading insight-heading">
+          <div>
+            <p class="eyebrow">03 · 设计检查</p>
+            <h2>把洞察变成<br>可验证的问题</h2>
+          </div>
+          <p>这些问题用于检查新原型，而不是把洞察固化成不可调整的数值上限。</p>
+        </div>
+
+        <div class="insight-check-grid">
+          <article>
+            <span>CHECK 01 · C₁</span>
+            <h3>第一次看就能判断好坏吗？</h3>
+            <p>不解释规则，让玩家完成一次 Spin：他能否指出哪里形成了基础协同、为什么这是好结果？</p>
+          </article>
+          <article>
+            <span>CHECK 02 · C₂</span>
+            <h3>暂停在 C₂开始前，答案已经算完了吗？</h3>
+            <p>如果玩家能够直接准确报出最终结果，后续表演大概率只是结算动画，而不是二次揭晓。</p>
+          </article>
+          <article>
+            <span>CHECK 03 · 认知预算</span>
+            <h3>棋盘是否还处在不耗力观察区？</h3>
+            <p>共同检查棋盘大小、符号类型、关系层数与跨区域依赖；Slot改+战斗尤其需要控制这些变量。</p>
+          </article>
+          <article>
+            <span>CHECK 04 · 边界</span>
+            <h3>复杂规则真的必须属于 C₁吗？</h3>
+            <p>决定基础协同是否成立的规则留在 C₁；在基础结果之上进行修饰或转译的规则优先归入 C₂。</p>
+          </article>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -1098,6 +1516,116 @@
     </article>
   </dialog>
 
+  <dialog class="atlas-summary-dialog" id="atlas-summary-dialog"
+    aria-labelledby="atlas-summary-title">
+    <article>
+      <button type="button" class="editor-close" id="atlas-summary-close"
+        aria-label="关闭完整说明">×</button>
+      <p class="eyebrow" id="atlas-summary-type">图谱节点</p>
+      <h3 id="atlas-summary-title">节点名称</h3>
+      <p id="atlas-summary-copy"></p>
+    </article>
+  </dialog>
+
+  <dialog class="field-editor classification-editor" id="classification-editor"
+    aria-labelledby="classification-editor-title">
+    <form id="classification-editor-form">
+      <div class="field-editor-head">
+        <div>
+          <span>PRODUCT CLASSIFICATION</span>
+          <h3 id="classification-editor-title">设置游戏的品类归属</h3>
+        </div>
+        <button type="button" class="editor-close" id="classification-editor-close"
+          aria-label="关闭分类编辑器">×</button>
+      </div>
+      <div class="editor-inheritance-preview">
+        <span>所属机制母型</span>
+        <strong id="classification-editor-mechanism">由品类原型自动推导</strong>
+      </div>
+      <div class="field-editor-grid">
+        <label>
+          <span>品类原型</span>
+          <select id="classification-editor-prototype"></select>
+        </label>
+        <label>
+          <span>在该品类中的角色</span>
+          <select id="classification-editor-role">
+            <option value="variant_instance">变体游戏</option>
+            <option value="cornerstone">基石游戏</option>
+          </select>
+        </label>
+        <label>
+          <span>确认状态</span>
+          <select id="classification-editor-status">
+            <option value="confirmed">已确认</option>
+            <option value="partial">部分归类</option>
+            <option value="unreviewed">尚未归类</option>
+          </select>
+        </label>
+      </div>
+      <label class="editor-field">
+        <span>人工确认备注</span>
+        <textarea id="classification-editor-note" rows="4" maxlength="600"
+          placeholder="说明归类依据、尚未确认的边界或为何清除归属。"></textarea>
+      </label>
+      <div class="field-editor-message" id="classification-editor-message" aria-live="polite"></div>
+      <div class="field-editor-actions">
+        <button type="button" class="button button-secondary" id="classification-editor-cancel">取消</button>
+        <button type="submit" class="button button-primary" id="classification-editor-save">保存分类</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="field-editor node-creator" id="node-creator" aria-labelledby="node-creator-title">
+    <form id="node-creator-form">
+      <div class="field-editor-head">
+        <div>
+          <span>PROTOTYPE GRAPH</span>
+          <h3 id="node-creator-title">新建图谱节点</h3>
+        </div>
+        <button type="button" class="editor-close" id="node-creator-close"
+          aria-label="关闭节点创建器">×</button>
+      </div>
+      <input type="hidden" id="node-creator-type">
+      <label class="editor-field" id="node-creator-parent-field">
+        <span id="node-creator-parent-label">父级节点</span>
+        <select id="node-creator-parent"></select>
+      </label>
+      <label class="editor-field" id="node-creator-product-field" hidden>
+        <span>选择游戏库产品</span>
+        <select id="node-creator-product"></select>
+      </label>
+      <label class="editor-field" id="node-creator-role-field" hidden>
+        <span>在该品类中的角色</span>
+        <select id="node-creator-role">
+          <option value="variant_instance">变体游戏</option>
+          <option value="cornerstone">基石游戏</option>
+        </select>
+      </label>
+      <label class="editor-field" id="node-creator-name-field">
+        <span>节点名称</span>
+        <input id="node-creator-name" maxlength="80" required>
+      </label>
+      <label class="editor-field" id="node-creator-summary-field">
+        <span>一句话摘要</span>
+        <input id="node-creator-summary" maxlength="240" required>
+      </label>
+      <label class="editor-field" id="node-creator-definition-field">
+        <span>工作定义</span>
+        <textarea id="node-creator-definition" rows="5" maxlength="1200" required></textarea>
+      </label>
+      <div class="field-editor-message" id="node-creator-message" aria-live="polite"></div>
+      <div class="field-editor-actions">
+        <button type="button" class="button button-danger" id="node-creator-delete" hidden>
+          删除节点
+        </button>
+        <span class="field-editor-action-spacer"></span>
+        <button type="button" class="button button-secondary" id="node-creator-cancel">取消</button>
+        <button type="submit" class="button button-primary" id="node-creator-save">创建并进入公式定义</button>
+      </div>
+    </form>
+  </dialog>
+
   <div class="data-toast" id="data-toast" role="status" aria-live="polite" hidden></div>
 
   <footer>
@@ -1111,7 +1639,7 @@
 
   <script>
     (() => {
-      const tabIds = ["model", "atlas", "library"];
+      const tabIds = ["model", "atlas", "ecosystem", "library", "insights"];
       const pages = [...document.querySelectorAll("[data-tab-page]")];
       const links = [...document.querySelectorAll("[data-nav]")];
 
@@ -1120,6 +1648,9 @@
         if (tabIds.includes(hash)) return hash;
         if (hash === "model-content" || hash === "model-case" || hash === "top") return "model";
         if (hash === "atlas-content" || hash === "atlas-method") return "atlas";
+        if (hash === "ecosystem-content") return "ecosystem";
+        if (hash === "insights-content" || hash === "insight-prior" ||
+          hash === "insight-reveal" || hash === "insight-checks") return "insights";
         return "model";
       }
 
@@ -1151,6 +1682,6 @@
       activateTab();
     })();
   </script>
-  <script type="module" src="./assets/app.js?v=20260726-29"></script>
+  <script type="module" src="./assets/app.js?v=20260728-21"></script>
 </body>
 </html>

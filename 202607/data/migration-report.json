@@ -10,16 +10,17 @@
   "result": {
     "formal_legacy_games": 34,
     "design_samples": 1,
-    "merged_existing_products": 1,
-    "newly_imported_products": 33,
-    "retained_new_products": 2,
-    "final_formal_products": 36,
-    "formula_observation_records": 34
+    "merged_existing_products": 3,
+    "newly_imported_products": 31,
+    "retained_new_products": 1,
+    "final_formal_products": 35,
+    "retained_new_formula_observations": 1,
+    "formula_observation_records": 35
   },
   "classification": {
-    "confirmed": 2,
-    "partial": 1,
-    "unreviewed": 33,
+    "confirmed": 6,
+    "partial": 0,
+    "unreviewed": 29,
     "note": "迁移程序不会根据旧版标签自动确认任何新的原型分类。"
   },
   "missing_metadata": {
@@ -39,7 +40,13 @@
       "legacy_slug": "luck-be-a-landlord",
       "target_product_id": "product.luck-be-a-landlord",
       "action": "merge",
-      "note": "保留新版已确认的 Slot → Slot 数值型 - 幸运房东关系，并补入旧版基础资料与分析来源。"
+      "note": "保留新版已确认的 Slot母体 → Slot改·数值型 → 幸运房东关系，并补入旧版基础资料与分析来源。"
+    },
+    {
+      "legacy_slug": "lucky-mayor",
+      "target_product_id": "product.lucky-mayor",
+      "action": "merge_alias",
+      "note": "将早期占位名称“幸运城市”并入 Steam 官方名称《幸运市长》，保留旧版完整资料并确认其为 0D 多重集品类变体实例。"
     }
   ],
   "output_files": [

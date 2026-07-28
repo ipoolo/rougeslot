@@ -5,8 +5,8 @@
   "experience_goal": "持续爱干",
   "model_positioning": "本模型本质上是对这类游戏的抽象假设。",
   "formula": {
-    "display": "P(t) ⟦ [ Random@Pool_Symbol → Put@Show_TP → Combo(C1→C2?)@Show_TP ]_N → BD ⟧",
-    "core_display": "[ Random@Pool_Symbol → Put@Show_TP → Combo(C1→C2?)@Show_TP ]_N → BD",
+    "display": "P(t) ⟦ [ Random@Pool_Symbol → Put@Show_TP → Combo(C1→C2)@Show_TP ]_N → BD ⟧",
+    "core_display": "[ Random@Pool_Symbol → Put@Show_TP → Combo(C1→C2)@Show_TP ]_N → BD",
     "outer_context": {
       "key": "P_t",
       "display": "P(t)",

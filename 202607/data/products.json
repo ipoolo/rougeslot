@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.6",
+  "version": "202607-draft.7",
   "migration": {
     "source": "data/games.json",
     "imported_at": "2026-07-25",
@@ -24,9 +24,11 @@
       "prototype_ids": [
         "prototype.slot-numeric"
       ],
-      "variant_ids": [],
+      "variant_ids": [
+        "variant.luck-be-a-landlord"
+      ],
       "classification_status": "confirmed",
-      "summary": "“Slot 数值型 - 幸运房东”品类原型的主要提炼来源与代表产品。",
+      "summary": "“Slot改·数值型”品类原型的基石游戏、主要提炼来源与代表产品。",
       "source_url": "https://store.steampowered.com/app/1404850/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1404850/header.jpg",
       "developer": "TrampolineTales",
@@ -43,7 +45,7 @@
         "Put：auto_place",
         "C₁：threshold + adjacency"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "luck-be-a-landlord",
         "framework_version": "v5",
@@ -51,14 +53,17 @@
         "imported_at": "2026-07-25"
       },
       "evidence": [
-        "用户已确认其作为“Slot 数值型 - 幸运房东”的品类原型来源和代表产品。"
-      ]
+        "用户已确认其作为“Slot改·数值型”的品类原型来源、基石游戏和代表产品。"
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.134Z"
     },
     {
-      "id": "product.lucky-city",
-      "name": "幸运城市",
+      "id": "product.lucky-mayor",
+      "name": "幸运市长",
+      "name_en": "Lucky Mayor",
       "type": "product",
-      "status": "content_pending",
+      "record_type": "game",
+      "status": "legacy_imported",
       "order": 20,
       "relation_types": [
         "variant_instance"
@@ -70,32 +75,64 @@
         "prototype.slot-numeric"
       ],
       "variant_ids": [
-        "variant.lucky-city"
+        "variant.lucky-mayor"
       ],
-      "summary": "幸运城市品类变体对应的具体产品对象。",
+      "classification_status": "confirmed",
+      "summary": "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
+      "source_url": "https://store.steampowered.com/app/2659970/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2659970/header_schinese.jpg?t=1720252883",
+      "developer": "MadGoat Game Studio",
+      "release_year": 2023,
+      "tags": [
+        "装置类",
+        "卡牌",
+        "城市管理",
+        "轻装置"
+      ],
+      "core_loop": "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
+      "observed_mechanics": [
+        "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
+        "Show_TP：0D_multiset",
+        "Put：auto_place",
+        "C₁：type_dict"
+      ],
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "legacy_source": {
+        "slug": "lucky-mayor",
+        "framework_version": "v5",
+        "analysis_updated_at": "2026-04-29",
+        "imported_at": "2026-07-25"
+      },
       "evidence": [
-        "用户已确认其作为“Slot 数值型 - 幸运房东”下的首个品类变体。",
-        "用户已确认《幸运城市》的 Show_TP 不是 2D 网格；当前正式记录为 0D 多重集。"
+        "基础资料与分析内容来自旧版 data/games.json。",
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。",
+        "用户于 2026-07-27 确认“幸运城市”与《幸运市长》为同一产品，并采用官方名称《幸运市长》。",
+        "用户已确认其 Show_TP 为 0D 多重集，不建立二维位置与邻接关系。"
       ],
-      "record_type": "game",
-      "classification_status": "confirmed"
+      "last_classified_at": "2026-07-28T06:52:49.136Z"
     },
     {
       "id": "product.slotbound-demo",
       "name": "Slotbound Demo",
       "type": "product",
-      "status": "content_pending",
+      "status": "reference_confirmed",
       "order": 30,
       "relation_types": [
-        "member"
+        "source",
+        "representative"
       ],
       "mother_ids": [
         "mechanism.slot"
       ],
-      "prototype_ids": [],
-      "variant_ids": [],
+      "prototype_ids": [
+        "prototype.slot-plus-combat"
+      ],
+      "variant_ids": [
+        "variant.slotbound-demo"
+      ],
       "summary": "以 3×3 Slot Spin 召唤单位，并把 Slot 结果转译为自动战斗防守、单位吸收与职业进化的 Roguelite Demo。",
       "source_url": "https://store.steampowered.com/app/4906570/Slotbound_Demo/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4906570/3c04c8dadcb56124838f39abe512839bfc6b3257/header.jpg?t=1783709880",
       "steam_app_id": "4906570",
       "product_form": "demo",
       "developer": "Optima Arch",
@@ -108,14 +145,15 @@
         "Items 与 Cores 调整概率、属性和协同",
         "自动战斗防守、审判波次与 Boss 波次"
       ],
-      "classification_note": "已确认归入 Slot 机制母型；候选品类方向为“Slot 战斗型”，在正式建立该品类原型前不挂靠现有“Slot 数值型 - 幸运房东”。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "evidence": [
         "Steam 商店页将游戏描述为结合 3×3 Slot、Roguelite 防守和自动战斗策略的作品。",
         "Steam 商店页说明 Spin 用于召唤单位，单位可以吸收进化，Items 与 Cores 用于影响概率、属性与协同。",
-        "品类原型与公式字段约束尚未完成正式拆解。"
+        "用户已确认其作为“Slot+战斗型”的基石游戏与代表产品。"
       ],
       "record_type": "game",
-      "classification_status": "partial"
+      "classification_status": "confirmed",
+      "last_classified_at": "2026-07-28T06:52:49.097Z"
     },
     {
       "id": "product.balatro",
@@ -147,7 +185,7 @@
         "Put：manual_set",
         "C₁：type_dict + trigger_chain"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "迁移为独立游戏变体；品类原型归属保持不变。",
       "legacy_source": {
         "slug": "balatro",
         "framework_version": "v5",
@@ -157,7 +195,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T05:24:20.228Z"
     },
     {
       "id": "product.peglin",
@@ -587,11 +626,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 220,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-plus-numeric"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4ag70p-7b1s4"
+      ],
+      "classification_status": "confirmed",
       "summary": "老虎机 spin 产出资源，分配建造兵种与奇迹推动帝国科技树",
       "source_url": "https://store.steampowered.com/app/3576520/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3576520/2d9f43ddbd134a25e0942e725ffca4c5ec0ca298/header.jpg?t=1777038565",
@@ -610,7 +657,7 @@
         "Put：auto_place",
         "C₁：line_complete + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "spinera",
         "framework_version": "v5",
@@ -620,7 +667,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.104Z"
     },
     {
       "id": "product.spin-hero",
@@ -630,11 +678,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 230,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atumz-i0j6x"
+      ],
+      "classification_status": "confirmed",
       "summary": "老虎机符号构筑驱动自动战斗，每局拉杆推进 roguelike 闯关",
       "source_url": "https://store.steampowered.com/app/2917350/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2917350/header.jpg?t=1760025570",
@@ -653,7 +709,7 @@
         "Put：auto_place",
         "C₁：type_dict + threshold"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "spin-hero",
         "framework_version": "v5",
@@ -663,7 +719,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.115Z"
     },
     {
       "id": "product.cloverpit",
@@ -671,13 +728,22 @@
       "name_en": "CLOVERPIT",
       "type": "product",
       "record_type": "game",
-      "status": "legacy_imported",
+      "status": "reference_confirmed",
       "order": 240,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "source",
+        "representative"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-plus-numeric"
+      ],
+      "variant_ids": [
+        "variant.cloverpit"
+      ],
+      "classification_status": "confirmed",
       "summary": "第一人称操作老虎机连击吸金，护身符构筑应对无尽债务循环",
       "source_url": "https://store.steampowered.com/app/3314790/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3314790/f9e9b212e2d5a11bb049e31639c80e49b231f427/header_alt_assets_1.jpg?t=1775754157",
@@ -696,7 +762,7 @@
         "Put：auto_place",
         "C₁：line_complete + type_dict + cascade"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "cloverpit",
         "framework_version": "v5",
@@ -705,8 +771,10 @@
       },
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
-        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未逐字段人工确认。",
+        "用户已确认其作为“Slot+数值型”的基石游戏与代表产品。"
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.110Z"
     },
     {
       "id": "product.dice-player-one",
@@ -802,11 +870,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 270,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-numeric"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atune-6ml6f"
+      ],
+      "classification_status": "confirmed",
       "summary": "旋转棋盘格子蓄能触发卡牌效果，构筑卡组推进 roguelike 闯关",
       "source_url": "https://store.steampowered.com/app/2516820/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2516820/header.jpg?t=1726290426",
@@ -825,7 +901,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "luckland",
         "framework_version": "v5",
@@ -835,7 +911,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.130Z"
     },
     {
       "id": "product.lucky-island",
@@ -845,11 +922,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 280,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-numeric"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atung-qdotg"
+      ],
+      "classification_status": "confirmed",
       "summary": "老虎机分派岛民工作产出资源，规划海岛建设应对 roguelike 事件",
       "source_url": "https://store.steampowered.com/app/2195650/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2195650/header.jpg?t=1716624493",
@@ -868,7 +953,7 @@
         "Put：auto_place",
         "C₁：type_dict + threshold"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "lucky-island",
         "framework_version": "v5",
@@ -878,7 +963,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.132Z"
     },
     {
       "id": "product.lucky-lord",
@@ -931,11 +1017,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 300,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atun8-bcmye"
+      ],
+      "classification_status": "confirmed",
       "summary": "武器装备化为符号，转动命运轮盘构筑组合击败敌人",
       "source_url": "https://store.steampowered.com/app/2404510/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2404510/header.jpg",
@@ -954,7 +1048,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "lucky-hero",
         "framework_version": "v5",
@@ -964,7 +1058,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.124Z"
     },
     {
       "id": "product.bingle-bingle",
@@ -1017,11 +1112,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 320,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-numeric"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atunc-236pv"
+      ],
+      "classification_status": "confirmed",
       "summary": "构筑符号组合产出防御值抵挡僵尸潮的牌组构建塔防",
       "source_url": "https://store.steampowered.com/app/1863170/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1863170/header.jpg",
@@ -1040,7 +1143,7 @@
         "Put：manual_place",
         "C₁：line_complete + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "die-shou-wei-cheng",
         "framework_version": "v5",
@@ -1050,7 +1153,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.128Z"
     },
     {
       "id": "product.crop-rotation",
@@ -1060,11 +1164,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 330,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-numeric"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atuna-iwolq"
+      ],
+      "classification_status": "confirmed",
       "summary": "drafting 卡牌组建自动农场，自动结算还清贷款",
       "source_url": "https://store.steampowered.com/app/2348090/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2348090/header.jpg?t=1756122377",
@@ -1083,7 +1195,7 @@
         "Put：manual_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "crop-rotation",
         "framework_version": "v5",
@@ -1093,7 +1205,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.126Z"
     },
     {
       "id": "product.cat-god-ranch",
@@ -1103,11 +1216,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 340,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-numeric"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4430m6-dycxc"
+      ],
+      "classification_status": "confirmed",
       "summary": "构筑动物牌组每日产出货币向猫神进贡的牧场 roguelike",
       "source_url": "https://store.steampowered.com/app/2797340/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2797340/d1e3697fb2ed8e4e885d9be93d4d85eafa1426e9/header_schinese.jpg?t=1773415538",
@@ -1126,7 +1247,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "保留用户此前确认：《猫神牧场》属于 Slot改·数值型变体；本次同步刷新变体摘要。",
       "legacy_source": {
         "slug": "cat-god-ranch",
         "framework_version": "v5",
@@ -1135,8 +1256,10 @@
       },
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
-        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。",
+        "用户于 2026-07-27 确认其品类归属为“Slot改·数值型”。"
+      ],
+      "last_classified_at": "2026-07-28T06:55:30.329Z"
     },
     {
       "id": "product.lucky-hunter",
@@ -1146,11 +1269,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 350,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atun6-6s54z"
+      ],
+      "classification_status": "confirmed",
       "summary": "三消合并构筑棋子阵容，自走棋自动战斗对抗灾变怪物",
       "source_url": "https://store.steampowered.com/app/2824310/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2824310/header_schinese.jpg?t=1770639208",
@@ -1169,7 +1300,7 @@
         "Put：auto_place",
         "C₁：adjacency + threshold + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "lucky-hunter",
         "framework_version": "v5",
@@ -1179,50 +1310,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
-    },
-    {
-      "id": "product.lucky-mayor",
-      "name": "幸运市长",
-      "name_en": "Lucky Mayor",
-      "type": "product",
-      "record_type": "game",
-      "status": "legacy_imported",
-      "order": 360,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
-      "summary": "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
-      "source_url": "https://store.steampowered.com/app/2659970/",
-      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2659970/header_schinese.jpg?t=1720252883",
-      "developer": "MadGoat Game Studio",
-      "release_year": 2023,
-      "tags": [
-        "装置类",
-        "卡牌",
-        "城市管理",
-        "轻装置"
       ],
-      "core_loop": "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
-      "observed_mechanics": [
-        "招募市民卡牌构筑产业链，roguelike 经营繁荣都市",
-        "Show_TP：0D_multiset",
-        "Put：auto_place",
-        "C₁：type_dict"
-      ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
-      "legacy_source": {
-        "slug": "lucky-mayor",
-        "framework_version": "v5",
-        "analysis_updated_at": "2026-04-29",
-        "imported_at": "2026-07-25"
-      },
-      "evidence": [
-        "基础资料与分析内容来自旧版 data/games.json。",
-        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      "last_classified_at": "2026-07-28T06:52:49.122Z"
     },
     {
       "id": "product.insider-trading",
@@ -1442,11 +1531,19 @@
       "record_type": "game",
       "status": "legacy_imported",
       "order": 420,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.custom-ms46plmn-clrp8"
+      ],
+      "classification_status": "confirmed",
       "summary": "spin 随机出棋子位置 + 150 棋子 combo 自动战斗",
       "source_url": "https://store.steampowered.com/app/2666230/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2666230/header_schinese.jpg?t=1749176310",
@@ -1464,7 +1561,7 @@
         "Put：manual_place",
         "C₁：type_dict + adjacency + threshold"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "dog-and-goblin",
         "framework_version": "v5",
@@ -1474,7 +1571,8 @@
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
         "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.112Z"
     },
     {
       "id": "product.endgame-of-devil",
@@ -1482,13 +1580,22 @@
       "name_en": "Endgame of Devil",
       "type": "product",
       "record_type": "game",
-      "status": "legacy_imported",
+      "status": "reference_confirmed",
       "order": 430,
-      "relation_types": [],
-      "mother_ids": [],
-      "prototype_ids": [],
-      "variant_ids": [],
-      "classification_status": "unreviewed",
+      "relation_types": [
+        "source",
+        "representative"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.endgame-of-devil"
+      ],
+      "classification_status": "confirmed",
       "summary": "spin 随机出棋子位置 + 240 随从一键自动战斗",
       "source_url": "https://store.steampowered.com/app/2343600/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2343600/header_schinese.jpg?t=1771846080",
@@ -1506,7 +1613,7 @@
         "Put：auto_place",
         "C₁：type_dict + adjacency"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
       "legacy_source": {
         "slug": "endgame-of-devil",
         "framework_version": "v5",
@@ -1515,8 +1622,254 @@
       },
       "evidence": [
         "基础资料与分析内容来自旧版 data/games.json。",
-        "旧版字段已机械映射到新版公式观察表，但映射结果尚未人工确认。"
-      ]
+        "旧版字段已机械映射到新版公式观察表，但映射结果尚未逐字段人工确认。",
+        "用户已确认其作为“Slot改·战斗型”的基石游戏与代表产品。"
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.119Z"
+    },
+    {
+      "id": "product.runeborn",
+      "name": "死而符生",
+      "name_en": "Runeborn",
+      "type": "product",
+      "record_type": "game",
+      "status": "reference_confirmed",
+      "order": 440,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-plus-numeric"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atumr-muzwe"
+      ],
+      "classification_status": "confirmed",
+      "summary": "老虎机与牌组构建结合的 Roguelite，通过符文匹配、连接和遗物修饰形成大数值战斗结果。",
+      "source_url": "https://store.steampowered.com/app/3073990/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3073990/25e2c04f07c2e274bf89090de2bb8fc63d92ad23/header_schinese.jpg?t=1773151370",
+      "developer": "iDream Interactive",
+      "release_year": 2026,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "牌组构建",
+        "符文协同",
+        "数值表现"
+      ],
+      "core_loop": "Spin 与保留／重随机形成符文连接，遗物和符文效果放大数值并击败敌人。",
+      "observed_mechanics": [
+        "符文老虎机与牌组构建",
+        "保留符文与重新随机",
+        "符文匹配连接",
+        "遗物与符文效果放大伤害"
+      ],
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "evidence": [
+        "Steam 商店页：游戏将老虎机玩法与牌组构建结合。",
+        "Steam 商店页：玩家通过保留、重随机与符文连接形成伤害。",
+        "用户于 2026-07-28 确认其属于 Slot+数值型。"
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.107Z"
+    },
+    {
+      "id": "product.slots-and-daggers",
+      "name": "命运转轮",
+      "name_en": "Slots & Daggers",
+      "type": "product",
+      "record_type": "game",
+      "status": "reference_confirmed",
+      "order": 450,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4atun1-t6nby"
+      ],
+      "classification_status": "confirmed",
+      "summary": "发生在老虎机装置中的复古奇幻 Roguelike，通过武器与功能符号的 Spin 结果推进战斗。",
+      "source_url": "https://store.steampowered.com/app/3631290/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3631290/e6717abc9fe7d15049543614ffd69317b9e1e4b4/header.jpg?t=1780064257",
+      "developer": "Friedemann",
+      "release_year": 2025,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "奇幻战斗",
+        "Roguelike",
+        "战斗表现"
+      ],
+      "core_loop": "配置武器与功能符号，通过老虎机 Spin 生成当回合攻击、防御和资源结果并推进战斗。",
+      "observed_mechanics": [
+        "老虎机装置内的奇幻 Roguelike",
+        "武器、护盾与金币等符号进入转轮",
+        "Spin 结果直接推进敌我战斗",
+        "战后升级老虎机与符号配置"
+      ],
+      "classification_note": "用户于 2026-07-28 按四组分类截图确认该游戏的品类原型归属。",
+      "evidence": [
+        "Steam 商店页：复古奇幻 Roguelike 发生在老虎机装置中。",
+        "Steam 商店页：游戏融合老虎机与奇幻 RPG 战斗。",
+        "用户于 2026-07-28 确认其属于 Slot改·战斗型。"
+      ],
+      "last_classified_at": "2026-07-28T06:52:49.117Z"
+    },
+    {
+      "id": "product.rogue-slots",
+      "name": "Rogue Slots",
+      "name_en": "Rogue Slots",
+      "type": "product",
+      "record_type": "game",
+      "status": "reference_confirmed",
+      "order": 460,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-plus-combat"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4blk7r-3gb76"
+      ],
+      "classification_status": "confirmed",
+      "summary": "以老虎机作为地下城主的牌组构建 Roguelike，把武器、金币与诅咒遗物装入转轮，每次 Spin 触发攻击、能力和效果。",
+      "source_url": "https://store.steampowered.com/app/2462430/Rogue_Slots/",
+      "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2462430/700a2dc78f00a386dc7bc91043837711fb84aeee/header.jpg?t=1767157279",
+      "developer": "WubsGames",
+      "release_year": 2025,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "牌组构建",
+        "Roguelike",
+        "战斗表现"
+      ],
+      "core_loop": "把武器、金币和遗物装入转轮，通过 Spin 触发攻击与能力，获得新物品并继续强化后续战斗。",
+      "observed_mechanics": [
+        "老虎机作为地下城主",
+        "武器、金币与诅咒遗物进入转轮",
+        "每次 Spin 触发攻击、能力与效果",
+        "超过 30 种物品形成构筑组合"
+      ],
+      "classification_note": "用户于 2026-07-28 按补充分类截图确认该游戏的品类原型归属。",
+      "evidence": [
+        "Steam 商店页：牌组构建 Roguelike，以老虎机作为 Dungeon Master。",
+        "Steam 商店页：每次 Spin 会触发攻击、能力和效果。",
+        "用户于 2026-07-28 确认其属于 Slot+战斗型。"
+      ],
+      "last_classified_at": "2026-07-28T07:14:21.975Z"
+    },
+    {
+      "id": "product.spinny-dungeon",
+      "name": "Spinny Dungeon",
+      "name_en": "Spinny Dungeon",
+      "type": "product",
+      "record_type": "game",
+      "status": "reference_confirmed",
+      "order": 470,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.custom-ms4blk85-wj4pu"
+      ],
+      "classification_status": "confirmed",
+      "summary": "老虎机 Roguelike、牌组构建与自动战斗的结合；每次 Spin 后，武器、植物、魔法物品和伙伴会在棋盘上重新随机排列。",
+      "source_url": "https://store.steampowered.com/app/2837790/Spinny_Dungeon/",
+      "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2837790/header.jpg?t=1775720977",
+      "developer": "Typing Monkey",
+      "release_year": 2026,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "牌组构建",
+        "自动战斗",
+        "战斗表现"
+      ],
+      "core_loop": "构筑包含武器、植物、魔法物品与伙伴的棋盘，每次 Spin 后重新排列并自动触发战斗，阻止怪物进入红区。",
+      "observed_mechanics": [
+        "老虎机 Roguelike 与自动战斗结合",
+        "每次 Spin 后棋盘内容随机重排",
+        "武器、植物、魔法物品与伙伴共同构筑",
+        "怪物逼近红区形成战斗压力"
+      ],
+      "classification_note": "用户于 2026-07-28 按补充分类截图确认该游戏的品类原型归属。",
+      "evidence": [
+        "Steam 商店页：slot machine roguelike、deckbuilder 与 auto battler 的结合。",
+        "Steam 商店页：每次 Spin 后棋盘上的内容随机重新排列。",
+        "用户于 2026-07-28 确认其属于 Slot改·战斗型。"
+      ],
+      "last_classified_at": "2026-07-28T07:14:21.989Z"
+    },
+    {
+      "id": "product.slot-or-not",
+      "name": "Slot or Not",
+      "name_en": "Slot or Not",
+      "type": "product",
+      "record_type": "game",
+      "status": "reference_confirmed",
+      "order": 480,
+      "relation_types": [
+        "variant_instance"
+      ],
+      "mother_ids": [
+        "mechanism.slot"
+      ],
+      "prototype_ids": [
+        "prototype.slot-transform-combat"
+      ],
+      "variant_ids": [
+        "variant.slot-or-not"
+      ],
+      "classification_status": "confirmed",
+      "summary": "牌组构建式回合制 Slot 战斗：Random 先生成候选池，再由玩家主动选择本次进入 Spin 的装备结果。",
+      "source_url": "https://store.steampowered.com/app/3496890/Slot_or_Not/",
+      "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3496890/header.jpg",
+      "steam_app_id": "3496890",
+      "developer": "MakoTeam",
+      "publisher": "Proteus Interactive",
+      "release_date": "2026-05-25",
+      "release_year": 2026,
+      "tags": [
+        "装置类",
+        "老虎机",
+        "牌组构建",
+        "回合制战斗",
+        "Random 创新"
+      ],
+      "core_loop": "把装备加入抽取池；每次 Spin 先随机产生候选池，再由玩家主动选择本次结果，并把装备结果转译为攻击与防御。",
+      "observed_mechanics": [
+        "40+ 可用物品进入装备抽取池",
+        "Random 不直接输出最终结果，而是先生成 Choice_Pool",
+        "玩家从 Choice_Pool 主动选择，组成 SingleSpin_Symbol",
+        "结果继续进入回合制 Slot 战斗"
+      ],
+      "classification_note": "用户于 2026-07-28 确认其属于 Slot改·战斗型，并指出其在单次 Spin 的 Random 环节采用候选池与主动选择。",
+      "evidence": [
+        "Steam 商店页：deck-building turn-based slot machine battling adventure。",
+        "Steam 商店页：玩家把装备加入 drawing pool，并根据结果攻击或防御。",
+        "用户确认流程：Pool_Symbol → Choice_Pool → 玩家主动选择 → SingleSpin_Symbol。",
+        "用户确认其属于 Slot改·战斗型。"
+      ],
+      "last_classified_at": "2026-07-28T12:00:00.000Z"
     }
   ]
 }

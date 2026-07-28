@@ -1,9 +1,20 @@
 {
-  "version": "202607-draft.6",
+  "version": "202607-draft.7",
+  "classification_model": {
+    "description": "Slot 母体下的品类原型由两个维度共同确定：怎样继承 Slot 核心，以及最终结果采用战斗还是数值表现。",
+    "inheritance_strategies": {
+      "slot_plus": "保留 Slot 的固定符号池、Random、自动 Put、2D Show_TP 与传统 C₁，在 C₂、Spin_Result、P(t) 和构筑层继续扩展。",
+      "slot_transform": "保留 Slot 的装置认知与 Spin 操作，但允许覆写 Pool_Symbol 或传统 C₁，建立自己的符号池与协同语法。"
+    },
+    "result_modes": {
+      "combat": "C₂ 把 C₁ 基础结果转译为伤害、防御、治疗或战斗状态；P(t) 判断能否击败敌人、存活或通过波次。",
+      "numeric": "C₂ 把 C₁ 基础结果演绎为金额、分数、倍率或资源；P(t) 判断能否达到房租、债务或目标分。"
+    }
+  },
   "items": [
     {
-      "id": "prototype.slot-numeric",
-      "name": "Slot 数值型 - 幸运房东",
+      "id": "prototype.slot-plus-combat",
+      "name": "Slot+战斗型",
       "name_status": "confirmed",
       "type": "category_prototype",
       "status": "working",
@@ -11,47 +22,278 @@
       "primary_mother_id": "mechanism.slot",
       "composed_mother_ids": [],
       "representative_product_ids": [
-        "product.luck-be-a-landlord"
+        "product.slotbound-demo"
       ],
-      "summary": "从《幸运房东》提炼：构筑符号池，在 2D Slot 网格中通过符号产出、阈值与邻接协同获得数值。",
-      "definition": "本品类原型以《幸运房东》为提炼来源：保留 Slot 的自动随机与装置落位，把固定符号池改为可构筑符号池，并加入符号直接产出、阈值／邻接协同、道具结果演绎以及 Spin 后构筑决策。",
+      "classification_axes": {
+        "inheritance_strategy": "slot_plus",
+        "inheritance_label": "Slot+扩展",
+        "result_mode": "combat",
+        "result_label": "战斗表现"
+      },
+      "summary": "保留传统 Slot 的 Random、自动 Put 与 C₁，把基础中奖结果进一步转译成战斗行为。",
+      "definition": "本品类原型以《Slotbound》为基石游戏：不改写 Slot 的核心抽取、落位与基础支付线协同，主要在 C₂ 中把 C₁ 结果演绎为单位、伤害、防御与战斗状态，并通过战斗型 P(t) 判断玩家能否通过波次。",
       "formula_changes": {
         "P_t": {
           "operation": "fix",
-          "constraint_label": "房租目标压力",
-          "summary": "采用《幸运房东》的房租压力：以当前房租、剩余 Spin、金币缺口和未达标后果包裹完整循环；房租检查周期独立于每次 Spin 后触发构筑选择的 N = 1。",
+          "constraint_label": "战斗目标压力",
+          "summary": "把敌方生命、波次期限、玩家生存状态和失败后果作为外层压力；P(t) 负责判断战斗结果是否足够，不由 C₂ 代替。"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承固定符号池",
+          "summary": "继承 Slot 母体的固定符号池身份；品类创新不以增删核心 Slot 符号类型为前提。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承 Slot Random",
+          "summary": "继续从预设 Slot 符号池按装置概率生成本次 Spin 结果。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承自动 Put",
+          "summary": "继续由 Slot 装置自动完成符号落位，玩家不决定主要安置结果。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承 2D Slot 网格",
+          "summary": "继续使用传统 Slot 的 2D 网格承载符号与支付线关系。"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承 Slot 基础协同",
+          "summary": "保留同符号、支付线、连续符号或经典特殊符号等 Slot 先验 C₁，不把战斗规则塞回 C₁。"
+        },
+        "C2": {
+          "operation": "extend",
+          "constraint_label": "战斗结果演绎",
+          "summary": "把 C₁ 的中奖、单位或资源基础结果转译为召唤、伤害、防御、治疗、职业进化或战斗状态变化。"
+        },
+        "N": {
+          "operation": "extend",
+          "constraint_label": "战斗间构筑周期",
+          "summary": "启用进入 BD 前的 Spin／战斗周期；具体 N 值由品类产品的波次与构筑节奏决定。"
+        },
+        "BD": {
+          "operation": "extend",
+          "constraint_label": "单位 · 道具 · 概率构筑",
+          "summary": "在传统 Slot 之外加入单位成长、道具、Core、概率或战斗编队等构筑决策，影响后续 C₂ 与战斗结果。"
+        }
+      },
+      "identity_rules": [
+        "以《Slotbound》作为本品类原型的基石游戏与代表产品",
+        "Pool_Symbol、Random、Put、Show_TP 与 C1 保持 Slot 核心身份",
+        "主要设计空间是如何在 C2 中放大并转译 Slot Combo 结果",
+        "C2 负责战斗结果演绎，P(t) 负责战斗目标验证",
+        "是否加入构筑、N 的具体数值和 BD 操作由具体产品继续约束"
+      ]
+    },
+    {
+      "id": "prototype.slot-plus-numeric",
+      "name": "Slot+数值型",
+      "name_status": "confirmed",
+      "type": "category_prototype",
+      "status": "working",
+      "order": 20,
+      "primary_mother_id": "mechanism.slot",
+      "composed_mother_ids": [],
+      "representative_product_ids": [
+        "product.cloverpit"
+      ],
+      "classification_axes": {
+        "inheritance_strategy": "slot_plus",
+        "inheritance_label": "Slot+扩展",
+        "result_mode": "numeric",
+        "result_label": "数值表现"
+      },
+      "summary": "保留传统 Slot 的 Random、自动 Put 与 C₁，围绕倍率、连击与数值目标放大 Combo 结果。",
+      "definition": "本品类原型以《四叶草深渊》为基石游戏：保留 Slot 的固定符号池、装置抽取、自动落位与基础中奖规则，主要通过 C₂ 的护身符、倍率和结果修饰放大数值输出，并由数值型 P(t) 检查债务、目标分或资源阈值。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "fix",
+          "constraint_label": "数值目标压力",
+          "summary": "以债务、目标分、余额、期限和未达标后果包裹循环；P(t) 判断本次与累计 Spin_Result 是否足够。"
+        },
+        "Pool_Symbol": {
+          "operation": "inherit",
+          "constraint_label": "继承固定符号池",
+          "summary": "继承 Slot 母体的固定符号类型与基础配置，不以玩家增删核心符号类型作为品类身份。"
+        },
+        "Random": {
+          "operation": "inherit",
+          "constraint_label": "继承 Slot Random",
+          "summary": "继续从预设 Slot 符号池按装置概率产生本次 Spin 结果。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承自动 Put",
+          "summary": "继续由装置自动完成转轴停止与符号落位。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承 2D Slot 网格",
+          "summary": "继续使用传统 Slot 的 2D 网格与支付线承载规则。"
+        },
+        "C1": {
+          "operation": "inherit",
+          "constraint_label": "继承 Slot 基础协同",
+          "summary": "保留支付线、同符号、连续符号与经典特殊符号等 Slot C₁。"
+        },
+        "C2": {
+          "operation": "extend",
+          "constraint_label": "数值结果演绎",
+          "summary": "用护身符、倍率、连击、条件加成或全局规则修饰 C₁ 基础结果，形成金额、分数与资源型 Spin_Result。"
+        },
+        "N": {
+          "operation": "extend",
+          "constraint_label": "数值阶段构筑周期",
+          "summary": "启用进入 BD 前的 Spin 周期；具体 N 由债务阶段、商店或护身符选择节奏决定。"
+        },
+        "BD": {
+          "operation": "extend",
+          "constraint_label": "护身符 · 倍率 · 概率构筑",
+          "summary": "加入护身符、概率、倍率或规则升级等构筑决策，主要持续修改后续 C₂ 和目标达成能力。"
+        }
+      },
+      "identity_rules": [
+        "以《四叶草深渊》作为本品类原型的基石游戏与代表产品",
+        "Pool_Symbol、Random、Put、Show_TP 与 C1 保持 Slot 核心身份",
+        "主要设计空间是如何在 C2 中放大传统 Slot Combo 的数值结果",
+        "C2 负责数值结果演绎，P(t) 负责债务、目标分或资源阈值验证",
+        "具体倍率顺序、债务曲线、N 与 BD 节奏由产品继续约束"
+      ]
+    },
+    {
+      "id": "prototype.slot-transform-combat",
+      "name": "Slot改·战斗型",
+      "name_status": "confirmed",
+      "type": "category_prototype",
+      "status": "working",
+      "order": 30,
+      "primary_mother_id": "mechanism.slot",
+      "composed_mother_ids": [],
+      "representative_product_ids": [
+        "product.endgame-of-devil"
+      ],
+      "classification_axes": {
+        "inheritance_strategy": "slot_transform",
+        "inheritance_label": "Slot改写",
+        "result_mode": "combat",
+        "result_label": "战斗表现"
+      },
+      "summary": "保留 Slot 的 Spin 认知与自动落位，但建立可构筑棋子池和自有 C₁，再把结果转译为战斗。",
+      "definition": "本品类原型以《魔王终局》为基石游戏：保留 Slot 的装置认知、随机揭晓与自动 Put，但把固定符号池改为可构筑的棋子／随从池，并用类型、邻接、阵容或羁绊规则覆写传统支付线 C₁；随后由 C₂ 形成战斗结果。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "fix",
+          "constraint_label": "战斗目标压力",
+          "summary": "以敌方生命、玩家生存、波次期限、Boss 与失败代价判断结果是否足够；P(t) 独立于 C₂ 的战斗表演。"
+        },
+        "Pool_Symbol": {
+          "operation": "override",
+          "constraint_label": "可构筑棋子／随从池",
+          "summary": "覆写 Slot 的固定符号池：玩家可以获得、删除、升级或调整属于自己的棋子、随从与符号类型。"
+        },
+        "Random": {
+          "operation": "restrict",
+          "constraint_label": "从当前构筑池抽取",
+          "summary": "保留 Random 从 Pool_Symbol 产生结果的职责，但输入改为当前构筑后的动态棋子／随从池。"
+        },
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承自动 Put",
+          "summary": "继续由 Slot 装置自动把本次结果写入主要承载空间。"
+        },
+        "Show_TP": {
+          "operation": "inherit",
+          "constraint_label": "继承 2D 装置舞台",
+          "summary": "工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。"
+        },
+        "C1": {
+          "operation": "override",
+          "constraint_label": "自有棋子与阵容协同",
+          "summary": "不再以传统支付线为核心，改用棋子类型、邻接、阈值、阵营、羁绊或阵容关系产生基础结果。"
+        },
+        "C2": {
+          "operation": "extend",
+          "constraint_label": "战斗结果演绎",
+          "summary": "把自有 C₁ 的阵容基础结果转译为攻击、防御、技能、自动战斗与敌我状态变化。"
+        },
+        "N": {
+          "operation": "extend",
+          "constraint_label": "Spin／波次构筑周期",
+          "summary": "启用 Spin、战斗或波次之间的构筑周期；具体 N 值由代表游戏与后续产品继续确认。"
+        },
+        "BD": {
+          "operation": "extend",
+          "constraint_label": "招募 · 删除 · 升级 · 编队",
+          "summary": "通过招募、删除、升级、合成或编队持续改变 Pool_Symbol、C₁、C₂ 与后续战斗能力。"
+        }
+      },
+      "identity_rules": [
+        "以《魔王终局》作为本品类原型的基石游戏与代表产品",
+        "保留 Slot 的 Spin、随机揭晓、自动 Put 与装置认知",
+        "Pool_Symbol 从固定池改为可构筑的棋子或随从池",
+        "C1 覆写为自有的类型、邻接、阵容或羁绊协同",
+        "C2 负责战斗结果演绎，P(t) 负责战斗目标验证"
+      ]
+    },
+    {
+      "id": "prototype.slot-numeric",
+      "name": "Slot改·数值型",
+      "name_status": "confirmed",
+      "type": "category_prototype",
+      "status": "working",
+      "order": 40,
+      "primary_mother_id": "mechanism.slot",
+      "composed_mother_ids": [],
+      "representative_product_ids": [
+        "product.luck-be-a-landlord"
+      ],
+      "classification_axes": {
+        "inheritance_strategy": "slot_transform",
+        "inheritance_label": "Slot改写",
+        "result_mode": "numeric",
+        "result_label": "数值表现"
+      },
+      "summary": "保留 Slot 的 Spin 认知与自动落位，但建立可构筑符号池和自有 C₁，再放大数值结果。",
+      "definition": "本品类原型以《幸运房东》为基石游戏：保留 Slot 的装置随机、自动 Put 与 2D 网格认知，把固定符号池改为可构筑符号池，并以直接产出、阈值与邻接覆写传统支付线 C₁；道具在 C₂ 中演绎数值结果，房租在 P(t) 中验证结果是否足够。",
+      "formula_changes": {
+        "P_t": {
+          "operation": "fix",
+          "constraint_label": "房租数值压力",
+          "summary": "以当前房租、剩余 Spin、金币缺口和未达标后果包裹循环；房租检查属于 P(t)，不等于 C₂，也不与 N = 1 混用。",
           "review_status": "pending",
           "review_note": "外层压力结构已确认；具体房租数列、增长率与检查节奏等待产品资料逐项确认。"
         },
         "Pool_Symbol": {
           "operation": "override",
           "constraint_label": "可构筑符号池",
-          "summary": "采用《幸运房东》的符号池构筑：玩家能够持续增加、删除或调整后续 Spin 可以抽到的符号。"
+          "summary": "覆写 Slot 的固定符号池：玩家能够持续增加、删除或调整后续 Spin 可以抽到的符号。"
         },
         "Random": {
           "operation": "restrict",
-          "constraint_label": "从当前符号池自动抽取",
-          "summary": "每次 Spin 由 Slot 装置从玩家当前构筑的 Pool_Symbol 中自动产生本次符号结果。"
+          "constraint_label": "从当前构筑池抽取",
+          "summary": "保留 Random 从 Pool_Symbol 产生结果的职责，但输入改为玩家当前构筑的动态符号池。"
         },
         "Put": {
-          "operation": "restrict",
-          "constraint_label": "自动落位",
-          "summary": "采用《幸运房东》的自动 Put：装置把本次抽取符号自动写入 Slot 网格，玩家不决定单次落位。"
+          "operation": "inherit",
+          "constraint_label": "继承自动 Put",
+          "summary": "继承 Slot 母体的自动落位：装置把本次抽取符号写入 Slot 网格，玩家不决定单次落位。"
         },
         "Show_TP": {
-          "operation": "fix",
-          "constraint_label": "2D Slot 网格",
-          "summary": "采用《幸运房东》的 2D 离散 Slot 网格；符号位置与邻接关系可以被 C₁ 读取。"
+          "operation": "inherit",
+          "constraint_label": "继承 2D Slot 网格",
+          "summary": "继承 Slot 母体的 2D 离散网格；符号位置与邻接关系可以被新的 C₁ 读取。"
         },
         "C1": {
-          "operation": "extend",
+          "operation": "override",
           "constraint_label": "直接产出 · 阈值 · 邻接",
-          "summary": "采用《幸运房东》的基础协同：符号直接产生数值，并通过数量阈值与网格邻接形成额外产出。"
+          "summary": "覆写传统 Slot 支付线 C₁：符号直接产生数值，并通过数量阈值与网格邻接形成额外产出。"
         },
         "C2": {
           "operation": "extend",
-          "constraint_label": "道具结果演绎",
-          "summary": "在 Slot 母型无 C₂ 的基础上，加入《幸运房东》的道具层，对 C₁ 基础结果进行全局／局部修饰，或改变其最终结果映射。"
+          "constraint_label": "道具数值演绎",
+          "summary": "加入道具层，对 C₁ 基础结果进行全局／局部增强、修饰或结果映射，形成最终数值型 Spin_Result。"
         },
         "N": {
           "operation": "override",
@@ -61,16 +303,15 @@
         "BD": {
           "operation": "extend",
           "constraint_label": "选符号 · 删符号 · 获得道具",
-          "summary": "在传统 Slot 之上加入《幸运房东》的构筑决策，用新符号、删除与道具持续改变后续 Pool_Symbol、C₁ 和 C₂。"
+          "summary": "通过新符号、删除与道具持续改变后续 Pool_Symbol、C₁ 和 C₂。"
         }
       },
       "identity_rules": [
-        "以《幸运房东》作为本品类原型的提炼来源和代表产品",
-        "使用房租目标压力 P(t) 赋予每次 Spin_Result 达标意义，但不把房租检查周期写入 N",
-        "Pool_Symbol 可由玩家持续增加、删除或调整",
-        "装置自动把本次结果 Put 到 2D Slot 网格",
-        "C1 同时包含符号直接产出、数量阈值与网格邻接",
-        "C2 来自道具对 C1 基础结果的修饰或结果转译",
+        "以《幸运房东》作为本品类原型的基石游戏与代表产品",
+        "保留 Slot 的 Spin、自动 Put、2D 网格与装置认知",
+        "Pool_Symbol 从固定池改为可构筑动态池，但 Random 的抽取职责不变",
+        "C1 覆写为直接产出、数量阈值与网格邻接",
+        "C2 负责道具数值演绎，P(t) 负责房租数值验证",
         "一次 Spin 后进入一次构筑决策，并持续改变后续循环"
       ]
     }
