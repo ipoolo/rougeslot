@@ -120,6 +120,7 @@ const state = {
   selectedTermKey: "P_t",
   query: "",
   filter: "all",
+  atlasVariantViewMode: "compact",
   libraryView: "products",
   libraryProductQuery: "",
   libraryProductFilter: "all",
@@ -157,6 +158,8 @@ const elements = {
   mechanismRail: document.querySelector("#mechanism-rail"),
   prototypeRail: document.querySelector("#prototype-rail"),
   variantRail: document.querySelector("#variant-rail"),
+  variantViewToggle: document.querySelector("#atlas-variant-view-toggle"),
+  variantViewButtons: [...document.querySelectorAll("[data-variant-view-mode]")],
   atlasSummaryDialog: document.querySelector("#atlas-summary-dialog"),
   atlasSummaryTitle: document.querySelector("#atlas-summary-title"),
   atlasSummaryType: document.querySelector("#atlas-summary-type"),
@@ -2895,12 +2898,11 @@ function cardCounts(node) {
   ).length;
   return [
     `${FORMULA_FIELDS.length - changes} 继承`,
-    `${changes} 变化`,
-    `${productsFor(node).length} 产品`
+    `${changes} 变化`
   ];
 }
 
-function cardMarkup(node, inPath, current) {
+function cardMarkup(node, inPath, current, options = {}) {
   const status = statusCopy(node.status);
   const linksToDefinition = status.label === "工作定义";
   const temporaryName = node.name_status === "temporary"
@@ -2916,13 +2918,15 @@ function cardMarkup(node, inPath, current) {
     : null;
   const variantIconUrl = safeHttpUrl(variantProduct?.header_image_url);
   const variantIconFallback = (variantProduct?.name ?? node.name).slice(0, 2);
+  const compactVariant = node.type === "category_variant" && options.compact;
 
   return `
     <button
-      class="atlas-card atlas-card-${escapeHtml(node.type)} ${cornerstoneVariant ? "cornerstone-variant" : ""} ${inPath ? "in-path" : ""} ${current ? "current" : ""}"
+      class="atlas-card atlas-card-${escapeHtml(node.type)} ${cornerstoneVariant ? "cornerstone-variant" : ""} ${inPath ? "in-path" : ""} ${current ? "current" : ""} ${compactVariant ? "is-compact" : ""}"
       type="button"
       data-node-id="${escapeHtml(node.id)}"
       aria-pressed="${current}"
+      ${compactVariant ? `aria-label="查看品类变体：${escapeHtml(node.name)}"` : ""}
     >
       <span class="card-type">
         ${escapeHtml(TYPE_LABELS[node.type])}
@@ -3045,12 +3049,24 @@ function renderRails() {
     .sort((a, b) => a.order - b.order);
   const allPrototypes = prototypesFor(state.selectedMechanismId);
   const prototypes = allPrototypes.filter(nodeIsVisible);
-  const allVariants = variantsFor(state.selectedPrototypeId);
+  const allVariants = state.detailLevel === "mechanism"
+    ? allPrototypes.flatMap((prototype) => variantsFor(prototype.id))
+    : variantsFor(state.selectedPrototypeId);
   const variants = allVariants.filter(nodeIsVisible);
+  const allowsVariantViewToggle = allVariants.length >= 4;
+  const compactVariantView = allowsVariantViewToggle
+    && state.atlasVariantViewMode === "compact";
 
   elements.mechanismCount.textContent = `共 ${state.data.mechanisms.length} 种`;
   elements.prototypeCount.textContent = `包含 ${allPrototypes.length} 种`;
   elements.variantCount.textContent = `包含 ${allVariants.length} 种`;
+  elements.variantViewToggle.hidden = !allowsVariantViewToggle;
+  elements.variantViewButtons.forEach((button) => {
+    const active = button.dataset.variantViewMode === state.atlasVariantViewMode;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  elements.variantRail.classList.toggle("is-compact-view", compactVariantView);
 
   elements.mechanismRail.innerHTML = mechanisms.length
     ? mechanisms.map((node) => cardMarkup(
@@ -3072,7 +3088,11 @@ function renderRails() {
     ? variants.map((node) => cardMarkup(
         node,
         state.detailLevel === "variant" && node.id === state.selectedVariantId,
-        state.detailLevel === "variant" && node.id === state.selectedVariantId
+        state.detailLevel === "variant" && node.id === state.selectedVariantId,
+        {
+          compact: compactVariantView
+            && !(state.detailLevel === "variant" && node.id === state.selectedVariantId)
+        }
       )).join("")
     : emptyRailMarkup("当前原型下没有符合条件的品类变体");
 
@@ -3093,6 +3113,16 @@ function renderRails() {
       handleAtlasCardClick(event, button, selectVariant);
     });
   });
+
+  if (state.detailLevel === "variant") {
+    requestAnimationFrame(() => {
+      elements.variantRail.querySelector(".atlas-card.current")?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center"
+      });
+    });
+  }
 }
 
 function selectMechanism(id) {
@@ -3647,6 +3677,13 @@ function bindToolbar() {
   elements.filter.addEventListener("change", () => {
     state.filter = elements.filter.value;
     renderRails();
+  });
+
+  elements.variantViewButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      state.atlasVariantViewMode = button.dataset.variantViewMode;
+      renderRails();
+    });
   });
 }
 

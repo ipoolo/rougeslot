@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、品类变体图谱。">
   <title>持续爱干 · 游戏体验模型与原型图谱</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260728-6">
+  <link rel="stylesheet" href="./assets/styles.css?v=20260729-3">
   <link rel="stylesheet" href="./assets/insights.css?v=20260728-9">
   <link rel="stylesheet" href="./assets/ecosystem.css?v=20260728-21">
 </head>
@@ -873,7 +873,19 @@
               <span class="level-number">03</span>
               <h3 id="variant-title">品类变体</h3>
             </div>
-            <p id="variant-count">包含 0 种</p>
+            <div class="variant-level-meta">
+              <p id="variant-count">包含 0 种</p>
+              <div
+                class="variant-view-toggle"
+                id="atlas-variant-view-toggle"
+                role="group"
+                aria-label="品类变体显示方式"
+                hidden
+              >
+                <button type="button" data-variant-view-mode="compact" aria-pressed="true">折叠</button>
+                <button type="button" data-variant-view-mode="detail" aria-pressed="false">详细</button>
+              </div>
+            </div>
           </div>
           <div class="card-rail" id="variant-rail"></div>
         </section>
@@ -1741,6 +1753,6 @@
       activateTab();
     })();
   </script>
-  <script type="module" src="./assets/app.js?v=20260728-22"></script>
+  <script type="module" src="./assets/app.js?v=20260729-1"></script>
 </body>
 </html>

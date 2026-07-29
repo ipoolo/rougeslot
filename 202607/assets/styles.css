@@ -4701,6 +4701,48 @@ button.case-evidence-card.is-active {
   font-size: 11px;
 }
 
+.variant-level-meta {
+  display: grid;
+  gap: 10px;
+}
+
+.variant-view-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.variant-view-toggle[hidden] {
+  display: none;
+}
+
+.variant-view-toggle button {
+  min-height: 28px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 7px;
+  color: rgba(255, 255, 255, 0.5);
+  background: transparent;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.variant-view-toggle button:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.variant-view-toggle button.is-active {
+  color: #d8f5ff;
+  background: rgba(77, 149, 231, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(117, 216, 255, 0.28);
+}
+
 .card-rail {
   display: flex;
   gap: 12px;
@@ -4710,6 +4752,15 @@ button.case-evidence-card.is-active {
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.card-rail.is-compact-view {
+  display: grid;
+  height: 258px;
+  grid-auto-columns: 136.5px;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, 109px);
+  align-items: stretch;
 }
 
 .atlas-card {
@@ -4731,6 +4782,51 @@ button.case-evidence-card.is-active {
   display: flex;
   min-height: 230px;
   flex-direction: column;
+}
+
+.atlas-card-category_variant.is-compact {
+  flex: 0 0 136.5px;
+  height: 109px;
+  min-height: 109px;
+  padding: 14px;
+  justify-content: center;
+}
+
+.card-rail.is-compact-view .atlas-card-category_variant:not(.is-compact) {
+  height: 230px;
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.atlas-card-category_variant.is-compact > .card-type,
+.atlas-card-category_variant.is-compact > .atlas-card-representative,
+.atlas-card-category_variant.is-compact > p,
+.atlas-card-category_variant.is-compact > .atlas-card-more,
+.atlas-card-category_variant.is-compact > .card-counts {
+  display: none;
+}
+
+.atlas-card-category_variant.is-compact > .atlas-variant-identity {
+  gap: 8px;
+  min-height: 0;
+  margin: 0;
+}
+
+.atlas-card-category_variant.is-compact .atlas-variant-icon {
+  flex-basis: 46px;
+  width: 46px;
+  height: 34px;
+}
+
+.atlas-card-category_variant.is-compact .atlas-variant-identity h4 {
+  display: -webkit-box;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 760;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .atlas-card-category_variant > .card-type,
