@@ -6,27 +6,26 @@ const files = {
   prototypes: "data/category-prototypes.json",
   variants: "data/category-variants.json",
   products: "data/products.json",
+  sales: "data/product-sales-estimates.json",
+  steamMetadata: "data/product-steam-metadata.json",
   observations: "data/product-formula-observations.json",
   ecosystems: "data/category-ecosystems.json",
   samples: "data/design-samples.json"
 };
 
 const data = {};
+const documents = {};
 for (const [key, path] of Object.entries(files)) {
-  data[key] = JSON.parse(await readFile(new URL(path, root), "utf8")).items;
+  documents[key] = JSON.parse(await readFile(new URL(path, root), "utf8"));
+  data[key] = documents[key].items;
 }
 
 const errors = [];
 const ids = new Map();
 const allowedOperations = new Set([
   "inherit",
-  "default",
-  "restrict",
-  "fix",
-  "disable",
   "override",
-  "extend",
-  "compose"
+  "extend"
 ]);
 const allowedReviewStatuses = new Set(["draft", "pending", "confirmed"]);
 const formulaFields = [
@@ -43,7 +42,13 @@ const formulaFields = [
 
 for (const [collection, items] of Object.entries(data)) {
   for (const item of items) {
-    if (collection === "observations" || collection === "ecosystems" || collection === "samples") continue;
+    if (
+      collection === "sales"
+      || collection === "steamMetadata"
+      || collection === "observations"
+      || collection === "ecosystems"
+      || collection === "samples"
+    ) continue;
     if (ids.has(item.id)) {
       errors.push(`重复 ID：${item.id}`);
     }
@@ -77,7 +82,7 @@ for (const product of data.products) {
     errors.push(`${product.id} 已归类但没有且仅有一个对应的游戏变体`);
   }
   if ((product.prototype_ids ?? []).length === 0 && (product.variant_ids ?? []).length > 0) {
-    errors.push(`${product.id} 没有品类原型却仍关联品类变体`);
+    errors.push(`${product.id} 没有品类原型却仍关联游戏变体`);
   }
   for (const [collection, relationIds] of [
     ["mechanisms", product.mother_ids],
@@ -96,15 +101,95 @@ for (const product of data.products) {
   const variant = data.variants.find((item) => item.id === (product.variant_ids ?? [])[0]);
   if (variant) {
     if (!(variant.product_ids ?? []).includes(product.id)) {
-      errors.push(`${product.id} 指向的品类变体没有反向关联该游戏：${variant.id}`);
+      errors.push(`${product.id} 指向的游戏变体没有反向关联该游戏：${variant.id}`);
     }
     if (variant.prototype_id !== (product.prototype_ids ?? [])[0]) {
-      errors.push(`${product.id} 的品类原型与品类变体父级不一致`);
+      errors.push(`${product.id} 的品类原型与游戏变体父级不一致`);
     }
   }
 }
 
 const productIds = new Set(data.products.map((product) => product.id));
+const salesProductIds = new Set();
+if (documents.sales.source?.name !== "Gamalytic" || documents.sales.source?.metric !== "copiesSold") {
+  errors.push("销量数据源必须统一为 Gamalytic copiesSold");
+}
+for (const estimate of data.sales) {
+  if (!productIds.has(estimate.product_id)) {
+    errors.push(`销量估算指向不存在的游戏：${estimate.product_id}`);
+  }
+  if (salesProductIds.has(estimate.product_id)) {
+    errors.push(`游戏存在重复销量估算：${estimate.product_id}`);
+  }
+  salesProductIds.add(estimate.product_id);
+  if (estimate.metric !== "gamalytic_copies_sold") {
+    errors.push(`销量记录口径不是 Gamalytic copiesSold：${estimate.product_id}`);
+  }
+  if (estimate.status === "estimated") {
+    if (
+      !Number.isFinite(estimate.units_estimate)
+      || estimate.units_estimate < 0
+    ) {
+      errors.push(`Gamalytic 销量点估算无效：${estimate.product_id}`);
+    }
+    const hasLower = Number.isFinite(estimate.units_lower);
+    const hasUpper = Number.isFinite(estimate.units_upper);
+    if (hasLower !== hasUpper) {
+      errors.push(`Gamalytic 销量区间不完整：${estimate.product_id}`);
+    } else if (
+      hasLower
+      && (
+        estimate.units_lower > estimate.units_estimate
+        || estimate.units_estimate > estimate.units_upper
+      )
+    ) {
+      errors.push(`Gamalytic 销量点估算不在区间内：${estimate.product_id}`);
+    }
+  } else if (estimate.status !== "unavailable") {
+    errors.push(`未知销量状态：${estimate.product_id} · ${estimate.status}`);
+  }
+}
+for (const productId of productIds) {
+  if (!salesProductIds.has(productId)) {
+    errors.push(`游戏缺少销量估算记录：${productId}`);
+  }
+}
+
+const steamMetadataProductIds = new Set();
+if (documents.steamMetadata.source?.name !== "Steam") {
+  errors.push("Steam 元数据源必须标记为 Steam");
+}
+for (const metadata of data.steamMetadata) {
+  if (!productIds.has(metadata.product_id)) {
+    errors.push(`Steam 元数据指向不存在的游戏：${metadata.product_id}`);
+  }
+  if (steamMetadataProductIds.has(metadata.product_id)) {
+    errors.push(`游戏存在重复 Steam 元数据：${metadata.product_id}`);
+  }
+  steamMetadataProductIds.add(metadata.product_id);
+  if (!['available', 'unavailable'].includes(metadata.status)) {
+    errors.push(`未知 Steam 元数据状态：${metadata.product_id} · ${metadata.status}`);
+  }
+  if (metadata.status === "available") {
+    if (!/^\d+$/.test(String(metadata.steam_app_id ?? ""))) {
+      errors.push(`Steam App ID 无效：${metadata.product_id}`);
+    }
+    if (!Number.isInteger(metadata.review_score) || metadata.review_score < 0 || metadata.review_score > 9) {
+      errors.push(`Steam 评价等级无效：${metadata.product_id}`);
+    }
+    if (!Number.isInteger(metadata.total_reviews) || metadata.total_reviews < 0) {
+      errors.push(`Steam 评价数量无效：${metadata.product_id}`);
+    }
+    if (!metadata.release_date_iso && !metadata.release_date_text) {
+      errors.push(`Steam 上市时间缺失：${metadata.product_id}`);
+    }
+  }
+}
+for (const productId of productIds) {
+  if (!steamMetadataProductIds.has(productId)) {
+    errors.push(`游戏缺少 Steam 元数据：${productId}`);
+  }
+}
 
 for (const prototype of data.prototypes) {
   for (const productId of prototype.representative_product_ids ?? []) {
@@ -120,7 +205,7 @@ for (const prototype of data.prototypes) {
         && (variant.product_ids ?? []).includes(productId)
       );
       if (!cornerstoneVariant) {
-        errors.push(`${prototype.id} 的基石产品必须作为基石变体计入品类变体：${productId}`);
+        errors.push(`${prototype.id} 的基石产品必须作为基石变体计入游戏变体：${productId}`);
       } else if (!product.item.variant_ids.includes(cornerstoneVariant.id)) {
         errors.push(`${prototype.id} 的基石产品未反向关联基石变体：${productId}`);
       }
@@ -137,7 +222,7 @@ for (const variant of data.variants) {
     if (!product || product.collection !== "products") {
       errors.push(`${variant.id} 的变体产品不存在：${productId}`);
     } else if (!product.item.variant_ids.includes(variant.id)) {
-      errors.push(`${variant.id} 的产品未反向关联该品类变体：${productId}`);
+      errors.push(`${variant.id} 的产品未反向关联该游戏变体：${productId}`);
     } else if (!product.item.prototype_ids.includes(variant.prototype_id)) {
       errors.push(`${variant.id} 的产品没有归属于该变体的品类原型：${productId}`);
     }

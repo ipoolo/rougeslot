@@ -3,11 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、品类变体图谱。">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、游戏变体图谱。">
   <title>持续爱干 · 游戏体验模型与原型图谱</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260729-3">
-  <link rel="stylesheet" href="./assets/insights.css?v=20260728-9">
-  <link rel="stylesheet" href="./assets/ecosystem.css?v=20260728-21">
+  <link rel="stylesheet" href="./assets/styles.css?v=20260802-4">
+  <link rel="stylesheet" href="./assets/insights.css?v=20260801-2">
+  <link rel="stylesheet" href="./assets/ecosystem.css?v=20260802-2">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -28,6 +31,17 @@
       <a href="#insights" data-nav="insights">核心洞察</a>
     </nav>
     <span class="version-label">202607 · draft.27</span>
+    <nav class="cross-tab-trail" id="cross-tab-trail" aria-label="跨页跳转路径" hidden>
+      <span class="cross-tab-trail-label">跨页路径</span>
+      <div class="cross-tab-trail-items" id="cross-tab-trail-items"></div>
+      <button
+        type="button"
+        class="cross-tab-trail-clear"
+        id="cross-tab-trail-clear"
+        aria-label="清除跨页路径"
+        title="清除跨页路径"
+      >×</button>
+    </nav>
   </header>
 
   <main id="main">
@@ -121,7 +135,7 @@
       <div class="hero-foot">
         <p>
           <strong>公式是整站的共同底座。</strong>
-          机制母型、品类原型与品类变体，都必须说明自己约束或改变了哪个公式字段。
+          机制母型、品类原型与游戏变体，都必须说明自己约束或改变了哪个公式字段。
         </p>
         <div class="hero-actions">
           <a class="button button-primary" href="#model-case">看《幸运房东》案例</a>
@@ -204,14 +218,14 @@
               <span class="case-evidence-copy">
                 <small>真实界面 02 · 本次 Spin 结算</small>
                 <strong>同一游戏画面里，可以定位 Combo 的三个组成部分</strong>
-                <em>Combo 不是抽象黑盒：盘面先产生基础结果，道具再演绎结果，最后把本次收入呈现给玩家。</em>
+                <em>Combo 不是抽象黑盒：盘面先建立基础结果，道具再沿该结果完成二次揭晓，最后把本次收入呈现给玩家。</em>
                 <span class="case-evidence-mapping">
                   <span><b>C₁</b><i>中央 3 × 5 盘面：直接产出、数量阈值与邻接协同</i></span>
                   <span><b>C₂</b><i>两侧已持有道具：增强、修饰或改变 C₁ 基础结果</i></span>
                   <span><b>Spin_Result</b><i>金币增长与结算表演：玩家实际看到的本次输出</i></span>
                 </span>
                 <span class="case-evidence-tags">
-                  <b>C₁ · 符号协同</b><b>C₂ · 结果演绎</b><b>Spin_Result</b>
+                  <b>C₁ · 符号协同</b><b>C₂ · 二次揭晓</b><b>Spin_Result</b>
                 </span>
               </span>
             </button>
@@ -246,7 +260,7 @@
               </span>
               <span class="case-evidence-copy">
                 <small>真实界面 04 · 阶段性道具选择</small>
-                <strong>BD 获得道具，后续持续演绎结算结果</strong>
+                <strong>BD 获得道具，后续改变 C₂ 的二次揭晓</strong>
                 <em>获得道具发生在构筑节点；道具生效后进入后续 Spin 的 C₂。</em>
                 <span class="case-evidence-tags">
                   <b>BD</b><b>道具池</b><b>后续 C₂</b>
@@ -339,7 +353,7 @@
                 <span class="case-edge" data-case-edge="c1-c2" aria-hidden="true">→</span>
                 <button type="button" class="case-node node-rule"
                   data-case-node="c2" data-case-select="settle" aria-pressed="false">
-                  <small>C₂ · 结果演绎</small>
+                  <small>C₂ · 二次揭晓</small>
                   <strong>道具修饰</strong>
                   <em>增强或改变基础结果</em>
                 </button>
@@ -581,7 +595,7 @@
                 <strong>+12</strong>
               </span>
             </span>
-            <span class="stage-visual-caption">C₁ 产生基础结果 → C₂ 可选演绎 → 生成单次结果</span>
+            <span class="stage-visual-caption">C₁ 建立价值锚点 → C₂ 可选二次揭晓 → 生成单次结果</span>
           </button>
           <p>
             玩家先识别 C₁ 符号协同，再观察可选的 C₂ 如何修饰基础结果，
@@ -678,7 +692,7 @@
         <p>子节点继承父级已有约束，只记录自己进一步固定、收窄、扩展、覆写或禁用的字段。</p>
       </div>
 
-      <div class="atlas-cardinality-diagram" aria-label="体验模型向机制母型、品类原型与品类变体一对多展开">
+      <div class="atlas-cardinality-diagram" aria-label="体验模型向机制母型、品类原型与游戏变体一对多展开">
         <section class="cardinality-column cardinality-model">
           <header>
             <span>00 · 体验模型</span>
@@ -754,7 +768,7 @@
 
         <section class="cardinality-column cardinality-variant">
           <header>
-            <span>03 · 品类变体</span>
+            <span>03 · 游戏变体</span>
             <strong>继承原型，只记录局部差异</strong>
             <small>每个原型可拥有多个</small>
           </header>
@@ -766,7 +780,7 @@
             </article>
             <article class="cardinality-node is-placeholder">
               <small>未来扩展位置</small>
-              <strong>同原型的其他品类变体</strong>
+              <strong>同原型的其他游戏变体</strong>
               <p>可以覆写不同字段，但仍共享同一个品类原型身份。</p>
             </article>
           </div>
@@ -781,7 +795,7 @@
           </div>
           <p>
             纵向看“是否改写 Slot 核心”，横向看“结果如何表现与验证”。
-            C₂ 负责结果演绎；P(t) 负责判断结果是否足够。
+            C₂ 负责沿 C₁ 结果进行二次揭晓；P(t) 负责判断结果是否足够。
           </p>
         </header>
         <div class="slot-prototype-matrix" id="slot-prototype-matrix" aria-label="Slot 母体四品类原型矩阵">
@@ -795,7 +809,7 @@
       <div class="atlas-example-path">
         <div>
           <span>当前数据库的 Slot 核心分支</span>
-          <strong>四款基石游戏分别定义四个品类原型；品类变体继续从对应原型向下生长。</strong>
+          <strong>四款基石游戏分别定义四个品类原型；游戏变体继续从对应原型向下生长。</strong>
         </div>
         <div class="atlas-example-branches">
           <p><b>Slot+战斗型</b><i>→</i><b>Slotbound</b></p>
@@ -821,7 +835,7 @@
           <h2>先看有多少、有哪些，<br>再进入具体路径</h2>
         </div>
         <p>
-          先选择机制母型，再进入它的品类原型与品类变体；
+          先选择机制母型，再进入它的品类原型与游戏变体；
           完成选择后，下方会解释当前路径如何约束公式。
         </p>
       </div>
@@ -871,7 +885,7 @@
           <div class="level-head">
             <div>
               <span class="level-number">03</span>
-              <h3 id="variant-title">品类变体</h3>
+              <h3 id="variant-title">游戏变体</h3>
             </div>
             <div class="variant-level-meta">
               <p id="variant-count">包含 0 种</p>
@@ -879,7 +893,7 @@
                 class="variant-view-toggle"
                 id="atlas-variant-view-toggle"
                 role="group"
-                aria-label="品类变体显示方式"
+                aria-label="游戏变体显示方式"
                 hidden
               >
                 <button type="button" data-variant-view-mode="compact" aria-pressed="true">折叠</button>
@@ -908,7 +922,7 @@
           <div class="atlas-formula-legend" aria-label="公式约束图例">
             <span><i class="mechanism"></i>机制母型</span>
             <span><i class="prototype"></i>品类原型</span>
-            <span><i class="variant"></i>品类变体</span>
+            <span><i class="variant"></i>游戏变体</span>
             <span><i class="direct-change"></i>当前层变化</span>
             <span><i class="inherited"></i>继承未改</span>
           </div>
@@ -970,7 +984,7 @@
           <h2>游戏目录与模型数据管理台</h2>
         </div>
         <p>
-          具体产品从这里进入数据库；母型、品类原型与品类变体的公式字段，
+          具体游戏从这里进入数据库；母型、品类原型与游戏变体的公式字段，
           也在这里集中查看、调整并完成人工确认。
         </p>
       </div>
@@ -1014,7 +1028,7 @@
         <div class="library-panel-head">
           <div>
             <p class="eyebrow">PRODUCT CATALOG</p>
-            <h3 id="product-catalog-title">全部具体产品</h3>
+            <h3 id="product-catalog-title">全部具体游戏</h3>
           </div>
           <div class="product-catalog-tools">
             <button
@@ -1044,6 +1058,13 @@
                 <option value="legacy">旧版迁入</option>
               </select>
             </label>
+            <label class="product-filter product-sort-filter">
+              <span>排序</span>
+              <select id="library-product-sort" aria-label="游戏目录排序方式">
+                <option value="default">默认</option>
+                <option value="sales_desc">按销量数据逆序</option>
+              </select>
+            </label>
             <label class="library-search">
               <span class="sr-only">搜索游戏</span>
               <input id="library-product-search" type="search" placeholder="搜索游戏、作者、标签或旧版分析">
@@ -1061,17 +1082,12 @@
           <div>
             <p class="eyebrow">FORMULA DATA MATRIX</p>
             <h3 id="formula-matrix-title">模型公式字段总表</h3>
-            <p>每一行是一个模型节点，每一列是一个公式字段。点击单元格查看或修改。</p>
+            <p id="matrix-scope-summary">选择一个父类型，横向比较它与全部直接子类型的九个公式字段。</p>
           </div>
           <div class="matrix-filters">
             <label>
-              <span>层级</span>
-              <select id="library-level-filter">
-                <option value="all">全部层级</option>
-                <option value="mechanism_archetype">机制母型</option>
-                <option value="category_prototype">品类原型</option>
-                <option value="category_variant">品类变体</option>
-              </select>
+              <span>父类型</span>
+              <select id="library-matrix-parent" aria-label="选择公式表父类型"></select>
             </label>
             <label>
               <span>字段</span>
@@ -1081,9 +1097,19 @@
             </label>
           </div>
         </div>
+        <div class="matrix-node-focus" id="matrix-node-focus" hidden>
+          <div>
+            <span>当前聚焦子类型</span>
+            <strong id="matrix-node-focus-name"></strong>
+            <small>它仍与同一父类型下的其他子类型并列显示；点击单元格可查看或修改。</small>
+          </div>
+          <button type="button" class="button button-secondary" id="matrix-node-focus-clear">
+            清除聚焦
+          </button>
+        </div>
         <div class="formula-matrix-scroll">
           <table class="formula-data-table" id="formula-data-table">
-            <caption class="sr-only">机制母型、品类原型和品类变体的公式字段表</caption>
+            <caption class="sr-only">机制母型、品类原型和游戏变体的公式字段表</caption>
           </table>
         </div>
         <div class="matrix-legend" aria-label="字段状态图例">
@@ -1115,7 +1141,7 @@
           <div>
             <p class="eyebrow">PROTOTYPE GRAPH MANAGER</p>
             <h3 id="graph-manager-title">图谱节点与游戏归属管理</h3>
-            <p>机制母型与品类原型在这里增、删、改、查；具体游戏可在这里或游戏目录中设置所属原型与基石／变体角色，品类变体映射由系统自动生成。</p>
+            <p>机制母型与品类原型在这里增、删、改、查；具体游戏可在这里或游戏目录中设置所属原型与基石／变体角色，游戏变体映射由系统自动生成。</p>
           </div>
           <button type="button" class="button button-primary" data-create-node="mechanism_archetype">
             + 新建机制母型
@@ -1133,14 +1159,14 @@
         <div class="insights-hero">
           <div>
             <p class="eyebrow">00 · 核心洞察总览</p>
-            <h1>C₁ 立即可读，<br><em>C₂ 二次揭晓</em></h1>
+            <h1>C₁ 立即可读，<br><em>C₂ 二次揭晓，</em><br><span>决策保持轻量</span></h1>
           </div>
           <div class="insights-thesis">
             <span>总原则</span>
-            <strong>学习负责放大，不负责放行</strong>
+            <strong>学习负责放大，决策不能打断</strong>
             <p>
               玩家应当依靠先验知识直接进入最小爽环；新的规则、构筑和策略可以放大结果，
-              但不能挡在“抽取 → 看见 → 识别好坏”的入口。
+              但不能挡在“少量操作 → 看表演 → 再次操作”的连续循环里。
             </p>
           </div>
         </div>
@@ -1150,12 +1176,14 @@
           <div class="insight-model-head">
             <div>
               <span>CANONICAL INSIGHT MAP</span>
-              <h2 id="insight-model-title">最小爽环与第二次开奖</h2>
+              <h2 id="insight-model-title">双峰爽环与决策节奏</h2>
             </div>
             <div class="insight-model-controls" aria-label="核心洞察视角">
               <button type="button" data-insight-preset="all" aria-pressed="true">总原则</button>
               <button type="button" data-insight-preset="c1" aria-pressed="false">洞察 1 · C₁</button>
               <button type="button" data-insight-preset="c2" aria-pressed="false">洞察 2 · C₂</button>
+              <button type="button" data-insight-preset="c3" aria-pressed="false">洞察 3 · 轻决策</button>
+              <button type="button" data-insight-preset="c4" aria-pressed="false">洞察 4 · 禁止自动 Spin</button>
               <button type="button" data-insight-preset="hybrid" aria-pressed="false">高风险 · Slot改+战斗</button>
             </div>
           </div>
@@ -1202,7 +1230,7 @@
               <div class="insight-node-row">
                 <button type="button" class="insight-node node-c2"
                   data-insight-node="c2" data-insight-select="c2" aria-pressed="false">
-                  <small>结果演绎</small>
+                  <small>二次揭晓</small>
                   <strong>C₂ · 开奖过程</strong>
                   <span>预测不断被过程更新</span>
                 </button>
@@ -1238,17 +1266,79 @@
                 <span class="insight-next-cycle">放大下一轮</span>
               </div>
             </section>
+
+            <section class="insight-zone insight-zone-rhythm" data-insight-zone="rhythm">
+              <header>
+                <span>循环节奏 · 决策预算</span>
+                <strong>控制决策数与单次决策复杂度</strong>
+              </header>
+              <div class="insight-rhythm-flow">
+                <button type="button" class="insight-node node-operate"
+                  data-insight-node="operate" data-insight-select="c3" aria-pressed="false">
+                  <small>短操作窗口</small>
+                  <strong>少量操作</strong>
+                  <span>只保留当前表演所需的决定</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="operate-perform" aria-hidden="true">→</i>
+                <button type="button" class="insight-node node-perform"
+                  data-insight-node="perform" data-insight-select="c3" aria-pressed="false">
+                  <small>双峰释放</small>
+                  <strong>看表演</strong>
+                  <span>C₁ 识别好坏，C₂ 逐步揭晓</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="perform-repeat" aria-hidden="true">→</i>
+                <button type="button" class="insight-node node-repeat"
+                  data-insight-node="repeat" data-insight-select="c3" aria-pressed="false">
+                  <small>快速回流</small>
+                  <strong>再次操作</strong>
+                  <span>期待没有被长规划截断</span>
+                </button>
+              </div>
+              <p>复杂策略可以存在，但应优先放在阶段边界，避免每轮表演前都进入长时间分析。</p>
+            </section>
+
+            <section class="insight-zone insight-zone-autospin" data-insight-zone="autospin">
+              <header>
+                <span>主动权边界 · 禁止自动 Spin</span>
+                <strong>每一轮都必须由玩家明确触发</strong>
+              </header>
+              <div class="insight-autospin-flow">
+                <button type="button" class="insight-node node-manual-spin"
+                  data-insight-node="manual-spin" data-insight-select="c4" aria-pressed="false">
+                  <small>明确起点</small>
+                  <strong>手动 Spin</strong>
+                  <span>我决定下一轮何时开始</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="manual-anticipation" aria-hidden="true">→</i>
+                <button type="button" class="insight-node node-anticipation"
+                  data-insight-node="anticipation" data-insight-select="c4" aria-pressed="false">
+                  <small>主观期待</small>
+                  <strong>等待结果</strong>
+                  <span>操作与奖励建立因果距离</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="anticipation-peaks" aria-hidden="true">→</i>
+                <button type="button" class="insight-node node-double-peak"
+                  data-insight-node="double-peak" data-insight-select="c4" aria-pressed="false">
+                  <small>离散事件</small>
+                  <strong>C₁ → C₂ 双峰</strong>
+                  <span>两次峰值拥有清晰边界</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="peaks-return" aria-hidden="true">→</i>
+                <span class="insight-next-cycle">再次主动触发</span>
+              </div>
+              <p>自动 Spin 会删掉每轮的主动起点，把双峰压成没有边界的连续结果流。</p>
+            </section>
           </div>
 
           <div class="insight-selection-info" data-insight-info aria-live="polite">
             <span data-insight-info-label>总原则</span>
             <div>
-              <strong data-insight-info-title>C₁ 负责立即可读，C₂ 负责保留不确定性并二次揭晓。</strong>
+              <strong data-insight-info-title>C₁ 负责立即可读，C₂ 负责二次揭晓，轻决策与手动 Spin 让双峰持续成立。</strong>
               <p data-insight-info-copy>
-                学习、构筑和压力验证位于结果之后或循环外层，用来放大体验，不应成为进入最小爽环的通行证。
+                学习、构筑和压力验证位于结果之后或循环外层，用来放大体验；单轮只保留少量、低复杂度操作，并由玩家主动开启。
               </p>
               <small data-insight-info-boundary>
-                边界：C₂ 负责结果如何被演绎；P(t) 负责判断最终结果是否足够。
+                边界：复杂策略可以进入阶段性构筑，但不应占满两次表演之间的操作窗口；系统也不能替玩家触发下一次 Spin。
               </small>
             </div>
           </div>
@@ -1486,10 +1576,479 @@
         </div>
       </section>
 
+      <section class="section insights-section insight-decision-section" id="insight-decision">
+        <div class="section-heading insight-heading">
+          <div>
+            <p class="eyebrow">03 · 洞察三</p>
+            <h2>限制决策复杂度，<br>保护双峰循环的连续性</h2>
+          </div>
+          <p>
+            双峰多巴胺游戏需要同时限制<strong>决策数</strong>与<strong>单次决策复杂度</strong>，
+            让玩家持续处在“少量操作 → 看表演 → 少量操作”的循环中。
+            策略深度可以保留，但不应让每次表演都以一段长分析为代价。
+          </p>
+        </div>
+
+        <section class="decision-budget-definition" aria-labelledby="decision-budget-title">
+          <header>
+            <div>
+              <span>DECISION BUDGET</span>
+              <h3 id="decision-budget-title">循环负荷 ≈ 决策数 × 单次决策复杂度</h3>
+            </div>
+            <p>
+              决策负荷越高，玩家从一次表演回到下一次表演所需的时间越长。
+              这里限制的不是策略上限，而是单个双峰循环必须支付的操作成本。
+            </p>
+          </header>
+
+          <div class="decision-budget-grid">
+            <article>
+              <span>01 · 决策数</span>
+              <strong>一次表演前要连续做多少次选择？</strong>
+              <p>选择入口越多、确认步骤越长，循环越容易停在操作区。</p>
+            </article>
+            <b aria-hidden="true">×</b>
+            <article>
+              <span>02 · 单次复杂度</span>
+              <strong>每次选择要比较多少分支与依赖？</strong>
+              <p>分支、资源、跨系统依赖与计算量，都会延长单次判断。</p>
+            </article>
+            <i aria-hidden="true">→</i>
+            <article class="decision-budget-outcome">
+              <span>节奏结果</span>
+              <strong>下一次表演来得够快吗？</strong>
+              <p>目标是让思考服务于期待，而不是取代期待。</p>
+            </article>
+          </div>
+
+          <div class="decision-rhythm-lanes">
+            <div class="decision-rhythm-primary">
+              <span>单轮主循环</span>
+              <b>少量操作</b><i>→</i><b>看 C₁ / C₂ 表演</b><i>→</i><b>快速进入下一轮</b>
+            </div>
+            <div class="decision-rhythm-boundary">
+              <span>阶段边界</span>
+              <b>复杂构筑／长期策略</b>
+              <small>低频集中处理，不占满每轮表演之间的窗口</small>
+            </div>
+          </div>
+        </section>
+
+        <article class="decision-bad-case decision-good-case">
+          <div class="decision-bad-case-visual decision-good-case-visual"
+            aria-label="命运转轮用低复杂度的技巧型斯金纳箱维持连续双峰">
+            <div><span>LOW COMPLEXITY</span><strong>单轴轻操作</strong></div>
+            <i>→</i>
+            <div><span>SKILL INPUT</span><strong>选择时机停轮</strong></div>
+            <i>→</i>
+            <div><span>MICRO SKINNER BOX</span><strong>每次操作再开奖</strong></div>
+            <i>→</i>
+            <div><span>DOUBLE-PEAK LOOP</span><strong>快速进入下一峰</strong></div>
+          </div>
+          <div class="decision-bad-case-copy decision-good-case-copy">
+            <header><span>GOOD CASE 01 · 洞察 03</span><strong>命运转轮 · Slot改·战斗</strong></header>
+            <h3>把复杂策略压缩成一次时机判断，让每次操作都成为新的开奖</h3>
+            <p>
+              《命运转轮》把复杂决策降维成单轴、单时机的轻操作：玩家观察数值，在合适时点点击停轮。
+              每次点击既带有技巧成分，又会立刻进入一次随机兑现，形成一个短小的<strong>“技巧型斯金纳箱”</strong>。
+              “操作 → 期待 → 揭晓”高频连续，使玩家能够持续处在多轮双峰多巴胺体验状态。
+            </p>
+            <aside>
+              <span>TRADE-OFF</span>
+              <p>每一轴都需要持续注意并主动判断停轮时机；交互频率过高时，长时间游玩会明显疲劳。</p>
+            </aside>
+            <footer>有效机制：<b>低复杂度 × 技巧型斯金纳箱 × 高频双峰</b>；代价：<b>持续注意力疲劳</b></footer>
+          </div>
+        </article>
+
+        <article class="decision-bad-case lucky-hero-bad-case">
+          <div class="decision-bad-case-visual lucky-hero-operation-flow"
+            aria-label="幸运勇者的 5×5 盘面把单 Spin 逐符号操作放大为大量操作对象">
+            <div><span>BOARD</span><strong>5×5 大盘面</strong></div>
+            <i>→</i>
+            <div><span>OBJECTS</span><strong>最多 25 个符号对象</strong></div>
+            <i>→</i>
+            <div><span>PER-SYMBOL INPUT</span><strong>单 Spin 逐符号操作</strong></div>
+            <i>→</i>
+            <div><span>FATIGUE</span><strong>持续注意与输入疲劳</strong></div>
+          </div>
+          <div class="decision-bad-case-copy">
+            <header><span>BAD CASE 01 · 洞察 03</span><strong>幸运勇者 · Slot改·战斗</strong></header>
+            <h3>5×5 的盘面容量，被逐符号操作转化成了操作数量</h3>
+            <p>
+              《幸运勇者》仍使用 5×5 盘面，并要求玩家在单次 Spin 内逐符号操作。
+              大盘面本可用于承载更多符号与协同；当每个符号同时成为操作对象时，
+              即使单次判断并不复杂，重复到大量符号上仍会显著拉长操作窗口，
+              打断“少量操作 → 看表演”的节奏，并让长时间游玩产生明显疲劳。
+            </p>
+            <footer>负荷来源：<b>5×5 盘面 × 逐符号操作 × 高频重复</b></footer>
+          </div>
+        </article>
+
+        <section class="decision-board-tradeoff" aria-labelledby="decision-board-tradeoff-title">
+          <header>
+            <div>
+              <span>DESIGN TRADE-OFF · 基于幸运猎人的改造推导</span>
+              <h3 id="decision-board-tradeoff-title">盘面大小不能脱离操作粒度与符号养成方式单独决定</h3>
+            </div>
+            <p>
+              以下不是《幸运勇者》或《幸运猎人》的当前盘面设定，而是基于《幸运猎人》改造方向得到的通用取舍：
+              大盘面适合承载符号协同，小盘面适合承载逐符号操作；组合错误，会在操作疲劳与养成承载不足之间付出代价。
+            </p>
+          </header>
+
+          <div class="decision-board-matrix">
+            <article class="is-good">
+              <span>✓ 玩符号协同</span>
+              <strong>大盘面 + 符号类型 BD + 自动处理盘面</strong>
+              <p>把注意力留给符号组合、流派构筑与结果观察，不要求玩家逐个处理盘面对象。</p>
+            </article>
+            <article class="is-good">
+              <span>✓ 玩单次操作决策</span>
+              <strong>小盘面 + 逐符号操作 + 概率 BD／不养成符号类型</strong>
+              <p>缩小每次要处理的对象集合，让少量操作本身成为主要决策体验。</p>
+            </article>
+            <article class="is-bad">
+              <span>✕ 操作数太高</span>
+              <strong>大盘面 + 单 Spin 逐符号操作</strong>
+              <p>盘面容量直接转化成输入数量，单次循环被大量重复操作占满。</p>
+            </article>
+            <article class="is-bad">
+              <span>✕ 盘面单次承载太低</span>
+              <strong>小盘面 + 深度符号类型养成</strong>
+              <p>可同时出现的符号过少，协同难以展开，养成成果也缺少展示空间。</p>
+            </article>
+          </div>
+
+          <footer>
+            <strong>核心取舍</strong>
+            <p>
+              要么让大盘面负责“看更多符号协同”，把操作移出单 Spin；
+              要么让小盘面负责“做少量关键操作”，降低符号类型养成的承载要求。
+            </p>
+          </footer>
+        </section>
+
+        <section class="choice-pool-attempt" aria-labelledby="choice-pool-attempt-title">
+          <header>
+            <div>
+              <span>DESIGN ATTEMPT · 洞察 03</span>
+              <h3 id="choice-pool-attempt-title">《Slot or Not》：用 Choice_Pool 换取支付线密度，但以操作数和峰值强度为代价</h3>
+            </div>
+            <p>
+              这是“大盘面 + 符号类型 BD”的一种结构思路，不是默认推荐的 Good Case。
+              它解决了全局符号池与单 Spin 同屏类型数量的冲突，但没有消除复杂度，而是把复杂度转移到抽取阶段与玩家操作中。
+            </p>
+          </header>
+
+          <div class="choice-pool-progressive-board">
+            <span>盘面成长</span>
+            <strong>1×3 初始盘面</strong><i>→</i><strong>随单局进度扩展</strong><i>→</i><strong>逐步释放盘面容量</strong>
+            <p>初期认知压力得到延后；当盘面持续扩大时，后期识别量与操作负担仍会重新上升。</p>
+          </div>
+
+          <div class="choice-pool-flow-compare">
+            <div class="choice-pool-flow-lane is-direct">
+              <span>直接抽取 · 集中揭晓</span>
+              <div>
+                <b>Pool_Symbol</b><i>→</i><b>Random</b><i>→</i><b>SingleSpin_Symbol</b><i>→</i><b>Put</b><i>→</i><strong>C₁ 盘面揭晓</strong>
+              </div>
+            </div>
+            <div class="choice-pool-flow-lane is-staged">
+              <span>Slot or Not · 多阶段抽取</span>
+              <div>
+                <b>Pool_Symbol</b><i>→</i><b>Random</b><i>→</i><b>Choice_Pool</b><i>→</i><b>玩家主动选择</b><i>→</i><b>SingleSpin_Symbol</b><i>→</i><b>Put</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="choice-pool-tradeoff-grid">
+            <article class="choice-pool-gain">
+              <span>结构收益</span>
+              <h4>限制单 Spin 同屏类型，提高支付线协同概率</h4>
+              <ul>
+                <li>全局 Pool_Symbol 可以保留较大的构筑空间。</li>
+                <li>Choice_Pool 每次只暴露少量候选，降低进入盘面的符号类型数量。</li>
+                <li>相同符号的重复密度提高，更容易形成支付线协同反应。</li>
+              </ul>
+              <p>支付线的结构限制是：盘面格数固定时，符号类型越多，相同符号越稀疏，协同越难发生。</p>
+            </article>
+            <article class="choice-pool-cost">
+              <span>体验代价</span>
+              <h4>一次强揭晓被拆成多个操作阶段</h4>
+              <ul>
+                <li>候选揭晓与主动选择增加了单 Spin 的操作阶段和操作数。</li>
+                <li>玩家在落盘前已经看到并筛选候选，最终盘面的未知性下降。</li>
+                <li>“盘面中大奖”的 C₁ 刺激被提前拆散，强峰值可能变成多个较弱的小揭晓。</li>
+              </ul>
+              <p>多阶段抽取并不必然产生更多有效峰值；它也可能稀释单次大奖的认知刺激，削弱连续维持多巴胺峰值的能力。</p>
+            </article>
+          </div>
+
+          <footer>
+            <span>结论</span>
+            <strong>全局符号池可以很大，但限制单 Spin 类型的方式不能破坏集中揭晓。</strong>
+            <p>Choice_Pool 是可研究的结构思路；是否成立，取决于支付线密度收益能否覆盖新增操作数与 C₁ 峰值损失。</p>
+          </footer>
+        </section>
+
+        <section class="combat-cognitive-budget" aria-labelledby="combat-cognitive-budget-title">
+          <header>
+            <div>
+              <span>COMBAT COGNITIVE BUDGET · 单 Spin 压力验证</span>
+              <h3 id="combat-cognitive-budget-title">战斗模型也占用单 Spin 的认知预算</h3>
+            </div>
+            <p>
+              双峰体验要求玩家快速完成期待、识别与结果理解。战斗变量不是独立叠加在 Slot 之外的系统，
+              它会直接增加玩家理解本次 Spin 的成本。
+            </p>
+          </header>
+
+          <div class="combat-cognitive-formula" aria-label="单 Spin 有效认知负荷公式">
+            <article>
+              <span>Pool_Symbol</span>
+              <strong>概率认知</strong>
+              <p>会出现哪些符号、各自概率如何，以及构筑怎样改变概率空间。</p>
+            </article>
+            <i aria-hidden="true">+</i>
+            <article>
+              <span>C₁</span>
+              <strong>盘面认知／操作决策</strong>
+              <p>识别当前盘面、符号关系与协同，并完成本轮必要操作。</p>
+            </article>
+            <i aria-hidden="true">+</i>
+            <article>
+              <span>C₂</span>
+              <strong>结果解释／战斗状态更新</strong>
+              <p>理解表演最终带来的攻击、防御、血量与能量变化。</p>
+            </article>
+            <i aria-hidden="true">+</i>
+            <article>
+              <span>P(t)</span>
+              <strong>持续压力追踪</strong>
+              <p>追踪跨 Spin 目标、期限，以及食物等独立于战斗的生存压力。</p>
+            </article>
+            <i aria-hidden="true">=</i>
+            <article class="combat-cognitive-total">
+              <span>SINGLE SPIN</span>
+              <strong>有效认知负荷</strong>
+              <p>四部分共同决定下一次双峰循环能否立即开始。</p>
+            </article>
+          </div>
+
+          <div class="combat-model-contrast">
+            <article class="is-light combat-model-numeric">
+              <span>01 · 数值检测型</span>
+              <h4>只有我方攻击：把战斗压缩成一次数值验证</h4>
+              <p>
+                符号养成通常只围绕攻击展开，并包装成随从、武器等符号。
+                玩家主要确认本次造成了多少伤害、是否达到目标值；Pool_Symbol 的类型分叉少，
+                C₂ 的解释路径也更短，表演结束后可以迅速进入下一次 Spin。
+              </p>
+              <div class="combat-model-signature">
+                <b>Pool</b><em>攻击符号</em>
+                <b>包装</b><em>随从／武器</em>
+                <b>验证</b><em>伤害是否达标</em>
+              </div>
+            </article>
+            <article class="is-heavy combat-model-survival">
+              <span>02 · 生存型</span>
+              <h4>敌我相互攻击：攻／防／钱继续分化出更多状态</h4>
+              <p>
+                玩家既要提高我方输出，也要承受敌方攻击并维护生存资源。
+                基础符号池常由攻、防、钱构成，而攻防内部的进一步变体会同时抬高 Pool_Symbol、C₂ 与 P(t) 的认知负荷。
+              </p>
+              <div class="survival-variant-list">
+                <div>
+                  <span>变体 01 · 防御层</span>
+                  <strong>在血量系统中引入防御</strong>
+                  <p>玩家需要额外理解减伤、护甲消耗与实际生命损失。</p>
+                </div>
+                <div>
+                  <span>变体 02 · 资源攻击</span>
+                  <strong>攻击消耗不同类型资源</strong>
+                  <p>攻击不再只是数值，还要判断资源来源、消耗与攻击种类。</p>
+                </div>
+                <div>
+                  <span>变体 03 · 独立生存线</span>
+                  <strong>食物消耗形成战斗外压力</strong>
+                  <p>《Spinny Dungeon》在战斗之外增加食物压力，应计入跨 Spin 持续存在的 P(t)。</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <section class="combat-complexity-compensation" aria-labelledby="combat-compensation-title">
+            <header>
+              <span>LOAD COMPENSATION · 当前样本观察</span>
+              <h4 id="combat-compensation-title">增加战斗认知后，用盘面降维归还 C₁ 与符号池预算</h4>
+              <p>
+                生存型战斗相较基础模型增加了状态与符号分叉；较有效的解法不是继续让所有层级一起增长，
+                而是主动缩小盘面、减少同屏符号与单 Spin 操作对象。
+              </p>
+            </header>
+            <div class="combat-compensation-map">
+              <article class="combat-compensation-source">
+                <span>高负荷起点</span>
+                <strong>2D · 5×5+</strong>
+                <p>大盘面、较大符号池与生存战斗同时存在。</p>
+              </article>
+              <i aria-hidden="true">→</i>
+              <div class="combat-compensation-routes">
+                <article>
+                  <span>路径 A · 保留二维盘面</span>
+                  <strong>3×3 + 单步斯金纳箱操作</strong>
+                  <p>《Slotbound》保留支付线与位置关系，但用更小盘面降低 C₁ 识别量。</p>
+                </article>
+                <article>
+                  <span>路径 B · 进一步降低维度</span>
+                  <strong>1D 序列 + 单步斯金纳箱操作</strong>
+                  <p>《命运转轮》把空间判断压缩成序列与时机判断，维持更连续的操作—表演节奏。</p>
+                </article>
+              </div>
+            </div>
+            <footer>
+              当前样本中，3×3 与 1D 路线表现出较好的市场反馈和爽感连续性；该结论仍需更多产品样本继续验证。
+            </footer>
+          </section>
+
+          <footer>
+            <span>复杂度守恒</span>
+            <strong>战斗越接近生存模型，Pool_Symbol 的类型分叉与 C₁ 的空间规模就越要收缩。</strong>
+            <p>不要同时扩大盘面、符号池、C₂ 战斗状态与 P(t) 生存压力。</p>
+          </footer>
+        </section>
+
+        <article class="decision-bad-case">
+          <div class="decision-bad-case-visual" aria-label="帝国轮盘的决策负荷不断累积">
+            <div><span>SLOT</span><strong>资源产出</strong></div>
+            <i>→</i>
+            <div><span>DECISION 01</span><strong>资源分配</strong></div>
+            <i>→</i>
+            <div><span>DECISION 02</span><strong>发展路线</strong></div>
+            <i>→</i>
+            <div><span>DECISION 03+</span><strong>文明经营</strong></div>
+          </div>
+          <div class="decision-bad-case-copy">
+            <header><span>BAD CASE 02 · 洞察 03</span><strong>帝国轮盘 · Slot+数值</strong></header>
+            <h3>连续规划拉长了两次表演之间的静默区</h3>
+            <p>
+              Slot 产出后，玩家需要处理多种资源，并连续完成分配、发展与经营决策。
+              决策数与依赖复杂度同时累积，使体验长时间停留在分析状态，
+              “少量操作 → 看表演”的节奏被策略规划截断。
+            </p>
+            <footer>节奏风险：<b>决策数上升 × 依赖层数上升 × 表演间隔拉长</b></footer>
+          </div>
+        </article>
+
+        <article class="decision-bad-case">
+          <div
+            class="decision-bad-case-visual column-library-flow"
+            aria-label="死而符生的五列 Slot 分别使用独立符号库"
+          >
+            <div><span>COL 01</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
+            <div><span>COL 02</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
+            <div><span>COL 03</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
+            <div><span>COL 04</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
+            <div><span>COL 05</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
+            <b>5 个独立库 × 刷新／锁定 × 支付线序列 → 决策认知负荷不止 5×</b>
+          </div>
+          <div class="decision-bad-case-copy">
+            <header><span>BAD CASE 03 · 洞察 03</span><strong>死而符生 · Slot+数值</strong></header>
+            <h3>五列独立符号库，把一次大奖判断拆成五套认知任务</h3>
+            <p>
+              传统 Slot 依靠共享符号先验支持一次性识别；《死而符生》让五列分别维护独立符号库。
+              玩家需要同时理解每列的候选、价值与组合关系，再叠加刷新、锁定和从左到右的支付线序列。
+              原本“一套符号认知 + 一次操作判断”被放大为至少五套并行认知，实际决策认知复杂度不止 5 倍。
+            </p>
+            <footer>认知风险：<b>5 个独立符号库 × 列间比较 × 刷新／锁定 ≫ 5×</b></footer>
+          </div>
+        </article>
+
+        <div class="insight-rule-banner rule-banner-c3">
+          <span>规则 03</span>
+          <strong>让玩家频繁做小决定，阶段性做大决定；不要每次开奖前都完成一轮经营。</strong>
+          <p>好的策略深度会放大下一轮期待，过密的策略决策则会取代双峰体验本身。</p>
+        </div>
+      </section>
+
+      <section class="section insights-section insight-autospin-section" id="insight-autospin">
+        <div class="section-heading insight-heading">
+          <div>
+            <p class="eyebrow">04 · 洞察四</p>
+            <h2>绝对，千万，<br>不要做自动 Spin</h2>
+          </div>
+          <p>
+            手动触发不是可以省略的冗余操作。它为每一轮建立明确的时间起点与玩家主动权，
+            让期待、C₁ 识别和 C₂ 揭晓被感知为一次完整事件。
+            自动 Spin 会直接打断双峰多巴胺体验的设计目的。
+          </p>
+        </div>
+
+        <div class="autospin-prohibition" role="note" aria-label="禁止自动 Spin 的不可妥协原则">
+          <span>NON-NEGOTIABLE</span>
+          <strong>绝对，千万，<em>不要做自动 Spin。</em></strong>
+          <p>可以让操作更轻，但不能替玩家按下下一次 Spin。</p>
+        </div>
+
+        <section class="autospin-contrast" aria-label="手动 Spin 与自动 Spin 的体验差异">
+          <article class="autospin-lane autospin-lane-manual">
+            <header><span>MANUAL SPIN</span><strong>主动开启一次完整双峰</strong></header>
+            <div>
+              <b>明确操作</b><i>→</i><b>期待建立</b><i>→</i><b>C₁ 识别</b><i>→</i><b>C₂ 揭晓</b><i>→</i><b>回到主动权</b>
+            </div>
+            <p>每轮都有清晰起点、等待过程与结束边界，玩家知道“是我开启了这次结果”。</p>
+          </article>
+          <article class="autospin-lane autospin-lane-auto">
+            <header><span>AUTO SPIN</span><strong>把离散双峰压成连续结果流</strong></header>
+            <div>
+              <b>系统触发</b><i>→</i><b>结果不断</b><i>→</i><b>起点消失</b><i>→</i><b>峰值扁平</b><i>→</i><b>等待下次奖励</b>
+            </div>
+            <p>玩家从主动发起者退化为被动观看者，只剩下一次随机回报何时出现的等待。</p>
+          </article>
+        </section>
+
+        <div class="skinner-warning">
+          <span>BEHAVIORAL RISK · 斯金纳箱式循环</span>
+          <strong>自动 Spin + 变动比率奖励 + 无间断重复</strong>
+          <p>
+            自动推进让重复行为不再需要新的主动决定，变动奖励则持续提供“下一次也许会更好”的刺激。
+            这不是在完成双峰设计，而是在引导无意识重复行为，并放大行为成瘾风险。
+          </p>
+        </div>
+
+        <article class="decision-bad-case autospin-bad-case">
+          <div class="decision-bad-case-visual autospin-bad-flow"
+            aria-label="Devils Due 的自动 Spin 把双峰压成连续随机奖励">
+            <div><span>AUTO SPIN ON</span><strong>系统连续拉动</strong></div>
+            <i>→</i>
+            <div><span>BOUNDARY LOST</span><strong>C₁／C₂ 失去边界</strong></div>
+            <i>→</i>
+            <div><span>PASSIVE LOOP</span><strong>等待下一次随机奖励</strong></div>
+          </div>
+          <div class="decision-bad-case-copy">
+            <header><span>BAD CASE 01 · 洞察 04</span><strong>Devils Due · Slot+数值</strong></header>
+            <h3>自动 Spin 直接拆掉了双峰体验的主动起点</h3>
+            <p>
+              Devils Due 让系统自动推进 Spin。玩家不再通过一次明确操作建立期待，而是被动接收连续结果；
+              C₁ 与 C₂ 难以形成可感知的两次峰值，只剩等待下一次随机回报。
+              变动奖励与无间断重复共同构成斯金纳箱式循环，引导无意识重复行为并放大行为成瘾风险。
+            </p>
+            <footer>设计风险：<b>主动权消失 × 峰值扁平化 × 变动奖励无尽循环</b></footer>
+          </div>
+        </article>
+
+        <div class="insight-rule-banner rule-banner-c4">
+          <span>规则 04</span>
+          <strong>可以降低 Spin 的操作成本，但绝不能把“下一次何时开始”的权力交给系统。</strong>
+          <p>双峰需要玩家主动开启每一轮；自动 Spin 优化的是重复次数，不是体验质量。</p>
+        </div>
+      </section>
+
       <section class="section insights-section insight-check-section" id="insight-checks">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">03 · 设计检查</p>
+            <p class="eyebrow">05 · 设计检查</p>
             <h2>把洞察变成<br>可验证的问题</h2>
           </div>
           <p>这些问题用于检查新原型，而不是把洞察固化成不可调整的数值上限。</p>
@@ -1507,12 +2066,22 @@
             <p>如果玩家能够直接准确报出最终结果，后续表演大概率只是结算动画，而不是二次揭晓。</p>
           </article>
           <article>
-            <span>CHECK 03 · 认知预算</span>
+            <span>CHECK 03 · 决策节奏</span>
+            <h3>下一次表演前，玩家还要做多少决定？</h3>
+            <p>同时记录决策数量、每次选择的分支与依赖；只统计操作时长，会漏掉真正的思考负荷。</p>
+          </article>
+          <article>
+            <span>CHECK 04 · 主动触发</span>
+            <h3>每一次 Spin 都由玩家明确触发吗？</h3>
+            <p>如果系统可以连续自动 Spin，期待就失去清晰起点，C₁／C₂ 会退化为没有边界的连续结果流。</p>
+          </article>
+          <article>
+            <span>CHECK 05 · 认知预算</span>
             <h3>棋盘是否还处在不耗力观察区？</h3>
             <p>共同检查棋盘大小、符号类型、关系层数与跨区域依赖；Slot改+战斗尤其需要控制这些变量。</p>
           </article>
           <article>
-            <span>CHECK 04 · 边界</span>
+            <span>CHECK 06 · 边界</span>
             <h3>复杂规则真的必须属于 C₁吗？</h3>
             <p>决定基础协同是否成立的规则留在 C₁；在基础结果之上进行修饰或转译的规则优先归入 C₂。</p>
           </article>
@@ -1561,6 +2130,31 @@
         <textarea id="field-editor-summary" rows="6" maxlength="1200" required></textarea>
       </label>
 
+      <section
+        class="field-editor-evidence"
+        id="field-editor-evidence"
+        aria-labelledby="field-editor-evidence-title"
+      >
+        <div class="field-editor-evidence-head">
+          <div>
+            <span id="field-editor-evidence-title">字段配图</span>
+            <small>可点击上传、拖入或粘贴界面截图与机制示意图。</small>
+          </div>
+          <label class="button button-secondary field-editor-upload">
+            <input
+              id="field-editor-image-input"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              multiple
+            >
+            <span>＋ 上传图片</span>
+          </label>
+        </div>
+        <div class="field-editor-evidence-list" id="field-editor-evidence-list"
+          data-field-evidence-group></div>
+        <p class="field-editor-evidence-hint">最多 4 张；支持 PNG、JPEG、WebP，单张不超过 5MB。可拖入图片，或复制图片后按 ⌘V / Ctrl+V。</p>
+      </section>
+
       <label class="editor-field">
         <span>本次调整备注</span>
         <textarea id="field-editor-note" rows="3" maxlength="600"
@@ -1577,8 +2171,59 @@
     </form>
   </dialog>
 
+  <dialog class="field-image-viewer" id="field-image-viewer" aria-labelledby="field-image-viewer-title">
+    <section>
+      <header class="field-image-viewer-head">
+        <div>
+          <span id="field-image-viewer-count">字段配图</span>
+          <strong id="field-image-viewer-title">查看字段配图</strong>
+        </div>
+        <div class="field-image-viewer-actions">
+          <div class="field-image-viewer-tools" role="group" aria-label="图片缩放">
+            <button type="button" id="field-image-viewer-zoom-out"
+              aria-label="缩小图片" title="缩小图片">−</button>
+            <output id="field-image-viewer-zoom-level" aria-live="polite">100%</output>
+            <button type="button" id="field-image-viewer-zoom-in"
+              aria-label="放大图片" title="放大图片">＋</button>
+            <button type="button" class="reset" id="field-image-viewer-zoom-reset"
+              aria-label="恢复适应窗口大小" title="恢复适应窗口大小">适应</button>
+          </div>
+          <button type="button" class="field-image-viewer-close"
+            id="field-image-viewer-close" aria-label="关闭配图大图">×</button>
+        </div>
+      </header>
+      <div class="field-image-viewer-stage">
+        <button type="button" class="field-image-viewer-nav previous"
+          id="field-image-viewer-previous" aria-label="查看上一张配图">‹</button>
+        <img id="field-image-viewer-image" alt="" draggable="false">
+        <button type="button" class="field-image-viewer-nav next"
+          id="field-image-viewer-next" aria-label="查看下一张配图">›</button>
+      </div>
+      <footer>
+        <p id="field-image-viewer-caption"></p>
+        <span>滚轮或 ＋／－ 缩放，放大后拖动查看；按 0 复原，← → 切换图片</span>
+      </footer>
+    </section>
+  </dialog>
+
   <dialog class="product-detail-dialog" id="product-detail" aria-labelledby="product-detail-title">
     <article>
+      <nav
+        class="cross-tab-trail product-detail-cross-tab-trail"
+        id="product-detail-cross-tab-trail"
+        aria-label="产品详情跨页跳转路径"
+        hidden
+      >
+        <span class="cross-tab-trail-label">跨页路径</span>
+        <div class="cross-tab-trail-items" id="product-detail-cross-tab-trail-items"></div>
+        <button
+          type="button"
+          class="cross-tab-trail-clear"
+          id="product-detail-cross-tab-trail-clear"
+          aria-label="清除跨页路径"
+          title="清除跨页路径"
+        >×</button>
+      </nav>
       <button type="button" class="editor-close product-detail-close" id="product-detail-close"
         aria-label="关闭游戏资料">×</button>
       <div id="product-detail-content">
@@ -1701,7 +2346,7 @@
 
   <footer>
     <p>R_RougeSlot · 202607 新版知识架构</p>
-    <p>体验模型 → 机制母型 → 品类原型 → 品类变体 → 具体产品</p>
+    <p>体验模型 → 机制母型 → 品类原型 → 游戏变体</p>
   </footer>
 
   <div class="fatal-message" id="fatal-message" hidden>
@@ -1717,11 +2362,18 @@
       function currentTab() {
         const hash = window.location.hash.slice(1);
         if (tabIds.includes(hash)) return hash;
-        if (hash === "model-content" || hash === "model-case" || hash === "top") return "model";
+        if (
+          hash === "model-content" ||
+          hash === "model-case" ||
+          hash === "top" ||
+          hash.startsWith("formula-term-")
+        ) return "model";
         if (hash === "atlas-content" || hash === "atlas-method") return "atlas";
         if (hash === "ecosystem-content") return "ecosystem";
         if (hash === "insights-content" || hash === "insight-prior" ||
-          hash === "insight-reveal" || hash === "insight-checks") return "insights";
+          hash === "insight-reveal" || hash === "insight-decision" ||
+          hash === "insight-autospin" ||
+          hash === "insight-checks") return "insights";
         return "model";
       }
 
@@ -1753,6 +2405,6 @@
       activateTab();
     })();
   </script>
-  <script type="module" src="./assets/app.js?v=20260729-1"></script>
+  <script type="module" src="./assets/app.js?v=20260802-1"></script>
 </body>
 </html>

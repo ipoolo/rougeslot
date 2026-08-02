@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.4",
+  "version": "20260801-draft.8",
   "mapping_policy": "legacy_mechanical_import_plus_retained_new_product_observations",
   "formula_fields": [
     "P_t",
@@ -1144,96 +1144,76 @@
     {
       "product_id": "product.spinera",
       "legacy_slug": "spinera",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：时代分数 checkpoint：每个时代要求达到指定分数，未达标则\"帝国统治坍塌\"（GG）；具体周期/曲线待校核，倾向指数递增 · 补充：M≈5（约 5 个时代，估算）；N≈10（每时代约 10 spin）；T0≈100（首时代分数门槛估算）；r≈2.0（时代分指数）；无显式 boss 关。[全部估算待校核]；旧版压力参数：M=5 · N=10 · T0=100 · r=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "继承数值目标压力，以目标分、余额、期限和未达标后果包裹循环；P(t) 判断本次与累计 Spin_Result 是否足够。",
           "source_fields": [
-            "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "老虎机符号池（具体规模约 30-50 种待校核）；符号代表帝国资源（食物、士兵、金币、人口等）；稀有度梯度未披露",
+          "value": "继承 Slot 母体的固定符号类型与基础配置；扩展为通过 BD 调整固定类型下的符号数量，不以增删核心符号类型作为品类身份。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "老虎机摇杆 spin（具体格子数待校核，倾向 3×3 或 3×5），落位 0.7-1.5s 标准 slot 节奏，每次产出有限资源",
+          "value": "继承 Slot Random，从预设 Pool_Symbol 按装置概率产生本次 Spin 结果。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "继承自动 Put，由装置完成转轴停止与符号落位；扩展锁定盘面具体符号的能力。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "继承传统 Slot 的 2D 网格与支付线承载规则。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "符号匹配产出资源（如 3 食物 → +N 食物），通过类型字典映射；具体邻接/链式规则未披露——以 type_dict 为主；判定：line_complete、type_dict",
+          "value": "继承支付线、同符号、连续符号与经典特殊符号等 Slot 先验规则。",
           "source_fields": [
-            "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "C₁的 Slot 结果被转译为资源后，C₂主要进入类文明的资源分配、科技发展与经营策略。这个阶段偏向分析和规划，没有形成未知结果逐步揭晓的二次开奖过程，因此第二个多巴胺峰值表现较弱。",
+          "value": "C₁ 先建立基础分数与资源产出；C₂ 通过分数×倍率与盘面位置增益继续兑现本次分数结果。确定性的资源分配、科技发展与经营规划归入 BD，不再计入 C₂。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier",
-            "用户于 2026-07-28 确认的洞察二案例"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
           "review_status": "confirmed"
         },
         "N": {
-          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
+          "value": "继承进入 BD 前的 Spin 周期；具体 N 由产品的目标阶段、商店、升级或规则选择节奏决定。",
           "source_fields": [
-            "新版迁移规则：N 与 P(t) 分离"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "时代结算后进入科技树点选（类似商店三选一或自由分配）；不同领袖在新局起手提供差异化；具体增删符号成本待校核",
+          "value": "将 Spin 产出的资源用于确定性分配、科技树发展、领袖差异与类文明经营规划，持续改变后续概率、规则、倍率与目标达成能力。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
-        }
-      },
-      "legacy_scores": {
-        "random": 8,
-        "combo": 7,
-        "pool": 7,
-        "structure": 7
-      },
-      "legacy_summary": "总分 29（C 级），表演 7.5 / 结构 7.0，落在「网格邻接族」(2D_grid × line_complete+type_dict)。投影到锚点 luck-be-a-landlord，因主动池是科技树（线性养成）而非 100+ 道具池、且 combo 协同细节未显露邻接爆点而下调 1 分。亮点是\"帝国\"题材为时代分压力提供叙事承载，但 combo 维度需明确邻接/链式才能进入双 8 区间。",
-      "supplemental": {
-        "pool_active_desc": "科技树作为主动池：玩家解锁科技节点为帝国施加全局修饰（产量+%、新规则）；不同领袖提供差异化起手；具体科技数约 30-60 节点（待校核）",
-        "pressure_params": {
-          "M": "5",
-          "N": "10",
-          "T0": "100",
-          "r": "2.0",
-          "m_boss": null
+          "review_status": "confirmed"
         }
       },
       "source": {
-        "framework_version": "v5",
-        "analysis_updated_at": "2026-04-29"
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-08-01"
       }
     },
     {
@@ -1333,95 +1313,76 @@
     {
       "product_id": "product.cloverpit",
       "legacy_slug": "cloverpit",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：每轮还债 checkpoint：到期必须凑齐债务额，未达标则\"真实的毁灭\"（永久死亡 + 恐怖叙事惩罚）；债务指数递增，多结局路线 · 补充：M≈6（约 6 周还债，估算）；N≈3（每周 3 spin）；T0≈100（首周债务估算）；r≈2.0（指数还债压力）；无显式 boss 关，永久死亡 + 多结局路线。[全部估算待校核]；旧版压力参数：M=6 · N=3 · T0=100 · r=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "继承数值目标压力，以逐步上涨的债务、偿还期限与未达标后果判断累计 Spin_Result 是否达标。",
           "source_fields": [
-            "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "第一人称老虎机符号池（约 3 列规格，符号种类待校核约 15-25 种），符号涵盖四叶草、$、数字、骷髅等主题元素；稀有度梯度未披露但页面强调\"运势如滚雪球\"暗示有等级",
+          "value": "继承固定符号池，核心 Slot 符号类型由游戏预设，不通过 BD 增删；扩展为各固定符号出现概率可以养成。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "第一人称视角拉杆老虎机，3 列符号落位（具体格子数待校核），第一人称沉浸感 + 恐怖氛围声效强化\"每次拉杆\"的戏剧性；落位 1-2s",
+          "value": "继承 Slot Random，每次 Spin 从预设符号池中按装置概率产生本次结果。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "继承自动 Put，由装置完成转轴停止与符号落位，玩家不决定主要安置结果。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "继承 2D Slot 网格，以盘面承载符号位置、支付线关系与本次结果。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "符号组合（同类阈值 + 连线）产出基础硬币；强调\"强力连锁组合\"——道具间互相引爆形成滚雪球；具体连线/阈值规则待校核；判定：line_complete、type_dict、cascade",
+          "value": "继承支付线、同符号与连续符号等 Slot 先验规则，由支付线匹配建立本次结果的基础价值。",
           "source_fields": [
-            "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "150+ 道具对结算施加倍率/加成/新规则；多道具叠乘形成\"滚雪球\"——典型 Balatro 式爆炸结算",
+          "value": "继承数值二次揭晓，沿 C₁ 的基础结果通过倍率、连击与护身符效果逐步揭晓最终数值。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
+          "value": "继承数值阶段构筑周期，以连续 Spin 与阶段目标作为进入下一次构筑决策前的周期单位。",
           "source_fields": [
-            "新版迁移规则：N 与 P(t) 分离"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "每轮结束在密室内的商店/抽卡获得新护身符（charms），可能存在弃置/替换机制（待校核）；跨局解锁系统提供元进展",
+          "value": "继承规则、倍率与概率构筑，通过护身符、倍率和概率选择持续影响后续 C₂ 二次揭晓与目标达成能力。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "draft"
-        }
-      },
-      "legacy_scores": {
-        "random": 8,
-        "combo": 8,
-        "pool": 8,
-        "structure": 9
-      },
-      "legacy_summary": "总分 33（A 级），表演 8.0 / 结构 8.5，落在「多重集字典族 + 网格连线族」(2D_grid × line_complete+type_dict+cascade)。投影到锚点 luck-be-a-landlord+balatro 复合，因 150+ 道具的滚雪球和\"还债指数压力 + 永久毁灭\"叙事比 LBL 房租更具张力，structure 上调 1 分至 9；random 因第一人称沉浸感比标准 slot 高半档但物理弱仍钉 8。最强卖点是恐怖氛围 × 数学爆炸的化学反应，是双 8 候选爆款。",
-      "supplemental": {
-        "pool_active_desc": "150+ 道具与协同效果（charms 护身符）：覆盖加成、新规则、连锁触发等多类型；跨局元进展解锁",
-        "pressure_params": {
-          "M": "6",
-          "N": "3",
-          "T0": "100",
-          "r": "2.0",
-          "m_boss": null
+          "review_status": "confirmed"
         }
       },
       "source": {
-        "framework_version": "v5",
-        "analysis_updated_at": "2026-04-29"
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-08-01"
       }
     },
     {
@@ -2111,11 +2072,11 @@
           "review_status": "draft"
         },
         "Put": {
-          "value": "manual_place",
+          "value": "auto_place：系统将本次符号结果自动落入盘面，玩家不决定主要落位。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "2026-08-01 用户确认"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
           "value": "2D_grid",
@@ -2198,18 +2159,18 @@
           "review_status": "draft"
         },
         "Random": {
-          "value": "卡牌自动打出（玩家不操作）；视觉上是卡牌依次出场结算，缺少落位戏剧化；接近骰子地下城/切骰这一档的低视觉爆发",
+          "value": "Pool_Symbol 以有序序列直接生成 SingleSpin_Symbol，不存在从符号池随机抽取的过程；随机性只存在于后续 Put 到 Show_TP 时的自动随机落位。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "2026-08-01 用户确认"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "manual_place",
+          "value": "auto_place：系统将 SingleSpin_Symbol 自动随机落入 Show_TP 的可用位置，玩家不决定主要落位。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "2026-08-01 用户确认"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
           "value": "2D_grid",
@@ -3212,157 +3173,150 @@
     },
     {
       "product_id": "product.slotbound-demo",
-      "mapping_status": "working_definition_user_confirmed_classification",
-      "review_status": "pending",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "工作定义：以审判波次、Boss 波次、敌我生存状态与失败后果构成战斗目标压力；具体曲线等待逐项人工确认。",
+          "value": "继承战斗目标压力，以审判波次、Boss 波次、敌我生存状态与失败后果判断本轮战斗是否达标。",
           "source_fields": [
-            "产品资料：自动战斗防守、审判波次与 Boss 波次",
-            "用户确认：Slot+战斗型"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "工作定义：保持 Slot+ 类的固定核心符号池身份；单位、Items 与 Cores 如何分层进入符号池或修饰池等待正式拆解。",
+          "value": "继承固定符号池身份，核心抽取对象来自预设的单位与符号配置，不通过 BD 增删 Slot 的核心符号类型；扩展为 BD 可以影响符号触发概率。",
           "source_fields": [
-            "产品资料：3×3 Slot 召唤单位",
-            "Slot+战斗型工作定义"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "3×3 Slot Spin 从当前预设池产生单位或符号结果；核心 Random 职责继承 Slot 母体。",
+          "value": "继承 Slot Random，每次 Spin 从预设符号池中随机产生本次 3×3 盘面的单位或符号结果。",
           "source_fields": [
-            "产品资料：Spin 3×3 Slot 召唤单位",
-            "用户确认：R 不做核心改变"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "装置自动把本次 Spin 结果写入 3×3 Slot 舞台；玩家不决定主要落位。",
+          "value": "装置自动把本次 Spin 结果写入 3×3 Slot 舞台；BD 可提供额外转动与盘面位置互换。按当前公式责任，两者均记入 Put；Random 仅负责从 Pool_Symbol 生成 SingleSpin_Symbol。",
           "source_fields": [
-            "产品资料：3×3 Slot",
-            "用户确认：Put 不做核心改变"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "工作定义：使用 3×3 的 2D Slot 网格承载符号、支付线与单位结果。",
+          "value": "继承 2D Slot 网格，以 3×3 盘面承载符号位置、支付线关系以及对应的单位结果。",
           "source_fields": [
-            "产品资料：3×3 Slot"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "匹配传统 Slot 支付线并触发单位与 Core 的基础协同；工作定义暂按 Slot C₁ 继承处理。",
+          "value": "继承支付线、同符号与连续符号等 Slot 先验规则，由支付线匹配建立本次结果的基础价值。",
           "source_fields": [
-            "产品资料：匹配支付线并触发单位与 Core 协同",
-            "用户确认：C₁ 不做核心改变"
-          ],
-          "review_status": "pending"
-        },
-        "C2": {
-          "value": "把 C₁ 的支付线与单位基础结果演绎为召唤、单位属性、职业进化、伤害、防御和自动战斗状态。",
-          "source_fields": [
-            "产品资料：单位吸收、升星、职业进化与自动战斗",
-            "用户确认：Slot+战斗型"
-          ],
-          "review_status": "pending"
-        },
-        "N": {
-          "value": "启用进入一次构筑决策前的 Spin／战斗周期；具体 N 与波次对应关系等待人工确认。",
-          "source_fields": [
-            "Slot+战斗型工作定义"
-          ],
-          "review_status": "pending"
-        },
-        "BD": {
-          "value": "Items、Cores、单位吸收、升星与分支职业进化构成后续构筑决策，主要修改概率、单位属性与战斗型 C₂。",
-          "source_fields": [
-            "产品资料：Items、Cores、单位成长与职业进化"
-          ],
-          "review_status": "pending"
-        }
-      },
-      "source": {
-        "framework_version": "202607",
-        "analysis_updated_at": "2026-07-26"
-      }
-    },
-    {
-      "product_id": "product.runeborn",
-      "mapping_status": "new_record_partially_confirmed",
-      "review_status": "draft",
-      "fields": {
-        "P_t": {
-          "value": "以持续增强的敌人与战斗失败作为目标压力；具体检查周期和曲线等待逐局分析。",
-          "source_fields": [
-            "Steam 商店页：迎战随机敌人"
-          ],
-          "review_status": "pending"
-        },
-        "Pool_Symbol": {
-          "value": "由多本符文秘典中的符文列构成；可通过构筑增加、移除或修改符文，并由饰品继续修饰。",
-          "source_fields": [
-            "Steam 商店页：构筑符文秘典"
-          ],
-          "review_status": "pending"
-        },
-        "Random": {
-          "value": "老虎机式随机产生符文结果，并允许保留符文和重新随机以提高匹配概率。",
-          "source_fields": [
-            "Steam 商店页：匹配元素符文"
-          ],
-          "review_status": "pending"
-        },
-        "Put": {
-          "value": "装置将随机结果写入各符文列；玩家主要通过保留与重随机干预，而非自由空间放置。",
-          "source_fields": [
-            "Steam 商店页：每本符文书包含五个符文列"
-          ],
-          "review_status": "pending"
-        },
-        "Show_TP": {
-          "value": "以多列符文与链路节点共同承载本次结果；具体拓扑边界等待结合游戏画面确认。",
-          "source_fields": [
-            "Steam 商店页：符文列与链路刻印"
-          ],
-          "review_status": "pending"
-        },
-        "C1": {
-          "value": "延续老虎机的匹配认知，通过同元素符文的匹配与连接形成基础结果；用户将其归为 Slot+数值型。",
-          "source_fields": [
-            "Steam 商店页：匹配连接元素符文",
-            "用户确认：Slot+数值型"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "遗物、光环、项链和符文额外效果逐个触发，放大基础符文连接并转译为大数值伤害。",
+          "value": "沿 C₁ 已建立的支付线与单位基础结果进行战斗二次揭晓；扩展通过召唤与稀有度、伤害、防御、单位等级／种类／阶级和自动战斗过程，逐步揭晓最终兑现程度。",
           "source_fields": [
-            "Steam 商店页：饰品协同与符文额外效果"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "进入一次构筑决策前的连续 Spin 数量等待逐局拆解，暂不把敌人或章节周期直接等同于 N。",
+          "value": "继承战斗间构筑周期，以连续 Spin 与战斗轮次作为进入下一次构筑决策前的周期单位。",
           "source_fields": [
-            "202607 公式定义"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "通过商人、敌人选择、符文增删修改与饰品选择持续调整后续符文池和协同结果。",
+          "value": "继承战斗相关内容、规则、倍率、概率或编队构筑；扩展通过单位吸收、升星与分支职业进化调整概率、单位属性和后续战斗表现。",
           "source_fields": [
-            "Steam 商店页：构筑符文秘典、收集饰品、随机敌人"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
         "framework_version": "202607",
-        "analysis_updated_at": "2026-07-28"
+        "analysis_updated_at": "2026-08-01"
+      }
+    },
+    {
+      "product_id": "product.runeborn",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
+      "fields": {
+        "P_t": {
+          "value": "继承数值目标压力，以目标分、余额、期限和未达标后果包裹循环；P(t) 判断本次与累计 Spin_Result 是否足够。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        },
+        "Pool_Symbol": {
+          "value": "由多本符文秘典中的独立符文列构成；核心符文类型集合固定，玩家增加、移除或调整的是固定类型下的符文个数，从而改变各类型的数量配比与抽取权重，不创造新符文类型。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        },
+        "Random": {
+          "value": "老虎机式从固定符文类型的 Pool_Symbol 产生本次结果；各类型的当前个数决定相对抽取权重。保留符文与重新随机可进一步干预匹配结果。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        },
+        "Put": {
+          "value": "继承自动落位；扩展刷新与盘面符号锁定能力，玩家以刷新和锁定干预结果，而非自由空间放置。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        },
+        "Show_TP": {
+          "value": "继承传统 Slot 的 2D 网格与支付线承载规则，使用 5×5 盘面。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        },
+        "C1": {
+          "value": "继承支付线、同符号、连续符号与经典特殊符号等 Slot 先验规则；扩展为 5 条支付线从左到右施法，将支付线的类型判定改为序列执行。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        },
+        "C2": {
+          "value": "沿 C₁ 已建立的结果继续加入倍率、连击、条件加成或规则修饰；扩展引入类似小丑牌的分数×倍率概念。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        },
+        "N": {
+          "value": "继承进入 BD 前的 Spin 周期；具体 N 由产品的目标阶段、商店、升级或规则选择节奏决定。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        },
+        "BD": {
+          "value": "通过商人、敌人选择、饰品，以及固定符文类型下的个数增减与调整，持续改变后续 Random 权重和协同结果；不增加新符文类型。",
+          "source_fields": [
+            "2026-08-01 用户确认的游戏变体九字段"
+          ],
+          "review_status": "confirmed"
+        }
+      },
+      "source": {
+        "framework_version": "202607",
+        "analysis_updated_at": "2026-08-01"
       }
     },
     {
@@ -3487,11 +3441,12 @@
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "将符号结果进一步转译为攻击、能力与物品效果，形成战斗表现。",
+          "value": "将符号结果进一步转译为敌我互相攻击的攻血战斗；玩家会受到攻击，但没有独立防御／护甲数值。",
           "source_fields": [
-            "Steam 商店页：each spin triggers attacks, abilities, and effects"
+            "Steam 商店页：each spin triggers attacks, abilities, and effects",
+            "用户 2026-08-01 确认：没有护甲"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "触发一次构筑决策前的连续 Spin 数量等待逐局确认。",
@@ -3561,11 +3516,12 @@
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "把棋盘组合结果转译为自动战斗过程，攻击逼近红区的怪物。",
+          "value": "把棋盘组合结果转译为自动攻血战斗，敌我互相攻击但没有独立防御／护甲数值；怪物持续逼近 RED ZONE。",
           "source_fields": [
-            "Steam 商店页：auto battler 与 RED ZONE"
+            "Steam 商店页：auto battler 与 RED ZONE",
+            "用户 2026-08-01 确认：没有护甲"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "进入一次构筑选择前的连续 Spin／战斗数量等待逐局确认。",
@@ -3614,12 +3570,11 @@
           "review_status": "confirmed"
         },
         "Put": {
-          "value": "玩家在 Random 内完成结果选择后，本次装备结果进入 Slot 战斗；是否还存在独立空间安置选择等待逐局确认。",
+          "value": "继承：继续由 Slot 装置自动把本次结果写入主要承载空间。扩展：敌方符号与我方符号进入同一盘面并占据盘面位置，供后续 C₁ 协同计算。",
           "source_fields": [
-            "用户确认的 Random 流程",
-            "Steam 商店页与官方截图"
+            "用户 2026-08-01 确认敌方 Put 方式"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
           "value": "Slot 装置与回合制战斗界面共同承载本次装备结果；具体空间拓扑和位置关系等待逐局确认。",
@@ -3637,7 +3592,7 @@
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "把选择出的装备结果转译为攻击、防御与敌我战斗状态，形成回合制战斗演绎。",
+          "value": "沿选择出的装备结果，通过攻击、防御与敌我战斗状态形成回合制战斗二次揭晓。",
           "source_fields": [
             "Steam 商店页：attack/defend based on the outcome"
           ],
@@ -3665,224 +3620,224 @@
     },
     {
       "product_id": "product.devils-due",
-      "mapping_status": "classification_confirmed_content_pending",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，P_t 的具体表现尚待补录。",
+          "value": "完成当前阶段规定的 N 次 Spin 后检查 P(t)：达到压力目标则进入 BD，未达到则本局结束。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "value": "核心 Slot 符号类型固定；BD 可以养成各固定符号的出现概率。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，Random 的具体表现尚待补录。",
+          "value": "每次 Spin 从固定类型的 Pool_Symbol 按当前概率生成 SingleSpin_Symbol。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，Put 的具体表现尚待补录。",
+          "value": "装置自动完成本次结果落位；玩家可主动开启自动 Spin。开启后，每次 Put 与结算完成即自动启动下一次 Spin；玩家关闭时停止，或在当前阶段完成 N 次 Spin 后停止并进入 P(t) 检查。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认：自动 Spin 的开启、关闭与周期终止规则"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，Show_TP 的具体表现尚待补录。",
+          "value": "使用传统 Slot 的 2D 网格与支付线承载本次结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，C1 的具体表现尚待补录。",
+          "value": "沿用支付线、同符号、连续符号与经典特殊符号等 Slot 先验规则建立基础结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，C2 的具体表现尚待补录。",
+          "value": "沿 C₁ 已建立的价值锚点，通过倍率、连击、条件加成与规则修饰揭晓最终金额、分数或资源型 Spin_Result。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，N 的具体表现尚待补录。",
+          "value": "N 表示当前阶段完成 P(t) 压力检查前需要连续发生的 Spin 数量；自动 Spin 在达到 N 时停止。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认：阶段 Spin 周期"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "待拆解：已确认《Devils Due》的品类归属，BD 的具体表现尚待补录。",
+          "value": "只有在当前 N 次 Spin 结束后通过 P(t) 压力检查，才进入规则、概率、倍率、资源与全局修饰构筑；检查失败则本局结束。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认：压力检查通过后进入 BD"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
         "framework_version": "202607",
-        "analysis_updated_at": "2026-07-28"
+        "analysis_updated_at": "2026-08-01"
       }
     },
     {
       "product_id": "product.peglotto-demo",
-      "mapping_status": "classification_confirmed_content_pending",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，P_t 的具体表现尚待补录。",
+          "value": "继承数值目标压力，以债务、目标分、余额、期限与未达标后果检查累计 Spin_Result。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "value": "继承 Slot 母体的固定核心符号类型与基础配置，不以玩家增删核心符号类型作为品类身份。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，Random 的具体表现尚待补录。",
+          "value": "继承 Slot Random，从预设 Pool_Symbol 按装置概率生成本次 Spin 结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，Put 的具体表现尚待补录。",
+          "value": "继承自动 Put，由装置完成转轴停止与符号落位，玩家不决定主要安置结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，Show_TP 的具体表现尚待补录。",
+          "value": "继承传统 Slot 的 2D 网格与支付线承载规则。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，C1 的具体表现尚待补录。",
+          "value": "继承支付线、同符号、连续符号与经典特殊符号等 Slot 先验规则，建立本次基础价值。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，C2 的具体表现尚待补录。",
+          "value": "覆写为弹珠机重新开奖：将沿 C₁ 结果展开的数值二次揭晓改为时间与路径不确定性更高的弹珠机过程，该过程会重置或推翻 C₁ 已建立的价值锚点。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认：PegLotto C₂ 字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，N 的具体表现尚待补录。",
+          "value": "继承进入 BD 前的 Spin 周期；具体 N 由产品的目标阶段与构筑节奏决定。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "待拆解：已确认《PegLotto! Demo》的品类归属，BD 的具体表现尚待补录。",
+          "value": "继承规则、概率、倍率、资源与全局修饰构筑，并扩展弹珠机位置 BD，持续改变后续弹珠路径与 C₂ 结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认：PegLotto BD 字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
         "framework_version": "202607",
-        "analysis_updated_at": "2026-07-28"
+        "analysis_updated_at": "2026-08-01"
       }
     },
     {
       "product_id": "product.spin-tactics-demo",
-      "mapping_status": "classification_confirmed_content_pending",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，P_t 的具体表现尚待补录。",
+          "value": "继承数值目标压力，以目标分、余额、期限和未达标后果包裹循环；P(t) 判断本次与累计 Spin_Result 是否足够。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "value": "继承 Slot 母体的固定符号类型与基础配置，不以玩家增删核心符号类型作为品类身份。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，Random 的具体表现尚待补录。",
+          "value": "继承 Slot Random，从预设 Pool_Symbol 按装置概率产生本次 Spin 结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，Put 的具体表现尚待补录。",
+          "value": "装置自动将本次结果写入当前 Show_TP 已解锁的符号位；盘面符号位锁定只限制可用落位空间，不改变 Put 的自动写入责任。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，Show_TP 的具体表现尚待补录。",
+          "value": "使用 2D Slot 网格承载支付线；部分符号位初始锁定，可通过 BD 消耗 Gold 逐步解锁盘面空间。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，C1 的具体表现尚待补录。",
+          "value": "继承支付线判定，并扩展为只在 Show_TP 当前已解锁区域中进行支付线计算。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，C2 的具体表现尚待补录。",
+          "value": "沿 C₁ 支付线结果进行数值二次揭晓，并在 Spin_Result 中产出 Gold 资源；Gold 的后续消费与解锁不属于 C₂。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，N 的具体表现尚待补录。",
+          "value": "继承进入 BD 前的 Spin 周期；具体 N 由产品的目标阶段、商店、升级或规则选择节奏决定。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "待拆解：已确认《Spin Tactics Demo》的品类归属，BD 的具体表现尚待补录。",
+          "value": "消耗 C₂ 产出的 Gold，解锁 Show_TP 符号位、新能力与后续规则。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认的游戏变体九字段"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
         "framework_version": "202607",
-        "analysis_updated_at": "2026-07-28"
+        "analysis_updated_at": "2026-08-01"
       }
     },
     {
@@ -3926,11 +3881,11 @@
           "review_status": "pending"
         },
         "C1": {
-          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，C1 的具体表现尚待补录。",
+          "value": "C₁ 生成普通、远程、魔法等不同攻击类型在单回合内的伤害值，供 C₂ 战斗演绎。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户 2026-08-01 确认 C₁ 输出"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C2": {
           "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，C2 的具体表现尚待补录。",
@@ -3993,25 +3948,25 @@
           "review_status": "pending"
         },
         "Show_TP": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，Show_TP 的具体表现尚待补录。",
+          "value": "系统自动生成并展示本次 1D 序列；玩家不在单次 Spin 内移动、选择或控制该轴。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户 2026-08-01 确认：自动生成并展示 1D 序列"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，C1 的具体表现尚待补录。",
+          "value": "敌方符号参与 C₁ 协同计算；C₁ 按 1D 序列依次执行本次符号，并将各符号产生的基础结果传入 C₂。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户 2026-08-01 确认：序列执行符号"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，C2 的具体表现尚待补录。",
+          "value": "敌方符号在盘中与我方互相攻击，战斗由系统自动进行，形成生存战斗演绎。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户 2026-08-01 确认：敌我互相攻击，自动战斗"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待拆解：已确认《Hoptale Demo》的品类归属，N 的具体表现尚待补录。",
@@ -4039,18 +3994,18 @@
       "review_status": "draft",
       "fields": {
         "P_t": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，P_t 的具体表现尚待补录。",
+          "value": "任务给定固定目标与有限解题范围，玩家围绕当前任务完成数值检测。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "value": "玩家存在 Pool_Symbol 构筑，但候选池与构筑范围受当前任务限制。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
           "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Random 的具体表现尚待补录。",
@@ -4081,11 +4036,11 @@
           "review_status": "pending"
         },
         "C2": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，C2 的具体表现尚待补录。",
+          "value": "固定任务条件与系统给定增益可以形成高值结果，但玩家不能通过 BD 持续养成 C2 修饰，第二峰更像任务中抽中超级大奖。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，N 的具体表现尚待补录。",
@@ -4095,11 +4050,11 @@
           "review_status": "pending"
         },
         "BD": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，BD 的具体表现尚待补录。",
+          "value": "玩家仍可构筑 Pool_Symbol，但不能构筑 C2 修饰；决策空间被收敛到任务限定的符号池与候选范围，体验更像解任务，而非构筑大奖概率。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-01 用户确认"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
