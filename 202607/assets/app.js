@@ -49,7 +49,7 @@ const FIELD_LABELS = {
   Put: "放置／安置",
   Show_TP: "承载拓扑",
   C1: "符号协同",
-  C2: "结果演绎",
+  C2: "二次揭晓",
   N: "Spin 周期",
   BD: "构筑决策"
 };
@@ -57,19 +57,25 @@ const FIELD_LABELS = {
 const TYPE_LABELS = {
   mechanism_archetype: "机制母型",
   category_prototype: "品类原型",
-  category_variant: "品类变体"
+  category_variant: "游戏变体"
 };
 
 const OPERATION_LABELS = {
   inherit: "继承",
-  default: "默认",
-  restrict: "收窄",
-  fix: "固定",
-  disable: "禁用",
   override: "覆写",
-  extend: "扩展",
-  compose: "组合"
+  extend: "扩展"
 };
+
+const OPERATION_DESCRIPTIONS = {
+  inherit: "与父类完全一样",
+  override: "完全改动父级定义",
+  extend: "继承父级并拓展"
+};
+
+function operationLabelForNode(node, operation) {
+  if (node?.type === "mechanism_archetype") return "本层定义";
+  return OPERATION_LABELS[operation] ?? operation;
+}
 
 const RELATION_LABELS = {
   source: "主要来源",
@@ -97,7 +103,7 @@ const NODE_TYPE_ORDER = {
   category_variant: 3
 };
 
-const DATA_VERSION = "20260728-23";
+const DATA_VERSION = "20260802-1";
 
 const DATA_FILES = {
   model: `./data/experience-model.json?v=${DATA_VERSION}`,
@@ -106,6 +112,8 @@ const DATA_FILES = {
   prototypes: `./data/category-prototypes.json?v=${DATA_VERSION}`,
   variants: `./data/category-variants.json?v=${DATA_VERSION}`,
   products: `./data/products.json?v=${DATA_VERSION}`,
+  salesEstimates: `./data/product-sales-estimates.json?v=${DATA_VERSION}`,
+  steamMetadata: `./data/product-steam-metadata.json?v=${DATA_VERSION}`,
   productObservations: `./data/product-formula-observations.json?v=${DATA_VERSION}`,
   ecosystems: `./data/category-ecosystems.json?v=${DATA_VERSION}`,
   migrationReport: `./data/migration-report.json?v=${DATA_VERSION}`
@@ -116,6 +124,7 @@ const state = {
   selectedMechanismId: null,
   selectedPrototypeId: null,
   selectedVariantId: null,
+  selectedFingerprintField: null,
   detailLevel: "variant",
   selectedTermKey: "P_t",
   query: "",
@@ -124,22 +133,48 @@ const state = {
   libraryView: "products",
   libraryProductQuery: "",
   libraryProductFilter: "all",
+  libraryProductSort: "default",
   librarySlotMotherOnly: true,
   libraryPrototypeFilter: "all",
-  libraryLevelFilter: "all",
+  libraryMatrixParentId: "mechanism.slot",
   libraryFieldFilter: "all",
+  libraryMatrixNodeFilter: null,
   dataServiceOnline: false,
   editingField: null,
+  editingFieldImages: [],
+  fieldEditorBusy: false,
+  fieldImageViewerItems: [],
+  fieldImageViewerIndex: 0,
+  fieldImageViewerZoom: 1,
+  fieldImageViewerPanX: 0,
+  fieldImageViewerPanY: 0,
+  fieldImageViewerDrag: null,
   selectedProductId: null,
   editingProductId: null,
-  selectedEcosystemPrototypeId: "prototype.slot-numeric",
-  selectedEcosystemProductId: "product.luck-be-a-landlord",
+  selectedEcosystemPrototypeId: "prototype.slot-transform-combat",
+  selectedEcosystemProductId: "product.endgame-of-devil",
   selectedEcosystemField: null,
+  selectedEcosystemMapPreset: "all",
+  ecosystemMapFilters: {
+    topology: null,
+    color: null,
+    secondary_badge: null
+  },
+  selectedEcosystemBdMode: "all",
+  expandedEcosystemBranches: ["numeric-check"],
+  ecosystemNicheInfoCollapsed: false,
+  crossTabHistory: [],
   creatingNodeType: null,
   editingNodeId: null
 };
 
 const elements = {
+  crossTabTrail: document.querySelector("#cross-tab-trail"),
+  crossTabTrailItems: document.querySelector("#cross-tab-trail-items"),
+  crossTabTrailClear: document.querySelector("#cross-tab-trail-clear"),
+  productDetailCrossTabTrail: document.querySelector("#product-detail-cross-tab-trail"),
+  productDetailCrossTabTrailItems: document.querySelector("#product-detail-cross-tab-trail-items"),
+  productDetailCrossTabTrailClear: document.querySelector("#product-detail-cross-tab-trail-clear"),
   luckLandlordCase: document.querySelector("#luck-landlord-case"),
   experienceTimeline: document.querySelector("#experience-timeline"),
   fieldFormulaMap: document.querySelector("#field-formula-map"),
@@ -173,12 +208,17 @@ const elements = {
   libraryPanels: [...document.querySelectorAll("[data-library-panel]")],
   productSearch: document.querySelector("#library-product-search"),
   productFilter: document.querySelector("#library-product-filter"),
+  productSort: document.querySelector("#library-product-sort"),
   motherFilter: document.querySelector("#library-mother-filter"),
   prototypeFilter: document.querySelector("#library-prototype-filter"),
   productResultSummary: document.querySelector("#product-result-summary"),
   productCatalog: document.querySelector("#product-catalog"),
-  levelFilter: document.querySelector("#library-level-filter"),
+  matrixParentFilter: document.querySelector("#library-matrix-parent"),
   fieldFilter: document.querySelector("#library-field-filter"),
+  matrixScopeSummary: document.querySelector("#matrix-scope-summary"),
+  matrixNodeFocus: document.querySelector("#matrix-node-focus"),
+  matrixNodeFocusName: document.querySelector("#matrix-node-focus-name"),
+  matrixNodeFocusClear: document.querySelector("#matrix-node-focus-clear"),
   formulaDataTable: document.querySelector("#formula-data-table"),
   reviewQueue: document.querySelector("#review-queue"),
   refreshReviewQueue: document.querySelector("#refresh-review-queue"),
@@ -191,12 +231,28 @@ const elements = {
   fieldEditorStatus: document.querySelector("#field-editor-status"),
   fieldEditorLabel: document.querySelector("#field-editor-label"),
   fieldEditorSummary: document.querySelector("#field-editor-summary"),
+  fieldEditorEvidence: document.querySelector("#field-editor-evidence"),
+  fieldEditorImageInput: document.querySelector("#field-editor-image-input"),
+  fieldEditorEvidenceList: document.querySelector("#field-editor-evidence-list"),
   fieldEditorNote: document.querySelector("#field-editor-note"),
   fieldEditorMessage: document.querySelector("#field-editor-message"),
   fieldEditorClose: document.querySelector("#field-editor-close"),
   fieldEditorCancel: document.querySelector("#field-editor-cancel"),
   fieldEditorSave: document.querySelector("#field-editor-save"),
   fieldEditorConfirm: document.querySelector("#field-editor-confirm"),
+  fieldImageViewer: document.querySelector("#field-image-viewer"),
+  fieldImageViewerImage: document.querySelector("#field-image-viewer-image"),
+  fieldImageViewerTitle: document.querySelector("#field-image-viewer-title"),
+  fieldImageViewerCount: document.querySelector("#field-image-viewer-count"),
+  fieldImageViewerCaption: document.querySelector("#field-image-viewer-caption"),
+  fieldImageViewerClose: document.querySelector("#field-image-viewer-close"),
+  fieldImageViewerStage: document.querySelector(".field-image-viewer-stage"),
+  fieldImageViewerZoomOut: document.querySelector("#field-image-viewer-zoom-out"),
+  fieldImageViewerZoomIn: document.querySelector("#field-image-viewer-zoom-in"),
+  fieldImageViewerZoomReset: document.querySelector("#field-image-viewer-zoom-reset"),
+  fieldImageViewerZoomLevel: document.querySelector("#field-image-viewer-zoom-level"),
+  fieldImageViewerPrevious: document.querySelector("#field-image-viewer-previous"),
+  fieldImageViewerNext: document.querySelector("#field-image-viewer-next"),
   productDetail: document.querySelector("#product-detail"),
   productDetailContent: document.querySelector("#product-detail-content"),
   productDetailClose: document.querySelector("#product-detail-close"),
@@ -260,7 +316,7 @@ const EXPERIENCE_STAGE_PRESETS = {
   settle: {
     label: "阶段 02 · 结算",
     title: "第二峰：玩家识别协同，并看到规则把组合转换成结果。",
-    copy: "Combo 先由 C₁ 产生基础协同结果，再由可选的 C₂ 完成修饰或结果转译，输出本次 Spin_Result。"
+    copy: "Combo 先由 C₁ 建立基础结果的价值锚点，再由可选的 C₂ 沿该结果逐步完成二次揭晓，输出本次 Spin_Result。"
   },
   build: {
     label: "阶段 03 · 构筑",
@@ -272,9 +328,9 @@ const EXPERIENCE_STAGE_PRESETS = {
 const CORE_INSIGHT_PRESETS = {
   all: {
     label: "总原则",
-    title: "C₁ 负责立即可读，C₂ 负责保留不确定性并二次揭晓。",
-    copy: "学习、构筑和压力验证位于结果之后或循环外层，用来放大体验，不应成为进入最小爽环的通行证。",
-    boundary: "边界：C₂ 负责结果如何被演绎；P(t) 负责判断最终结果是否足够。",
+    title: "C₁ 负责立即可读，C₂ 负责二次揭晓，轻决策与手动 Spin 让双峰持续成立。",
+    copy: "学习、构筑和压力验证位于结果之后或循环外层，用来放大体验；单轮只保留少量、低复杂度操作，并由玩家主动开启。",
+    boundary: "边界：复杂策略可以进入阶段性构筑，但不应占满两次表演之间的操作窗口；系统也不能替玩家触发下一次 Spin。",
     nodes: [],
     edges: [],
     zones: []
@@ -297,10 +353,28 @@ const CORE_INSIGHT_PRESETS = {
     edges: ["c1-c2", "c2-result"],
     zones: ["first-peak", "second-peak"]
   },
+  c3: {
+    label: "洞察 3 · 决策复杂度",
+    title: "同时控制决策数与单次复杂度，让玩家尽快从操作回到下一次表演。",
+    copy: "双峰多巴胺循环依赖短操作窗口与表演窗口持续交替。每次操作也可以成为低复杂度、带技巧的短开奖，但要控制持续输入造成的疲劳；复杂策略应在阶段边界集中处理。",
+    boundary: "检查边界：限制的是单个双峰循环必须支付的决策成本，而不是游戏整体的策略上限。",
+    nodes: ["operate", "perform", "repeat"],
+    edges: ["operate-perform", "perform-repeat"],
+    zones: ["rhythm"]
+  },
+  c4: {
+    label: "洞察 4 · 禁止自动 Spin",
+    title: "每一次 Spin 都必须由玩家明确触发，主动操作为期待建立清晰起点。",
+    copy: "自动 Spin 把离散的“操作 → 期待 → C₁／C₂ 揭晓”压成无边界结果流，使双峰失去起点与间隔，并滑向依赖变动奖励维持重复行为的斯金纳箱式循环。",
+    boundary: "不可妥协：可以减少单次操作成本，但不能移除玩家对下一次 Spin 的主动触发权。",
+    nodes: ["manual-spin", "anticipation", "double-peak", "c1", "c2", "result"],
+    edges: ["manual-anticipation", "anticipation-peaks", "peaks-return", "c1-c2", "c2-result"],
+    zones: ["autospin", "first-peak", "second-peak"]
+  },
   hybrid: {
     label: "高风险组合 · Slot改+战斗",
     title: "同时保护 C₁ 的大奖识别，并让 C₂ 的战斗结果保持悬念。",
-    copy: "这种组合既改写基础协同，又把结果演绎成战斗，最容易让两个体验阶段相互侵占。棋盘过大、符号过多或关系过深，会先削弱第一峰；结果过早可计算，又会削弱第二峰。",
+    copy: "这种组合既改写基础协同，又通过战斗过程二次揭晓 C₁ 的兑现程度，最容易让两个体验阶段相互侵占。棋盘过大、符号过多或关系过深，会先削弱第一峰；结果过早可计算，又会削弱第二峰。",
     boundary: "设计约束：控制棋盘大小、符号类型、关系层数与跨区域依赖；先让基础协同清晰成立，再进入紧凑的战斗时序。",
     nodes: ["reveal", "c1", "c2", "result"],
     edges: ["reveal-c1", "c1-c2", "c2-result"],
@@ -536,6 +610,193 @@ function escapeHtml(value = "") {
     .replaceAll("'", "&#039;");
 }
 
+function topTabForHash(hash = window.location.hash) {
+  const value = hash.replace(/^#/, "");
+  if (value === "atlas" || value === "atlas-content" || value === "atlas-method") {
+    return "atlas";
+  }
+  if (value === "ecosystem" || value === "ecosystem-content") {
+    return "ecosystem";
+  }
+  if (value === "library") {
+    return "library";
+  }
+  if (
+    value === "insights" ||
+    value === "insights-content" ||
+    value.startsWith("insight-")
+  ) {
+    return "insights";
+  }
+  return "model";
+}
+
+function currentCrossTabLabel(hash = window.location.hash) {
+  const tab = topTabForHash(hash);
+  if (!state.data) {
+    return {
+      model: "体验模型",
+      atlas: "原型图谱",
+      ecosystem: "品类生态",
+      library: "游戏库",
+      insights: "核心洞察"
+    }[tab];
+  }
+
+  if (tab === "atlas") {
+    const fullPath = [
+      state.data.mechanismById.get(state.selectedMechanismId)?.name,
+      state.data.prototypeById.get(state.selectedPrototypeId)?.name,
+      state.data.variantById.get(state.selectedVariantId)?.name
+    ];
+    const depth = {
+      mechanism: 1,
+      prototype: 2,
+      variant: 3
+    }[state.detailLevel] ?? 1;
+    const path = fullPath.slice(0, depth).filter(Boolean);
+    return `原型图谱${path.length ? ` · ${path.join(" → ")}` : ""}`;
+  }
+
+  if (tab === "library") {
+    const selectedProduct = elements.productDetail?.open
+      ? state.data.productById.get(state.selectedProductId)
+      : null;
+    const viewLabels = {
+      products: "游戏目录",
+      matrix: "公式数据表",
+      review: "待确认队列",
+      graph: "图谱管理"
+    };
+    return `游戏库 · ${selectedProduct?.name ?? viewLabels[state.libraryView] ?? "游戏目录"}`;
+  }
+
+  if (tab === "ecosystem") {
+    const prototype = state.data.prototypeById.get(state.selectedEcosystemPrototypeId);
+    const product = state.data.productById.get(state.selectedEcosystemProductId);
+    return `品类生态${prototype ? ` · ${prototype.name}` : ""}${product ? ` → ${product.name}` : ""}`;
+  }
+
+  if (tab === "insights") {
+    return "核心洞察";
+  }
+
+  const term = state.data.termByKey.get(state.selectedTermKey);
+  return `体验模型${term ? ` · ${formulaDisplayKey(state.selectedTermKey)} ${term.name}` : ""}`;
+}
+
+function captureCrossTabContext() {
+  return {
+    hash: window.location.hash || "#model",
+    label: currentCrossTabLabel(),
+    scrollY: window.scrollY,
+    productDetailOpen: Boolean(elements.productDetail?.open && state.selectedProductId),
+    state: {
+      selectedMechanismId: state.selectedMechanismId,
+      selectedPrototypeId: state.selectedPrototypeId,
+      selectedVariantId: state.selectedVariantId,
+      selectedFingerprintField: state.selectedFingerprintField,
+      detailLevel: state.detailLevel,
+      selectedTermKey: state.selectedTermKey,
+      atlasVariantViewMode: state.atlasVariantViewMode,
+      libraryView: state.libraryView,
+      libraryProductQuery: state.libraryProductQuery,
+      libraryProductFilter: state.libraryProductFilter,
+      libraryProductSort: state.libraryProductSort,
+      librarySlotMotherOnly: state.librarySlotMotherOnly,
+      libraryPrototypeFilter: state.libraryPrototypeFilter,
+      libraryMatrixParentId: state.libraryMatrixParentId,
+      libraryFieldFilter: state.libraryFieldFilter,
+      libraryMatrixNodeFilter: state.libraryMatrixNodeFilter,
+      selectedProductId: state.selectedProductId,
+      selectedEcosystemPrototypeId: state.selectedEcosystemPrototypeId,
+      selectedEcosystemProductId: state.selectedEcosystemProductId,
+      selectedEcosystemField: state.selectedEcosystemField,
+      selectedEcosystemMapPreset: state.selectedEcosystemMapPreset,
+      ecosystemMapFilters: { ...state.ecosystemMapFilters },
+      selectedEcosystemBdMode: state.selectedEcosystemBdMode,
+      expandedEcosystemBranches: [...state.expandedEcosystemBranches],
+      ecosystemNicheInfoCollapsed: state.ecosystemNicheInfoCollapsed
+    }
+  };
+}
+
+function rememberCrossTabOrigin() {
+  const context = captureCrossTabContext();
+  const previous = state.crossTabHistory[state.crossTabHistory.length - 1];
+  if (previous?.hash === context.hash && previous?.label === context.label) return;
+  state.crossTabHistory.push(context);
+  if (state.crossTabHistory.length > 6) {
+    state.crossTabHistory.shift();
+  }
+  renderCrossTabTrail();
+}
+
+function restoreCrossTabContext(index) {
+  const context = state.crossTabHistory[index];
+  if (!context) return;
+  state.crossTabHistory = state.crossTabHistory.slice(0, index);
+
+  if (elements.productDetail?.open) {
+    closeProductDetail();
+  }
+  Object.assign(state, context.state);
+  renderFieldFormulaMap();
+  renderTermControls();
+  renderTermDetail();
+  renderAtlas();
+  renderEcosystem();
+  renderLibrary();
+
+  window.location.hash = context.hash.replace(/^#/, "");
+  if (context.productDetailOpen && context.state.selectedProductId) {
+    openProductDetail(context.state.selectedProductId);
+  }
+
+  window.requestAnimationFrame(() => {
+    window.scrollTo({
+      top: context.scrollY,
+      behavior: "instant"
+    });
+    renderCrossTabTrail();
+  });
+}
+
+function renderCrossTabTrail() {
+  const trailMarkup = state.crossTabHistory.length ? `
+    ${state.crossTabHistory.map((item, index) => `
+      <button
+        type="button"
+        data-cross-tab-history="${index}"
+        title="返回 ${escapeHtml(item.label)}"
+      >
+        <span>←</span>
+        ${escapeHtml(item.label)}
+      </button>
+      <i aria-hidden="true">›</i>
+    `).join("")}
+    <strong title="${escapeHtml(currentCrossTabLabel())}">
+      当前 · ${escapeHtml(currentCrossTabLabel())}
+    </strong>
+  ` : "";
+
+  [
+    [elements.crossTabTrail, elements.crossTabTrailItems],
+    [elements.productDetailCrossTabTrail, elements.productDetailCrossTabTrailItems]
+  ].forEach(([trail, items]) => {
+    if (!trail || !items) return;
+    trail.hidden = state.crossTabHistory.length === 0;
+    items.innerHTML = trailMarkup;
+    items
+      .querySelectorAll("[data-cross-tab-history]")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          restoreCrossTabContext(Number(button.dataset.crossTabHistory));
+        });
+      });
+  });
+}
+
 async function loadData() {
   const entries = await Promise.all(
     Object.entries(DATA_FILES).map(async ([key, url]) => {
@@ -552,6 +813,10 @@ async function loadData() {
   loaded.prototypes = loaded.prototypes.items;
   loaded.variants = loaded.variants.items;
   loaded.products = loaded.products.items;
+  loaded.salesEstimatesSource = loaded.salesEstimates.source;
+  loaded.salesEstimates = loaded.salesEstimates.items;
+  loaded.steamMetadataSource = loaded.steamMetadata.source;
+  loaded.steamMetadata = loaded.steamMetadata.items;
   loaded.productObservations = loaded.productObservations.items;
   loaded.ecosystems = loaded.ecosystems.items;
   loaded.termItems = loaded.terms.terms;
@@ -565,6 +830,12 @@ async function loadData() {
   loaded.variantById = new Map(loaded.variants.map((item) => [item.id, item])
   );
   loaded.productById = new Map(loaded.products.map((item) => [item.id, item]));
+  loaded.salesEstimateByProductId = new Map(
+    loaded.salesEstimates.map((item) => [item.product_id, item])
+  );
+  loaded.steamMetadataByProductId = new Map(
+    loaded.steamMetadata.map((item) => [item.product_id, item])
+  );
   loaded.productObservationById = new Map(
     loaded.productObservations.map((item) => [item.product_id, item])
   );
@@ -640,6 +911,352 @@ function safeHttpUrl(value = "") {
   return /^https?:\/\//.test(value) ? value : null;
 }
 
+function steamDbUrlForProduct(product) {
+  const explicitId = String(product?.steam_app_id ?? "").trim();
+  const sourceId = String(product?.source_url ?? "")
+    .match(/store\.steampowered\.com\/app\/(\d+)/)?.[1];
+  const appId = explicitId || sourceId;
+  return /^\d+$/.test(appId) ? `https://steamdb.info/app/${appId}/` : null;
+}
+
+function compactChineseCount(value) {
+  if (!Number.isFinite(value)) return "";
+  if (value >= 10000) {
+    const tenThousands = value / 10000;
+    return `${Number.isInteger(tenThousands) ? tenThousands : tenThousands.toFixed(1)} 万`;
+  }
+  return new Intl.NumberFormat("zh-CN").format(value);
+}
+
+function salesEstimateCopy(product) {
+  const estimate = state.data.salesEstimateByProductId.get(product.id);
+  const fetchedAt = String(state.data.salesEstimatesSource?.fetched_at ?? "").slice(0, 10);
+
+  if (!estimate) {
+    return {
+      value: "暂无数据",
+      detail: "未找到销量记录",
+      title: "当前游戏还没有关联销量参考记录。"
+    };
+  }
+
+  if (estimate.status === "estimated" && Number.isFinite(estimate.units_estimate)) {
+    const hasRange = Number.isFinite(estimate.units_lower) && Number.isFinite(estimate.units_upper);
+    return {
+      value: `约 ${compactChineseCount(estimate.units_estimate)}`,
+      detail: `${hasRange
+        ? `区间 ${compactChineseCount(estimate.units_lower)}–${compactChineseCount(estimate.units_upper)}`
+        : "Gamalytic 估算"}${fetchedAt ? ` · ${fetchedAt}` : ""}`,
+      title: "Gamalytic Copies sold 估算：表示直接在 Steam 购买的预估份数，不包含通过 Steam Key 激活的份数；不是官方销量。",
+      sourceUrl: safeHttpUrl(estimate.source_url)
+    };
+  }
+
+  return {
+    value: "暂无 Gamalytic 数据",
+    detail: `未收录或暂未提供${fetchedAt ? ` · ${fetchedAt}` : ""}`,
+    title: "Gamalytic 当前未提供这款游戏的 Copies sold 估算。",
+    sourceUrl: safeHttpUrl(estimate.source_url)
+  };
+}
+
+function steamMetadataCopy(product) {
+  const metadata = state.data.steamMetadataByProductId.get(product.id);
+  const isDemo = Boolean(metadata?.is_demo)
+    || /\bdemo\b/i.test(`${product.name ?? ""} ${product.name_en ?? ""}`);
+  const dateLabel = metadata?.coming_soon
+    ? (isDemo ? "Demo 预计上线" : "预计上市")
+    : (isDemo ? "Demo 上线" : "上市时间");
+  const rawDateText = String(metadata?.release_date_text ?? "").trim();
+  const dateValue = (
+    metadata?.release_date_iso
+    ?? (/^coming soon$/i.test(rawDateText) ? "日期待公布" : rawDateText)
+  ) || (product.release_year ? String(product.release_year) : "日期待公布");
+  const reviewScore = Number.isInteger(metadata?.review_score)
+    ? metadata.review_score
+    : 0;
+  const reviewTone = reviewScore >= 8
+    ? "excellent"
+    : reviewScore >= 6
+      ? "positive"
+      : reviewScore === 5
+        ? "mixed"
+        : reviewScore > 0
+          ? "negative"
+          : "none";
+  const reviewLabel = reviewScore === 0 && Number(metadata?.total_reviews) > 0
+    ? "评价较少"
+    : (metadata?.review_label ?? "暂无用户评测");
+  const reviewCount = Number.isFinite(metadata?.total_reviews)
+    ? `${new Intl.NumberFormat("zh-CN").format(metadata.total_reviews)} 条评价`
+    : "评价数待更新";
+
+  return {
+    dateLabel,
+    dateValue,
+    reviewLabel,
+    reviewCount,
+    reviewTone
+  };
+}
+
+function compareProductsBySalesDescending(a, b) {
+  const aEstimate = state.data.salesEstimateByProductId.get(a.id);
+  const bEstimate = state.data.salesEstimateByProductId.get(b.id);
+  const aPoint = Number.isFinite(aEstimate?.units_estimate) ? aEstimate.units_estimate : -1;
+  const bPoint = Number.isFinite(bEstimate?.units_estimate) ? bEstimate.units_estimate : -1;
+  if (aPoint !== bPoint) return bPoint - aPoint;
+
+  const aUpper = Number.isFinite(aEstimate?.units_upper) ? aEstimate.units_upper : aPoint;
+  const bUpper = Number.isFinite(bEstimate?.units_upper) ? bEstimate.units_upper : bPoint;
+  if (aUpper !== bUpper) return bUpper - aUpper;
+
+  return a.order - b.order || a.name.localeCompare(b.name, "zh-CN");
+}
+
+function safeFieldEvidenceUrl(value = "") {
+  if (/^\.\/assets\/uploads\/formula-fields\/[A-Za-z0-9._-]+$/.test(value)) {
+    return value;
+  }
+  if (/^data:image\/(?:png|jpeg|webp);base64,/.test(value)) {
+    return value;
+  }
+  return safeHttpUrl(value);
+}
+
+function fieldEvidenceImages(entry) {
+  return Array.isArray(entry?.evidence_images)
+    ? entry.evidence_images.filter((item) => safeFieldEvidenceUrl(item?.url ?? item?.data_url))
+    : [];
+}
+
+function fieldEvidencePreviewMarkup(input, options = {}) {
+  const images = Array.isArray(input)
+    ? fieldEvidenceImages({ evidence_images: input })
+    : fieldEvidenceImages(input);
+  if (!images.length) return "";
+
+  const limit = Math.max(1, options.limit ?? images.length);
+  const visibleImages = images.slice(0, limit);
+  const label = options.label ?? "字段配图";
+  const className = options.className ? ` ${options.className}` : "";
+
+  return `
+    <span class="field-evidence-thumbnails${className}" data-field-evidence-group
+      aria-label="${escapeHtml(label)}">
+      ${visibleImages.map((image, index) => {
+        const imageUrl = safeFieldEvidenceUrl(image.url ?? image.data_url);
+        const caption = image.caption || image.name || `${label} ${index + 1}`;
+        return `
+          <button type="button" class="field-evidence-thumb"
+            data-field-image-preview
+            data-field-image-caption="${escapeHtml(caption)}"
+            aria-label="放大查看：${escapeHtml(caption)}"
+            title="点击放大查看"
+          >
+            <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(caption)}" loading="lazy">
+            <span aria-hidden="true">↗</span>
+          </button>
+        `;
+      }).join("")}
+      ${images.length > visibleImages.length
+        ? `<span class="field-evidence-more">+${images.length - visibleImages.length}</span>`
+        : ""}
+    </span>
+  `;
+}
+
+const FIELD_IMAGE_VIEWER_MIN_ZOOM = 0.5;
+const FIELD_IMAGE_VIEWER_MAX_ZOOM = 5;
+const FIELD_IMAGE_VIEWER_ZOOM_STEP = 0.25;
+
+function updateFieldImageViewerTransform() {
+  const zoom = state.fieldImageViewerZoom;
+  elements.fieldImageViewerImage.style.transform =
+    `translate(${state.fieldImageViewerPanX}px, ${state.fieldImageViewerPanY}px) scale(${zoom})`;
+  elements.fieldImageViewerZoomLevel.value = `${Math.round(zoom * 100)}%`;
+  elements.fieldImageViewerZoomLevel.textContent = `${Math.round(zoom * 100)}%`;
+  elements.fieldImageViewerZoomOut.disabled = zoom <= FIELD_IMAGE_VIEWER_MIN_ZOOM;
+  elements.fieldImageViewerZoomIn.disabled = zoom >= FIELD_IMAGE_VIEWER_MAX_ZOOM;
+  elements.fieldImageViewerStage.classList.toggle("is-zoomed", zoom > 1);
+}
+
+function resetFieldImageViewerZoom() {
+  state.fieldImageViewerZoom = 1;
+  state.fieldImageViewerPanX = 0;
+  state.fieldImageViewerPanY = 0;
+  state.fieldImageViewerDrag = null;
+  elements.fieldImageViewerStage.classList.remove("is-dragging");
+  updateFieldImageViewerTransform();
+}
+
+function setFieldImageViewerZoom(value) {
+  const nextZoom = Math.min(
+    FIELD_IMAGE_VIEWER_MAX_ZOOM,
+    Math.max(FIELD_IMAGE_VIEWER_MIN_ZOOM, value)
+  );
+  state.fieldImageViewerZoom =
+    Math.round(nextZoom / FIELD_IMAGE_VIEWER_ZOOM_STEP) * FIELD_IMAGE_VIEWER_ZOOM_STEP;
+  if (state.fieldImageViewerZoom <= 1) {
+    state.fieldImageViewerPanX = 0;
+    state.fieldImageViewerPanY = 0;
+  }
+  updateFieldImageViewerTransform();
+}
+
+function renderFieldImageViewer() {
+  const items = state.fieldImageViewerItems;
+  const item = items[state.fieldImageViewerIndex];
+  if (!item) return;
+
+  resetFieldImageViewerZoom();
+  elements.fieldImageViewerImage.src = item.src;
+  elements.fieldImageViewerImage.alt = item.caption;
+  elements.fieldImageViewerTitle.textContent = item.caption || "字段配图";
+  elements.fieldImageViewerCaption.textContent = item.caption || "字段配图";
+  elements.fieldImageViewerCount.textContent =
+    `字段配图 · ${state.fieldImageViewerIndex + 1} / ${items.length}`;
+  elements.fieldImageViewerPrevious.hidden = items.length < 2;
+  elements.fieldImageViewerNext.hidden = items.length < 2;
+}
+
+function openFieldImageViewer(trigger) {
+  const group = trigger.closest("[data-field-evidence-group]");
+  const triggers = group
+    ? [...group.querySelectorAll("[data-field-image-preview]")]
+    : [trigger];
+  const items = triggers.map((button) => {
+    const image = button.querySelector("img");
+    return {
+      trigger: button,
+      src: image?.currentSrc || image?.getAttribute("src") || "",
+      caption: button.dataset.fieldImageCaption || image?.alt || "字段配图"
+    };
+  }).filter((item) => safeFieldEvidenceUrl(item.src));
+  if (!items.length) return;
+
+  state.fieldImageViewerItems = items;
+  state.fieldImageViewerIndex = Math.max(0, triggers.indexOf(trigger));
+  renderFieldImageViewer();
+  if (typeof elements.fieldImageViewer.showModal === "function") {
+    elements.fieldImageViewer.showModal();
+  } else {
+    elements.fieldImageViewer.setAttribute("open", "");
+  }
+}
+
+function closeFieldImageViewer() {
+  if (typeof elements.fieldImageViewer.close === "function") {
+    elements.fieldImageViewer.close();
+  } else {
+    elements.fieldImageViewer.removeAttribute("open");
+  }
+}
+
+function stepFieldImageViewer(delta) {
+  const count = state.fieldImageViewerItems.length;
+  if (count < 2) return;
+  state.fieldImageViewerIndex = (state.fieldImageViewerIndex + delta + count) % count;
+  renderFieldImageViewer();
+}
+
+function bindFieldImageViewer() {
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-field-image-preview]");
+    if (!trigger) return;
+    event.preventDefault();
+    event.stopPropagation();
+    openFieldImageViewer(trigger);
+  });
+  elements.fieldImageViewerClose.addEventListener("click", closeFieldImageViewer);
+  elements.fieldImageViewerZoomOut.addEventListener("click", () => {
+    setFieldImageViewerZoom(state.fieldImageViewerZoom - FIELD_IMAGE_VIEWER_ZOOM_STEP);
+  });
+  elements.fieldImageViewerZoomIn.addEventListener("click", () => {
+    setFieldImageViewerZoom(state.fieldImageViewerZoom + FIELD_IMAGE_VIEWER_ZOOM_STEP);
+  });
+  elements.fieldImageViewerZoomReset.addEventListener("click", resetFieldImageViewerZoom);
+  elements.fieldImageViewerPrevious.addEventListener("click", () => stepFieldImageViewer(-1));
+  elements.fieldImageViewerNext.addEventListener("click", () => stepFieldImageViewer(1));
+  elements.fieldImageViewerStage.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    const direction = event.deltaY < 0 ? 1 : -1;
+    setFieldImageViewerZoom(
+      state.fieldImageViewerZoom + direction * FIELD_IMAGE_VIEWER_ZOOM_STEP
+    );
+  }, { passive: false });
+  elements.fieldImageViewerStage.addEventListener("dblclick", (event) => {
+    if (event.target.closest(".field-image-viewer-nav")) return;
+    setFieldImageViewerZoom(state.fieldImageViewerZoom === 1 ? 2 : 1);
+  });
+  elements.fieldImageViewerStage.addEventListener("pointerdown", (event) => {
+    if (
+      state.fieldImageViewerZoom <= 1
+      || event.target.closest(".field-image-viewer-nav")
+    ) return;
+    event.preventDefault();
+    state.fieldImageViewerDrag = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      panX: state.fieldImageViewerPanX,
+      panY: state.fieldImageViewerPanY
+    };
+    elements.fieldImageViewerStage.classList.add("is-dragging");
+    elements.fieldImageViewerStage.setPointerCapture?.(event.pointerId);
+  });
+  elements.fieldImageViewerStage.addEventListener("pointermove", (event) => {
+    const drag = state.fieldImageViewerDrag;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    state.fieldImageViewerPanX = drag.panX + event.clientX - drag.startX;
+    state.fieldImageViewerPanY = drag.panY + event.clientY - drag.startY;
+    updateFieldImageViewerTransform();
+  });
+  const endImageDrag = (event) => {
+    const drag = state.fieldImageViewerDrag;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    state.fieldImageViewerDrag = null;
+    elements.fieldImageViewerStage.classList.remove("is-dragging");
+    elements.fieldImageViewerStage.releasePointerCapture?.(event.pointerId);
+  };
+  elements.fieldImageViewerStage.addEventListener("pointerup", endImageDrag);
+  elements.fieldImageViewerStage.addEventListener("pointercancel", endImageDrag);
+  elements.fieldImageViewer.addEventListener("click", (event) => {
+    if (event.target === elements.fieldImageViewer) closeFieldImageViewer();
+  });
+  elements.fieldImageViewer.addEventListener("keydown", (event) => {
+    if (["+", "=", "Add"].includes(event.key)) {
+      event.preventDefault();
+      setFieldImageViewerZoom(state.fieldImageViewerZoom + FIELD_IMAGE_VIEWER_ZOOM_STEP);
+      return;
+    }
+    if (["-", "Subtract"].includes(event.key)) {
+      event.preventDefault();
+      setFieldImageViewerZoom(state.fieldImageViewerZoom - FIELD_IMAGE_VIEWER_ZOOM_STEP);
+      return;
+    }
+    if (event.key === "0") {
+      event.preventDefault();
+      resetFieldImageViewerZoom();
+      return;
+    }
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      stepFieldImageViewer(-1);
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      stepFieldImageViewer(1);
+    }
+  });
+  elements.fieldImageViewer.addEventListener("close", () => {
+    state.fieldImageViewerItems = [];
+    state.fieldImageViewerIndex = 0;
+    resetFieldImageViewerZoom();
+    elements.fieldImageViewerImage.removeAttribute("src");
+  });
+}
+
 function productClassification(product) {
   const mechanisms = product.mother_ids
     .map((id) => state.data.mechanismById.get(id)?.name)
@@ -654,7 +1271,7 @@ function productClassification(product) {
   const path = [
     mechanisms.join(" + ") || "机制母型待确认",
     prototypes.join(" + ") || "品类原型待确认",
-    variants.join(" + ") || (prototypes.length ? "无独立变体" : "品类变体待确认")
+    variants.join(" + ") || (prototypes.length ? "无独立变体" : "游戏变体待确认")
   ];
 
   return {
@@ -675,7 +1292,7 @@ function renderLibraryStats() {
   const pending = reviewItems.filter((item) => item.status !== "confirmed").length;
   const confirmed = reviewItems.length - pending;
   const values = [
-    [state.data.products.length, "具体产品"],
+    [state.data.products.length, "具体游戏"],
     [nodes.length, "模型节点"],
     [reviewItems.length, "公式字段记录"],
     [confirmed, "已人工确认"],
@@ -762,7 +1379,11 @@ function renderProductCatalog() {
       ].join(" ").toLowerCase();
       return haystack.includes(query);
     })
-    .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, "zh-CN"));
+    .sort(state.libraryProductSort === "sales_desc"
+      ? compareProductsBySalesDescending
+      : (a, b) => a.order - b.order || a.name.localeCompare(b.name, "zh-CN"));
+
+  elements.productSort.value = state.libraryProductSort;
 
   elements.motherFilter.classList.toggle("is-active", state.librarySlotMotherOnly);
   elements.motherFilter.setAttribute("aria-pressed", String(state.librarySlotMotherOnly));
@@ -783,6 +1404,7 @@ function renderProductCatalog() {
       ${state.libraryPrototypeFilter !== "all"
         ? `${escapeHtml(selectedPrototype?.name ?? "所选品类原型")}共 ${prototypeProductCount} 款；`
         : "全部品类原型；"}
+      ${state.libraryProductSort === "sales_desc" ? "按销量数据从高到低排列；" : "默认排序；"}
       旧版迁入 ${state.data.migrationReport.result.formal_legacy_games} 款；
       设计样例 ${state.data.migrationReport.result.design_samples} 条，不计入游戏数量。
     </small>
@@ -790,15 +1412,20 @@ function renderProductCatalog() {
 
   elements.productCatalog.innerHTML = products.length
     ? products.map((product, index) => {
-      const status = productStatusCopy(product);
-      const classificationStatus = classificationStatusCopy(product);
       const classification = productClassification(product);
       const sourceUrl = safeHttpUrl(product.source_url);
+      const steamDbUrl = steamDbUrlForProduct(product);
       const coverUrl = safeHttpUrl(product.header_image_url);
       const tags = (product.tags ?? []).slice(0, 3);
-      const hasModelRelation = product.mother_ids.length
-        || product.prototype_ids.length
-        || product.variant_ids.length;
+      const relationRole = roleForProduct(product);
+      const roleLabel = relationRole === "cornerstone"
+        ? "基石游戏"
+        : product.prototype_ids.length
+          ? "变体游戏"
+          : "待归类游戏";
+      const prototypeIdentity = classification.path[1] ?? "品类原型待确认";
+      const salesEstimate = salesEstimateCopy(product);
+      const steamMetadata = steamMetadataCopy(product);
       return `
         <article class="product-record product-depth-${classification.depth}">
           <div class="product-cover ${coverUrl ? "" : "no-image"}">
@@ -808,38 +1435,66 @@ function renderProductCatalog() {
               <span>${escapeHtml(product.name.slice(0, 2))}</span>
             `}
           </div>
-          <header>
-            <span class="product-sequence">${String(index + 1).padStart(2, "0")}</span>
-            <span class="product-status-stack">
-              <span class="review-badge ${status.className}">${escapeHtml(status.label)}</span>
-              <span class="review-badge ${classificationStatus.className}">${escapeHtml(classificationStatus.label)}</span>
-            </span>
-          </header>
-          <h4>${escapeHtml(product.name)}</h4>
-          ${product.name_en ? `<span class="product-name-en">${escapeHtml(product.name_en)}</span>` : ""}
-          <p>${escapeHtml(product.summary)}</p>
-          <div class="product-classification" aria-label="${escapeHtml(product.name)}的分类路径">
-            ${classification.path.map((part, pathIndex) => `
-              ${pathIndex ? '<span aria-hidden="true">→</span>' : ""}
-              <strong>${escapeHtml(part)}</strong>
-            `).join("")}
-          </div>
-          ${tags.length ? `
-            <div class="product-mechanics">
-              ${tags.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+          <header class="product-record-head">
+            <div class="product-record-title">
+              <h4>${escapeHtml(product.name)}</h4>
+              ${product.name_en ? `<span class="product-name-en">${escapeHtml(product.name_en)}</span>` : ""}
+              <div class="product-steam-meta" aria-label="${escapeHtml(product.name)}的 Steam 上市与评价信息">
+                <span class="product-release-date">
+                  ${escapeHtml(steamMetadata.dateLabel)} · ${escapeHtml(steamMetadata.dateValue)}
+                </span>
+                <span class="product-review-text review-${escapeHtml(steamMetadata.reviewTone)}">
+                  ${escapeHtml(steamMetadata.reviewLabel)} · ${escapeHtml(steamMetadata.reviewCount)}
+                </span>
+              </div>
             </div>
-          ` : ""}
+            <div class="product-record-side">
+              <span class="product-sequence">${String(index + 1).padStart(2, "0")}</span>
+            </div>
+          </header>
+          <section class="product-category-band" aria-label="${escapeHtml(product.name)}的当前品类身份">
+            <div>
+              <small>当前品类身份</small>
+              <strong>${escapeHtml(prototypeIdentity)}</strong>
+            </div>
+            <span class="product-taxonomy-role role-${escapeHtml(relationRole)}">${escapeHtml(roleLabel)}</span>
+          </section>
+          <p class="product-summary">${escapeHtml(product.summary)}</p>
+          <section class="product-info-row product-sales-row" title="${escapeHtml(salesEstimate.title)}">
+            <small>销量估算</small>
+            <div class="product-sales-estimate">
+              <strong>${escapeHtml(salesEstimate.value)}</strong>
+            </div>
+          </section>
+          <section class="product-info-row product-path-row">
+            <small>完整路径</small>
+            <div class="product-classification" aria-label="${escapeHtml(product.name)}的完整分类路径">
+              ${classification.path.map((part, pathIndex) => `
+                ${pathIndex ? '<span aria-hidden="true">→</span>' : ""}
+                <strong>${escapeHtml(part)}</strong>
+              `).join("")}
+            </div>
+          </section>
+          <section class="product-info-row product-tags-row">
+            <small>分析标签</small>
+            ${tags.length ? `
+              <div class="product-mechanics">
+                ${tags.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+              </div>
+            ` : '<span class="product-tags-empty">待补充</span>'}
+          </section>
           <footer>
             <button type="button" class="product-detail-button" data-product-detail="${escapeHtml(product.id)}">
               查看游戏资料
             </button>
-            ${hasModelRelation ? `
-              <button type="button" class="product-focus-button" data-product-focus="${escapeHtml(product.id)}">
-                所属模型
-              </button>
-            ` : ""}
             ${sourceUrl ? `
               <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">Steam ↗</a>
+            ` : ""}
+            ${steamDbUrl ? `
+              <a href="${escapeHtml(steamDbUrl)}" target="_blank" rel="noreferrer">SteamDB ↗</a>
+            ` : ""}
+            ${salesEstimate.sourceUrl ? `
+              <a href="${escapeHtml(salesEstimate.sourceUrl)}" target="_blank" rel="noreferrer">Gamalytic ↗</a>
             ` : ""}
           </footer>
         </article>
@@ -850,20 +1505,6 @@ function renderProductCatalog() {
   elements.productCatalog.querySelectorAll("[data-product-detail]").forEach((button) => {
     button.addEventListener("click", () => {
       openProductDetail(button.dataset.productDetail);
-    });
-  });
-
-  elements.productCatalog.querySelectorAll("[data-product-focus]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const product = state.data.productById.get(button.dataset.productFocus);
-      if (!product) return;
-      const variantId = product.variant_ids[0];
-      const prototypeId = product.prototype_ids[0];
-      const mechanismId = product.mother_ids[0];
-      if (variantId) selectVariant(variantId);
-      else if (prototypeId) selectPrototype(prototypeId);
-      else if (mechanismId) selectMechanism(mechanismId);
-      window.location.hash = "atlas";
     });
   });
 
@@ -1059,6 +1700,7 @@ function openProductDetail(productId) {
   } else {
     elements.productDetail.setAttribute("open", "");
   }
+  renderCrossTabTrail();
 }
 
 function closeProductDetail() {
@@ -1085,7 +1727,7 @@ function updateClassificationPrototypePreview() {
     : null;
 
   elements.classificationEditorMechanism.textContent = mechanism
-    ? `${mechanism.name} → ${prototype.name} → 当前游戏（系统自动建立品类变体）`
+    ? `${mechanism.name} → ${prototype.name} → 当前游戏（系统自动建立游戏变体）`
     : "未选择品类原型；保存后会清除模型归属";
   elements.classificationEditorRole.disabled = !prototype;
 }
@@ -1174,8 +1816,9 @@ async function saveProductClassification() {
   }
 }
 
-function matrixCellMarkup(node, field) {
+function matrixCellMarkup(node, field, options = {}) {
   const entry = rawFingerprint(node)[field];
+  const evidenceImages = fieldEvidenceImages(entry);
   const status = reviewStatusFor(node, entry);
   const parent = parentNode(node);
   const parentValue = parent ? effectiveFingerprint(parent)[field] : null;
@@ -1183,96 +1826,176 @@ function matrixCellMarkup(node, field) {
     ? `${parentValue.label}：${parentValue.summary}`
     : "体验公式基础字段";
   return `
-    <td>
-      <button
-        type="button"
-        class="matrix-cell layer-${escapeHtml(node.type)} status-${escapeHtml(status)}"
-        data-edit-node="${escapeHtml(node.id)}"
-        data-edit-field="${escapeHtml(field)}"
-        aria-label="编辑 ${escapeHtml(node.name)} 的 ${escapeHtml(field)}"
-        title="父级有效结果：${escapeHtml(parentCopy)}"
-      >
-        <span class="matrix-cell-meta">
-          <em class="operation-pill ${escapeHtml(entry.operation)}">
-            ${escapeHtml(OPERATION_LABELS[entry.operation] ?? entry.operation)}
-          </em>
-          <i class="review-badge ${escapeHtml(status)}">${escapeHtml(REVIEW_STATUS_LABELS[status])}</i>
-        </span>
-        <strong>${escapeHtml(entry.constraint_label ?? FIELD_LABELS[field])}</strong>
-        <small>${escapeHtml(entry.summary)}</small>
-      </button>
+    <td class="${options.isParent ? "matrix-parent-data-column" : ""} ${options.isFocused ? "is-focused-node" : ""}">
+      <div class="matrix-cell-shell ${evidenceImages.length ? "has-evidence" : ""}">
+        <button
+          type="button"
+          class="matrix-cell layer-${escapeHtml(node.type)} status-${escapeHtml(status)}"
+          data-edit-node="${escapeHtml(node.id)}"
+          data-edit-field="${escapeHtml(field)}"
+          aria-label="编辑 ${escapeHtml(node.name)} 的 ${escapeHtml(field)}"
+          title="父级有效结果：${escapeHtml(parentCopy)}"
+        >
+          <span class="matrix-cell-meta">
+            <em class="operation-pill ${escapeHtml(entry.operation)}">
+              ${escapeHtml(operationLabelForNode(node, entry.operation))}
+            </em>
+            <i class="review-badge ${escapeHtml(status)}">${escapeHtml(REVIEW_STATUS_LABELS[status])}</i>
+          </span>
+          <strong>${escapeHtml(entry.constraint_label ?? FIELD_LABELS[field])}</strong>
+          <small>${escapeHtml(entry.summary)}</small>
+        </button>
+        ${fieldEvidencePreviewMarkup(evidenceImages, {
+          className: "matrix-field-evidence",
+          limit: 4,
+          label: `${node.name} · ${formulaDisplayKey(field)} 配图`
+        })}
+      </div>
     </td>
   `;
 }
 
-function matrixInheritanceTreeMarkup(node) {
+function matrixParentCandidates() {
+  return [
+    ...state.data.mechanisms,
+    ...state.data.prototypes
+  ].sort((a, b) => {
+    const typeDelta = NODE_TYPE_ORDER[a.type] - NODE_TYPE_ORDER[b.type];
+    return typeDelta || a.order - b.order;
+  });
+}
+
+function matrixChildrenFor(parent) {
+  if (!parent) return [];
+  if (parent.type === "mechanism_archetype") return prototypesFor(parent.id);
+  if (parent.type === "category_prototype") return variantsFor(parent.id);
+  return [];
+}
+
+function matrixParentOptionLabel(node) {
+  const childCount = matrixChildrenFor(node).length;
+  const childLabel = node.type === "mechanism_archetype" ? "品类原型" : "游戏变体";
+  return `${TYPE_LABELS[node.type]} · ${node.name}（${childCount} 个${childLabel}）`;
+}
+
+function matrixNodeHeadingMarkup(node) {
   if (node.type !== "category_variant") {
-    const parent = parentNode(node);
-    return `<small>${parent ? `继承自 ${escapeHtml(parent.name)}` : "体验公式下的第一层"}</small>`;
+    return `<strong>${escapeHtml(node.name)}</strong>`;
   }
 
-  const path = inheritancePath(node);
+  const product = productsFor(node)[0] ?? null;
+  const imageUrl = safeHttpUrl(product?.header_image_url);
+  const fallback = (product?.name ?? node.name).slice(0, 2);
+
   return `
-    <div class="matrix-inheritance-tree"
-      aria-label="${escapeHtml(path.map((item) => item.name).join(" 到 "))}">
-      <small class="matrix-tree-title">完整继承树</small>
-      ${path.map((item, index) => `
-        ${index ? '<span class="matrix-tree-edge" aria-hidden="true"></span>' : ""}
-        <span class="matrix-tree-node layer-${escapeHtml(item.type)} ${item.id === node.id ? "is-current" : ""}">
-          <i aria-hidden="true"></i>
-          <span>
-            <small>${escapeHtml(TYPE_LABELS[item.type])}</small>
-            <strong>${escapeHtml(item.name)}</strong>
-          </span>
-          ${item.id === node.id ? "<em>当前</em>" : ""}
-        </span>
-      `).join("")}
-    </div>
+    <span class="matrix-game-heading">
+      <span class="matrix-game-icon ${imageUrl ? "has-image" : "no-image"}" aria-hidden="true">
+        <span>${escapeHtml(fallback)}</span>
+        ${imageUrl ? `
+          <img
+            src="${escapeHtml(imageUrl)}"
+            alt=""
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          >
+        ` : ""}
+      </span>
+      <strong>${escapeHtml(node.name)}</strong>
+    </span>
   `;
+}
+
+function syncMatrixParentOptions() {
+  const candidates = matrixParentCandidates();
+  if (!candidates.some((node) => node.id === state.libraryMatrixParentId)) {
+    state.libraryMatrixParentId = candidates[0]?.id ?? null;
+  }
+  elements.matrixParentFilter.innerHTML = candidates.map((node) => `
+    <option value="${escapeHtml(node.id)}">
+      ${escapeHtml(matrixParentOptionLabel(node))}
+    </option>
+  `).join("");
+  elements.matrixParentFilter.value = state.libraryMatrixParentId ?? "";
 }
 
 function renderFormulaMatrix() {
   const fields = state.libraryFieldFilter === "all"
     ? FORMULA_FIELDS
     : [state.libraryFieldFilter];
-  const nodes = libraryNodes().filter((node) =>
-    state.libraryLevelFilter === "all" || node.type === state.libraryLevelFilter
-  );
+  syncMatrixParentOptions();
+  const parent = libraryNodeById(state.libraryMatrixParentId);
+  const children = matrixChildrenFor(parent);
+  const focusedNode = state.libraryMatrixNodeFilter
+    ? libraryNodeById(state.libraryMatrixNodeFilter)
+    : null;
+
+  elements.matrixNodeFocus.hidden = !focusedNode;
+  elements.matrixNodeFocusName.textContent = focusedNode
+    ? `${TYPE_LABELS[focusedNode.type]} · ${focusedNode.name}`
+    : "";
+  const childTypeLabel = parent?.type === "mechanism_archetype" ? "品类原型" : "游戏变体";
+  elements.matrixScopeSummary.textContent = parent
+    ? `当前父类型：${parent.name}；横向对照 ${children.length} 个直接${childTypeLabel}，纵向展示 ${fields.length} 个公式字段。`
+    : "暂无可比较的父类型。";
 
   elements.formulaDataTable.innerHTML = `
     <thead>
       <tr>
-        <th scope="col" class="matrix-node-column">
-          <span>模型节点</span>
-          <small>层级与继承位置</small>
+        <th scope="col" class="matrix-field-column">
+          <span>公式字段</span>
+          <small>字段与含义</small>
         </th>
-        ${fields.map((field) => `
-          <th scope="col">
-            <code>${escapeHtml(formulaDisplayKey(field))}</code>
-            <small>${escapeHtml(FIELD_LABELS[field])}</small>
+        ${parent ? `
+          <th scope="col" class="matrix-parent-heading layer-${escapeHtml(parent.type)}">
+            <span>${escapeHtml(TYPE_LABELS[parent.type])} · 父类型</span>
+            <strong>${escapeHtml(parent.name)}</strong>
+          </th>
+        ` : ""}
+        ${children.map((node) => `
+          <th scope="col" class="matrix-child-heading layer-${escapeHtml(node.type)} ${focusedNode?.id === node.id ? "is-focused-node" : ""}">
+            <span>${escapeHtml(TYPE_LABELS[node.type])}</span>
+            ${matrixNodeHeadingMarkup(node)}
           </th>
         `).join("")}
+        ${parent && !children.length ? `
+          <th scope="col" class="matrix-empty-heading">
+            <span>直接子类型</span>
+            <strong>尚未建立</strong>
+          </th>
+        ` : ""}
       </tr>
     </thead>
     <tbody>
-      ${nodes.map((node) => {
-        return `
-          <tr>
-            <th scope="row" class="matrix-node-column">
-              <span class="node-type-label">${escapeHtml(TYPE_LABELS[node.type])}</span>
-              <strong>${escapeHtml(node.name)}</strong>
-              ${matrixInheritanceTreeMarkup(node)}
-            </th>
-            ${fields.map((field) => matrixCellMarkup(node, field)).join("")}
-          </tr>
-        `;
-      }).join("")}
+      ${fields.map((field) => `
+        <tr data-matrix-field-row="${escapeHtml(field)}">
+          <th scope="row" class="matrix-field-column">
+            <code>${escapeHtml(formulaDisplayKey(field))}</code>
+            <strong>${escapeHtml(FIELD_LABELS[field])}</strong>
+          </th>
+          ${parent ? matrixCellMarkup(parent, field, { isParent: true }) : ""}
+          ${children.map((node) => matrixCellMarkup(node, field, {
+            isFocused: focusedNode?.id === node.id
+          })).join("")}
+          ${parent && !children.length ? `
+            <td class="matrix-empty-child-column">
+              <span>该父类型下暂时没有直接子类型</span>
+            </td>
+          ` : ""}
+        </tr>
+      `).join("")}
     </tbody>
   `;
 
   elements.formulaDataTable.querySelectorAll("[data-edit-node][data-edit-field]").forEach((button) => {
     button.addEventListener("click", () => {
       openFieldEditor(button.dataset.editNode, button.dataset.editField);
+    });
+  });
+
+  elements.formulaDataTable.querySelectorAll(".matrix-game-icon img").forEach((image) => {
+    image.addEventListener("error", () => {
+      image.closest(".matrix-game-icon")?.classList.add("image-failed");
+      image.hidden = true;
     });
   });
 }
@@ -1300,25 +2023,35 @@ function reviewQueueItems() {
 function renderReviewQueue() {
   const items = reviewQueueItems();
   elements.reviewQueue.innerHTML = items.length
-    ? items.map((item) => `
-      <button
-        type="button"
-        class="review-item layer-${escapeHtml(item.node.type)}"
-        data-review-node="${escapeHtml(item.node.id)}"
-        data-review-field="${escapeHtml(item.field)}"
-      >
-        <span class="review-item-path">
-          <small>${escapeHtml(TYPE_LABELS[item.node.type])}</small>
-          <strong>${escapeHtml(item.node.name)}</strong>
-        </span>
-        <code>${escapeHtml(formulaDisplayKey(item.field))}</code>
-        <span class="review-item-copy">
-          <strong>${escapeHtml(item.entry.constraint_label ?? FIELD_LABELS[item.field])}</strong>
-          <small>${escapeHtml(item.entry.summary)}</small>
-        </span>
-        <span class="review-badge ${escapeHtml(item.status)}">${escapeHtml(REVIEW_STATUS_LABELS[item.status])}</span>
-      </button>
-    `).join("")
+    ? items.map((item) => {
+      const evidenceImages = fieldEvidenceImages(item.entry);
+      return `
+        <article class="review-item layer-${escapeHtml(item.node.type)}">
+          <button
+            type="button"
+            class="review-item-open"
+            data-review-node="${escapeHtml(item.node.id)}"
+            data-review-field="${escapeHtml(item.field)}"
+          >
+            <span class="review-item-path">
+              <small>${escapeHtml(TYPE_LABELS[item.node.type])}</small>
+              <strong>${escapeHtml(item.node.name)}</strong>
+            </span>
+            <code>${escapeHtml(formulaDisplayKey(item.field))}</code>
+            <span class="review-item-copy">
+              <strong>${escapeHtml(item.entry.constraint_label ?? FIELD_LABELS[item.field])}</strong>
+              <small>${escapeHtml(item.entry.summary)}</small>
+            </span>
+            <span class="review-badge ${escapeHtml(item.status)}">${escapeHtml(REVIEW_STATUS_LABELS[item.status])}</span>
+          </button>
+          ${fieldEvidencePreviewMarkup(evidenceImages, {
+            className: "review-field-evidence",
+            limit: 4,
+            label: `${item.node.name} · ${formulaDisplayKey(item.field)} 配图`
+          })}
+        </article>
+      `;
+    }).join("")
     : '<div class="library-empty confirmed-empty">全部公式字段都已经完成人工确认。</div>';
 
   elements.reviewQueue.querySelectorAll("[data-review-node][data-review-field]").forEach((button) => {
@@ -1387,6 +2120,90 @@ function selectEcosystemProduct(productId, field = null) {
   if (!state.data.productById.has(productId)) return;
   state.selectedEcosystemProductId = productId;
   state.selectedEcosystemField = field && FORMULA_FIELDS.includes(field) ? field : null;
+  state.selectedEcosystemMapPreset = `product:${productId}`;
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+  state.selectedEcosystemBdMode = "all";
+  renderEcosystemWorkbench();
+}
+
+function selectEcosystemMapPreset(presetKey) {
+  const config = state.data.ecosystemByPrototypeId.get(state.selectedEcosystemPrototypeId);
+  if (!config?.niche_map) return;
+  const riskId = presetKey.startsWith("risk:") ? presetKey.slice("risk:".length) : null;
+  const isRisk = riskId
+    && (config.four_layer_architecture?.boundaries ?? []).some((risk) => risk.id === riskId);
+  const bdModeId = presetKey.startsWith("bd:") ? presetKey.slice("bd:".length) : null;
+  const isBdMode = bdModeId
+    && (config.bd_analysis?.modes ?? []).some((mode) => mode.id === bdModeId);
+  state.selectedEcosystemMapPreset = config.niche_map.presets[presetKey] || isRisk || isBdMode
+    ? presetKey
+    : "all";
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+  state.selectedEcosystemBdMode = isBdMode ? bdModeId : "all";
+  if (config.niche_map.presets[presetKey]?.kind === "BRANCH") {
+    state.expandedEcosystemBranches = [
+      ...new Set([...state.expandedEcosystemBranches, presetKey])
+    ];
+  }
+  if (state.selectedEcosystemMapPreset === "all") {
+    state.selectedEcosystemField = null;
+  }
+  renderEcosystemWorkbench();
+}
+
+function selectEcosystemBdMode(modeId) {
+  const config = state.data.ecosystemByPrototypeId.get(state.selectedEcosystemPrototypeId);
+  const validMode = modeId === "all"
+    || (config?.bd_analysis?.modes ?? []).some((mode) => mode.id === modeId);
+  state.selectedEcosystemBdMode = validMode ? modeId : "all";
+  if (config?.niche_map) {
+    state.selectedEcosystemMapPreset = state.selectedEcosystemBdMode === "all"
+      ? "all"
+      : `bd:${state.selectedEcosystemBdMode}`;
+  }
+  state.selectedEcosystemField = null;
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+  renderEcosystemWorkbench();
+}
+
+function selectEcosystemMapFilter(dimension, value) {
+  const config = state.data.ecosystemByPrototypeId.get(state.selectedEcosystemPrototypeId);
+  if (!config?.niche_map) return;
+  const encoding = ecosystemNodeEncodings(config)[dimension];
+  const validValues = new Set((encoding?.legend ?? Object.entries(encoding?.labels ?? {}))
+    .map(([key]) => key));
+  if (!encoding || !validValues.has(value)) return;
+
+  const currentFilters = state.ecosystemMapFilters ?? {};
+  state.ecosystemMapFilters = {
+    topology: currentFilters.topology ?? null,
+    color: currentFilters.color ?? null,
+    secondary_badge: currentFilters.secondary_badge ?? null,
+    [dimension]: currentFilters[dimension] === value ? null : value
+  };
+  state.selectedEcosystemMapPreset = "all";
+  state.selectedEcosystemBdMode = "all";
+  state.selectedEcosystemField = null;
+  renderEcosystemWorkbench();
+}
+
+function clearEcosystemMapFilters() {
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+  state.selectedEcosystemMapPreset = "all";
+  renderEcosystemWorkbench();
+}
+
+function toggleEcosystemBranch(branchId) {
+  const config = state.data.ecosystemByPrototypeId.get(state.selectedEcosystemPrototypeId);
+  if (config?.niche_map?.presets?.[branchId]?.kind !== "BRANCH") return;
+  const expanded = new Set(state.expandedEcosystemBranches);
+  if (expanded.has(branchId)) expanded.delete(branchId);
+  else expanded.add(branchId);
+  state.expandedEcosystemBranches = [...expanded];
+  if (expanded.has(branchId)) {
+    selectEcosystemMapPreset(branchId);
+    return;
+  }
   renderEcosystemWorkbench();
 }
 
@@ -1433,6 +2250,10 @@ function renderEcosystemPrototypeList() {
           ?? ecosystemProducts(state.selectedEcosystemPrototypeId)[0]?.id
           ?? null;
         state.selectedEcosystemField = null;
+        state.selectedEcosystemMapPreset = "all";
+        state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+        state.selectedEcosystemBdMode = "all";
+        state.expandedEcosystemBranches = config?.four_layer_architecture?.branch_ids?.slice(0, 1) ?? [];
         renderEcosystem();
       });
     });
@@ -1464,16 +2285,22 @@ function ecosystemDeltaCards(config, selectedProduct, focusedField = null) {
     const comparison = ecosystemFieldComparison(config, selectedProduct, field);
     return `
       <article class="ecosystem-delta-card is-${escapeHtml(comparison.state.className)}">
-        <code>${escapeHtml(formulaDisplayKey(field))}</code>
-        <strong>
-          ${escapeHtml(FIELD_LABELS[field])}
-          <span>${escapeHtml(comparison.state.label)}</span>
-        </strong>
-        <small><b>基石</b>${escapeHtml(comparison.before)}</small>
-        <small><b>当前</b>${escapeHtml(comparison.after)}</small>
-        <em class="ecosystem-review-status ${escapeHtml(comparison.reviewStatus)}">
-          ${escapeHtml(REVIEW_STATUS_LABELS[comparison.reviewStatus] ?? "草稿")}
-        </em>
+        <header class="ecosystem-delta-card-head">
+          <div>
+            <code>${escapeHtml(formulaDisplayKey(field))}</code>
+            <strong>
+              ${escapeHtml(FIELD_LABELS[field])}
+              <span>${escapeHtml(comparison.state.label)}</span>
+            </strong>
+          </div>
+          <em class="ecosystem-review-status ${escapeHtml(comparison.reviewStatus)}">
+            ${escapeHtml(REVIEW_STATUS_LABELS[comparison.reviewStatus] ?? "草稿")}
+          </em>
+        </header>
+        <div class="ecosystem-delta-comparison">
+          <small><b>基石</b>${escapeHtml(comparison.before)}</small>
+          <small><b>当前</b>${escapeHtml(comparison.after)}</small>
+        </div>
       </article>
     `;
   }).join("");
@@ -1611,8 +2438,8 @@ function ecosystemInnovationsMarkup(config) {
     <section class="ecosystem-innovations" aria-labelledby="ecosystem-innovations-title">
       <div class="ecosystem-panel-head">
         <div>
-          <span class="ecosystem-kicker">06 · 值得关注的变体创新</span>
-          <h3 id="ecosystem-innovations-title">记录具体产品改了什么，以及为什么值得继续观察</h3>
+          <span class="ecosystem-kicker">08 · 值得关注的变体创新</span>
+          <h3 id="ecosystem-innovations-title">记录具体游戏改了什么，以及为什么值得继续观察</h3>
         </div>
         <p>点击创新卡，产品详情与公式字段同步聚焦</p>
       </div>
@@ -1660,7 +2487,7 @@ function ecosystemOpportunitiesMarkup(config) {
     <section class="ecosystem-opportunities">
       <div class="ecosystem-panel-head">
         <div>
-          <span class="ecosystem-kicker">07 · 生态位假设</span>
+          <span class="ecosystem-kicker">09 · 生态位假设</span>
           <h3>空白不是结论，需要写明机制假设与验证风险</h3>
         </div>
         <p>这里只记录人工提出的设计假设，不把地图空白自动视为机会。</p>
@@ -1679,6 +2506,857 @@ function ecosystemOpportunitiesMarkup(config) {
     </section>
   `;
 }
+
+function ecosystemClassToken(value = "pending") {
+  return String(value).toLowerCase().replace(/[^a-z0-9-]+/g, "-");
+}
+
+const ECOSYSTEM_MAP_LABELS = {
+  topology: {
+    "2d-fixed": "固定 2D",
+    "2d-split": "分区 2D",
+    "2d-grow": "成长 2D",
+    "1d": "1D 序列"
+  },
+  enemySpace: {
+    external: "敌方盘外",
+    fixed: "固定敌方区",
+    shared: "敌方入盘",
+    pending: "敌方位置待确认"
+  },
+  c1Mode: {
+    formation: "阵容／邻接",
+    payline: "支付线",
+    hybrid: "混合协同"
+  },
+  pending: {
+    defense: "防御状态",
+    enemy_put: "敌方 Put",
+    combat_relation: "战斗关系",
+    single_axis_control: "单轴操作",
+    c1_output: "C₁ 输出"
+  }
+};
+
+function ecosystemNodeEncodings(config) {
+  const configured = config?.niche_map?.node_encodings ?? {};
+  return {
+    topology: configured.topology ?? {
+      title: "Show_TP",
+      position_key: "topology",
+      labels: ECOSYSTEM_MAP_LABELS.topology
+    },
+    color: configured.color ?? {
+      title: "敌方空间",
+      position_key: "enemy_space",
+      labels: ECOSYSTEM_MAP_LABELS.enemySpace
+    },
+    secondary_badge: configured.secondary_badge ?? {
+      title: "C₁",
+      position_key: "c1_mode",
+      labels: ECOSYSTEM_MAP_LABELS.c1Mode
+    }
+  };
+}
+
+function ecosystemNicheMapFocus(config) {
+  const nicheMap = config.niche_map;
+  const nodeEncodings = ecosystemNodeEncodings(config);
+  const activeFilters = Object.entries(state.ecosystemMapFilters ?? {})
+    .filter(([dimension, value]) => value && nodeEncodings[dimension]);
+
+  if (activeFilters.length) {
+    const matchingPositions = config.positions.filter((position) => activeFilters.every(
+      ([dimension, value]) => position[nodeEncodings[dimension].position_key] === value
+    ));
+    const productIds = new Set(matchingPositions.map((position) => position.product_id));
+    const edgeIds = new Set();
+    const anchorIds = new Set();
+    nicheMap.edges.forEach((edge) => {
+      const productEndpoints = [edge.from, edge.to]
+        .filter((endpoint) => endpoint.startsWith("product."));
+      if (!productEndpoints.length || !productEndpoints.every((endpoint) => productIds.has(endpoint))) return;
+      edgeIds.add(edge.id);
+      [edge.from, edge.to].forEach((endpoint) => {
+        if (endpoint.startsWith("anchor:")) anchorIds.add(endpoint.slice("anchor:".length));
+      });
+    });
+    const zoneIds = new Set(
+      matchingPositions.flatMap((position) => position.branch_ids ?? [])
+        .filter((branchId) => nicheMap.zones.some((zone) => zone.id === branchId))
+    );
+    const filterLabels = activeFilters.map(([dimension, value]) => {
+      const encoding = nodeEncodings[dimension];
+      return {
+        dimension,
+        value,
+        title: encoding.title,
+        label: encoding.labels?.[value] ?? value
+      };
+    });
+    return {
+      key: `filter:${filterLabels.map((item) => `${item.dimension}=${item.value}`).join("|")}`,
+      kind: "FILTER",
+      label: `匹配 ${productIds.size} / ${config.positions.length} 款`,
+      title: filterLabels.map((item) => item.label).join(" × "),
+      summary: `同时满足${filterLabels.map((item) => `${item.title}“${item.label}”`).join("、")}的游戏变体。`,
+      boundary: "筛选只改变聚焦状态；未匹配节点仍保留在原位置，便于观察它们与当前结果的生态关系。",
+      fields: filterLabels.map((item) => ({
+        topology: "Show_TP",
+        color: "C2",
+        secondary_badge: "C1"
+      })[item.dimension]).filter(Boolean),
+      productIds,
+      edgeIds,
+      zoneIds,
+      anchorIds,
+      activeFilters: filterLabels,
+      isFilter: true,
+      isAll: false
+    };
+  }
+
+  const requestedKey = state.selectedEcosystemMapPreset ?? "all";
+  const riskId = requestedKey.startsWith("risk:")
+    ? requestedKey.slice("risk:".length)
+    : null;
+  const risk = riskId
+    ? (config.four_layer_architecture?.boundaries ?? []).find((item) => item.id === riskId)
+    : null;
+  const productId = requestedKey.startsWith("product:")
+    ? requestedKey.slice("product:".length)
+    : null;
+  const bdModeId = requestedKey.startsWith("bd:")
+    ? requestedKey.slice("bd:".length)
+    : null;
+  const bdMode = bdModeId
+    ? (config.bd_analysis?.modes ?? []).find((item) => item.id === bdModeId)
+    : null;
+
+  if (bdMode) {
+    const matchingCases = (config.bd_analysis?.cases ?? [])
+      .filter((item) => (item.mode_ids ?? []).includes(bdMode.id));
+    const productIds = new Set(matchingCases.map((item) => item.product_id));
+    const edgeIds = new Set(
+      nicheMap.edges
+        .filter((edge) => productIds.has(edge.from) || productIds.has(edge.to))
+        .map((edge) => edge.id)
+    );
+    const zoneIds = new Set();
+    const anchorIds = new Set();
+    matchingCases.forEach((item) => {
+      const position = ecosystemPosition(config, item.product_id);
+      (position?.branch_ids ?? []).forEach((branchId) => {
+        if (nicheMap.zones.some((zone) => zone.id === branchId)) zoneIds.add(branchId);
+      });
+    });
+    nicheMap.edges
+      .filter((edge) => edgeIds.has(edge.id))
+      .forEach((edge) => {
+        [edge.from, edge.to].forEach((endpoint) => {
+          if (endpoint.startsWith("anchor:")) anchorIds.add(endpoint.slice("anchor:".length));
+        });
+      });
+    return {
+      key: requestedKey,
+      kind: "BD",
+      label: bdMode.label,
+      title: bdMode.title,
+      summary: bdMode.description,
+      boundary: bdMode.boundary,
+      fields: bdMode.fields ?? [],
+      productIds,
+      edgeIds,
+      zoneIds,
+      anchorIds,
+      isAll: false
+    };
+  }
+
+  if (risk) {
+    const productIds = new Set(risk.product_ids ?? []);
+    const branchIds = new Set(risk.branch_ids ?? []);
+    const edgeIds = new Set();
+    const anchorIds = new Set();
+    nicheMap.edges.forEach((edge) => {
+      if (!branchIds.has(edge.branch)) return;
+      const endpoints = [edge.from, edge.to];
+      const productEndpoints = endpoints.filter((endpoint) => endpoint.startsWith("product."));
+      const connectsRiskCases = productEndpoints.length
+        ? productEndpoints.every((endpoint) => productIds.has(endpoint))
+        : false;
+      const connectsCoreToRisk = endpoints.some((endpoint) => endpoint.startsWith("anchor:"))
+        && productEndpoints.some((endpoint) => productIds.has(endpoint));
+      if (!connectsRiskCases && !connectsCoreToRisk) return;
+      edgeIds.add(edge.id);
+      endpoints.forEach((endpoint) => {
+        if (endpoint.startsWith("anchor:")) anchorIds.add(endpoint.slice("anchor:".length));
+      });
+    });
+    const zoneIds = new Set(
+      [...branchIds].flatMap((branchId) => nicheMap.presets[branchId]?.zones ?? [])
+    );
+    return {
+      key: requestedKey,
+      kind: "BOUNDARY",
+      label: risk.label,
+      title: risk.title,
+      summary: `${risk.trigger} ${risk.consequence}`,
+      boundary: `应对方向：${risk.mitigation}`,
+      fields: risk.fields ?? [],
+      productIds,
+      edgeIds,
+      zoneIds,
+      anchorIds,
+      isAll: false
+    };
+  }
+
+  if (productId) {
+    const product = state.data.productById.get(productId);
+    const position = ecosystemPosition(config, productId);
+    if (product && position) {
+      const incidentEdges = nicheMap.edges
+        .filter((edge) => edge.from === productId || edge.to === productId)
+        .map((edge) => edge.id);
+      const zoneIds = (position.branch_ids ?? [])
+        .filter((branchId) => nicheMap.zones.some((zone) => zone.id === branchId));
+      const pendingDimensions = (position.pending_dimensions ?? [])
+        .map((key) => ECOSYSTEM_MAP_LABELS.pending[key] ?? key);
+      return {
+        key: requestedKey,
+        kind: "CASE",
+        label: "游戏变体",
+        title: product.name,
+        summary: position.position_note,
+        boundary: pendingDimensions.length
+          ? `待确认维度：${pendingDimensions.join("、")}。其余坐标与编码也仍是第一版分析草稿。`
+          : "坐标与视觉编码来自当前字段资料，仍作为第一版分析草稿等待逐点确认。",
+        fields: position.changed_fields ?? [],
+        productIds: new Set([productId]),
+        edgeIds: new Set(incidentEdges),
+        zoneIds: new Set(zoneIds),
+        anchorIds: new Set(),
+        isAll: false
+      };
+    }
+  }
+
+  const preset = nicheMap.presets[requestedKey] ?? nicheMap.presets.all;
+  const key = nicheMap.presets[requestedKey] ? requestedKey : "all";
+  if (key !== requestedKey) state.selectedEcosystemMapPreset = key;
+  const isAll = key === "all";
+  const edgeIds = new Set(isAll ? nicheMap.edges.map((edge) => edge.id) : (preset.edges ?? []));
+  const productIds = new Set(isAll ? config.positions.map((position) => position.product_id) : (preset.products ?? []));
+  const anchorIds = new Set(isAll ? nicheMap.anchors.map((anchor) => anchor.id) : (preset.anchors ?? []));
+
+  if (!isAll) {
+    nicheMap.edges
+      .filter((edge) => edgeIds.has(edge.id))
+      .forEach((edge) => {
+        [edge.from, edge.to].forEach((endpoint) => {
+          if (endpoint.startsWith("product.")) productIds.add(endpoint);
+          if (endpoint.startsWith("anchor:")) anchorIds.add(endpoint.slice("anchor:".length));
+        });
+      });
+  }
+
+  return {
+    key,
+    kind: preset.kind,
+    label: preset.label,
+    title: preset.title,
+    summary: preset.summary,
+    boundary: preset.boundary,
+    fields: preset.fields ?? [],
+    productIds,
+    edgeIds,
+    zoneIds: new Set(isAll ? nicheMap.zones.map((zone) => zone.id) : (preset.zones ?? [])),
+    anchorIds,
+    isAll
+  };
+}
+
+function ecosystemNicheMapMarkup(config, prototype, products, positionedProducts, unpositioned) {
+  const nicheMap = config.niche_map;
+  const focus = ecosystemNicheMapFocus(config);
+  const infoCollapsed = state.ecosystemNicheInfoCollapsed;
+  const nodeEncodings = ecosystemNodeEncodings(config);
+  const topologyEncoding = nodeEncodings.topology;
+  const colorEncoding = nodeEncodings.color;
+  const secondaryEncoding = nodeEncodings.secondary_badge;
+  const topologyLegend = topologyEncoding.legend ?? Object.entries(topologyEncoding.labels ?? {});
+  const colorLegend = colorEncoding.legend ?? Object.entries(colorEncoding.labels ?? {});
+  const secondaryLegend = secondaryEncoding.legend ?? Object.entries(secondaryEncoding.labels ?? {});
+  const activeFilterMap = new Map((focus.activeFilters ?? []).map((item) => [item.dimension, item.value]));
+  const coordinateById = new Map();
+  nicheMap.anchors.forEach((anchor) => coordinateById.set(`anchor:${anchor.id}`, anchor));
+  positionedProducts.forEach(({ product, position }) => coordinateById.set(product.id, position));
+  const presetEntries = Object.entries(nicheMap.presets);
+
+  return `
+    <section class="ecosystem-panel ecosystem-niche-map" aria-labelledby="ecosystem-niche-map-title">
+      <div class="ecosystem-panel-head ecosystem-niche-map-head">
+        <div>
+          <span class="ecosystem-kicker">04 · ECOSYSTEM NICHE MAP</span>
+          <h3 id="ecosystem-niche-map-title">品类原型生态位图 · 第一版</h3>
+        </div>
+        <p>切换分析镜头只改变聚焦；点击图中空白处返回全部生态</p>
+      </div>
+      <div class="ecosystem-niche-map-presets" role="toolbar" aria-label="生态位图分析镜头">
+        ${presetEntries.map(([key, preset]) => `
+          <button type="button"
+            class="is-${escapeHtml(ecosystemClassToken(preset.kind))} ${focus.key === key ? "is-active" : ""}"
+            data-ecosystem-map-preset="${escapeHtml(key)}"
+            aria-pressed="${focus.key === key}">
+            <small>${escapeHtml(preset.kind)}</small>
+            <span>${escapeHtml(preset.label)}</span>
+          </button>
+        `).join("")}
+      </div>
+      <div class="ecosystem-niche-product-nav" aria-label="生态位图游戏变体">
+        ${products.map((product) => {
+          const isProductSelection = focus.key === `product:${product.id}`;
+          const isFilterSelection = !focus.isAll && !focus.key.startsWith("product:");
+          const isFilterMatch = isFilterSelection && focus.productIds.has(product.id);
+          return `
+            <button type="button"
+              class="${isProductSelection ? "is-active" : ""} ${isFilterMatch ? "is-filter-match" : ""} ${isFilterSelection && !isFilterMatch ? "is-filter-context" : ""}"
+              data-ecosystem-product="${escapeHtml(product.id)}"
+              aria-pressed="${isProductSelection}"
+              aria-label="${escapeHtml(product.name)}${isFilterMatch ? `，属于当前筛选：${focus.label}` : ""}">
+              ${ecosystemProductIcon(product)}
+              <span>${escapeHtml(product.name)}</span>
+              ${isFilterMatch ? `<i aria-hidden="true">${escapeHtml(focus.label)}</i>` : ""}
+            </button>
+          `;
+        }).join("")}
+      </div>
+      <div class="ecosystem-niche-map-layout ${infoCollapsed ? "is-info-collapsed" : ""}">
+        <div class="ecosystem-niche-map-scroll">
+          <div class="ecosystem-niche-map-plot ${focus.isAll ? "is-all" : "has-focus"}"
+            aria-label="${escapeHtml(prototype.name)}生态位图：横轴${escapeHtml(config.axes.x.label)}，纵轴${escapeHtml(config.axes.y.label)}；点击空白处返回全部生态"
+            title="点击图中空白处返回全部生态">
+            <div class="ecosystem-niche-axis x">
+              <b>${escapeHtml(config.axes.x.label)}</b>
+              <span><i>${escapeHtml(config.axes.x.low)}</i><i>${escapeHtml(config.axes.x.high)}</i></span>
+            </div>
+            <div class="ecosystem-niche-axis y">
+              <b>${escapeHtml(config.axes.y.label)}</b>
+              <span><i>${escapeHtml(config.axes.y.high)}</i><i>${escapeHtml(config.axes.y.low)}</i></span>
+            </div>
+            ${nicheMap.zones.map((zone) => {
+              const isFocused = focus.isAll || focus.zoneIds.has(zone.id);
+              return `
+                <span class="ecosystem-model-zone tone-${escapeHtml(ecosystemClassToken(zone.tone))} ${isFocused ? "is-focused" : "is-dimmed"} ${zone.status === "hypothesis" ? "is-hypothesis" : ""}"
+                  style="--x:${zone.x};--y:${zone.y};--w:${zone.width};--h:${zone.height}"
+                  data-model-zone="${escapeHtml(zone.id)}"
+                  title="${escapeHtml(zone.description)}">
+                  <b>${escapeHtml(zone.label)}</b>
+                  <small>${escapeHtml(zone.description)}</small>
+                </span>
+              `;
+            }).join("")}
+            ${nicheMap.edges.map((edge) => {
+              const from = coordinateById.get(edge.from);
+              const to = coordinateById.get(edge.to);
+              if (!from || !to) return "";
+              const isFocused = focus.isAll || focus.edgeIds.has(edge.id);
+              const showLabel = !focus.isAll && focus.edgeIds.has(edge.id);
+              const branchLabel = nicheMap.presets[edge.branch]?.label ?? edge.branch;
+              return `
+                <span class="ecosystem-model-edge ${isFocused ? "is-focused" : "is-dimmed"}"
+                  data-model-edge="${escapeHtml(edge.id)}"
+                  data-model-from="${escapeHtml(edge.from)}"
+                  data-model-to="${escapeHtml(edge.to)}"
+                  data-x1="${from.x}" data-y1="${from.y}" data-x2="${to.x}" data-y2="${to.y}">
+                </span>
+                ${showLabel ? `
+                  <span class="ecosystem-model-edge-label"
+                    style="--x:${(from.x + to.x) / 2};--y:${(from.y + to.y) / 2}"
+                    data-model-edge-label="${escapeHtml(edge.id)}">
+                    <i aria-hidden="true">→</i>${escapeHtml(branchLabel)}
+                  </span>
+                ` : ""}
+              `;
+            }).join("")}
+            ${nicheMap.anchors.map((anchor) => {
+              const isFocused = focus.isAll || focus.anchorIds.has(anchor.id);
+              return `
+                <button type="button"
+                  class="ecosystem-model-anchor ${isFocused ? "is-focused" : "is-dimmed"}"
+                  style="--x:${anchor.x};--y:${anchor.y}"
+                  data-ecosystem-map-preset="core"
+                  aria-label="聚焦原型核心：${escapeHtml(anchor.summary)}">
+                  <small>CORE</small><strong>${escapeHtml(anchor.label)}</strong>
+                </button>
+              `;
+            }).join("")}
+            ${positionedProducts.map(({ product, position }) => {
+              const isFocused = focus.isAll || focus.productIds.has(product.id);
+              const topology = position[topologyEncoding.position_key] ?? "pending";
+              const colorValue = position[colorEncoding.position_key] ?? "pending";
+              const secondaryValue = position[secondaryEncoding.position_key] ?? "formation";
+              const topologyLabel = topologyEncoding.labels?.[topology] ?? topology;
+              const colorLabel = colorEncoding.labels?.[colorValue] ?? colorValue;
+              const secondaryLabel = secondaryEncoding.labels?.[secondaryValue] ?? secondaryValue;
+              return `
+                <button type="button"
+                  class="ecosystem-model-node topology-${escapeHtml(ecosystemClassToken(topology))} enemy-${escapeHtml(ecosystemClassToken(colorValue))} c1-${escapeHtml(ecosystemClassToken(secondaryValue))} ${position.role === "cornerstone" ? "is-cornerstone" : ""} ${position.status === "confirmed" ? "is-confirmed" : "is-draft"} ${isFocused ? "is-focused" : "is-dimmed"} ${focus.key === `product:${product.id}` ? "is-active" : ""}"
+                  style="--x:${position.x};--y:${position.y}"
+                  data-model-node="${escapeHtml(product.id)}"
+                  data-ecosystem-product="${escapeHtml(product.id)}"
+                  aria-label="${escapeHtml(product.name)}，${escapeHtml(topologyEncoding.title)}：${escapeHtml(topologyLabel)}，${escapeHtml(colorEncoding.title)}：${escapeHtml(colorLabel)}，${escapeHtml(secondaryEncoding.title)}：${escapeHtml(secondaryLabel)}"
+                  aria-pressed="${focus.key === `product:${product.id}`}">
+                  <span class="ecosystem-node-badges" aria-hidden="true">
+                    <i class="ecosystem-node-badge is-topology badge-topology-${escapeHtml(ecosystemClassToken(topology))}" title="${escapeHtml(topologyEncoding.title)} · ${escapeHtml(topologyLabel)}">${escapeHtml(topologyLabel)}</i>
+                    <i class="ecosystem-node-badge is-c1 badge-c1-${escapeHtml(ecosystemClassToken(secondaryValue))}" title="${escapeHtml(secondaryEncoding.title)} · ${escapeHtml(secondaryLabel)}">${escapeHtml(secondaryLabel)}</i>
+                  </span>
+                  ${ecosystemProductIcon(product)}
+                  <span class="ecosystem-model-node-copy"><strong>${escapeHtml(product.name)}</strong></span>
+                </button>
+              `;
+            }).join("")}
+            ${positionedProducts
+              .filter(({ position }) => (position.pending_dimensions ?? []).length)
+              .map(({ product, position }) => {
+                const pendingLabels = position.pending_dimensions
+                  .map((key) => ECOSYSTEM_MAP_LABELS.pending[key] ?? key);
+                const tooltip = `待确认：${pendingLabels.join("、")}`;
+                const isFocused = focus.isAll || focus.productIds.has(product.id);
+                return `
+                  <button type="button"
+                    class="ecosystem-model-pending ${position.y > 82 ? "tooltip-below" : ""} ${isFocused ? "is-focused" : "is-dimmed"} ${focus.key === `product:${product.id}` ? "is-active" : ""}"
+                    style="--x:${position.x};--y:${position.y}"
+                    data-ecosystem-product="${escapeHtml(product.id)}"
+                    data-tooltip="${escapeHtml(tooltip)}"
+                    aria-label="选择${escapeHtml(product.name)}并查看${escapeHtml(tooltip)}"
+                    aria-pressed="${focus.key === `product:${product.id}`}">?</button>
+                `;
+              }).join("")}
+          </div>
+        </div>
+        <aside class="ecosystem-niche-map-info ${infoCollapsed ? "is-collapsed" : ""}"
+          aria-label="当前生态位分析说明">
+          <button type="button" class="ecosystem-niche-info-toggle"
+            data-ecosystem-info-toggle
+            aria-expanded="${!infoCollapsed}"
+            aria-controls="ecosystem-niche-map-info-content"
+            title="${infoCollapsed ? "展开右侧说明" : "收起右侧说明"}">
+            <i aria-hidden="true">${infoCollapsed ? "‹" : "›"}</i>
+            <span>${infoCollapsed ? "展开说明" : "收起说明"}</span>
+          </button>
+          <div class="ecosystem-niche-map-info-content" id="ecosystem-niche-map-info-content"
+            aria-live="polite" ${infoCollapsed ? "hidden" : ""}>
+            <header><span>${escapeHtml(focus.kind)}</span><small>${escapeHtml(focus.label)}</small></header>
+            <h4>${escapeHtml(focus.title)}</h4>
+            <p>${escapeHtml(focus.summary)}</p>
+            <div><b>分析边界</b><span>${escapeHtml(focus.boundary)}</span></div>
+            <footer>
+              <b>证据字段</b>
+              <span>${focus.fields.length
+                ? focus.fields.map((field) => `<code>${escapeHtml(formulaDisplayKey(field))}</code>`).join("")
+                : "全部字段共同观察"}</span>
+            </footer>
+          </div>
+        </aside>
+      </div>
+      <div class="ecosystem-niche-map-legend" aria-label="生态位图筛选与视觉编码图例">
+        <div role="group" aria-label="按 ${escapeHtml(topologyEncoding.title)} 筛选">
+          <b>右上角标 · ${escapeHtml(topologyEncoding.title)}</b>
+          ${topologyLegend.map(([value, label]) => {
+            const active = activeFilterMap.get("topology") === value;
+            return `<button type="button" class="legend-badge badge-topology-${escapeHtml(ecosystemClassToken(value))} ${active ? "is-active" : ""}" data-ecosystem-map-filter-dimension="topology" data-ecosystem-map-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
+          }).join("")}
+        </div>
+        <div role="group" aria-label="按 ${escapeHtml(colorEncoding.title)} 筛选">
+          <b>颜色 · ${escapeHtml(colorEncoding.title)}</b>
+          ${colorLegend.map(([value, label]) => {
+            const active = activeFilterMap.get("color") === value;
+            return `<button type="button" class="enemy-${escapeHtml(ecosystemClassToken(value))} ${active ? "is-active" : ""}" data-ecosystem-map-filter-dimension="color" data-ecosystem-map-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
+          }).join("")}
+        </div>
+        <div role="group" aria-label="按 ${escapeHtml(secondaryEncoding.title)} 筛选">
+          <b>右上角标 · ${escapeHtml(secondaryEncoding.title)}</b>
+          ${secondaryLegend.map(([value, label]) => {
+            const active = activeFilterMap.get("secondary_badge") === value;
+            return `<button type="button" class="legend-badge badge-c1-${escapeHtml(ecosystemClassToken(value))} ${active ? "is-active" : ""}" data-ecosystem-map-filter-dimension="secondary_badge" data-ecosystem-map-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
+          }).join("")}
+        </div>
+        <div class="ecosystem-map-filter-status" aria-live="polite">
+          ${focus.isFilter
+            ? `<strong>已筛选 ${focus.productIds.size} / ${positionedProducts.length} 款</strong><span>${focus.activeFilters.map((item) => escapeHtml(item.label)).join(" · ")}</span><button type="button" data-ecosystem-map-filter-clear>清除筛选</button>`
+            : `<span>点击标签筛选上方生态图；跨维度组合时，只强调同时满足的游戏。</span>`}
+        </div>
+        <p>每个节点右上角依次显示 ${escapeHtml(topologyEncoding.title)} 与 ${escapeHtml(secondaryEncoding.title)} 角标，文字和颜色共同区分类别。箭头表示同一改动分支中的案例展开路径，聚焦时在线上显示分支名；不表示产品继承、时间先后或优劣。问号表示存在待确认维度，可悬停或点击查看。节点大小暂不代表销量。</p>
+      </div>
+      ${unpositioned.length ? `
+        <p class="ecosystem-unpositioned"><strong>已归类、待定位：</strong>${unpositioned.map((product) => escapeHtml(product.name)).join(" · ")}</p>
+      ` : ""}
+    </section>
+  `;
+}
+
+function ecosystemFourLayerArchitectureMarkup(config, prototype) {
+  const architecture = config.four_layer_architecture;
+  const nicheMap = config.niche_map;
+  if (!architecture || !nicheMap) return "";
+
+  const core = nicheMap.presets[architecture.core_preset_id ?? "core"];
+  const branchEntries = (architecture.branch_ids ?? [])
+    .map((branchId) => [branchId, nicheMap.presets[branchId]])
+    .filter(([, branch]) => branch?.kind === "BRANCH");
+  const expandedBranches = new Set(state.expandedEcosystemBranches);
+  const risks = architecture.boundaries ?? [];
+
+  const fieldChips = (fields = []) => fields.map((field) =>
+    `<code>${escapeHtml(formulaDisplayKey(field))}</code>`
+  ).join("");
+
+  return `
+    <section class="ecosystem-four-layer" aria-labelledby="ecosystem-four-layer-title">
+      <div class="ecosystem-panel-head ecosystem-four-layer-head">
+        <div>
+          <span class="ecosystem-kicker">06 · FOUR-LAYER EVIDENCE ARCHITECTURE</span>
+          <h3 id="ecosystem-four-layer-title">CORE → BRANCH → CASE → BOUNDARY</h3>
+        </div>
+        <p>分支负责组织变化方向，案例与字段描述负责提供证据，边界风险独立判断。</p>
+      </div>
+
+      <div class="ecosystem-layer-core">
+        <button type="button"
+          class="${state.selectedEcosystemMapPreset === (architecture.core_preset_id ?? "core") ? "is-active" : ""}"
+          data-ecosystem-map-preset="${escapeHtml(architecture.core_preset_id ?? "core")}"
+          aria-pressed="${state.selectedEcosystemMapPreset === (architecture.core_preset_id ?? "core")}">
+          <span class="ecosystem-layer-index">01 · CORE</span>
+          <strong>${escapeHtml(core?.title ?? prototype.name)}</strong>
+          <p>${escapeHtml(core?.summary ?? config.analysis_basis?.inheritance_summary ?? "")}</p>
+          <span class="ecosystem-layer-fields">${fieldChips(core?.fields ?? [])}</span>
+        </button>
+        <small>${escapeHtml(core?.boundary ?? "CORE 只定义品类不可缺失的共同身份。")}</small>
+      </div>
+
+      <div class="ecosystem-layer-connector" aria-hidden="true"><i></i><span>分化为可比较的改动方向</span></div>
+
+      <div class="ecosystem-layer-branches">
+        <header>
+          <span class="ecosystem-layer-index">02 · BRANCH</span>
+          <div>
+            <strong>${branchEntries.length} 条改动分支</strong>
+            <p>展开分支查看代表 CASE 与公式字段证据；分支之间允许交叉。</p>
+          </div>
+        </header>
+        <div class="ecosystem-branch-accordion">
+          ${branchEntries.map(([branchId, branch], index) => {
+            const expanded = expandedBranches.has(branchId);
+            const active = state.selectedEcosystemMapPreset === branchId;
+            const cases = (branch.products ?? [])
+              .map((productId) => ({
+                product: state.data.productById.get(productId),
+                position: ecosystemPosition(config, productId)
+              }))
+              .filter(({ product }) => product);
+            return `
+              <article class="ecosystem-branch-item ${expanded ? "is-expanded" : ""} ${active ? "is-active" : ""}">
+                <button type="button" class="ecosystem-branch-toggle"
+                  data-ecosystem-branch-toggle="${escapeHtml(branchId)}"
+                  aria-expanded="${expanded}"
+                  aria-controls="ecosystem-branch-cases-${escapeHtml(branchId)}">
+                  <span class="ecosystem-branch-number">B${String(index + 1).padStart(2, "0")}</span>
+                  <span class="ecosystem-branch-copy">
+                    <small>${escapeHtml(branch.label)}</small>
+                    <strong>${escapeHtml(branch.title)}</strong>
+                    <i>${escapeHtml(branch.summary)}</i>
+                  </span>
+                  <span class="ecosystem-branch-meta">
+                    <b>${cases.length} CASE</b>
+                    <span>${fieldChips(branch.fields ?? [])}</span>
+                  </span>
+                  <em aria-hidden="true">${expanded ? "−" : "+"}</em>
+                </button>
+                <div class="ecosystem-branch-cases" id="ecosystem-branch-cases-${escapeHtml(branchId)}" ${expanded ? "" : "hidden"}>
+                  <div class="ecosystem-case-layer-label">
+                    <span class="ecosystem-layer-index">03 · CASE</span>
+                    <p>${escapeHtml(architecture.case_evidence_policy)}</p>
+                  </div>
+                  <div class="ecosystem-case-grid">
+                    ${cases.map(({ product, position }) => {
+                      const productActive = state.selectedEcosystemProductId === product.id;
+                      const evidenceFields = branch.fields ?? [];
+                      return `
+                        <article class="ecosystem-case-card ${productActive ? "is-active" : ""}">
+                          <header>
+                            <button type="button" data-ecosystem-product="${escapeHtml(product.id)}"
+                              aria-label="查看 ${escapeHtml(product.name)} 的全部产品定位证据">
+                              ${ecosystemProductIcon(product)}
+                              <span><small>CASE</small><strong>${escapeHtml(product.name)}</strong></span>
+                            </button>
+                            <b>${position?.role === "cornerstone" ? "基石" : `${evidenceFields.length} 字段`}</b>
+                          </header>
+                          <p>${escapeHtml(position?.position_note ?? "该案例已进入分支，位置说明待补充。")}</p>
+                          <div class="ecosystem-case-evidence" aria-label="${escapeHtml(product.name)}的字段证据">
+                            ${evidenceFields.map((field) => {
+                              const comparison = ecosystemFieldComparison(config, product, field);
+                              return `
+                                <button type="button"
+                                  class="is-${escapeHtml(comparison.state.className)}"
+                                  data-ecosystem-product="${escapeHtml(product.id)}"
+                                  data-ecosystem-field="${escapeHtml(field)}"
+                                  aria-label="查看 ${escapeHtml(product.name)} 的 ${escapeHtml(formulaDisplayKey(field))} 字段证据">
+                                  <span>
+                                    <code>${escapeHtml(formulaDisplayKey(field))}</code>
+                                    <small>${escapeHtml(comparison.state.label)} · ${escapeHtml(REVIEW_STATUS_LABELS[comparison.reviewStatus] ?? "草稿")}</small>
+                                  </span>
+                                  <p>${escapeHtml(comparison.after)}</p>
+                                </button>
+                              `;
+                            }).join("")}
+                          </div>
+                        </article>
+                      `;
+                    }).join("")}
+                  </div>
+                  <p class="ecosystem-branch-boundary"><b>分支边界</b>${escapeHtml(branch.boundary)}</p>
+                </div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      </div>
+
+      <div class="ecosystem-layer-connector is-boundary" aria-hidden="true"><i></i><span>跨分支检查组合风险</span></div>
+
+      <div class="ecosystem-layer-boundaries">
+        <header>
+          <span class="ecosystem-layer-index">04 · BOUNDARY</span>
+          <div>
+            <strong>四类独立风险</strong>
+            <p>风险不是游戏优劣结论；点击任一风险，会在上方生态位图同步聚焦对应案例。</p>
+          </div>
+        </header>
+        <div class="ecosystem-boundary-grid">
+          ${risks.map((risk, index) => {
+            const focusKey = `risk:${risk.id}`;
+            const active = state.selectedEcosystemMapPreset === focusKey;
+            return `
+              <article class="ecosystem-boundary-card risk-${index + 1} ${active ? "is-active" : ""}">
+                <button type="button" class="ecosystem-boundary-focus"
+                  data-ecosystem-map-preset="${escapeHtml(focusKey)}"
+                  aria-pressed="${active}">
+                  <span><small>RISK ${String(index + 1).padStart(2, "0")}</small><b>${escapeHtml(risk.label)}</b></span>
+                  <strong>${escapeHtml(risk.title)}</strong>
+                </button>
+                <dl>
+                  <div><dt>触发</dt><dd>${escapeHtml(risk.trigger)}</dd></div>
+                  <div><dt>后果</dt><dd>${escapeHtml(risk.consequence)}</dd></div>
+                  <div><dt>应对</dt><dd>${escapeHtml(risk.mitigation)}</dd></div>
+                </dl>
+                <div class="ecosystem-boundary-evidence">
+                  <span>${(risk.product_ids ?? []).map((productId) => {
+                    const product = state.data.productById.get(productId);
+                    if (!product) return "";
+                    return `<button type="button" data-ecosystem-product="${escapeHtml(product.id)}">${escapeHtml(product.name)}</button>`;
+                  }).join("")}</span>
+                  <span>${fieldChips(risk.fields ?? [])}</span>
+                </div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function ecosystemBdAnalysisMarkup(config) {
+  const analysis = config.bd_analysis;
+  if (!analysis) return "";
+
+  const modes = analysis.modes ?? [];
+  const cases = analysis.cases ?? [];
+  const modeById = new Map(modes.map((mode) => [mode.id, mode]));
+  const requestedMode = state.selectedEcosystemBdMode ?? "all";
+  const selectedMode = requestedMode === "all" || modeById.has(requestedMode)
+    ? requestedMode
+    : "all";
+  const statusLabels = { confirmed: "已确认", draft: "草稿", pending: "待确认" };
+
+  const modeButton = (mode, count) => {
+    const active = selectedMode === mode.id;
+    return `
+      <button type="button"
+        class="ecosystem-bd-mode tone-${escapeHtml(ecosystemClassToken(mode.kind))} ${active ? "is-active" : ""}"
+        data-ecosystem-bd-mode="${escapeHtml(mode.id)}"
+        aria-pressed="${active}">
+        <span><small>${escapeHtml(mode.kind)}</small><b>${escapeHtml(mode.label)}</b><i>${count} CASE</i></span>
+        <strong>${escapeHtml(mode.title)}</strong>
+        <p>${escapeHtml(mode.description)}</p>
+        <em>${escapeHtml(mode.boundary)}</em>
+        <span class="ecosystem-bd-fields">${(mode.fields ?? []).map((field) => `<code>${escapeHtml(formulaDisplayKey(field))}</code>`).join("")}</span>
+      </button>
+    `;
+  };
+
+  return `
+    <section class="ecosystem-bd-analysis" aria-labelledby="ecosystem-bd-analysis-title">
+      <div class="ecosystem-panel-head ecosystem-bd-analysis-head">
+        <div>
+          <span class="ecosystem-kicker">07 · BD DESIGN ANALYSIS</span>
+          <h3 id="ecosystem-bd-analysis-title">BD 实现谱系：同一 CORE，不同品质构筑路径</h3>
+        </div>
+        <p>点击路径只聚焦匹配案例，不隐藏其余样本；字段证据可继续进入产品定位详情。</p>
+      </div>
+
+      <div class="ecosystem-bd-formula">
+        <span>分析公式</span>
+        <strong>${escapeHtml(analysis.formula)}</strong>
+        <p>${escapeHtml(analysis.principle)}</p>
+      </div>
+
+      ${analysis.control_model ? `
+        <div class="ecosystem-bd-control-model">
+          <header>
+            <div><small>QUALITY CONTROL GATE</small><strong>${escapeHtml(analysis.control_model.formula)}</strong></div>
+            <p>${escapeHtml(analysis.control_model.scope_note)}</p>
+          </header>
+          <div class="ecosystem-bd-control-grid">
+            ${(analysis.control_model.cells ?? []).map((cell) => `
+              <article class="tone-${escapeHtml(ecosystemClassToken(cell.tone))}">
+                <span><small>Show_TP ${escapeHtml(cell.show_tp)}</small><i>×</i><small>有效池 ${escapeHtml(cell.pool)}</small></span>
+                <strong>${escapeHtml(cell.value)}</strong>
+                <p>${escapeHtml(cell.recommendation)}</p>
+              </article>
+            `).join("")}
+          </div>
+        </div>
+      ` : ""}
+
+      <div class="ecosystem-bd-mode-grid" role="toolbar" aria-label="BD 实现路径筛选">
+        <button type="button"
+          class="ecosystem-bd-mode is-all ${selectedMode === "all" ? "is-active" : ""}"
+          data-ecosystem-bd-mode="all"
+          aria-pressed="${selectedMode === "all"}">
+          <span><small>ALL</small><b>全部路径</b><i>${cases.length} CASE</i></span>
+          <strong>保持完整 BD 生态</strong>
+          <p>${escapeHtml(analysis.conclusion)}</p>
+          <em>同一产品可以同时属于多条路径；主路径只表示当前最能解释其 BD 特征的实现。</em>
+        </button>
+        ${modes.map((mode) => modeButton(
+          mode,
+          cases.filter((item) => (item.mode_ids ?? []).includes(mode.id)).length
+        )).join("")}
+      </div>
+
+      <div class="ecosystem-bd-case-list">
+        ${cases.map((item) => {
+          const product = state.data.productById.get(item.product_id);
+          if (!product) return "";
+          const matches = selectedMode === "all" || (item.mode_ids ?? []).includes(selectedMode);
+          const dominantMode = modeById.get(item.dominant_mode_id);
+          const observation = state.data.productObservationById.get(product.id);
+          return `
+            <article class="ecosystem-bd-case ${matches ? "is-match" : "is-context"} ${state.selectedEcosystemProductId === product.id ? "is-selected" : ""}">
+              <header>
+                <button type="button" data-ecosystem-product="${escapeHtml(product.id)}">
+                  ${ecosystemProductIcon(product)}
+                  <span><small>CASE</small><strong>${escapeHtml(product.name)}</strong></span>
+                </button>
+                <span class="ecosystem-bd-case-status is-${escapeHtml(item.status)}">${escapeHtml(statusLabels[item.status] ?? "草稿")}</span>
+              </header>
+              <div class="ecosystem-bd-case-route">
+                <span>当前主路径</span>
+                <strong>${escapeHtml(dominantMode?.label ?? "待拆解")}</strong>
+                <div>${(item.mode_ids ?? []).map((modeId) => {
+                  const mode = modeById.get(modeId);
+                  return mode ? `<i>${escapeHtml(mode.label)}</i>` : "";
+                }).join("") || "<i>证据待补</i>"}</div>
+              </div>
+              <p>${escapeHtml(item.summary)}</p>
+              <div class="ecosystem-bd-case-evidence" aria-label="${escapeHtml(product.name)}的 BD 字段证据">
+                ${(item.evidence_fields ?? []).map((field) => {
+                  const evidence = observation?.fields?.[field];
+                  return `
+                    <button type="button"
+                      data-ecosystem-product="${escapeHtml(product.id)}"
+                      data-ecosystem-field="${escapeHtml(field)}"
+                      title="${escapeHtml(evidence?.value ?? "字段证据待补充")}">
+                      <span><code>${escapeHtml(formulaDisplayKey(field))}</code><small>${escapeHtml(REVIEW_STATUS_LABELS[evidence?.review_status] ?? "待确认")}</small></span>
+                      <p>${escapeHtml(evidence?.value ?? "字段证据待补充")}</p>
+                    </button>
+                  `;
+                }).join("")}
+              </div>
+            </article>
+          `;
+        }).join("")}
+      </div>
+      <p class="ecosystem-bd-gap"><b>当前证据边界</b>${escapeHtml(analysis.evidence_boundary)}</p>
+    </section>
+  `;
+}
+
+function ecosystemGenericMapMarkup(config, prototype, products, positionedProducts, unpositioned) {
+  return `
+    <section class="ecosystem-panel">
+      <div class="ecosystem-panel-head">
+        <div><span class="ecosystem-kicker">04 · ECOSYSTEM MAP</span><h3>产品定位与潜在生态位</h3></div>
+        <p>选择只改变焦点，不隐藏完整品类地图</p>
+      </div>
+      <div class="ecosystem-product-list">
+        ${products.map((product) => `
+          <button type="button"
+            class="ecosystem-product-button ${product.id === state.selectedEcosystemProductId ? "is-active" : ""}"
+            data-ecosystem-product="${escapeHtml(product.id)}"
+            aria-pressed="${product.id === state.selectedEcosystemProductId}">
+            ${ecosystemProductIcon(product)}<span>${escapeHtml(product.name)}</span>
+          </button>
+        `).join("")}
+      </div>
+      <div class="ecosystem-plot ${state.selectedEcosystemProductId ? "has-selection" : ""}"
+        aria-label="${escapeHtml(prototype.name)}产品二维定位图">
+        <div class="ecosystem-axis x"><b>${escapeHtml(config.axes.x.label)}</b><span><i>${escapeHtml(config.axes.x.low)}</i><i>${escapeHtml(config.axes.x.high)}</i></span></div>
+        <div class="ecosystem-axis y"><b>${escapeHtml(config.axes.y.label)}</b><span><i>${escapeHtml(config.axes.y.high)}</i><i>${escapeHtml(config.axes.y.low)}</i></span></div>
+        ${(config.niches ?? []).map((niche) => `
+          <span class="ecosystem-niche" style="--x:${niche.x};--y:${niche.y}" title="${escapeHtml(niche.hypothesis)}">${escapeHtml(niche.label)}</span>
+        `).join("")}
+        ${positionedProducts.map(({ product, position }) => `
+          <button type="button"
+            class="ecosystem-dot ${position.role === "cornerstone" ? "is-cornerstone" : ""} ${position.status === "confirmed" ? "is-confirmed" : "is-draft"} ${product.id === state.selectedEcosystemProductId ? "is-active" : ""}"
+            style="--x:${position.x};--y:${position.y}"
+            data-ecosystem-product="${escapeHtml(product.id)}"
+            aria-pressed="${product.id === state.selectedEcosystemProductId}">
+            ${ecosystemProductIcon(product)}<span>${escapeHtml(product.name)}</span>
+          </button>
+        `).join("")}
+      </div>
+      ${unpositioned.length ? `
+        <p class="ecosystem-unpositioned"><strong>已归类、待定位：</strong>${unpositioned.map((product) => escapeHtml(product.name)).join(" · ")}</p>
+      ` : ""}
+    </section>
+  `;
+}
+
+function positionEcosystemNicheEdges() {
+  const plot = elements.ecosystemWorkbench?.querySelector(".ecosystem-niche-map-plot");
+  if (!plot) return;
+  const width = plot.clientWidth;
+  const height = plot.clientHeight;
+  if (!width || !height) return;
+  plot.querySelectorAll("[data-model-edge]").forEach((edge) => {
+    const x1 = width * Number(edge.dataset.x1) / 100;
+    const y1 = height * (100 - Number(edge.dataset.y1)) / 100;
+    const x2 = width * Number(edge.dataset.x2) / 100;
+    const y2 = height * (100 - Number(edge.dataset.y2)) / 100;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    edge.style.left = `${x1}px`;
+    edge.style.top = `${y1}px`;
+    edge.style.width = `${Math.hypot(dx, dy)}px`;
+    edge.style.transform = `rotate(${Math.atan2(dy, dx)}rad)`;
+  });
+}
+
+window.addEventListener("resize", positionEcosystemNicheEdges);
 
 function renderEcosystemWorkbench() {
   const prototype = state.data.prototypeById.get(state.selectedEcosystemPrototypeId);
@@ -1751,91 +3429,51 @@ function renderEcosystemWorkbench() {
     </div>
     ${ecosystemBasisMarkup(config, prototype, mechanism, cornerstone)}
     ${ecosystemMatrixMarkup(config, products)}
-    <div class="ecosystem-body">
-      <section class="ecosystem-panel">
-        <div class="ecosystem-panel-head">
-          <div>
-            <span class="ecosystem-kicker">04 · ECOSYSTEM MAP</span>
-            <h3>产品定位与潜在生态位</h3>
+    <div class="ecosystem-body ${config.niche_map ? "has-niche-map" : ""}">
+      ${config.niche_map
+        ? ecosystemNicheMapMarkup(config, prototype, products, positionedProducts, unpositioned)
+        : ecosystemGenericMapMarkup(config, prototype, products, positionedProducts, unpositioned)}
+      <aside class="ecosystem-panel ecosystem-detail ecosystem-detail-compact">
+        <header class="ecosystem-detail-head">
+          <div class="ecosystem-detail-identity">
+            <span class="ecosystem-kicker">05 · 产品定位详情</span>
+            <div class="ecosystem-detail-title">
+              ${selectedProduct ? ecosystemProductIcon(selectedProduct) : ""}
+              <div>
+                <h3>${escapeHtml(selectedProduct?.name ?? "请选择产品")}</h3>
+                <span class="ecosystem-position-status ${escapeHtml(positionStatus.className)}">
+                  ${escapeHtml(positionStatus.label)}
+                </span>
+              </div>
+            </div>
+            <p class="ecosystem-detail-path">
+              ${escapeHtml(mechanism?.name ?? "机制母型")} → ${escapeHtml(prototype.name)} → ${escapeHtml(selectedProduct?.name ?? "请选择产品")}
+            </p>
           </div>
-          <p>选择只改变焦点，不隐藏完整品类地图</p>
-        </div>
-        <div class="ecosystem-product-list">
-          ${products.map((product) => `
-            <button type="button"
-              class="ecosystem-product-button ${product.id === state.selectedEcosystemProductId ? "is-active" : ""}"
-              data-ecosystem-product="${escapeHtml(product.id)}"
-              aria-pressed="${product.id === state.selectedEcosystemProductId}">
-              ${ecosystemProductIcon(product)}
-              <span>${escapeHtml(product.name)}</span>
+          ${selectedProduct ? `
+            <button type="button" class="button button-secondary ecosystem-detail-open-product"
+              data-ecosystem-open-product="${escapeHtml(selectedProduct.id)}">
+              打开游戏资料与归属编辑
             </button>
-          `).join("")}
-        </div>
-        <div class="ecosystem-plot ${state.selectedEcosystemProductId ? "has-selection" : ""}"
-          aria-label="${escapeHtml(prototype.name)}产品二维定位图">
-          <div class="ecosystem-axis x">
-            <b>${escapeHtml(config.axes.x.label)}</b>
-            <span><i>${escapeHtml(config.axes.x.low)}</i><i>${escapeHtml(config.axes.x.high)}</i></span>
-          </div>
-          <div class="ecosystem-axis y">
-            <b>${escapeHtml(config.axes.y.label)}</b>
-            <span><i>${escapeHtml(config.axes.y.high)}</i><i>${escapeHtml(config.axes.y.low)}</i></span>
-          </div>
-          ${config.niches.map((niche) => `
-            <span class="ecosystem-niche" style="--x:${niche.x};--y:${niche.y}"
-              title="${escapeHtml(niche.hypothesis)}">${escapeHtml(niche.label)}</span>
-          `).join("")}
-          ${positionedProducts.map(({ product, position }) => `
-            <button type="button"
-              class="ecosystem-dot ${position.role === "cornerstone" ? "is-cornerstone" : ""} ${position.status === "confirmed" ? "is-confirmed" : "is-draft"} ${product.id === state.selectedEcosystemProductId ? "is-active" : ""}"
-              style="--x:${position.x};--y:${position.y}"
-              data-ecosystem-product="${escapeHtml(product.id)}"
-              aria-pressed="${product.id === state.selectedEcosystemProductId}">
-              ${ecosystemProductIcon(product)}
-              <span>${escapeHtml(product.name)}</span>
+          ` : ""}
+        </header>
+        <div class="ecosystem-detail-context">
+          ${selectedPosition
+            ? `<p class="ecosystem-position-note">${escapeHtml(selectedPosition.position_note)}</p>`
+            : '<p class="ecosystem-position-note">这款产品已完成品类归属，但二维位置和变化字段仍等待人工确认。</p>'}
+          ${state.selectedEcosystemField ? `
+            <button type="button" class="ecosystem-clear-field" data-ecosystem-clear-field>
+              当前聚焦 ${escapeHtml(formulaDisplayKey(state.selectedEcosystemField))} · 查看全部变化 ×
             </button>
-          `).join("")}
+          ` : ""}
         </div>
-        ${unpositioned.length ? `
-          <p class="ecosystem-unpositioned">
-            <strong>已归类、待定位：</strong>
-            ${unpositioned.map((product) => escapeHtml(product.name)).join(" · ")}
-          </p>
-        ` : ""}
-      </section>
-      <aside class="ecosystem-panel ecosystem-detail">
-        <span class="ecosystem-kicker">05 · 产品定位详情</span>
-        <div class="ecosystem-detail-title">
-          ${selectedProduct ? ecosystemProductIcon(selectedProduct) : ""}
-          <div>
-            <h3>${escapeHtml(selectedProduct?.name ?? "请选择产品")}</h3>
-            <span class="ecosystem-position-status ${escapeHtml(positionStatus.className)}">
-              ${escapeHtml(positionStatus.label)}
-            </span>
-          </div>
-        </div>
-        <p class="ecosystem-detail-path">
-          ${escapeHtml(mechanism?.name ?? "机制母型")} → ${escapeHtml(prototype.name)} → ${escapeHtml(selectedProduct?.name ?? "请选择产品")}
-        </p>
-        ${selectedPosition
-          ? `<p class="ecosystem-position-note">${escapeHtml(selectedPosition.position_note)}</p>`
-          : '<p class="ecosystem-position-note">这款产品已完成品类归属，但二维位置和变化字段仍等待人工确认。</p>'}
-        ${state.selectedEcosystemField ? `
-          <button type="button" class="ecosystem-clear-field" data-ecosystem-clear-field>
-            当前聚焦 ${escapeHtml(formulaDisplayKey(state.selectedEcosystemField))} · 查看全部变化 ×
-          </button>
-        ` : ""}
         <div class="ecosystem-delta-grid">
           ${selectedProduct ? ecosystemDeltaCards(config, selectedProduct, state.selectedEcosystemField) : ""}
         </div>
-        ${selectedProduct ? `
-          <button type="button" class="button button-secondary"
-            data-ecosystem-open-product="${escapeHtml(selectedProduct.id)}">
-            打开游戏资料与归属编辑
-          </button>
-        ` : ""}
       </aside>
     </div>
+    ${ecosystemFourLayerArchitectureMarkup(config, prototype)}
+    ${ecosystemBdAnalysisMarkup(config)}
     ${ecosystemInnovationsMarkup(config)}
     ${ecosystemOpportunitiesMarkup(config)}
   `;
@@ -1848,6 +3486,40 @@ function renderEcosystemWorkbench() {
       );
     });
   });
+  elements.ecosystemWorkbench.querySelectorAll("[data-ecosystem-map-preset]").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectEcosystemMapPreset(button.dataset.ecosystemMapPreset);
+    });
+  });
+  elements.ecosystemWorkbench.querySelectorAll("[data-ecosystem-map-filter-dimension]").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectEcosystemMapFilter(
+        button.dataset.ecosystemMapFilterDimension,
+        button.dataset.ecosystemMapFilterValue
+      );
+    });
+  });
+  elements.ecosystemWorkbench.querySelector("[data-ecosystem-map-filter-clear]")?.addEventListener("click", () => {
+    clearEcosystemMapFilters();
+  });
+  elements.ecosystemWorkbench.querySelectorAll("[data-ecosystem-branch-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      toggleEcosystemBranch(button.dataset.ecosystemBranchToggle);
+    });
+  });
+  elements.ecosystemWorkbench.querySelectorAll("[data-ecosystem-bd-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectEcosystemBdMode(button.dataset.ecosystemBdMode);
+    });
+  });
+  elements.ecosystemWorkbench.querySelector(".ecosystem-niche-map-plot")?.addEventListener("click", (event) => {
+    if (event.target.closest("button, [data-model-node], [data-ecosystem-map-preset]")) return;
+    selectEcosystemMapPreset("all");
+  });
+  elements.ecosystemWorkbench.querySelector("[data-ecosystem-info-toggle]")?.addEventListener("click", () => {
+    state.ecosystemNicheInfoCollapsed = !state.ecosystemNicheInfoCollapsed;
+    renderEcosystemWorkbench();
+  });
   elements.ecosystemWorkbench.querySelector("[data-ecosystem-clear-field]")?.addEventListener("click", () => {
     state.selectedEcosystemField = null;
     renderEcosystemWorkbench();
@@ -1855,6 +3527,7 @@ function renderEcosystemWorkbench() {
   elements.ecosystemWorkbench.querySelector("[data-ecosystem-open-product]")?.addEventListener("click", (event) => {
     openProductDetail(event.currentTarget.dataset.ecosystemOpenProduct);
   });
+  window.requestAnimationFrame(positionEcosystemNicheEdges);
 }
 
 function renderEcosystem() {
@@ -1903,6 +3576,10 @@ function renderGraphManager() {
                         编辑品类原型
                       </button>
                       <button type="button" class="button button-secondary"
+                        data-edit-formula-node="${escapeHtml(prototype.id)}">
+                        编辑公式字段
+                      </button>
+                      <button type="button" class="button button-secondary"
                         data-configure-product="${escapeHtml(prototype.id)}">
                         + 配置游戏归属
                       </button>
@@ -1942,6 +3619,11 @@ function renderGraphManager() {
       openNodeEditor(button.dataset.editGraphNode);
     });
   });
+  elements.graphManager.querySelectorAll("[data-edit-formula-node]").forEach((button) => {
+    button.addEventListener("click", () => {
+      focusFormulaMatrixForNode(button.dataset.editFormulaNode);
+    });
+  });
   elements.graphManager.querySelectorAll("[data-configure-product]").forEach((button) => {
     button.addEventListener("click", () => {
       openProductAssignment(button.dataset.configureProduct);
@@ -1976,7 +3658,7 @@ function renderNodeCreatorProductOptions(prototypeId) {
     : '<option value="">暂无可选游戏</option>';
   elements.nodeCreatorSave.disabled = !state.dataServiceOnline || products.length === 0;
   elements.nodeCreatorMessage.textContent = products.length
-    ? `选择游戏并设置为基石或变体；系统会自动建立“${state.data.prototypeById.get(prototypeId)?.name ?? "当前原型"} → 游戏”的品类变体映射。`
+    ? `选择游戏并设置为基石或变体；系统会自动建立“${state.data.prototypeById.get(prototypeId)?.name ?? "当前原型"} → 游戏”的游戏变体映射。`
     : "游戏库中暂无可配置产品。";
   elements.nodeCreatorMessage.className =
     `field-editor-message ${products.length ? "" : "warning"}`;
@@ -2379,7 +4061,7 @@ function renderFieldFormulaMap() {
     Show_State: "Put 输出、Combo 输入 · 流程中间状态",
     Combo: "单次 Spin 的第三步 · 第二峰",
     C1: "Combo 的符号协同参数 · 第二峰",
-    C2: "Combo 中位于 C₁ 之后的可选结果演绎层 · 第二峰",
+    C2: "Combo 中位于 C₁ 之后的可选二次揭晓层 · 第二峰",
     Spin_Result: "Combo 输出 · 单次 Spin 的可观察结果",
     N: "进入一次 BD 前的连续 Spin 数量",
     BD: "N 次 Spin 后的构筑决策"
@@ -2592,6 +4274,39 @@ function selectTerm(key) {
   renderTermDetail();
 }
 
+function formulaTermAnchorId(key) {
+  return `formula-term-${key}`;
+}
+
+function formulaTermKeyFromHash() {
+  const prefix = "#formula-term-";
+  if (!window.location.hash.startsWith(prefix)) return null;
+  const key = decodeURIComponent(window.location.hash.slice(prefix.length));
+  return FORMULA_FIELDS.includes(key) ? key : null;
+}
+
+function navigateToFormulaTerm(key) {
+  if (topTabForHash() !== "model") {
+    rememberCrossTabOrigin();
+  }
+  selectTerm(key);
+  const anchorId = formulaTermAnchorId(key);
+  const targetHash = `#${anchorId}`;
+
+  if (window.location.hash !== targetHash) {
+    window.location.hash = anchorId;
+    window.requestAnimationFrame(renderCrossTabTrail);
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    document.getElementById(anchorId)?.scrollIntoView({
+      block: "start",
+      behavior: "smooth"
+    });
+  });
+}
+
 function renderTermDetail() {
   const term = state.data.termByKey.get(state.selectedTermKey);
   if (!term) {
@@ -2624,6 +4339,11 @@ function renderTermDetail() {
   `).join("");
 
   elements.termDetail.innerHTML = `
+    <span
+      class="formula-term-anchor"
+      id="${escapeHtml(formulaTermAnchorId(state.selectedTermKey))}"
+      aria-hidden="true"
+    ></span>
     <div class="detail-kicker">
       <span class="detail-key">${escapeHtml(term.key)}</span>
       <span class="status-pill ${status.className}">${escapeHtml(status.label)}</span>
@@ -2714,8 +4434,8 @@ function renderStats() {
   const values = [
     [state.data.mechanisms.length, "机制母型"],
     [state.data.prototypes.length, "品类原型"],
-    [state.data.variants.length, "品类变体"],
-    [new Set(state.data.products.map((item) => item.id)).size, "具体产品"]
+    [state.data.variants.length, "游戏变体"],
+    [new Set(state.data.products.map((item) => item.id)).size, "具体游戏"]
   ];
   elements.atlasStats.innerHTML = values.map(([value, label]) => `
     <div class="stat-card">
@@ -2849,7 +4569,7 @@ function renderSlotPrototypeMatrix() {
     <span>当前选择 · ${escapeHtml(selected.name)}</span>
     <p>
       基石游戏《${escapeHtml(representative?.name ?? "待指定")}》。
-      ${escapeHtml(selected.formula_changes.C2.constraint_label)}负责结果演绎；
+      ${escapeHtml(selected.formula_changes.C2.constraint_label)}负责二次揭晓；
       ${escapeHtml(selected.formula_changes.P_t.constraint_label)}负责目标验证。
     </p>
     <button type="button" data-prototype-matrix-inspect="${escapeHtml(selected.id)}">
@@ -2926,7 +4646,7 @@ function cardMarkup(node, inPath, current, options = {}) {
       type="button"
       data-node-id="${escapeHtml(node.id)}"
       aria-pressed="${current}"
-      ${compactVariant ? `aria-label="查看品类变体：${escapeHtml(node.name)}"` : ""}
+      ${compactVariant ? `aria-label="查看游戏变体：${escapeHtml(node.name)}"` : ""}
     >
       <span class="card-type">
         ${escapeHtml(TYPE_LABELS[node.type])}
@@ -3067,6 +4787,10 @@ function renderRails() {
     button.setAttribute("aria-pressed", String(active));
   });
   elements.variantRail.classList.toggle("is-compact-view", compactVariantView);
+  elements.variantRail.classList.toggle(
+    "is-detail-view",
+    allowsVariantViewToggle && state.atlasVariantViewMode === "detail"
+  );
 
   elements.mechanismRail.innerHTML = mechanisms.length
     ? mechanisms.map((node) => cardMarkup(
@@ -3094,7 +4818,7 @@ function renderRails() {
             && !(state.detailLevel === "variant" && node.id === state.selectedVariantId)
         }
       )).join("")
-    : emptyRailMarkup("当前原型下没有符合条件的品类变体");
+    : emptyRailMarkup("当前原型下没有符合条件的游戏变体");
 
   updateAtlasSummaryOverflow();
 
@@ -3129,6 +4853,7 @@ function selectMechanism(id) {
   state.selectedMechanismId = id;
   state.selectedPrototypeId = prototypesFor(id)[0]?.id ?? null;
   state.selectedVariantId = variantsFor(state.selectedPrototypeId)[0]?.id ?? null;
+  state.selectedFingerprintField = null;
   state.detailLevel = "mechanism";
   renderAtlas();
 }
@@ -3138,6 +4863,7 @@ function selectPrototype(id) {
   state.selectedMechanismId = prototype.primary_mother_id;
   state.selectedPrototypeId = id;
   state.selectedVariantId = variantsFor(id)[0]?.id ?? null;
+  state.selectedFingerprintField = null;
   state.detailLevel = "prototype";
   renderAtlas();
 }
@@ -3148,6 +4874,7 @@ function selectVariant(id) {
   state.selectedMechanismId = prototype.primary_mother_id;
   state.selectedPrototypeId = prototype.id;
   state.selectedVariantId = id;
+  state.selectedFingerprintField = null;
   state.detailLevel = "variant";
   renderAtlas();
 }
@@ -3211,12 +4938,16 @@ function effectiveFingerprint(node) {
     const entry = own[field];
     const parentEntry = inherited[field];
     if (entry.operation === "inherit" && parentEntry) {
+      const ownEvidence = fieldEvidenceImages(entry);
       result[field] = {
         operation: entry.operation,
         summary: parentEntry.summary,
         source: parentEntry.source,
         label: parentEntry.label,
-        note: entry.summary
+        note: entry.summary,
+        evidence_images: ownEvidence.length
+          ? ownEvidence
+          : fieldEvidenceImages(parentEntry)
       };
     } else {
       result[field] = {
@@ -3224,7 +4955,8 @@ function effectiveFingerprint(node) {
         summary: entry.summary,
         source: entry.operation === "inherit" ? "体验公式" : node.name,
         label: entry.constraint_label ?? FIELD_LABELS[field],
-        note: null
+        note: null,
+        evidence_images: fieldEvidenceImages(entry)
       };
     }
   }
@@ -3260,15 +4992,21 @@ function atlasFormulaField(node, field, label = field) {
       <span class="atlas-constraint-stack">
         ${layers.map((layerNode) => {
           const entry = rawFingerprint(layerNode)[field];
+          const evidenceImages = fieldEvidenceImages(entry);
           const isInherited = entry.operation === "inherit";
           const isCurrentLayer = layerNode.id === node.id;
           return `
-            <span class="atlas-constraint-line ${layerClass[layerNode.type]} ${isInherited ? "is-inherit" : "is-change"} ${isCurrentLayer ? "is-current-layer" : ""}">
+            <span class="atlas-constraint-line ${layerClass[layerNode.type]} ${isInherited ? "is-inherit" : "is-change"} ${isCurrentLayer ? "is-current-layer" : ""} ${evidenceImages.length ? "has-evidence" : ""}">
               <small>
                 ${escapeHtml(TYPE_LABELS[layerNode.type])}
-                · ${escapeHtml(OPERATION_LABELS[entry.operation] ?? entry.operation)}
+                · ${escapeHtml(operationLabelForNode(layerNode, entry.operation))}
               </small>
               <strong>${isInherited ? "↳ 同上" : escapeHtml(entry.constraint_label ?? entry.summary)}</strong>
+              ${fieldEvidencePreviewMarkup(evidenceImages, {
+                className: "atlas-field-evidence",
+                limit: 4,
+                label: `${layerNode.name} · ${formulaDisplayKey(field)} 配图`
+              })}
             </span>
           `;
         }).join("")}
@@ -3384,7 +5122,7 @@ function renderAtlasFormula() {
     <div class="atlas-formula-note">
       <strong>正在查看：${escapeHtml(pathCopy)}</strong>
       <span>
-        红色为机制母型，黄色为品类原型，绿色为品类变体。
+        红色为机制母型，黄色为品类原型，绿色为游戏变体。
         同一字段按继承顺序逐行显示；重复字段同步显示相同约束。
       </span>
     </div>
@@ -3405,7 +5143,7 @@ function relationMetrics(node) {
     const prototypes = prototypesFor(node.id);
     return [
       [prototypes.length, "直接品类原型"],
-      [prototypes.flatMap((item) => variantsFor(item.id)).length, "全部品类变体"],
+      [prototypes.flatMap((item) => variantsFor(item.id)).length, "全部游戏变体"],
       [productsFor(node).length, "关联产品"],
       [node.open_axes.length, "开放变量"]
     ];
@@ -3414,7 +5152,7 @@ function relationMetrics(node) {
     const changes = Object.values(node.formula_changes);
     return [
       [1, "上级机制母型"],
-      [variantsFor(node.id).length, "直接品类变体"],
+      [variantsFor(node.id).length, "直接游戏变体"],
       [productsFor(node).length, "关联产品"],
       [changes.filter((item) => item.operation !== "inherit").length, "自身约束字段"]
     ];
@@ -3526,6 +5264,146 @@ function nodeVisualEvidenceMarkup(node) {
   `;
 }
 
+function renderFingerprintDetail(field) {
+  const node = selectedNode();
+  const panel = elements.nodeDetail.querySelector("#fingerprint-detail-panel");
+  if (!node || !panel || !FORMULA_FIELDS.includes(field)) return;
+
+  const item = effectiveFingerprint(node)[field];
+  const parent = parentNode(node);
+  const parentItem = parent ? effectiveFingerprint(parent)[field] : null;
+  const term = state.data.termByKey.get(field);
+  const operationLabel = operationLabelForNode(node, item.operation);
+  const evidenceImages = fieldEvidenceImages(item);
+
+  panel.classList.remove("is-empty");
+  panel.innerHTML = `
+    <header class="fingerprint-detail-head">
+      <div>
+        <span>FIELD DETAIL · 当前节点字段</span>
+        <h5>${escapeHtml(formulaDisplayKey(field))} · ${escapeHtml(term?.name ?? field)}</h5>
+      </div>
+      <div class="fingerprint-detail-actions">
+        <button
+          type="button"
+          class="button button-primary"
+          data-edit-current-formula-field="${escapeHtml(field)}"
+        >
+          修改当前字段 →
+        </button>
+        <button
+          type="button"
+          class="button button-secondary"
+          data-view-formula-field="${escapeHtml(field)}"
+        >
+          查看体验模型通用定义 →
+        </button>
+      </div>
+    </header>
+
+    <div class="fingerprint-detail-meta">
+      <div>
+        <small>相对父级操作</small>
+        <strong class="operation-pill ${escapeHtml(item.operation)}">
+          ${escapeHtml(operationLabel)}
+        </strong>
+      </div>
+      <div>
+        <small>当前有效来源</small>
+        <strong>${escapeHtml(item.source)}</strong>
+      </div>
+      <div>
+        <small>当前节点</small>
+        <strong>${escapeHtml(node.name)}</strong>
+      </div>
+    </div>
+
+    <div class="fingerprint-detail-copy">
+      <small>当前节点中的具体定义</small>
+      <p>${escapeHtml(item.summary)}</p>
+    </div>
+
+    ${evidenceImages.length ? `
+      <section class="fingerprint-evidence">
+        <header>
+          <strong>字段配图</strong>
+          <span>${evidenceImages.length} 张</span>
+        </header>
+        <div class="fingerprint-evidence-grid" data-field-evidence-group>
+          ${evidenceImages.map((image, index) => {
+            const imageUrl = safeFieldEvidenceUrl(image.url ?? image.data_url);
+            const caption = image.caption || image.name || `字段配图 ${index + 1}`;
+            return `
+              <figure>
+                <button
+                  type="button"
+                  class="fingerprint-evidence-preview"
+                  data-field-image-preview
+                  data-field-image-caption="${escapeHtml(caption)}"
+                  aria-label="放大查看：${escapeHtml(caption)}"
+                >
+                  <img
+                    src="${escapeHtml(imageUrl)}"
+                    alt="${escapeHtml(caption)}"
+                    loading="lazy"
+                  >
+                  <span aria-hidden="true">点击放大</span>
+                </button>
+                <figcaption>
+                  <strong>${escapeHtml(caption)}</strong>
+                  ${image.caption && image.name
+                    ? `<small>${escapeHtml(image.name)}</small>`
+                    : ""}
+                </figcaption>
+              </figure>
+            `;
+          }).join("")}
+        </div>
+      </section>
+    ` : ""}
+
+    ${parentItem ? `
+      <div class="fingerprint-parent-copy ${fieldEvidenceImages(parentItem).length ? "has-evidence" : ""}">
+        <small>父级有效定义 · ${escapeHtml(parent.name)}</small>
+        <p>${escapeHtml(parentItem.summary)}</p>
+        ${fieldEvidencePreviewMarkup(fieldEvidenceImages(parentItem), {
+          className: "fingerprint-parent-evidence",
+          label: `${parent.name} · ${formulaDisplayKey(field)} 配图`
+        })}
+      </div>
+    ` : `
+      <div class="fingerprint-parent-copy">
+        <small>父级有效定义</small>
+        <p>这是体验公式下的第一层约束，没有更上层的原型节点。</p>
+      </div>
+    `}
+  `;
+
+  elements.nodeDetail.querySelectorAll("[data-field]").forEach((button) => {
+    const selected = button.dataset.field === field;
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+
+  panel
+    .querySelector("[data-edit-current-formula-field]")
+    ?.addEventListener("click", () => {
+      openFieldEditor(node.id, field);
+    });
+
+  panel
+    .querySelector("[data-view-formula-field]")
+    ?.addEventListener("click", () => {
+      navigateToFormulaTerm(field);
+    });
+}
+
+function selectFingerprintField(field) {
+  if (!FORMULA_FIELDS.includes(field)) return;
+  state.selectedFingerprintField = field;
+  renderFingerprintDetail(field);
+}
+
 function renderNodeDetail() {
   const node = selectedNode();
   if (!node) {
@@ -3574,20 +5452,43 @@ function renderNodeDetail() {
     <div class="fingerprint-grid">
       ${FORMULA_FIELDS.map((field) => {
         const item = fingerprint[field];
+        const evidenceImages = fieldEvidenceImages(item);
         return `
-          <button class="fingerprint-card" type="button" data-field="${escapeHtml(field)}">
-            <header>
-              <code>${escapeHtml(field)}</code>
-              <span class="operation-pill ${escapeHtml(item.operation)}">
-                ${escapeHtml(OPERATION_LABELS[item.operation] ?? item.operation)}
-              </span>
-            </header>
-            <p>${escapeHtml(item.summary)}</p>
-            <span class="fingerprint-source">当前有效来源：${escapeHtml(item.source)}</span>
-          </button>
+          <article class="fingerprint-card-shell ${evidenceImages.length ? "has-evidence" : ""}">
+            <button
+              class="fingerprint-card"
+              type="button"
+              data-field="${escapeHtml(field)}"
+              aria-controls="fingerprint-detail-panel"
+              aria-pressed="false"
+            >
+              <header>
+                <code>${escapeHtml(field)}</code>
+                <span class="operation-pill ${escapeHtml(item.operation)}">
+                  ${escapeHtml(operationLabelForNode(node, item.operation))}
+                </span>
+              </header>
+              <p>${escapeHtml(item.summary)}</p>
+              <span class="fingerprint-source">当前有效来源：${escapeHtml(item.source)}</span>
+            </button>
+            ${fieldEvidencePreviewMarkup(evidenceImages, {
+              className: "fingerprint-card-evidence",
+              limit: 4,
+              label: `${node.name} · ${formulaDisplayKey(field)} 配图`
+            })}
+          </article>
         `;
       }).join("")}
     </div>
+
+    <section
+      class="fingerprint-detail-panel is-empty"
+      id="fingerprint-detail-panel"
+      aria-live="polite"
+    >
+      <span>字段详情</span>
+      <p>点击上方任一公式指纹，查看它在当前节点中的具体定义及其与父级的差异。</p>
+    </section>
 
     ${identityRules.length ? `
       <h4 class="detail-section-title">
@@ -3598,16 +5499,23 @@ function renderNodeDetail() {
       </ul>
     ` : ""}
 
-    <h4 class="detail-section-title">关联具体产品</h4>
+    <h4 class="detail-section-title">关联具体游戏</h4>
     <div class="product-chips">
       ${products.length
         ? products.map((product) => `
-          <span class="product-chip">
+          <button
+            type="button"
+            class="product-chip is-interactive"
+            data-related-product="${escapeHtml(product.id)}"
+            aria-label="在游戏库中查看 ${escapeHtml(product.name)}"
+            title="切换到游戏库并查看产品详情"
+          >
             ${escapeHtml(product.name)}
             <small>${escapeHtml(product.relation_types
               .map((type) => RELATION_LABELS[type] ?? type)
               .join(" · "))}</small>
-          </span>
+            <i aria-hidden="true">→</i>
+          </button>
         `).join("")
         : '<span class="product-chip">暂未关联产品</span>'}
     </div>
@@ -3615,11 +5523,23 @@ function renderNodeDetail() {
 
   elements.nodeDetail.querySelectorAll("[data-field]").forEach((button) => {
     button.addEventListener("click", () => {
-      state.selectedTermKey = button.dataset.field;
-      renderTermControls();
-      renderTermDetail();
-      window.location.hash = "model-content";
-      document.querySelector("#model-content").scrollIntoView({ behavior: "smooth" });
+      selectFingerprintField(button.dataset.field);
+    });
+  });
+
+  if (state.selectedFingerprintField) {
+    renderFingerprintDetail(state.selectedFingerprintField);
+  }
+
+  elements.nodeDetail.querySelectorAll("[data-related-product]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.dataset.relatedProduct;
+      if (!state.data.productById.has(productId)) return;
+      rememberCrossTabOrigin();
+      selectLibraryView("products");
+      window.location.hash = "library";
+      openProductDetail(productId);
+      window.requestAnimationFrame(renderCrossTabTrail);
     });
   });
 }
@@ -3732,6 +5652,37 @@ function selectLibraryView(view) {
   });
 }
 
+function focusFormulaMatrixForNode(nodeId) {
+  const node = libraryNodeById(nodeId);
+  if (!node) return;
+
+  const matrixParent = node.type === "category_variant"
+    ? parentNode(node)
+    : node;
+  state.libraryMatrixParentId = matrixParent?.id ?? state.libraryMatrixParentId;
+  state.libraryMatrixNodeFilter = node.type === "category_variant" ? node.id : null;
+  state.libraryFieldFilter = "all";
+  elements.fieldFilter.value = "all";
+
+  selectLibraryView("matrix");
+  renderFormulaMatrix();
+
+  requestAnimationFrame(() => {
+    elements.formulaDataTable.closest(".formula-matrix-scroll").scrollLeft = 0;
+    elements.matrixNodeFocus.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  });
+}
+
+function clearFormulaMatrixNodeFocus() {
+  state.libraryMatrixNodeFilter = null;
+  state.libraryFieldFilter = "all";
+  elements.fieldFilter.value = "all";
+  renderFormulaMatrix();
+}
+
 function showDataToast(message, kind = "success") {
   window.clearTimeout(state.toastTimer);
   elements.dataToast.textContent = message;
@@ -3740,6 +5691,173 @@ function showDataToast(message, kind = "success") {
   state.toastTimer = window.setTimeout(() => {
     elements.dataToast.hidden = true;
   }, 3200);
+}
+
+function renderFieldEditorEvidence() {
+  const images = state.editingFieldImages;
+  const remaining = Math.max(0, 4 - images.length);
+  elements.fieldEditorImageInput.disabled =
+    state.fieldEditorBusy || !state.dataServiceOnline || remaining === 0;
+  elements.fieldEditorImageInput.closest(".field-editor-upload")
+    ?.classList.toggle("is-disabled", elements.fieldEditorImageInput.disabled);
+  elements.fieldEditorEvidence.classList.toggle(
+    "is-drop-disabled",
+    elements.fieldEditorImageInput.disabled
+  );
+
+  elements.fieldEditorEvidenceList.innerHTML = images.length
+    ? images.map((item, index) => {
+      const imageUrl = safeFieldEvidenceUrl(item.url ?? item.data_url);
+      return `
+        <article class="field-editor-evidence-item">
+          <button type="button" class="field-editor-evidence-image"
+            data-field-image-preview
+            data-field-image-caption="${escapeHtml(item.caption || item.name || `字段配图 ${index + 1}`)}"
+            aria-label="放大查看：${escapeHtml(item.caption || item.name || `字段配图 ${index + 1}`)}"
+          >
+            <img
+              src="${escapeHtml(imageUrl)}"
+              alt="${escapeHtml(item.caption || item.name || `字段配图 ${index + 1}`)}"
+            >
+            <span aria-hidden="true">点击放大</span>
+          </button>
+          <div class="field-editor-evidence-body">
+            <div>
+              <strong>${escapeHtml(item.name || `字段配图 ${index + 1}`)}</strong>
+              <button
+                type="button"
+                data-remove-field-image="${index}"
+                aria-label="删除 ${escapeHtml(item.name || `字段配图 ${index + 1}`)}"
+              >删除</button>
+            </div>
+            <label>
+              <span>图片说明（可选）</span>
+              <input
+                type="text"
+                maxlength="160"
+                value="${escapeHtml(item.caption ?? "")}"
+                data-field-image-caption="${index}"
+                placeholder="说明截图中与当前字段相关的部分"
+              >
+            </label>
+          </div>
+        </article>
+      `;
+    }).join("")
+    : `
+      <div class="field-editor-evidence-empty">
+        <strong>当前字段还没有配图</strong>
+        <span>将图片拖到这里，或复制图片后按 ⌘V / Ctrl+V。</span>
+      </div>
+    `;
+
+  elements.fieldEditorEvidenceList.querySelectorAll("[data-remove-field-image]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.editingFieldImages.splice(Number(button.dataset.removeFieldImage), 1);
+      renderFieldEditorEvidence();
+    });
+  });
+
+  elements.fieldEditorEvidenceList.querySelectorAll("[data-field-image-caption]").forEach((input) => {
+    input.addEventListener("input", () => {
+      const item = state.editingFieldImages[Number(input.dataset.fieldImageCaption)];
+      if (item) item.caption = input.value;
+    });
+  });
+}
+
+function readImageFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => resolve(reader.result));
+    reader.addEventListener("error", () => reject(new Error(`无法读取图片：${file.name}`)));
+    reader.readAsDataURL(file);
+  });
+}
+
+function createClientId(prefix) {
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return `${prefix}-${globalThis.crypto.randomUUID()}`;
+  }
+  if (typeof globalThis.crypto?.getRandomValues === "function") {
+    const values = new Uint32Array(4);
+    globalThis.crypto.getRandomValues(values);
+    return `${prefix}-${[...values].map((value) => value.toString(36)).join("-")}`;
+  }
+  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+}
+
+async function addFieldEditorImages(fileList, source = "upload") {
+  const allowedTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
+  const typeByExtension = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    webp: "image/webp"
+  };
+  const files = [...fileList].filter(Boolean);
+  const sourceLabels = {
+    upload: "上传",
+    drop: "拖入",
+    paste: "粘贴"
+  };
+  const sourceLabel = sourceLabels[source] ?? "添加";
+  let added = 0;
+  let warning = "";
+
+  if (!state.dataServiceOnline) {
+    warning = "当前是只读模式，无法添加字段配图。";
+  } else if (state.fieldEditorBusy) {
+    warning = "字段正在保存，请稍后再添加配图。";
+  }
+
+  const blocked = Boolean(warning);
+  for (const file of files) {
+    if (blocked) break;
+    if (state.editingFieldImages.length >= 4) {
+      warning = "每个字段最多保存 4 张图片。";
+      break;
+    }
+    const fileName = file.name || `${sourceLabel}图片`;
+    const extension = fileName.toLowerCase().split(".").pop();
+    const normalizedType = file.type === "image/jpg"
+      ? "image/jpeg"
+      : allowedTypes.has(file.type)
+        ? file.type
+        : typeByExtension[extension];
+    if (!normalizedType) {
+      warning = `${fileName} 不是支持的图片格式。`;
+      continue;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      warning = `${fileName} 超过 5MB，未加入。`;
+      continue;
+    }
+
+    const dataUrl = await readImageFile(file);
+    state.editingFieldImages.push({
+      id: createClientId("pending"),
+      name: fileName,
+      caption: "",
+      data_url: dataUrl.replace(
+        /^data:[^;,]*;base64,/,
+        `data:${normalizedType};base64,`
+      )
+    });
+    added += 1;
+  }
+
+  elements.fieldEditorImageInput.value = "";
+  renderFieldEditorEvidence();
+  if (warning || added) {
+    elements.fieldEditorMessage.textContent = [
+      added ? `已${sourceLabel} ${added} 张图片，保存字段后写入。` : "",
+      warning
+    ].filter(Boolean).join(" ");
+    elements.fieldEditorMessage.className =
+      `field-editor-message ${warning ? "warning" : ""}`;
+  }
+  return added;
 }
 
 function openFieldEditor(nodeId, field) {
@@ -3757,16 +5875,21 @@ function openFieldEditor(nodeId, field) {
     ? `${parentEntry.label}｜${parentEntry.summary}`
     : "体验公式基础字段；当前节点负责给出第一层约束。";
 
-  const operationEntries = Object.entries(OPERATION_LABELS)
-    .filter(([operation]) => parent || operation !== "inherit");
+  const operationEntries = parent
+    ? Object.entries(OPERATION_LABELS)
+    : [["override", "本层定义"]];
   elements.fieldEditorOperation.innerHTML = operationEntries.map(([value, label]) => `
-    <option value="${escapeHtml(value)}">${escapeHtml(label)} · ${escapeHtml(value)}</option>
+    <option value="${escapeHtml(value)}">${escapeHtml(label)} · ${escapeHtml(
+      parent ? OPERATION_DESCRIPTIONS[value] : "当前层的基础定义"
+    )}</option>
   `).join("");
   elements.fieldEditorOperation.value = entry.operation;
   elements.fieldEditorStatus.value = reviewStatusFor(node, entry);
   elements.fieldEditorLabel.value = entry.constraint_label ?? "";
   elements.fieldEditorSummary.value = entry.summary ?? "";
   elements.fieldEditorNote.value = entry.review_note ?? "";
+  state.editingFieldImages = fieldEvidenceImages(entry).map((item) => ({ ...item }));
+  renderFieldEditorEvidence();
   elements.fieldEditorMessage.textContent = state.dataServiceOnline
     ? "修改会写回当前节点的直接约束；继承后的有效结果将自动重新计算。"
     : "当前是只读模式。请使用本地数据服务打开页面后再保存。";
@@ -3781,6 +5904,9 @@ function openFieldEditor(nodeId, field) {
 
 function closeFieldEditor() {
   state.editingField = null;
+  state.editingFieldImages = [];
+  elements.fieldEditorEvidence.classList.remove("is-dragover");
+  elements.fieldEditorImageInput.value = "";
   if (typeof elements.fieldEditor.close === "function") {
     elements.fieldEditor.close();
   } else {
@@ -3789,10 +5915,20 @@ function closeFieldEditor() {
 }
 
 function setEditorBusy(busy) {
+  state.fieldEditorBusy = busy;
   elements.fieldEditorSave.disabled = busy || !state.dataServiceOnline;
   elements.fieldEditorConfirm.disabled = busy || !state.dataServiceOnline;
   elements.fieldEditorCancel.disabled = busy;
   elements.fieldEditorClose.disabled = busy;
+  elements.fieldEditorImageInput.disabled = busy
+    || !state.dataServiceOnline
+    || state.editingFieldImages.length >= 4;
+  elements.fieldEditorImageInput.closest(".field-editor-upload")
+    ?.classList.toggle("is-disabled", elements.fieldEditorImageInput.disabled);
+  elements.fieldEditorEvidence.classList.toggle(
+    "is-drop-disabled",
+    elements.fieldEditorImageInput.disabled
+  );
 }
 
 async function refreshDataFromFiles() {
@@ -3822,29 +5958,62 @@ async function refreshDataFromFiles() {
   renderLibrary();
 }
 
-async function saveEditedField(action = "update") {
-  if (!state.dataServiceOnline || !state.editingField) return;
-  const node = libraryNodeById(state.editingField.nodeId);
-  if (!node) return;
-
-  const payload = {
+function editedFieldPayload(action = "update", savedEntry = null) {
+  const evidenceImages = savedEntry
+    ? fieldEvidenceImages(savedEntry)
+    : state.editingFieldImages;
+  return {
     node_id: state.editingField.nodeId,
     field: state.editingField.field,
     action,
-    operation: elements.fieldEditorOperation.value,
-    constraint_label: elements.fieldEditorLabel.value.trim(),
-    summary: elements.fieldEditorSummary.value.trim(),
+    operation: savedEntry?.operation ?? elements.fieldEditorOperation.value,
+    constraint_label: savedEntry?.constraint_label
+      ?? elements.fieldEditorLabel.value.trim(),
+    summary: savedEntry?.summary ?? elements.fieldEditorSummary.value.trim(),
     review_status: action === "confirm"
       ? "confirmed"
-      : elements.fieldEditorStatus.value,
-    review_note: elements.fieldEditorNote.value.trim()
+      : savedEntry?.review_status ?? elements.fieldEditorStatus.value,
+    review_note: savedEntry?.review_note
+      ?? elements.fieldEditorNote.value.trim(),
+    evidence_images: evidenceImages.map((item) => ({
+      id: item.id,
+      name: item.name,
+      caption: item.caption?.trim() ?? "",
+      url: item.url,
+      created_at: item.created_at,
+      data_url: item.data_url
+    }))
   };
+}
 
+function validateEditedFieldPayload(payload) {
   if (!payload.constraint_label || !payload.summary) {
     elements.fieldEditorMessage.textContent = "约束短标签和字段描述不能为空。";
     elements.fieldEditorMessage.className = "field-editor-message error";
-    return;
+    return false;
   }
+  return true;
+}
+
+async function submitEditedField(payload) {
+  const response = await fetch("./api/update-field", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  const result = await response.json();
+  if (!response.ok || !result.ok) {
+    throw new Error(result.error ?? "保存失败");
+  }
+  return result;
+}
+
+async function saveEditedField(action = "update") {
+  if (!state.dataServiceOnline || !state.editingField) return false;
+  const node = libraryNodeById(state.editingField.nodeId);
+  if (!node) return false;
+  const payload = editedFieldPayload(action);
+  if (!validateEditedFieldPayload(payload)) return false;
 
   setEditorBusy(true);
   elements.fieldEditorMessage.textContent = action === "confirm"
@@ -3853,24 +6022,62 @@ async function saveEditedField(action = "update") {
   elements.fieldEditorMessage.className = "field-editor-message";
 
   try {
-    const response = await fetch("./api/update-field", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json();
-    if (!response.ok || !result.ok) {
-      throw new Error(result.error ?? "保存失败");
-    }
-
+    await submitEditedField(payload);
     await refreshDataFromFiles();
     closeFieldEditor();
     showDataToast(action === "confirm"
       ? `${node.name} · ${payload.field} 已人工确认`
       : `${node.name} · ${payload.field} 已保存`);
+    return true;
   } catch (error) {
     elements.fieldEditorMessage.textContent = error.message;
     elements.fieldEditorMessage.className = "field-editor-message error";
+    return false;
+  } finally {
+    setEditorBusy(false);
+  }
+}
+
+async function confirmEditedField() {
+  if (!state.dataServiceOnline || !state.editingField) return false;
+  const node = libraryNodeById(state.editingField.nodeId);
+  if (!node) return false;
+
+  const savePayload = editedFieldPayload("update");
+  if (!validateEditedFieldPayload(savePayload)) return false;
+
+  let savedEntry = null;
+  setEditorBusy(true);
+  elements.fieldEditorMessage.textContent = "第 1 步：正在保存当前修改…";
+  elements.fieldEditorMessage.className = "field-editor-message";
+
+  try {
+    const saveResult = await submitEditedField(savePayload);
+    savedEntry = saveResult.entry;
+    state.editingFieldImages = fieldEvidenceImages(savedEntry).map((item) => ({ ...item }));
+    renderFieldEditorEvidence();
+
+    elements.fieldEditorMessage.textContent = "第 2 步：修改已保存，正在人工确认…";
+    const confirmPayload = editedFieldPayload("confirm", savedEntry);
+    await submitEditedField(confirmPayload);
+
+    await refreshDataFromFiles();
+    closeFieldEditor();
+    showDataToast(`${node.name} · ${savePayload.field} 已先保存并人工确认`);
+    return true;
+  } catch (error) {
+    if (savedEntry) {
+      try {
+        await refreshDataFromFiles();
+      } catch {
+        // 保留原始确认错误，数据可在下次刷新时重新载入。
+      }
+    }
+    elements.fieldEditorMessage.textContent = savedEntry
+      ? `修改已保存，但人工确认失败：${error.message}`
+      : `保存修改失败，尚未人工确认：${error.message}`;
+    elements.fieldEditorMessage.className = "field-editor-message error";
+    return false;
   } finally {
     setEditorBusy(false);
   }
@@ -3900,6 +6107,11 @@ function bindLibrary() {
     renderProductCatalog();
   });
 
+  elements.productSort.addEventListener("change", () => {
+    state.libraryProductSort = elements.productSort.value;
+    renderProductCatalog();
+  });
+
   elements.motherFilter.addEventListener("click", () => {
     state.librarySlotMotherOnly = !state.librarySlotMotherOnly;
     renderProductCatalog();
@@ -3910,15 +6122,19 @@ function bindLibrary() {
     renderProductCatalog();
   });
 
-  elements.levelFilter.addEventListener("change", () => {
-    state.libraryLevelFilter = elements.levelFilter.value;
+  elements.matrixParentFilter.addEventListener("change", () => {
+    state.libraryMatrixNodeFilter = null;
+    state.libraryMatrixParentId = elements.matrixParentFilter.value;
     renderFormulaMatrix();
+    elements.formulaDataTable.closest(".formula-matrix-scroll").scrollLeft = 0;
   });
 
   elements.fieldFilter.addEventListener("change", () => {
     state.libraryFieldFilter = elements.fieldFilter.value;
     renderFormulaMatrix();
   });
+
+  elements.matrixNodeFocusClear.addEventListener("click", clearFormulaMatrixNodeFocus);
 
   elements.refreshReviewQueue.addEventListener("click", async () => {
     try {
@@ -3931,19 +6147,77 @@ function bindLibrary() {
 
   elements.fieldEditorClose.addEventListener("click", closeFieldEditor);
   elements.fieldEditorCancel.addEventListener("click", closeFieldEditor);
-  elements.fieldEditor.addEventListener("click", (event) => {
+  elements.fieldEditor.addEventListener("dblclick", (event) => {
     if (event.target === elements.fieldEditor) closeFieldEditor();
+  });
+  elements.fieldEditorImageInput.addEventListener("change", async () => {
+    try {
+      await addFieldEditorImages(elements.fieldEditorImageInput.files, "upload");
+    } catch (error) {
+      elements.fieldEditorMessage.textContent = error.message;
+      elements.fieldEditorMessage.className = "field-editor-message error";
+    }
+  });
+  elements.fieldEditorEvidence.addEventListener("dragenter", (event) => {
+    if (![...(event.dataTransfer?.types ?? [])].includes("Files")) return;
+    event.preventDefault();
+    if (!elements.fieldEditorImageInput.disabled) {
+      elements.fieldEditorEvidence.classList.add("is-dragover");
+    }
+  });
+  elements.fieldEditorEvidence.addEventListener("dragover", (event) => {
+    if (![...(event.dataTransfer?.types ?? [])].includes("Files")) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = elements.fieldEditorImageInput.disabled ? "none" : "copy";
+  });
+  elements.fieldEditorEvidence.addEventListener("dragleave", (event) => {
+    if (event.relatedTarget && elements.fieldEditorEvidence.contains(event.relatedTarget)) {
+      return;
+    }
+    elements.fieldEditorEvidence.classList.remove("is-dragover");
+  });
+  elements.fieldEditorEvidence.addEventListener("drop", async (event) => {
+    if (![...(event.dataTransfer?.types ?? [])].includes("Files")) return;
+    event.preventDefault();
+    elements.fieldEditorEvidence.classList.remove("is-dragover");
+    try {
+      await addFieldEditorImages(event.dataTransfer.files, "drop");
+    } catch (error) {
+      elements.fieldEditorMessage.textContent = error.message;
+      elements.fieldEditorMessage.className = "field-editor-message error";
+    }
+  });
+  elements.fieldEditor.addEventListener("paste", async (event) => {
+    const clipboardFiles = [...(event.clipboardData?.items ?? [])]
+      .filter((item) => item.kind === "file")
+      .map((item) => item.getAsFile())
+      .filter((file) => file && (
+        file.type.startsWith("image/")
+        || /\.(?:png|jpe?g|webp)$/i.test(file.name)
+      ));
+    if (!clipboardFiles.length) return;
+
+    event.preventDefault();
+    try {
+      await addFieldEditorImages(clipboardFiles, "paste");
+    } catch (error) {
+      elements.fieldEditorMessage.textContent = error.message;
+      elements.fieldEditorMessage.className = "field-editor-message error";
+    }
   });
   elements.fieldEditorForm.addEventListener("submit", (event) => {
     event.preventDefault();
     saveEditedField("update");
   });
   elements.fieldEditorConfirm.addEventListener("click", () => {
-    elements.fieldEditorStatus.value = "confirmed";
-    saveEditedField("confirm");
+    confirmEditedField();
   });
 
   elements.productDetailClose.addEventListener("click", closeProductDetail);
+  elements.productDetailCrossTabTrailClear.addEventListener("click", () => {
+    state.crossTabHistory = [];
+    renderCrossTabTrail();
+  });
   elements.productDetail.addEventListener("click", (event) => {
     if (event.target === elements.productDetail) closeProductDetail();
   });
@@ -3988,6 +6262,13 @@ function bindLibrary() {
 
 async function init() {
   try {
+    elements.crossTabTrailClear.addEventListener("click", () => {
+      state.crossTabHistory = [];
+      renderCrossTabTrail();
+    });
+    window.addEventListener("hashchange", () => {
+      window.requestAnimationFrame(renderCrossTabTrail);
+    });
     elements.atlasSummaryClose.addEventListener("click", closeAtlasSummaryDialog);
     elements.atlasSummaryDialog.addEventListener("click", (event) => {
       if (event.target === elements.atlasSummaryDialog) closeAtlasSummaryDialog();
@@ -3995,8 +6276,13 @@ async function init() {
     bindLuckLandlordCase();
     bindExperienceTimeline();
     bindCoreInsights();
+    bindFieldImageViewer();
     state.data = await loadData();
     setDefaultSelection();
+    const deepLinkedTermKey = formulaTermKeyFromHash();
+    if (deepLinkedTermKey && state.data.termByKey.has(deepLinkedTermKey)) {
+      state.selectedTermKey = deepLinkedTermKey;
+    }
     renderFieldFormulaMap();
     renderTermControls();
     renderTermDetail();
@@ -4006,6 +6292,7 @@ async function init() {
     renderLibrary();
     bindToolbar();
     await checkDataService();
+    renderCrossTabTrail();
   } catch (error) {
     console.error(error);
     elements.fatalMessage.hidden = false;

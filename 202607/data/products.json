@@ -228,7 +228,7 @@
         "Put：auto_place",
         "C₁：path + cascade"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "peglin",
         "framework_version": "v5",
@@ -270,7 +270,7 @@
         "Put：auto_place",
         "C₁：path + cascade"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "ballionaire",
         "framework_version": "v5",
@@ -312,7 +312,7 @@
         "Put：manual_place",
         "C₁：type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "dicey-dungeons",
         "framework_version": "v5",
@@ -354,7 +354,7 @@
         "Put：manual_place",
         "C₁：type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "slice-and-dice",
         "framework_version": "v5",
@@ -396,7 +396,7 @@
         "Put：manual_place",
         "C₁：type_dict + threshold"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "astrea-six-sided-oracles",
         "framework_version": "v5",
@@ -438,7 +438,7 @@
         "Put：manual_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "die-in-the-dungeon",
         "framework_version": "v5",
@@ -480,7 +480,7 @@
         "Put：manual_set",
         "C₁：type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "aotenjo-infinite-hands",
         "framework_version": "v5",
@@ -522,7 +522,7 @@
         "Put：auto_place",
         "C₁：path + cascade"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "raccoin",
         "framework_version": "v5",
@@ -564,7 +564,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict + trigger_chain"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "roulette-hero",
         "framework_version": "v5",
@@ -606,7 +606,7 @@
         "Put：manual_place",
         "C₁：line_complete"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "bingo-betty",
         "framework_version": "v5",
@@ -807,7 +807,7 @@
         "Put：auto_place",
         "C₁：type_dict + threshold + trigger_chain"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "dice-player-one",
         "framework_version": "v5",
@@ -850,7 +850,7 @@
         "Put：auto_place",
         "C₁：path + cascade + threshold"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "coin-push-rpg",
         "framework_version": "v5",
@@ -997,7 +997,7 @@
         "Put：auto_place",
         "C₁：path + cascade + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "lucky-lord",
         "framework_version": "v5",
@@ -1092,7 +1092,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "bingle-bingle",
         "framework_version": "v5",
@@ -1343,7 +1343,7 @@
         "Put：auto_place",
         "C₁：type_dict + trigger_chain"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "insider-trading",
         "framework_version": "v5",
@@ -1385,7 +1385,7 @@
         "Put：manual_place",
         "C₁：type_dict + trigger_chain"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "vampire-crawlers",
         "framework_version": "v5",
@@ -1427,7 +1427,7 @@
         "Put：auto_place",
         "C₁：adjacency + type_dict"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "card-hog",
         "framework_version": "v5",
@@ -1469,7 +1469,7 @@
         "Put：manual_place",
         "C₁：type_dict + threshold"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "dice-tribes-ambitions",
         "framework_version": "v5",
@@ -1511,7 +1511,7 @@
         "Put：manual_place",
         "C₁：path + chain"
       ],
-      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+      "classification_note": "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
       "legacy_source": {
         "slug": "right-and-down",
         "framework_version": "v5",
@@ -2041,7 +2041,7 @@
         "prototype.slot-transform-combat"
       ],
       "variant_ids": [
-        "variant.hoptale-demo"
+        "variant.custom-ms97ik8h-ujrel"
       ],
       "classification_status": "confirmed",
       "summary": "已依据最新分类清单归入“Slot改·战斗型”；具体玩法与公式字段等待补录。",
@@ -2055,11 +2055,11 @@
       ],
       "core_loop": "待补录",
       "observed_mechanics": [],
-      "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
+      "classification_note": "从图谱管理配置游戏归属。",
       "evidence": [
         "用户提供的 2026-07-28 最新品类分类截图。"
       ],
-      "last_classified_at": "2026-07-28T14:30:00.000Z"
+      "last_classified_at": "2026-07-31T17:18:54.449Z"
     },
     {
       "id": "product.re-spin-die-repeat-demo",
