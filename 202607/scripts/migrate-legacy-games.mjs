@@ -77,7 +77,7 @@ function normalizeLegacyProduct(game, order, existing) {
     tags: basic.tags ?? [],
     core_loop: basic.core_loop_oneliner || "",
     observed_mechanics: observedMechanics,
-    classification_note: "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 品类变体”完成人工分类。",
+    classification_note: "从旧版 v5 游戏库导入；尚未按“机制母型 → 品类原型 → 游戏变体”完成人工分类。",
     legacy_source: {
       slug: game.slug,
       framework_version: analysis.framework_version,
@@ -301,7 +301,7 @@ const report = {
       legacy_slug: "lucky-mayor",
       target_product_id: "product.lucky-mayor",
       action: "merge_alias",
-      note: "将早期占位名称“幸运城市”并入 Steam 官方名称《幸运市长》，保留旧版完整资料并确认其为 0D 多重集品类变体实例。"
+      note: "将早期占位名称“幸运城市”并入 Steam 官方名称《幸运市长》，保留旧版完整资料并确认其为 0D 多重集游戏变体实例。"
     }
   ],
   output_files: [

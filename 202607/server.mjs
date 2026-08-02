@@ -1,9 +1,9 @@
 import { createServer } from "node:http";
-import { readFile, rename, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, stat, writeFile } from "node:fs/promises";
 import { dirname, extname, join, normalize, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const host = "127.0.0.1";
+const host = process.env.ROUGE_SLOT_HOST ?? "0.0.0.0";
 const port = Number(process.env.PORT ?? 8765);
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dataRoot = join(projectRoot, "202607", "data");
@@ -13,6 +13,7 @@ const mechanismsPath = join(dataRoot, "mechanism-archetypes.json");
 const prototypesPath = join(dataRoot, "category-prototypes.json");
 const variantsPath = join(dataRoot, "category-variants.json");
 const migrationReportPath = join(dataRoot, "migration-report.json");
+const fieldEvidenceRoot = join(projectRoot, "202607", "assets", "uploads", "formula-fields");
 const apiPrefix = "/202607/api/";
 
 const FORMULA_FIELDS = new Set([
@@ -29,13 +30,8 @@ const FORMULA_FIELDS = new Set([
 
 const OPERATIONS = new Set([
   "inherit",
-  "default",
-  "restrict",
-  "fix",
-  "disable",
   "override",
-  "extend",
-  "compose"
+  "extend"
 ]);
 
 const REVIEW_STATUSES = new Set(["draft", "pending", "confirmed"]);
@@ -45,6 +41,12 @@ const RELATION_ROLES = new Set([
   "representative",
   "cornerstone",
   "variant_instance"
+]);
+
+const FIELD_EVIDENCE_TYPES = new Map([
+  ["image/png", "png"],
+  ["image/jpeg", "jpg"],
+  ["image/webp", "webp"]
 ]);
 
 const collections = [
@@ -112,12 +114,12 @@ async function atomicWriteJson(path, value) {
   await rename(temporaryPath, path);
 }
 
-async function readRequestJson(request) {
+async function readRequestJson(request, maxBytes = 64 * 1024) {
   const chunks = [];
   let size = 0;
   for await (const chunk of request) {
     size += chunk.length;
-    if (size > 64 * 1024) {
+    if (size > maxBytes) {
       throw new Error("请求内容过大");
     }
     chunks.push(chunk);
@@ -127,6 +129,84 @@ async function readRequestJson(request) {
   } catch {
     throw new Error("请求不是有效 JSON");
   }
+}
+
+function optionalText(value, name, maxLength) {
+  if (value == null || value === "") return "";
+  if (typeof value !== "string") {
+    throw new Error(`${name} 必须是文本`);
+  }
+  const trimmed = value.trim();
+  if (trimmed.length > maxLength) {
+    throw new Error(`${name} 超过 ${maxLength} 字符`);
+  }
+  return trimmed;
+}
+
+function evidenceFileStem(nodeId, field) {
+  return `${nodeId}-${field}`
+    .replace(/[^A-Za-z0-9._-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 120);
+}
+
+async function persistEvidenceImages(input, nodeId, field, timestamp) {
+  if (!Array.isArray(input)) {
+    throw new Error("evidence_images 必须是数组");
+  }
+  if (input.length > 4) {
+    throw new Error("每个字段最多保存 4 张图片");
+  }
+
+  const stored = [];
+  await mkdir(fieldEvidenceRoot, { recursive: true });
+
+  for (const [index, item] of input.entries()) {
+    if (!item || typeof item !== "object") {
+      throw new Error(`第 ${index + 1} 张字段配图格式无效`);
+    }
+
+    const caption = optionalText(item.caption, "图片说明", 160);
+    const originalName = optionalText(item.name, "图片名称", 180) || `字段配图 ${index + 1}`;
+    const existingUrl = optionalText(item.url, "图片地址", 260);
+
+    if (/^\.\/assets\/uploads\/formula-fields\/[A-Za-z0-9._-]+$/.test(existingUrl)) {
+      stored.push({
+        id: optionalText(item.id, "图片 ID", 120) || `evidence-${Date.now()}-${index}`,
+        url: existingUrl,
+        name: originalName,
+        caption,
+        created_at: optionalText(item.created_at, "图片创建时间", 80) || timestamp
+      });
+      continue;
+    }
+
+    const dataUrl = optionalText(item.data_url, "图片数据", 8 * 1024 * 1024);
+    const match = dataUrl.match(/^data:(image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/=\r\n]+)$/);
+    if (!match || !FIELD_EVIDENCE_TYPES.has(match[1])) {
+      throw new Error(`${originalName} 不是支持的 PNG、JPEG 或 WebP 图片`);
+    }
+
+    const bytes = Buffer.from(match[2].replace(/\s+/g, ""), "base64");
+    if (!bytes.length || bytes.length > 5 * 1024 * 1024) {
+      throw new Error(`${originalName} 为空或超过 5MB`);
+    }
+
+    const extension = FIELD_EVIDENCE_TYPES.get(match[1]);
+    const fileName = `${evidenceFileStem(nodeId, field)}-${Date.now()}-${index}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}.${extension}`;
+    await writeFile(join(fieldEvidenceRoot, fileName), bytes);
+    stored.push({
+      id: `evidence-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
+      url: `./assets/uploads/formula-fields/${fileName}`,
+      name: originalName,
+      caption,
+      created_at: timestamp
+    });
+  }
+
+  return stored;
 }
 
 async function locateNode(nodeId) {
@@ -158,7 +238,7 @@ async function appendChange(change) {
 
 async function updateFormulaField(request, response) {
   try {
-    const input = await readRequestJson(request);
+    const input = await readRequestJson(request, 30 * 1024 * 1024);
     const nodeId = text(input.node_id, "node_id", 120);
     const field = text(input.field, "field", 40);
     const action = input.action === "confirm" ? "confirm" : "update";
@@ -192,6 +272,12 @@ async function updateFormulaField(request, response) {
 
     const before = structuredClone(fingerprint[field]);
     const timestamp = new Date().toISOString();
+    const evidenceImages = await persistEvidenceImages(
+      input.evidence_images ?? before.evidence_images ?? [],
+      nodeId,
+      field,
+      timestamp
+    );
     const after = {
       ...before,
       operation,
@@ -199,6 +285,7 @@ async function updateFormulaField(request, response) {
       summary,
       review_status: reviewStatus,
       review_note: reviewNote,
+      evidence_images: evidenceImages,
       last_modified_at: timestamp
     };
 
@@ -248,14 +335,16 @@ function nextOrder(items) {
   return Math.max(0, ...items.map((item) => Number(item.order) || 0)) + 10;
 }
 
-function emptyFingerprint(operation, nodeName) {
+function emptyFingerprint(operation, nodeName, parentFingerprint = null) {
   return Object.fromEntries([...FORMULA_FIELDS].map((field) => [
     field,
     {
       operation,
       constraint_label: operation === "inherit" ? "继承父级" : "待定义",
       summary: operation === "inherit"
-        ? `${nodeName}暂时继承父级的 ${field} 有效结果；等待人工调整。`
+        ? parentFingerprint?.[field]?.summary
+          ? `继承：${parentFingerprint[field].summary}`
+          : `${nodeName}暂时继承父级的 ${field} 有效结果；等待人工调整。`
         : `${nodeName}的 ${field} 第一层约束等待人工定义。`,
       review_status: "draft",
       review_note: ""
@@ -277,7 +366,7 @@ function createVariantFromProduct(prototype, product, role, timestamp) {
       ? `“${prototype.name}”的基石变体：作为品类公式比较基准，默认继承品类原型约束。`
       : `“${prototype.name}”下的具体游戏变体：${product.summary}`.slice(0, 240),
     definition: `本节点以《${product.name}》作为“${prototype.name}”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。`,
-    formula_changes: emptyFingerprint("inherit", product.name),
+    formula_changes: emptyFingerprint("inherit", product.name, prototype.formula_changes),
     inheritance_summary: {
       inherited_fields: FORMULA_FIELDS.size,
       changed_fields: 0,
@@ -303,7 +392,7 @@ function rebaseVariantToPrototype(variant, prototype, role, timestamp) {
     ].filter(Boolean).join(" ");
     if (entry.operation === "inherit") {
       entry.constraint_label = "继承新原型";
-      entry.summary = `${variant.name}暂时继承“${prototype.name}”的 ${field} 有效结果；等待人工复核。`;
+      entry.summary = `继承：${prototype.formula_changes?.[field]?.summary ?? `${prototype.name}的 ${field} 有效结果。`}`;
     }
   }
 }
@@ -432,7 +521,7 @@ async function updateProductClassification(request, response) {
       variant_ids: variant ? [variant.id] : [],
       classification_status: prototype ? classificationStatus : "unreviewed",
       classification_note: note || (prototype
-        ? `人工归类到“${prototype.name}”，角色为${normalizedRole === "cornerstone" ? "基石游戏" : "变体游戏"}；所属机制母型与品类变体映射由系统自动维护。`
+        ? `人工归类到“${prototype.name}”，角色为${normalizedRole === "cornerstone" ? "基石游戏" : "变体游戏"}；所属机制母型与游戏变体映射由系统自动维护。`
         : "人工清除模型归属，等待重新分类。")
     };
     Object.assign(product, after);
@@ -491,7 +580,7 @@ async function createModelNode(request, response) {
         order: nextOrder(document.items),
         summary,
         definition,
-        formula_constraints: emptyFingerprint("default", name),
+        formula_constraints: emptyFingerprint("override", name),
         open_axes: ["等待通过公式字段编辑器补充开放变量。"],
         created_at: timestamp
       };
@@ -523,7 +612,7 @@ async function createModelNode(request, response) {
         created_at: timestamp
       };
     } else if (type === "category_variant") {
-      throw new Error("品类变体由具体游戏的品类归属自动生成，请在游戏库或图谱管理中配置游戏");
+      throw new Error("游戏变体由具体游戏的品类归属自动生成，请在游戏库或图谱管理中配置游戏");
     } else {
       throw new Error(`未知节点类型：${type}`);
     }

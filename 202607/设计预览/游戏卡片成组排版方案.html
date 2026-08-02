@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>游戏卡片成组排版方案</title>
+  <style>
+    :root {
+      --ink: #1c2430;
+      --muted: #5d6877;
+      --blue: #3157d5;
+      --green: #168c74;
+      --green-soft: #e7f4f0;
+      --gold: #9b6a12;
+      --gold-soft: #fff0c8;
+      --paper: #f3f0e8;
+      --paper-soft: #faf8f2;
+      --line: #ddd9cf;
+      --white: #fff;
+      --shadow: 0 22px 56px rgba(42, 45, 53, .10);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(49, 87, 213, .07), transparent 36rem),
+        #f5f3ed;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+
+    .page {
+      width: min(1320px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 38px 0 54px;
+    }
+
+    .head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 30px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .13em;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: 38px;
+      font-weight: 500;
+    }
+
+    .head-copy {
+      max-width: 490px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .option-nav {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 22px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .75);
+    }
+
+    .option-nav a {
+      padding: 12px 14px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    body.option-a .option-nav a[href*="option=a"],
+    body.option-b .option-nav a[href*="option=b"],
+    body.option-c .option-nav a[href*="option=c"] {
+      border-color: rgba(49, 87, 213, .2);
+      color: white;
+      background: var(--ink);
+    }
+
+    .option-intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .7fr);
+      align-items: end;
+      gap: 30px;
+      margin-bottom: 18px;
+    }
+
+    .option-code {
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .12em;
+    }
+
+    h2 {
+      margin: 7px 0 0;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: 30px;
+      font-weight: 500;
+    }
+
+    .option-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .design { display: none; }
+    body.option-a .design-a,
+    body.option-b .design-b,
+    body.option-c .design-c { display: block; }
+
+    .cover {
+      height: 132px;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    .cover img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .title {
+      margin: 0;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: 25px;
+      font-weight: 500;
+      line-height: 1.15;
+    }
+
+    .en {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .seq {
+      display: grid;
+      width: 29px;
+      height: 29px;
+      place-items: center;
+      border-radius: 9px;
+      color: var(--green);
+      background: var(--green-soft);
+      font: 800 9px ui-monospace, "SFMono-Regular", Menlo, monospace;
+    }
+
+    .badge,
+    .role,
+    .tag,
+    .node {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .badge {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .role {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .role.cornerstone {
+      color: var(--gold);
+      background: var(--gold-soft);
+    }
+
+    .summary {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .03em;
+    }
+
+    .path,
+    .tags,
+    .actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .node {
+      padding: 4px 7px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: white;
+      font-size: 9px;
+      font-weight: 750;
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .tag {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: var(--paper);
+      font-size: 9px;
+      font-weight: 650;
+    }
+
+    .actions {
+      gap: 8px 12px;
+    }
+
+    .actions button,
+    .actions a {
+      border: 0;
+      color: #244499;
+      background: transparent;
+      font-size: 10px;
+      font-weight: 780;
+      text-decoration: none;
+    }
+
+    .actions .primary {
+      padding: 8px 11px;
+      border-radius: 8px;
+      color: white;
+      background: var(--blue);
+    }
+
+    /* A：每张卡独立，但强制相同的行高和内容顺序。 */
+    .aligned-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+      gap: 14px;
+    }
+
+    .aligned-card {
+      display: grid;
+      min-width: 0;
+      overflow: hidden;
+      grid-template-rows: 132px 76px 70px 84px 52px;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--green);
+      border-radius: 16px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .aligned-card > section,
+    .aligned-card > footer {
+      min-width: 0;
+      padding: 14px 17px;
+      border-top: 1px solid var(--line);
+    }
+
+    .aligned-card .identity {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 12px;
+      border-top: 0;
+    }
+
+    .aligned-card .identity-side {
+      display: flex;
+      align-items: flex-end;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .aligned-card .summary {
+      display: flex;
+      align-items: center;
+    }
+
+    .aligned-card .classification {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 9px;
+      background: color-mix(in srgb, var(--green) 4%, white);
+    }
+
+    .aligned-card .classification-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .aligned-card .classification-head strong {
+      overflow: hidden;
+      color: var(--green);
+      font-size: 14px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .aligned-card .tag-row {
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+    }
+
+    .aligned-card footer {
+      display: flex;
+      align-items: center;
+    }
+
+    /* B：减少内部方框，让品类身份成为一条横贯卡片的主信息带。 */
+    .band-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .band-card {
+      display: flex;
+      min-height: 492px;
+      overflow: hidden;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--green);
+      border-radius: 16px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .band-card .identity {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 16px 18px 13px;
+    }
+
+    .band-card .identity-side {
+      display: flex;
+      align-items: flex-end;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .band-card .category-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid color-mix(in srgb, var(--green) 18%, var(--line));
+      border-bottom: 1px solid color-mix(in srgb, var(--green) 18%, var(--line));
+      background: var(--green-soft);
+    }
+
+    .band-card .category-band small {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 750;
+    }
+
+    .band-card .category-band strong {
+      color: var(--green);
+      font-size: 15px;
+    }
+
+    .band-card .summary {
+      min-height: 76px;
+      padding: 16px 18px;
+    }
+
+    .band-card .plain-row {
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr);
+      align-items: start;
+      gap: 8px;
+      padding: 11px 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .band-card .plain-row .label { padding-top: 4px; }
+
+    .band-card footer {
+      margin-top: auto;
+      padding: 14px 18px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    /* C：三张卡共享同一组横向分区线，直接按“列”比较游戏。 */
+    .matrix-group {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--green);
+      border-radius: 17px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .matrix-cell {
+      min-width: 0;
+      padding: 14px 17px;
+      border-right: 1px solid var(--line);
+    }
+
+    .matrix-cell:nth-child(3n) { border-right: 0; }
+    .matrix-cell.row-start { border-top: 1px solid var(--line); }
+    .matrix-cell.cover-cell { height: 132px; padding: 0; }
+    .matrix-cell.cover-cell img { width: 100%; height: 100%; object-fit: cover; }
+
+    .matrix-cell.identity-cell {
+      display: grid;
+      min-height: 84px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .matrix-cell .identity-side {
+      display: flex;
+      align-items: flex-end;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .matrix-cell.summary-cell {
+      min-height: 72px;
+      background: #fdfcf9;
+    }
+
+    .matrix-cell.category-cell {
+      display: grid;
+      min-height: 64px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      background: var(--green-soft);
+    }
+
+    .matrix-cell.category-cell small {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 750;
+    }
+
+    .matrix-cell.category-cell strong {
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    .matrix-cell.info-cell {
+      display: grid;
+      min-height: 92px;
+      grid-template-rows: 1fr 1fr;
+      gap: 0;
+      padding: 0;
+    }
+
+    .matrix-info-row {
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      padding: 10px 17px;
+    }
+
+    .matrix-info-row + .matrix-info-row { border-top: 1px solid var(--line); }
+
+    .matrix-cell.action-cell {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+    }
+
+    .option-note {
+      margin-top: 16px;
+      padding: 13px 16px;
+      border-left: 3px solid var(--blue);
+      color: var(--muted);
+      background: rgba(49, 87, 213, .07);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 900px) {
+      .head,
+      .option-intro { grid-template-columns: 1fr; }
+      .aligned-grid,
+      .band-grid { grid-template-columns: 1fr; }
+      .matrix-group { display: block; }
+      .matrix-cell { border-right: 0; border-top: 1px solid var(--line); }
+      .matrix-cell.cover-cell { margin-top: 18px; }
+      .matrix-cell.cover-cell:first-child { margin-top: 0; }
+      .option-nav { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="head">
+      <div>
+        <p class="eyebrow">GAME CARD GROUP · LAYOUT OPTIONS</p>
+        <h1>让三张卡片像同一套系统</h1>
+      </div>
+      <p class="head-copy">三种方案都保留封面尺寸和现有信息。差别在于：卡片之间是依靠统一基线、统一信息带，还是直接共享整组横向分区。</p>
+    </header>
+
+    <nav class="option-nav" aria-label="方案切换">
+      <a href="?option=a">方案 1 · 统一基线</a>
+      <a href="?option=b">方案 2 · 品类信息带</a>
+      <a href="?option=c">方案 3 · 共享矩阵</a>
+    </nav>
+
+    <section class="option-intro">
+      <div>
+        <span class="option-code" id="option-code">OPTION 1</span>
+        <h2 id="option-title">统一基线卡片</h2>
+      </div>
+      <p class="option-copy" id="option-copy">每张卡片仍然独立，但名称、摘要、品类、标签和操作严格使用相同高度与顺序。</p>
+    </section>
+
+    <section class="design design-a" id="design-a" aria-label="统一基线卡片方案"></section>
+    <section class="design design-b" id="design-b" aria-label="品类信息带方案"></section>
+    <section class="design design-c" id="design-c" aria-label="共享矩阵方案"></section>
+  </main>
+
+  <script>
+    const games = [
+      {
+        seq: "01",
+        name: "幸运房东",
+        en: "Luck be a Landlord",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1404850/header.jpg",
+        role: "基石游戏",
+        source: "来源已确认",
+        summary: "“Slot改·数值型”品类原型的基石游戏、主要提炼来源与代表产品。",
+        prototype: "Slot改·数值型",
+        path: ["Slot母体", "Slot改·数值型", "幸运房东"],
+        tags: ["装置类", "老虎机", "符号 RPB"]
+      },
+      {
+        seq: "02",
+        name: "幸运市长",
+        en: "Lucky Mayor",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2659970/header_schinese.jpg?t=1720252883",
+        role: "变体游戏",
+        source: "旧资料已迁移",
+        summary: "招募市民卡牌构筑产业链，roguelike 经营繁荣都市。",
+        prototype: "Slot改·数值型",
+        path: ["Slot母体", "Slot改·数值型", "幸运市长"],
+        tags: ["装置类", "卡牌", "城市管理"]
+      },
+      {
+        seq: "03",
+        name: "Slotbound Demo",
+        en: "",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4906570/3c04c8dadcb56124838f39abe512839bfc6b3257/header.jpg?t=1783709880",
+        role: "基石游戏",
+        source: "来源已确认",
+        summary: "以 3×3 Slot Spin 召唤单位，并把 Slot 结果转译为自动战斗防守、单位吸收与职业进化。",
+        prototype: "Slot+战斗型",
+        path: ["Slot母体", "Slot+战斗型", "Slotbound Demo"],
+        tags: []
+      }
+    ];
+
+    const role = (game) => `<span class="role ${game.role === "基石游戏" ? "cornerstone" : ""}">${game.role}</span>`;
+    const path = (game) => `<div class="path">${game.path.map((item, index) => `${index ? '<span class="arrow">→</span>' : ""}<span class="node">${item}</span>`).join("")}</div>`;
+    const tags = (game) => `<div class="tags">${game.tags.length ? game.tags.map((item) => `<span class="tag">${item}</span>`).join("") : '<span class="tag">待补充</span>'}</div>`;
+    const actions = () => '<div class="actions"><button class="primary">查看游戏资料</button><button>所属模型</button><a>Steam ↗</a></div>';
+
+    document.querySelector("#design-a").innerHTML = `
+      <div class="aligned-grid">
+        ${games.map((game) => `
+          <article class="aligned-card">
+            <div class="cover"><img src="${game.image}" alt=""></div>
+            <section class="identity">
+              <div><h3 class="title">${game.name}</h3>${game.en ? `<span class="en">${game.en}</span>` : ""}</div>
+              <div class="identity-side"><span class="seq">${game.seq}</span><span class="badge">分类已确认</span></div>
+            </section>
+            <section class="summary">${game.summary}</section>
+            <section class="classification">
+              <div class="classification-head"><strong>${game.prototype}</strong>${role(game)}</div>
+              ${path(game)}
+            </section>
+            <section class="tag-row"><span class="label">分析标签</span>${tags(game)}</section>
+            <footer>${actions()}</footer>
+          </article>
+        `).join("")}
+      </div>
+      <div class="option-note">适合：继续保留“每款游戏是一张独立卡片”的感觉，同时让三张卡的分区线、信息密度和操作位置完全对齐。</div>
+    `;
+
+    document.querySelector("#design-b").innerHTML = `
+      <div class="band-grid">
+        ${games.map((game) => `
+          <article class="band-card">
+            <div class="cover"><img src="${game.image}" alt=""></div>
+            <section class="identity">
+              <div><h3 class="title">${game.name}</h3>${game.en ? `<span class="en">${game.en}</span>` : ""}</div>
+              <div class="identity-side"><span class="seq">${game.seq}</span><span class="badge">${game.source}</span></div>
+            </section>
+            <section class="category-band">
+              <div><small>当前品类身份</small><strong>${game.prototype}</strong></div>
+              ${role(game)}
+            </section>
+            <p class="summary">${game.summary}</p>
+            <section class="plain-row"><span class="label">完整路径</span>${path(game)}</section>
+            <section class="plain-row"><span class="label">分析标签</span>${tags(game)}</section>
+            <footer>${actions()}</footer>
+          </article>
+        `).join("")}
+      </div>
+      <div class="option-note">适合：减少“小框套小框”，让品类身份成为每张卡唯一的主色信息带；其他内容回归普通文本行，视觉更轻。</div>
+    `;
+
+    document.querySelector("#design-c").innerHTML = `
+      <div class="matrix-group">
+        ${games.map((game) => `<div class="matrix-cell cover-cell"><img src="${game.image}" alt=""></div>`).join("")}
+        ${games.map((game) => `
+          <section class="matrix-cell identity-cell row-start">
+            <div><h3 class="title">${game.name}</h3>${game.en ? `<span class="en">${game.en}</span>` : ""}</div>
+            <div class="identity-side"><span class="seq">${game.seq}</span><span class="badge">分类已确认</span></div>
+          </section>
+        `).join("")}
+        ${games.map((game) => `<p class="matrix-cell summary-cell summary row-start">${game.summary}</p>`).join("")}
+        ${games.map((game) => `
+          <section class="matrix-cell category-cell row-start">
+            <div><small>当前品类身份</small><strong>${game.prototype}</strong></div>
+            ${role(game)}
+          </section>
+        `).join("")}
+        ${games.map((game) => `
+          <section class="matrix-cell info-cell row-start">
+            <div class="matrix-info-row"><span class="label">完整路径</span>${path(game)}</div>
+            <div class="matrix-info-row"><span class="label">分析标签</span>${tags(game)}</div>
+          </section>
+        `).join("")}
+        ${games.map(() => `<footer class="matrix-cell action-cell row-start">${actions()}</footer>`).join("")}
+      </div>
+      <div class="option-note">适合：把当前一行三张游戏直接当作一张“横向比较表”。三列共享所有分区线，割裂感最低，但单张卡的独立感也最弱。</div>
+    `;
+
+    const option = new URLSearchParams(location.search).get("option") || "a";
+    const copy = {
+      a: ["OPTION 1", "统一基线卡片", "三张卡仍然独立，但名称、摘要、品类、标签和操作严格使用相同高度与顺序。"],
+      b: ["OPTION 2", "品类信息带", "减少嵌套边框，以一条统一的品类身份色带串起每张卡片，其余信息采用轻量文本行。"],
+      c: ["OPTION 3", "共享矩阵卡组", "三张卡直接共享横向分区线，像同一张比较表的三列，整体性最强。"]
+    }[option] || ["OPTION 1", "统一基线卡片", "三张卡仍然独立，但名称、摘要、品类、标签和操作严格使用相同高度与顺序。"];
+    document.body.className = `option-${option}`;
+    document.querySelector("#option-code").textContent = copy[0];
+    document.querySelector("#option-title").textContent = copy[1];
+    document.querySelector("#option-copy").textContent = copy[2];
+  </script>
+</body>
+</html>

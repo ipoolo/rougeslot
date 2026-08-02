@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>游戏库卡片排版方案</title>
+  <style>
+    :root {
+      --ink: #1c2430;
+      --ink-soft: #5d6877;
+      --blue: #3157d5;
+      --green: #168c74;
+      --green-soft: #e6f5f0;
+      --gold: #a67418;
+      --gold-soft: #f8efd7;
+      --paper: #f3f0e8;
+      --line: #ddd9cf;
+      --white: #fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(49, 87, 213, 0.08), transparent 34rem),
+        #f5f3ed;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+
+    .preview {
+      width: 470px;
+      padding: 28px 40px 40px;
+    }
+
+    .preview-head {
+      margin-bottom: 18px;
+    }
+
+    .preview-head span {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .12em;
+    }
+
+    .preview-head h1 {
+      margin: 7px 0 5px;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: 31px;
+      font-weight: 500;
+    }
+
+    .preview-head p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .card {
+      --accent: var(--green);
+      display: none;
+      min-height: 540px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--accent);
+      border-radius: 17px;
+      background: var(--white);
+      box-shadow: 0 22px 60px rgba(42, 45, 53, .12);
+    }
+
+    body.option-a .card-a,
+    body.option-b .card-b,
+    body.option-c .card-c {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cover {
+      width: 100%;
+      height: 132px;
+      flex: 0 0 132px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cover img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .body {
+      display: flex;
+      min-height: 0;
+      padding: 16px 18px 18px;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .topline,
+    .status,
+    .tags,
+    .actions,
+    .path {
+      display: flex;
+      align-items: center;
+    }
+
+    .topline { justify-content: space-between; gap: 12px; }
+    .status { flex-wrap: wrap; justify-content: flex-end; gap: 5px; }
+    .tags { flex-wrap: wrap; gap: 5px; }
+    .actions { flex-wrap: wrap; gap: 8px 12px; }
+    .path { flex-wrap: wrap; gap: 5px; }
+
+    .seq {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 9px;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 10%, white);
+      font: 800 11px ui-monospace, "SFMono-Regular", Menlo, monospace;
+    }
+
+    .badge,
+    .tag,
+    .role {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .badge {
+      padding: 5px 8px;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .badge.role-source {
+      color: var(--gold);
+      background: var(--gold-soft);
+    }
+
+    h2 {
+      margin: 16px 0 3px;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: 27px;
+      font-weight: 500;
+    }
+
+    .en {
+      color: var(--ink-soft);
+      font-size: 11px;
+    }
+
+    .summary {
+      margin: 13px 0 15px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .taxonomy {
+      margin-top: 1px;
+      border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+      border-radius: 13px;
+      background: color-mix(in srgb, var(--accent) 4%, white);
+    }
+
+    .taxonomy-label {
+      color: var(--ink-soft);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      white-space: nowrap;
+    }
+
+    .path {
+      min-width: 0;
+      color: var(--ink);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .path i {
+      margin: 0 4px;
+      color: color-mix(in srgb, var(--accent) 70%, var(--ink-soft));
+      font-style: normal;
+      font-weight: 850;
+    }
+
+    .tag {
+      padding: 5px 8px;
+      color: var(--ink-soft);
+      border: 1px solid rgba(28, 36, 48, .08);
+      background: white;
+      font-size: 10px;
+      font-weight: 650;
+    }
+
+    .actions {
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+    }
+
+    .actions button,
+    .actions a {
+      border: 0;
+      color: #244499;
+      background: transparent;
+      font-size: 11px;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .actions .primary {
+      padding: 8px 11px;
+      border-radius: 8px;
+      color: white;
+      background: var(--blue);
+    }
+
+    /* 方案 A：把状态合并到标题区，主体按“身份—说明—归属—操作”顺序。 */
+    .card-a .identity {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-a .summary {
+      margin-top: 14px;
+    }
+
+    .card-a .taxonomy {
+      padding: 4px 14px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .card-a .taxonomy-row {
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+    }
+
+    .card-a .taxonomy-row + .taxonomy-row {
+      border-top: 1px solid var(--line);
+    }
+
+    .card-a .path strong {
+      font-weight: 750;
+    }
+
+    .card-a .path strong:last-child {
+      color: var(--accent);
+    }
+
+    /* 方案 B：先让玩家看懂游戏身份，再集中呈现归属。 */
+    .card-b .title-line {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      gap: 12px;
+    }
+
+    .card-b h2 { margin-top: 0; }
+
+    .card-b .status {
+      justify-content: flex-start;
+      margin-top: 9px;
+    }
+
+    .card-b .classification-block {
+      margin: 15px 0 0;
+      padding: 14px;
+    }
+
+    .classification-block small {
+      display: block;
+      margin-bottom: 11px;
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .08em;
+    }
+
+    .card-b .hierarchy {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 12px minmax(0, 1.15fr) 12px minmax(0, 1fr);
+      align-items: stretch;
+      gap: 4px;
+    }
+
+    .card-b .hierarchy-node {
+      display: flex;
+      min-width: 0;
+      min-height: 62px;
+      padding: 9px 8px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: white;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-b .hierarchy-node small {
+      margin: 0 0 5px;
+      color: var(--ink-soft);
+      font-size: 10px;
+      letter-spacing: 0;
+    }
+
+    .card-b .hierarchy-node strong {
+      overflow-wrap: anywhere;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .card-b .hierarchy-node.current {
+      border-color: color-mix(in srgb, var(--accent) 48%, var(--line));
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, white);
+    }
+
+    .card-b .hierarchy-arrow {
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .card-b .taxonomy-tags {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid var(--line);
+    }
+
+    .card-b .summary {
+      margin-bottom: 0;
+    }
+
+    /* 方案 C：档案式摘要，让状态、角色和分类成为一组可扫读资料。 */
+    .card-c .record-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+
+    .card-c h2 { margin-top: 0; }
+
+    .card-c .record-side {
+      display: flex;
+      align-items: flex-end;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .card-c .record-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 15px 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fbfaf7;
+    }
+
+    .card-c .record-meta div {
+      padding: 10px 11px;
+      border-right: 1px solid var(--line);
+    }
+
+    .card-c .record-meta div:last-child { border-right: 0; }
+    .card-c .record-meta small {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink-soft);
+      font-size: 10px;
+    }
+    .card-c .record-meta strong { font-size: 12px; }
+    .card-c .summary { margin-top: 0; }
+
+    .card-c .taxonomy {
+      overflow: hidden;
+    }
+
+    .card-c .taxonomy-focus {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      background: color-mix(in srgb, var(--accent) 7%, white);
+    }
+
+    .card-c .taxonomy-focus small,
+    .card-c .taxonomy-trail small {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink-soft);
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .card-c .taxonomy-focus strong {
+      color: var(--accent);
+      font-size: 15px;
+    }
+
+    .card-c .taxonomy-role {
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: var(--gold);
+      background: var(--gold-soft);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .card-c .taxonomy-trail {
+      display: grid;
+      grid-template-columns: 68px minmax(0, 1fr);
+      gap: 9px;
+      padding: 11px 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .card-c .taxonomy-trail small {
+      margin: 1px 0 0;
+    }
+
+    .card-c .taxonomy-tags {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 11px 14px 13px;
+      border-top: 1px solid var(--line);
+    }
+  </style>
+</head>
+<body>
+  <main class="preview">
+    <header class="preview-head">
+      <span id="option-code">OPTION A</span>
+      <h1 id="option-title">分区清晰型</h1>
+      <p id="option-copy">把状态、身份、说明、归属与操作分成稳定阅读顺序。</p>
+    </header>
+
+    <article class="card card-a">
+      <div class="cover"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1404850/header.jpg" alt=""></div>
+      <div class="body">
+        <div class="topline">
+          <span class="seq">01</span>
+          <div class="status">
+            <span class="badge role-source">来源已确认</span>
+            <span class="badge">分类已确认</span>
+          </div>
+        </div>
+        <div class="identity">
+          <h2>幸运房东</h2>
+          <span class="en">Luck be a Landlord</span>
+        </div>
+        <p class="summary">“Slot改·数值型”品类原型的基石游戏、主要提炼来源与代表产品。</p>
+        <section class="taxonomy">
+          <div class="taxonomy-row">
+            <span class="taxonomy-label">归属路径</span>
+            <div class="path"><strong>Slot母体</strong><i>→</i><strong>Slot改·数值型</strong><i>→</i><strong>幸运房东</strong></div>
+          </div>
+          <div class="taxonomy-row">
+            <span class="taxonomy-label">分析标签</span>
+            <div class="tags"><span class="tag">装置类</span><span class="tag">老虎机</span><span class="tag">符号 RPB</span></div>
+          </div>
+        </section>
+        <div class="actions"><button class="primary">查看游戏资料</button><button>所属模型</button><a>Steam ↗</a></div>
+      </div>
+    </article>
+
+    <article class="card card-b">
+      <div class="cover"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1404850/header.jpg" alt=""></div>
+      <div class="body">
+        <div class="title-line">
+          <span class="seq">01</span>
+          <div>
+            <h2>幸运房东</h2>
+            <span class="en">Luck be a Landlord</span>
+            <div class="status">
+              <span class="badge role-source">来源已确认</span>
+              <span class="badge">分类已确认</span>
+            </div>
+          </div>
+        </div>
+        <p class="summary">“Slot改·数值型”品类原型的基石游戏、主要提炼来源与代表产品。</p>
+        <div class="classification-block taxonomy">
+          <small>三级分类身份</small>
+          <div class="hierarchy">
+            <div class="hierarchy-node"><small>机制母型</small><strong>Slot母体</strong></div>
+            <span class="hierarchy-arrow">→</span>
+            <div class="hierarchy-node"><small>品类原型</small><strong>Slot改·数值型</strong></div>
+            <span class="hierarchy-arrow">→</span>
+            <div class="hierarchy-node current"><small>游戏变体</small><strong>幸运房东</strong></div>
+          </div>
+          <div class="taxonomy-tags">
+            <span class="taxonomy-label">分析标签</span>
+            <div class="tags"><span class="tag">装置类</span><span class="tag">老虎机</span><span class="tag">符号 RPB</span></div>
+          </div>
+        </div>
+        <div class="actions"><button class="primary">查看游戏资料</button><button>所属模型</button><a>Steam ↗</a></div>
+      </div>
+    </article>
+
+    <article class="card card-c">
+      <div class="cover"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1404850/header.jpg" alt=""></div>
+      <div class="body">
+        <div class="record-head">
+          <div>
+            <h2>幸运房东</h2>
+            <span class="en">Luck be a Landlord</span>
+          </div>
+          <div class="record-side">
+            <span class="seq">01</span>
+            <span class="badge">分类已确认</span>
+          </div>
+        </div>
+        <div class="record-meta">
+          <div><small>品类角色</small><strong>基石游戏</strong></div>
+          <div><small>资料来源</small><strong>来源已确认</strong></div>
+        </div>
+        <p class="summary">“Slot改·数值型”品类原型的基石游戏、主要提炼来源与代表产品。</p>
+        <section class="taxonomy">
+          <div class="taxonomy-focus">
+            <div><small>当前品类身份</small><strong>Slot改·数值型</strong></div>
+            <span class="taxonomy-role">基石游戏</span>
+          </div>
+          <div class="taxonomy-trail">
+            <small>完整路径</small>
+            <div class="path"><strong>Slot母体</strong><i>→</i><strong>Slot改·数值型</strong><i>→</i><strong>幸运房东</strong></div>
+          </div>
+          <div class="taxonomy-tags">
+            <span class="taxonomy-label">分析标签</span>
+            <div class="tags"><span class="tag">装置类</span><span class="tag">老虎机</span><span class="tag">符号 RPB</span></div>
+          </div>
+        </section>
+        <div class="actions"><button class="primary">查看游戏资料</button><button>所属模型</button><a>Steam ↗</a></div>
+      </div>
+    </article>
+  </main>
+
+  <script>
+    const option = new URLSearchParams(location.search).get("option") || "a";
+    const copy = {
+      a: ["OPTION A", "标签化信息行", "明确区分归属路径与分析标签，最接近现有卡片但阅读层级更稳定。"],
+      b: ["OPTION B", "三级层级图", "把机制母型、品类原型和游戏变体做成一眼可读的关系图。"],
+      c: ["OPTION C", "品类身份摘要", "先突出当前所属品类，再补充完整路径与分析标签。"]
+    }[option] || ["OPTION A", "标签化信息行", "明确区分归属路径与分析标签，最接近现有卡片但阅读层级更稳定。"];
+    document.body.className = `option-${option}`;
+    document.querySelector("#option-code").textContent = copy[0];
+    document.querySelector("#option-title").textContent = copy[1];
+    document.querySelector("#option-copy").textContent = copy[2];
+  </script>
+</body>
+</html>

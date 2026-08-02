@@ -1,0 +1,498 @@
+{
+  "version": "gamalytic-2026-08-01",
+  "source": {
+    "name": "Gamalytic",
+    "page_url": "https://gamalytic.com/",
+    "api_url": "https://api.gamalytic.com/game/{steamId}",
+    "metric": "copiesSold",
+    "fetched_at": "2026-08-01T00:00:00.000Z",
+    "note": "统一采用 Gamalytic 的 Copies sold 估算。该指标表示直接在 Steam 购买的预估份数，不包含通过 Steam Key 激活的份数；公开页区间不是官方销量或统计置信区间。"
+  },
+  "items": [
+    {
+      "product_id": "product.luck-be-a-landlord",
+      "steam_app_id": 1404850,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 767600,
+      "units_lower": 474600,
+      "units_upper": 1000000,
+      "source_url": "https://gamalytic.com/game/1404850?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.lucky-mayor",
+      "steam_app_id": 2659970,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 7300,
+      "units_lower": 4800,
+      "units_upper": 9800,
+      "source_url": "https://gamalytic.com/game/2659970?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.slotbound-demo",
+      "steam_app_id": 4906570,
+      "status": "unavailable",
+      "metric": "gamalytic_copies_sold",
+      "source_url": "https://gamalytic.com/game/4906570?utm_source=SteamDB",
+      "reason": "gamalytic_record_unavailable"
+    },
+    {
+      "product_id": "product.balatro",
+      "steam_app_id": 2379780,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 6200000,
+      "units_lower": 4600000,
+      "units_upper": 7900000,
+      "source_url": "https://gamalytic.com/game/2379780?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.peglin",
+      "steam_app_id": 1296610,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 987800,
+      "units_lower": 722500,
+      "units_upper": 1200000,
+      "source_url": "https://gamalytic.com/game/1296610?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.ballionaire",
+      "steam_app_id": 2667120,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 359700,
+      "units_lower": 215900,
+      "units_upper": 503600,
+      "source_url": "https://gamalytic.com/game/2667120?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.dicey-dungeons",
+      "steam_app_id": 861540,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 793200,
+      "units_lower": 529100,
+      "units_upper": 1000000,
+      "source_url": "https://gamalytic.com/game/861540?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.slice-and-dice",
+      "steam_app_id": 1775490,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 127800,
+      "units_lower": 82700,
+      "units_upper": 172800,
+      "source_url": "https://gamalytic.com/game/1775490?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.astrea-six-sided-oracles",
+      "steam_app_id": 1755830,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 249900,
+      "units_lower": 160300,
+      "units_upper": 339500,
+      "source_url": "https://gamalytic.com/game/1755830?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.die-in-the-dungeon",
+      "steam_app_id": 2026820,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 188300,
+      "units_lower": 124700,
+      "units_upper": 251800,
+      "source_url": "https://gamalytic.com/game/2026820?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.aotenjo-infinite-hands",
+      "steam_app_id": 3066570,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 84800,
+      "units_lower": 55000,
+      "units_upper": 114700,
+      "source_url": "https://gamalytic.com/game/3066570?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.raccoin",
+      "steam_app_id": 3784030,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 755300,
+      "units_lower": 448900,
+      "units_upper": 1000000,
+      "source_url": "https://gamalytic.com/game/3784030?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.roulette-hero",
+      "steam_app_id": 3371510,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 21900,
+      "units_lower": 13700,
+      "units_upper": 30200,
+      "source_url": "https://gamalytic.com/game/3371510?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.bingo-betty",
+      "steam_app_id": 4045170,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 1,
+      "units_lower": 1,
+      "units_upper": 2,
+      "source_url": "https://gamalytic.com/game/4045170?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.spinera",
+      "steam_app_id": 3576520,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 2600,
+      "units_lower": 1400,
+      "units_upper": 3800,
+      "source_url": "https://gamalytic.com/game/3576520?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.spin-hero",
+      "steam_app_id": 2917350,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 70400,
+      "units_lower": 46200,
+      "units_upper": 94700,
+      "source_url": "https://gamalytic.com/game/2917350?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.cloverpit",
+      "steam_app_id": 3314790,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 1700000,
+      "units_lower": 1100000,
+      "units_upper": 2400000,
+      "source_url": "https://gamalytic.com/game/3314790?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.dice-player-one",
+      "steam_app_id": 2752720,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 21400,
+      "units_lower": 13500,
+      "units_upper": 29200,
+      "source_url": "https://gamalytic.com/game/2752720?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.coin-push-rpg",
+      "steam_app_id": 3036010,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 88600,
+      "units_lower": 53900,
+      "units_upper": 123200,
+      "source_url": "https://gamalytic.com/game/3036010?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.luckland",
+      "steam_app_id": 2516820,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 10300,
+      "units_lower": 6400,
+      "units_upper": 14100,
+      "source_url": "https://gamalytic.com/game/2516820?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.lucky-island",
+      "steam_app_id": 2195650,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 656,
+      "units_lower": 312,
+      "units_upper": 1000,
+      "source_url": "https://gamalytic.com/game/2195650?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.lucky-lord",
+      "steam_app_id": 3408410,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 4000,
+      "units_lower": 2600,
+      "units_upper": 5400,
+      "source_url": "https://gamalytic.com/game/3408410?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.lucky-hero",
+      "steam_app_id": 2404510,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 5200,
+      "units_lower": 3700,
+      "units_upper": 6700,
+      "source_url": "https://gamalytic.com/game/2404510?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.bingle-bingle",
+      "steam_app_id": 2789810,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 77900,
+      "units_lower": 48600,
+      "units_upper": 107100,
+      "source_url": "https://gamalytic.com/game/2789810?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.die-shou-wei-cheng",
+      "steam_app_id": 1863170,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 168,
+      "units_lower": 84,
+      "units_upper": 252,
+      "source_url": "https://gamalytic.com/game/1863170?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.crop-rotation",
+      "steam_app_id": 2348090,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 33200,
+      "units_lower": 21500,
+      "units_upper": 44900,
+      "source_url": "https://gamalytic.com/game/2348090?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.cat-god-ranch",
+      "steam_app_id": 2797340,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 224100,
+      "units_lower": 134700,
+      "units_upper": 313400,
+      "source_url": "https://gamalytic.com/game/2797340?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.lucky-hunter",
+      "steam_app_id": 2824310,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 28400,
+      "units_lower": 19000,
+      "units_upper": 37800,
+      "source_url": "https://gamalytic.com/game/2824310?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.insider-trading",
+      "steam_app_id": 3166810,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 73800,
+      "units_lower": 46000,
+      "units_upper": 101500,
+      "source_url": "https://gamalytic.com/game/3166810?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.vampire-crawlers",
+      "steam_app_id": 3265700,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 1200000,
+      "units_lower": 795300,
+      "units_upper": 1600000,
+      "source_url": "https://gamalytic.com/game/3265700?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.card-hog",
+      "steam_app_id": 1163740,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 13100,
+      "units_lower": 8200,
+      "units_upper": 18000,
+      "source_url": "https://gamalytic.com/game/1163740?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.dice-tribes-ambitions",
+      "steam_app_id": 1965800,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 4200,
+      "units_lower": 2600,
+      "units_upper": 5800,
+      "source_url": "https://gamalytic.com/game/1965800?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.right-and-down",
+      "steam_app_id": 2008050,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 5800,
+      "units_lower": 3600,
+      "units_upper": 8100,
+      "source_url": "https://gamalytic.com/game/2008050?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.dog-and-goblin",
+      "steam_app_id": 2666230,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 8600,
+      "units_lower": 6000,
+      "units_upper": 11300,
+      "source_url": "https://gamalytic.com/game/2666230?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.endgame-of-devil",
+      "steam_app_id": 2343600,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 70700,
+      "units_lower": 47000,
+      "units_upper": 94500,
+      "source_url": "https://gamalytic.com/game/2343600?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.runeborn",
+      "steam_app_id": 3073990,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 23500,
+      "units_lower": 15400,
+      "units_upper": 31600,
+      "source_url": "https://gamalytic.com/game/3073990?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.slots-and-daggers",
+      "steam_app_id": 3631290,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 291000,
+      "units_lower": 209200,
+      "units_upper": 372900,
+      "source_url": "https://gamalytic.com/game/3631290?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.rogue-slots",
+      "steam_app_id": 2462430,
+      "status": "unavailable",
+      "metric": "gamalytic_copies_sold",
+      "source_url": "https://gamalytic.com/game/2462430?utm_source=SteamDB",
+      "reason": "gamalytic_record_unavailable"
+    },
+    {
+      "product_id": "product.spinny-dungeon",
+      "steam_app_id": 2837790,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 4700,
+      "units_lower": 3000,
+      "units_upper": 6400,
+      "source_url": "https://gamalytic.com/game/2837790?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.slot-or-not",
+      "steam_app_id": 3496890,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 4700,
+      "units_lower": 3200,
+      "units_upper": 6300,
+      "source_url": "https://gamalytic.com/game/3496890?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.devils-due",
+      "steam_app_id": 3907520,
+      "status": "unavailable",
+      "metric": "gamalytic_copies_sold",
+      "source_url": "https://gamalytic.com/game/3907520?utm_source=SteamDB",
+      "reason": "gamalytic_record_unavailable"
+    },
+    {
+      "product_id": "product.peglotto-demo",
+      "steam_app_id": 4372270,
+      "status": "unavailable",
+      "metric": "gamalytic_copies_sold",
+      "source_url": "https://gamalytic.com/game/4372270?utm_source=SteamDB",
+      "reason": "gamalytic_record_unavailable"
+    },
+    {
+      "product_id": "product.spin-tactics-demo",
+      "steam_app_id": 3856990,
+      "status": "unavailable",
+      "metric": "gamalytic_copies_sold",
+      "source_url": "https://gamalytic.com/game/3856990?utm_source=SteamDB",
+      "reason": "gamalytic_record_unavailable"
+    },
+    {
+      "product_id": "product.lever-warrior-bow-and-magic",
+      "steam_app_id": 3343940,
+      "status": "estimated",
+      "estimate_method": "gamalytic_public_page",
+      "metric": "gamalytic_copies_sold",
+      "units_estimate": 825,
+      "units_lower": 459,
+      "units_upper": 1100,
+      "source_url": "https://gamalytic.com/game/3343940?utm_source=SteamDB"
+    },
+    {
+      "product_id": "product.hoptale-demo",
+      "steam_app_id": 4094560,
+      "status": "unavailable",
+      "metric": "gamalytic_copies_sold",
+      "source_url": "https://gamalytic.com/game/4094560?utm_source=SteamDB",
+      "reason": "gamalytic_record_unavailable"
+    },
+    {
+      "product_id": "product.re-spin-die-repeat-demo",
+      "steam_app_id": 3345680,
+      "status": "unavailable",
+      "metric": "gamalytic_copies_sold",
+      "source_url": "https://gamalytic.com/game/3345680?utm_source=SteamDB",
+      "reason": "gamalytic_record_unavailable"
+    }
+  ]
+}
