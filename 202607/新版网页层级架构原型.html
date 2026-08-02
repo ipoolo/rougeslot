@@ -1170,7 +1170,7 @@ button { color:inherit; }
       <div class="head-stats">
         <div class="head-stat"><strong id="statMothers">0</strong><span>机制母型</span></div>
         <div class="head-stat"><strong id="statPrototypes">0</strong><span>品类原型</span></div>
-        <div class="head-stat"><strong id="statVariants">0</strong><span>品类变体</span></div>
+        <div class="head-stat"><strong id="statVariants">0</strong><span>游戏变体</span></div>
         <div class="head-stat"><strong id="statProducts">0</strong><span>具体产品</span></div>
       </div>
     </div>
@@ -1214,7 +1214,7 @@ button { color:inherit; }
         <div class="level-head">
           <div class="level-title">
             <div class="level-index">3</div>
-            <div><h2 id="variantLevelTitle">品类变体</h2><p>查看所选品类原型下的直接变体</p></div>
+            <div><h2 id="variantLevelTitle">游戏变体</h2><p>查看所选品类原型下的直接变体</p></div>
           </div>
           <div class="level-count" id="variantCountLabel">共 0 种</div>
         </div>
@@ -1334,7 +1334,7 @@ var variants = [
     type:'variant',
     name:'幸运城市',
     prototypeId:'slot-number',
-    summary:'Slot 数值型下的首个品类变体；具体变化等待与《幸运房东》逐字段对照后确定。',
+    summary:'Slot 数值型下的首个游戏变体；具体变化等待与《幸运房东》逐字段对照后确定。',
     productIds:['lucky-city-product'],
     fingerprint:{
       Pool_Symbol:['inherit / 待确认','继承范围与变化等待拆解'],
@@ -1356,7 +1356,7 @@ var variants = [
 
 var products = [
   {id:'luck-be-a-landlord',name:'幸运房东',role:'品类原型提炼来源 / 代表产品',prototypeIds:['slot-number'],variantIds:[]},
-  {id:'lucky-city-product',name:'幸运城市',role:'品类变体对应产品',prototypeIds:['slot-number'],variantIds:['lucky-city']}
+  {id:'lucky-city-product',name:'幸运城市',role:'游戏变体对应产品',prototypeIds:['slot-number'],variantIds:['lucky-city']}
 ];
 
 var selectedMotherId = 'slot';
@@ -1398,19 +1398,19 @@ function motherCard(m){
   var productCount=productIdsForMother(m.id).length;
   return '<button class="entity-card mother '+(selectedMotherId===m.id?'active':'')+'" data-kind="mother" data-id="'+m.id+'" onclick="selectEntity(\'mother\',\''+m.id+'\')">'+
     '<div class="card-kicker">机制母型</div><h3>'+m.name+'</h3><p>'+m.summary+'</p>'+
-    '<div class="card-metrics"><span class="metric"><b>'+pCount+'</b>品类原型</span><span class="metric"><b>'+vCount+'</b>品类变体</span><span class="metric"><b>'+productCount+'</b>具体产品</span></div></button>';
+    '<div class="card-metrics"><span class="metric"><b>'+pCount+'</b>品类原型</span><span class="metric"><b>'+vCount+'</b>游戏变体</span><span class="metric"><b>'+productCount+'</b>具体产品</span></div></button>';
 }
 function prototypeCard(p){
   var reps=products.filter(function(x){return p.representativeProductIds.indexOf(x.id)>=0;});
   return '<button class="entity-card prototype '+(selectedPrototypeId===p.id?'active':'')+'" data-kind="prototype" data-id="'+p.id+'" onclick="selectEntity(\'prototype\',\''+p.id+'\')">'+
     '<div class="card-kicker">品类原型</div><h3>'+p.name+(p.nameStatus?'<span class="tentative">'+p.nameStatus+'</span>':'')+'</h3>'+
     '<div class="product-line"><span class="product-icon">◈</span><span>代表产品：'+reps.map(function(x){return x.name;}).join('、')+'</span></div>'+
-    '<p>'+p.summary+'</p><div class="card-metrics"><span class="metric"><b>'+variantsForPrototype(p.id).length+'</b>品类变体</span><span class="metric"><b>'+productsForEntity({type:'prototype',id:p.id}).length+'</b>归属产品</span></div></button>';
+    '<p>'+p.summary+'</p><div class="card-metrics"><span class="metric"><b>'+variantsForPrototype(p.id).length+'</b>游戏变体</span><span class="metric"><b>'+productsForEntity({type:'prototype',id:p.id}).length+'</b>归属产品</span></div></button>';
 }
 function variantCard(v){
   var ownProducts=productsForEntity({type:'variant',id:v.id});
   return '<button class="entity-card variant '+(selectedVariantId===v.id?'active':'')+'" data-kind="variant" data-id="'+v.id+'" onclick="selectEntity(\'variant\',\''+v.id+'\')">'+
-    '<div class="card-kicker">品类变体</div><h3>'+v.name+'</h3>'+
+    '<div class="card-kicker">游戏变体</div><h3>'+v.name+'</h3>'+
     '<div class="product-line"><span class="product-icon">◆</span><span>对应产品：'+ownProducts.map(function(x){return x.name;}).join('、')+'</span></div>'+
     '<p>'+v.summary+'</p><div class="card-metrics"><span class="metric"><b>3</b>待确认变化组</span></div></button>';
 }
@@ -1434,7 +1434,7 @@ function renderRails(){
   document.getElementById('prototypeCountLabel').textContent='共 '+pList.length+' 种';
   document.getElementById('variantCountLabel').textContent='共 '+vList.length+' 种';
   document.getElementById('prototypeLevelTitle').textContent=(currentMother?currentMother.name:'—')+' · 品类原型';
-  document.getElementById('variantLevelTitle').textContent=(currentPrototype?currentPrototype.name:'—')+' · 品类变体';
+  document.getElementById('variantLevelTitle').textContent=(currentPrototype?currentPrototype.name:'—')+' · 游戏变体';
 
   bindEntityCards();
   renderBreadcrumbs();
@@ -1447,7 +1447,7 @@ function entityData(entity){
 function entityTypeLabel(type){
   if(type==='mechanism') return 'MECHANISM ARCHETYPE · 机制母型';
   if(type==='prototype') return 'CATEGORY PROTOTYPE · 品类原型';
-  return 'CATEGORY VARIANT · 品类变体';
+  return 'CATEGORY VARIANT · 游戏变体';
 }
 function renderBreadcrumbs(){
   var m=byId(mothers,selectedMotherId);

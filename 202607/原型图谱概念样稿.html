@@ -959,7 +959,7 @@ body {
     <span class="stat-pill"><b>1</b>体验模型</span>
     <span class="stat-pill"><b>4</b>示意母型</span>
     <span class="stat-pill"><b>N</b>品类原型</span>
-    <span class="stat-pill"><b>N×M</b>品类变体</span>
+    <span class="stat-pill"><b>N×M</b>游戏变体</span>
   </div>
 </header>
 
@@ -992,7 +992,7 @@ body {
       <svg class="edge-layer" id="edgeLayer" aria-hidden="true"></svg>
       <div class="row-label label-mothers">MECHANISM MOTHERS · 机制母型</div>
       <div class="row-label label-prototypes">CATEGORY PROTOTYPES · 品类原型</div>
-      <div class="row-label label-variants">CATEGORY VARIANTS · 品类变体</div>
+      <div class="row-label label-variants">CATEGORY VARIANTS · 游戏变体</div>
 
       <div class="graph-row row-experience">
         <button class="proto-node experience active" data-node="experience" id="node-experience">
@@ -1035,16 +1035,16 @@ body {
 
       <div class="graph-row row-variants">
         <button class="proto-node variant" data-node="city" id="node-city">
-          <span class="node-badge">V-01</span><div class="node-type">品类变体</div><h3>幸运城市</h3><p>继承幸运房东型原型，改变语义与系统约束。</p>
+          <span class="node-badge">V-01</span><div class="node-type">游戏变体</div><h3>幸运城市</h3><p>继承幸运房东型原型，改变语义与系统约束。</p>
         </button>
         <button class="proto-node variant" data-node="hybridV" id="node-hybridV">
-          <span class="node-badge">V-02</span><div class="node-type">品类变体</div><h3>骰面工坊</h3><p>混合原型下继续固定 BD 与 Combo 规则。</p>
+          <span class="node-badge">V-02</span><div class="node-type">游戏变体</div><h3>骰面工坊</h3><p>混合原型下继续固定 BD 与 Combo 规则。</p>
         </button>
         <button class="proto-node variant empty-node" data-node="future" id="node-future">
-          <span class="node-badge">可继续分化</span><div class="node-type">品类变体</div><h3>新轮盘变体</h3><p>允许在原型下继续增加任意深度节点。</p>
+          <span class="node-badge">可继续分化</span><div class="node-type">游戏变体</div><h3>新轮盘变体</h3><p>允许在原型下继续增加任意深度节点。</p>
         </button>
         <button class="proto-node variant empty-node" data-node="future2" id="node-future2">
-          <span class="node-badge">可继续分化</span><div class="node-type">品类变体</div><h3>新物理变体</h3><p>继承母型先验，只记录自身差异。</p>
+          <span class="node-badge">可继续分化</span><div class="node-type">游戏变体</div><h3>新物理变体</h3><p>继承母型先验，只记录自身差异。</p>
         </button>
       </div>
     </div>
@@ -1145,23 +1145,23 @@ const nodeData = {
     diff:[['inherit','继承连续物理 Put'],['extend','碰撞对象成为可构筑内容'],['fix','Spin_Result 映射为战斗伤害']]
   },
   city: {
-    type:'CATEGORY VARIANT · 品类变体', name:'幸运城市', desc:'继承幸运房东型公式指纹，只记录城市化差异。',
+    type:'CATEGORY VARIANT · 游戏变体', name:'幸运城市', desc:'继承幸运房东型公式指纹，只记录城市化差异。',
     parents:['Slot','幸运房东型 Slot 构筑'],
     fp:{'Pool_Symbol':'城市设施 / 单位池','Random':'继承原型','Put':'继承自动槽位安置','Show_TP':'2D 城市网格','Combo':'城市功能邻接与产业链','BD':'选择设施并规划城市成长'},
     diff:[['inherit','Random 与 Put 不变'],['override','符号语义改为城市设施'],['extend','Combo 增加城市功能链']]
   },
   hybridV: {
-    type:'CATEGORY VARIANT · 品类变体', name:'骰面工坊', desc:'混合原型下继续固定更具体的玩法规则。',
+    type:'CATEGORY VARIANT · 游戏变体', name:'骰面工坊', desc:'混合原型下继续固定更具体的玩法规则。',
     parents:['Dice × Slot 构筑'],
     fp:{'Pool_Symbol':'工坊骰面池','Random':'继承骰面随机','Put':'自动进入生产槽位','Show_TP':'2D 工坊网格','Combo':'产线邻接 + 面值倍率','BD':'改造骰面与机器'},
     diff:[['inherit','保留双母型组合'],['fix','Combo 固定为产线邻接'],['extend','BD 增加骰面改造']]
   },
   future: {
-    type:'CATEGORY VARIANT · 品类变体', name:'新轮盘变体', desc:'占位节点，用于确认分支能够继续向下生长。',
+    type:'CATEGORY VARIANT · 游戏变体', name:'新轮盘变体', desc:'占位节点，用于确认分支能够继续向下生长。',
     parents:['轮盘战术原型'], fp:{'状态':'尚未定义','继承':'自动获得父级完整公式指纹'}, diff:[['open','等待未来设计']]
   },
   future2: {
-    type:'CATEGORY VARIANT · 品类变体', name:'新物理变体', desc:'占位节点，用于确认内容无需提前穷举。',
+    type:'CATEGORY VARIANT · 游戏变体', name:'新物理变体', desc:'占位节点，用于确认内容无需提前穷举。',
     parents:['弹珠构筑原型'], fp:{'状态':'尚未定义','继承':'自动获得父级完整公式指纹'}, diff:[['open','等待未来设计']]
   }
 };

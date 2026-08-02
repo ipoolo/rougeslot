@@ -55,14 +55,16 @@
       ],
       "formula_constraints": {
         "P_t": {
-          "operation": "default",
-          "constraint_label": "外层目标可选",
-          "summary": "Slot 机制母型本身不固定具体目标压力；具体游戏可以使用余额、分数目标、关卡期限或其他软硬目标包裹循环，也可以不启用明确的失败压力。",
-          "review_status": "pending",
-          "review_note": "已确认 P(t) 属于公式外层边界；Slot 层的具体默认范围仍需通过更多传统 Slot 案例校准。"
+          "operation": "override",
+          "constraint_label": "无独立P(t)",
+          "summary": "Slot 母体本身不包含独立的 P(t) 目标压力域；余额、分数目标、关卡期限或失败压力由下层品类原型与具体产品按需加入。",
+          "review_status": "confirmed",
+          "review_note": "已确认 Slot 母体无独立 P(t)；目标压力由下层品类原型与具体产品按需加入。",
+          "last_modified_at": "2026-07-30T06:03:32.568Z",
+          "confirmed_at": "2026-07-30T06:03:32.568Z"
         },
         "Pool_Symbol": {
-          "operation": "fix",
+          "operation": "override",
           "constraint_label": "固定符号池",
           "summary": "传统 Slot 的符号身份、数量或转轴条由游戏预先配置，玩家不能通过构筑改变 Pool_Symbol。",
           "review_status": "confirmed",
@@ -71,50 +73,75 @@
           "confirmed_at": "2026-07-26T11:33:54.416Z"
         },
         "Random": {
-          "operation": "restrict",
+          "operation": "override",
           "constraint_label": "从固定池随机抽取",
-          "summary": "只从预先配置的 Pool_Symbol 中，按游戏设定的概率规则生成本次 Spin 结果。"
+          "summary": "只从预先配置的 Pool_Symbol 中，按游戏设定的概率规则生成本次 Spin 结果。",
+          "review_status": "confirmed",
+          "review_note": "",
+          "last_modified_at": "2026-07-30T06:03:34.173Z",
+          "confirmed_at": "2026-07-30T06:03:34.173Z"
         },
         "Put": {
-          "operation": "fix",
+          "operation": "override",
           "constraint_label": "装置自动安置",
-          "summary": "传统 Slot 由装置自动完成转轴停止与符号落位，玩家不决定主要安置结果。"
+          "summary": "传统 Slot 由装置自动完成转轴停止与符号落位，玩家不决定主要安置结果。",
+          "review_status": "confirmed",
+          "review_note": "",
+          "last_modified_at": "2026-07-30T06:03:36.892Z",
+          "confirmed_at": "2026-07-30T06:03:36.892Z"
         },
         "Show_TP": {
-          "operation": "fix",
+          "operation": "override",
           "constraint_label": "2D 网格",
-          "summary": "固定使用 2D 离散网格承载符号位置、邻接关系与组合判定。"
+          "summary": "固定使用 2D 离散网格承载符号位置、邻接关系与组合判定。",
+          "review_status": "confirmed",
+          "review_note": "",
+          "last_modified_at": "2026-07-30T06:03:38.572Z",
+          "confirmed_at": "2026-07-30T06:03:38.572Z"
         },
         "C1": {
-          "operation": "default",
-          "constraint_label": "Slot 基础协同",
-          "summary": "使用同符号、支付线、连续符号、支付表和经典特殊符号角色等玩家可以快速理解的 Slot 先验协同。"
+          "operation": "override",
+          "constraint_label": "支付线、同符号、连续符号等 Slot 先验规则",
+          "summary": "使用同符号、支付线、连续符号、支付表和经典特殊符号角色等玩家可以快速理解的 Slot 先验协同。",
+          "review_status": "confirmed",
+          "review_note": "",
+          "last_modified_at": "2026-07-30T06:03:40.117Z",
+          "confirmed_at": "2026-07-30T06:03:40.117Z"
         },
         "C2": {
-          "operation": "disable",
-          "constraint_label": "无 C₂",
-          "summary": "传统 Slot 母型只要求存在可识别的 C₁，不默认要求在 C₁ 基础结果之后再加入独立的结果演绎层。",
-          "review_status": "pending",
+          "operation": "override",
+          "constraint_label": "无独立 C₂ 二次揭晓",
+          "summary": "传统 Slot 母体只要求存在可识别的 C₁，不默认在 C₁ 建立价值锚点后继续设置独立的 C₂ 二次揭晓过程。",
+          "review_status": "confirmed",
           "review_note": "",
-          "last_modified_at": "2026-07-24T23:32:45.797Z"
+          "last_modified_at": "2026-07-30T06:03:42.718Z",
+          "confirmed_at": "2026-07-30T06:03:42.718Z"
         },
         "N": {
-          "operation": "disable",
+          "operation": "override",
           "constraint_label": "不适用 · 无 BD",
-          "summary": "传统 Slot 不进入构筑决策，因此不存在用于触发 BD 的 N 次 Spin 周期。"
+          "summary": "传统 Slot 不进入构筑决策，因此不存在用于触发 BD 的 N 次 Spin 周期。",
+          "review_status": "confirmed",
+          "review_note": "",
+          "last_modified_at": "2026-07-30T06:03:44.056Z",
+          "confirmed_at": "2026-07-30T06:03:44.056Z"
         },
         "BD": {
-          "operation": "disable",
+          "operation": "override",
           "constraint_label": "无构筑决策",
-          "summary": "传统 Slot 不提供基于周期结果修改后续公式参数的构筑决策。"
+          "summary": "传统 Slot 不提供基于周期结果修改后续公式参数的构筑决策。",
+          "review_status": "confirmed",
+          "review_note": "",
+          "last_modified_at": "2026-07-30T06:03:45.585Z",
+          "confirmed_at": "2026-07-30T06:03:45.585Z"
         }
       },
       "open_axes": [
-        "P(t) 是否启用硬目标、期限、失败代价与递增曲线",
+        "下层品类是否加入 P(t) 硬目标、期限、失败代价与递增曲线",
         "2D 网格的尺寸、形状与可用区域",
         "固定符号池与随机概率的具体配置",
         "支付线、相同符号、连续符号、支付表与经典特殊符号等 C1 规则",
-        "下层品类是否在 Slot 的 C1 基础结果之后新增独立 C2 结果演绎",
+        "下层品类是否在 Slot 的 C1 基础结果之后新增独立 C2 二次揭晓",
         "下层品类是否在 Slot 装置先验上额外加入构筑系统"
       ]
     }
