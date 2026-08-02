@@ -1418,7 +1418,7 @@
   border-radius: 14px;
   display: grid;
   gap: .7rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: 1rem;
   padding: .9rem;
 }
@@ -1457,6 +1457,21 @@
 .ecosystem-niche-map-legend .enemy-fixed { background: #fff0cd; border-color: #c77a19; }
 .ecosystem-niche-map-legend .enemy-shared { background: #ffe8e1; border-color: #ca5c47; }
 .ecosystem-niche-map-legend .enemy-pending { background: #eef0f3; border-color: #8c96a4; }
+.ecosystem-niche-map-legend .legend-sales-tier {
+  background: #fff;
+  border-color: #aeb8c8;
+  border-radius: 999px;
+  color: #33435c;
+  font-weight: 800;
+}
+.ecosystem-niche-map-legend .legend-sales-tier.tier-unknown { color: #7d8797; }
+.ecosystem-niche-map-legend .legend-sales-tier.tier-lt-10k { border-color: #9aa8bc; }
+.ecosystem-niche-map-legend .legend-sales-tier.tier-gte-10k { border-color: #7d98c2; color: #2f5389; }
+.ecosystem-niche-map-legend .legend-sales-tier.tier-gte-50k { border-color: #5d83bf; color: #245da8; }
+.ecosystem-niche-map-legend .legend-sales-tier.tier-gte-100k { border-color: #3c70c2; color: #175bb9; }
+.ecosystem-niche-map-legend .legend-sales-tier.tier-gte-200k { border-color: #315cff; color: #174bd0; }
+.ecosystem-niche-map-legend .legend-sales-tier.tier-gte-500k { border-color: #315cff; color: #173f9b; }
+.ecosystem-niche-map-legend .legend-sales-tier.tier-gte-1000k { background: #1e3152; border-color: #1e3152; color: #fff; }
 .ecosystem-map-filter-status {
   align-items: center;
   background: rgba(255, 255, 255, .68);

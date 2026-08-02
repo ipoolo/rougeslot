@@ -158,7 +158,8 @@ const state = {
   ecosystemMapFilters: {
     topology: null,
     color: null,
-    secondary_badge: null
+    secondary_badge: null,
+    sales_tier: null
   },
   selectedEcosystemBdMode: "all",
   expandedEcosystemBranches: ["numeric-check"],
@@ -829,6 +830,11 @@ async function loadData() {
   );
   loaded.variantById = new Map(loaded.variants.map((item) => [item.id, item])
   );
+  loaded.variantByProductId = new Map(
+    loaded.variants.flatMap((variant) =>
+      (variant.product_ids ?? []).map((productId) => [productId, variant])
+    )
+  );
   loaded.productById = new Map(loaded.products.map((item) => [item.id, item]));
   loaded.salesEstimateByProductId = new Map(
     loaded.salesEstimates.map((item) => [item.product_id, item])
@@ -961,13 +967,24 @@ function salesEstimateCopy(product) {
 }
 
 const ECOSYSTEM_SALES_TIERS = [
-  { min: 1000000, label: "100万+", rank: 7 },
-  { min: 500000, label: "50万+", rank: 6 },
-  { min: 200000, label: "20万+", rank: 5 },
-  { min: 100000, label: "10万+", rank: 4 },
-  { min: 50000, label: "5万+", rank: 3 },
-  { min: 10000, label: "1万+", rank: 2 },
-  { min: 0, label: "1万-", rank: 1 }
+  { min: 1000000, key: "gte-1000k", label: "100万+", rank: 7 },
+  { min: 500000, key: "gte-500k", label: "50万+", rank: 6 },
+  { min: 200000, key: "gte-200k", label: "20万+", rank: 5 },
+  { min: 100000, key: "gte-100k", label: "10万+", rank: 4 },
+  { min: 50000, key: "gte-50k", label: "5万+", rank: 3 },
+  { min: 10000, key: "gte-10k", label: "1万+", rank: 2 },
+  { min: 0, key: "lt-10k", label: "1万-", rank: 1 }
+];
+
+const ECOSYSTEM_SALES_FILTER_OPTIONS = [
+  ["unknown", "未知"],
+  ["lt-10k", "1万-"],
+  ["gte-10k", "1万+"],
+  ["gte-50k", "5万+"],
+  ["gte-100k", "10万+"],
+  ["gte-200k", "20万+"],
+  ["gte-500k", "50万+"],
+  ["gte-1000k", "100万+"]
 ];
 
 function ecosystemSalesSnapshot(product) {
@@ -988,6 +1005,7 @@ function ecosystemSalesSnapshot(product) {
       displayEstimate: "未知",
       calculationValue: 0,
       tierRank: 0,
+      tierKey: "unknown",
       nodeLabel: "销量 未知"
     };
   }
@@ -1004,6 +1022,7 @@ function ecosystemSalesSnapshot(product) {
     displayEstimate: `约 ${compactChineseCount(salesEstimate)}`,
     calculationValue: salesEstimate,
     tierRank: tier.rank,
+    tierKey: tier.key,
     nodeLabel: `销量 ${tier.label}`
   };
 }
@@ -2137,31 +2156,39 @@ function ecosystemPositionStatus(position) {
 }
 
 function ecosystemFieldState(config, product, field) {
-  const position = ecosystemPosition(config, product.id);
-  if (product.id === config.cornerstone_product_id) {
-    return { label: "基准", className: "baseline" };
+  const variant = state.data.variantByProductId.get(product.id);
+  const entry = variant ? rawFingerprint(variant)[field] : null;
+  if (!entry || entry.review_status !== "confirmed") {
+    return { label: "待确认", className: "pending" };
   }
-  if (!position) return { label: "待定位", className: "pending" };
-  if ((position.changed_fields ?? []).includes(field)) {
-    return { label: "变化", className: "changed" };
+  if (entry.operation === "inherit") {
+    return { label: "同原型", className: "inherited" };
   }
-  return { label: "同基石", className: "inherited" };
+  return { label: "相对原型变化", className: "changed" };
 }
 
 function ecosystemFieldComparison(config, selectedProduct, field) {
-  const cornerstone = state.data.productById.get(config.cornerstone_product_id);
-  const cornerstoneObservation = state.data.productObservationById.get(cornerstone?.id);
-  const selectedObservation = state.data.productObservationById.get(selectedProduct?.id);
+  const prototype = state.data.prototypeById.get(config.prototype_id);
+  const variant = state.data.variantByProductId.get(selectedProduct?.id);
+  const prototypeEntry = prototype ? rawFingerprint(prototype)[field] : null;
+  const variantEntry = variant ? rawFingerprint(variant)[field] : null;
   const fieldState = ecosystemFieldState(config, selectedProduct, field);
   return {
     field,
     state: fieldState,
-    before: cornerstoneObservation?.fields?.[field]?.value
-      ?? rawFingerprint(state.data.prototypeById.get(config.prototype_id))?.[field]?.constraint_label
-      ?? "基石定义待补",
-    after: selectedObservation?.fields?.[field]?.value ?? "产品字段待补充",
-    reviewStatus: selectedObservation?.fields?.[field]?.review_status ?? "draft"
+    before: prototypeEntry?.summary
+      ?? prototypeEntry?.constraint_label
+      ?? "品类原型字段待补充",
+    after: variantEntry?.summary
+      ?? variantEntry?.constraint_label
+      ?? "游戏变体字段待补充",
+    reviewStatus: variantEntry?.review_status ?? "draft"
   };
+}
+
+function ecosystemPrototypeChangedFields(prototype) {
+  const fingerprint = rawFingerprint(prototype);
+  return FORMULA_FIELDS.filter((field) => fingerprint[field]?.operation !== "inherit");
 }
 
 function selectEcosystemProduct(productId, field = null) {
@@ -2169,7 +2196,7 @@ function selectEcosystemProduct(productId, field = null) {
   state.selectedEcosystemProductId = productId;
   state.selectedEcosystemField = field && FORMULA_FIELDS.includes(field) ? field : null;
   state.selectedEcosystemMapPreset = `product:${productId}`;
-  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, sales_tier: null };
   state.selectedEcosystemBdMode = "all";
   renderEcosystemWorkbench();
 }
@@ -2186,7 +2213,7 @@ function selectEcosystemMapPreset(presetKey) {
   state.selectedEcosystemMapPreset = config.niche_map.presets[presetKey] || isRisk || isBdMode
     ? presetKey
     : "all";
-  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, sales_tier: null };
   state.selectedEcosystemBdMode = isBdMode ? bdModeId : "all";
   if (config.niche_map.presets[presetKey]?.kind === "BRANCH") {
     state.expandedEcosystemBranches = [
@@ -2210,14 +2237,14 @@ function selectEcosystemBdMode(modeId) {
       : `bd:${state.selectedEcosystemBdMode}`;
   }
   state.selectedEcosystemField = null;
-  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, sales_tier: null };
   renderEcosystemWorkbench();
 }
 
 function selectEcosystemMapFilter(dimension, value) {
   const config = state.data.ecosystemByPrototypeId.get(state.selectedEcosystemPrototypeId);
   if (!config?.niche_map) return;
-  const encoding = ecosystemNodeEncodings(config)[dimension];
+  const encoding = ecosystemMapFilterDimensions(config)[dimension];
   const validValues = new Set((encoding?.legend ?? Object.entries(encoding?.labels ?? {}))
     .map(([key]) => key));
   if (!encoding || !validValues.has(value)) return;
@@ -2227,6 +2254,7 @@ function selectEcosystemMapFilter(dimension, value) {
     topology: currentFilters.topology ?? null,
     color: currentFilters.color ?? null,
     secondary_badge: currentFilters.secondary_badge ?? null,
+    sales_tier: currentFilters.sales_tier ?? null,
     [dimension]: currentFilters[dimension] === value ? null : value
   };
   state.selectedEcosystemMapPreset = "all";
@@ -2236,7 +2264,7 @@ function selectEcosystemMapFilter(dimension, value) {
 }
 
 function clearEcosystemMapFilters() {
-  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, sales_tier: null };
   state.selectedEcosystemMapPreset = "all";
   renderEcosystemWorkbench();
 }
@@ -2299,7 +2327,7 @@ function renderEcosystemPrototypeList() {
           ?? null;
         state.selectedEcosystemField = null;
         state.selectedEcosystemMapPreset = "all";
-        state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null };
+        state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, sales_tier: null };
         state.selectedEcosystemBdMode = "all";
         state.expandedEcosystemBranches = config?.four_layer_architecture?.branch_ids?.slice(0, 1) ?? [];
         renderEcosystem();
@@ -2308,24 +2336,17 @@ function renderEcosystemPrototypeList() {
 }
 
 function ecosystemDeltaCards(config, selectedProduct, focusedField = null) {
-  const cornerstone = state.data.productById.get(config.cornerstone_product_id);
-  const position = ecosystemPosition(config, selectedProduct.id);
-  const changedFields = position?.changed_fields ?? [];
+  const changedFields = FORMULA_FIELDS.filter((field) =>
+    ecosystemFieldState(config, selectedProduct, field).className === "changed"
+  );
   const fields = focusedField
     ? [focusedField]
     : changedFields;
 
-  if (selectedProduct.id === cornerstone?.id && !focusedField) {
-    return `
-      <div class="ecosystem-delta-empty">
-        这是品类基石产品。点击上方公式字段，可以查看它作为比较基准的完整定义。
-      </div>
-    `;
-  }
   if (!fields.length) {
     return `
       <div class="ecosystem-delta-empty">
-        这款产品已经归入本品类，但尚未人工确认相对基石修改的公式字段。
+        这款游戏当前没有已确认的相对品类原型变化；点击上方字段可逐项查看继承关系。
       </div>
     `;
   }
@@ -2346,8 +2367,8 @@ function ecosystemDeltaCards(config, selectedProduct, focusedField = null) {
           </em>
         </header>
         <div class="ecosystem-delta-comparison">
-          <small><b>基石</b>${escapeHtml(comparison.before)}</small>
-          <small><b>当前</b>${escapeHtml(comparison.after)}</small>
+          <small><b>品类原型</b>${escapeHtml(comparison.before)}</small>
+          <small><b>当前游戏</b>${escapeHtml(comparison.after)}</small>
         </div>
       </article>
     `;
@@ -2356,7 +2377,7 @@ function ecosystemDeltaCards(config, selectedProduct, focusedField = null) {
 
 function ecosystemBasisMarkup(config, prototype, mechanism, cornerstone) {
   const basis = config.analysis_basis ?? {};
-  const differentiationFields = basis.differentiation_fields ?? [];
+  const differentiationFields = ecosystemPrototypeChangedFields(prototype);
   return `
     <section class="ecosystem-baseline" aria-labelledby="ecosystem-baseline-title">
       <div class="ecosystem-panel-head">
@@ -2370,19 +2391,19 @@ function ecosystemBasisMarkup(config, prototype, mechanism, cornerstone) {
       </div>
       <div class="ecosystem-basis-grid">
         <article>
-          <small>继承边界</small>
-          <strong>品类共同保留什么</strong>
+          <small>品类公式边界</small>
+          <strong>相对机制母体保留与改动什么</strong>
           <p>${escapeHtml(basis.inheritance_summary ?? prototype.summary)}</p>
         </article>
         <article class="is-cornerstone">
-          <small>比较基准</small>
+          <small>基石游戏 · 案例锚点</small>
           <strong>${escapeHtml(cornerstone?.name ?? "基石待确认")}</strong>
-          <p>${escapeHtml(basis.cornerstone_role ?? "基石产品负责提供公式比较基准。")}</p>
+          <p>${escapeHtml(basis.cornerstone_role ?? "基石游戏用于展示品类公式的一种具体实现；品类定义以正式公式字段为准。")}</p>
         </article>
         <article>
-          <small>主要分化字段</small>
+          <small>相对母体改动字段</small>
           <strong>${differentiationFields.map((field) => escapeHtml(formulaDisplayKey(field))).join(" · ") || "待确认"}</strong>
-          <p>横向表格优先强调这些字段，但仍保留完整九字段作为共同底座。</p>
+          <p>从品类原型的正式公式字段自动生成；下方逐项比较具体游戏与品类原型。</p>
         </article>
         <article>
           <small>坐标推导</small>
@@ -2414,15 +2435,15 @@ function ecosystemMatrixMarkup(config, products) {
       <div class="ecosystem-panel-head">
         <div>
           <span class="ecosystem-kicker">03 · 横向公式差异表</span>
-          <h3 id="ecosystem-comparison-title">只强调相对基石发生变化的字段</h3>
+          <h3 id="ecosystem-comparison-title">只强调相对品类原型发生变化的字段</h3>
         </div>
         <p>点击游戏或字段，地图和右侧解释同步聚焦</p>
       </div>
       <div class="ecosystem-matrix-legend" aria-label="公式差异图例">
-        <span class="baseline">基准</span>
-        <span class="changed">相对基石变化</span>
-        <span class="inherited">同基石</span>
-        <span class="pending">待定位</span>
+        <span class="baseline">基石游戏 · 案例锚点</span>
+        <span class="changed">相对原型变化</span>
+        <span class="inherited">同原型</span>
+        <span class="pending">待确认</span>
       </div>
       <div class="ecosystem-matrix-scroll">
         <table class="ecosystem-matrix">
@@ -2607,15 +2628,34 @@ function ecosystemNodeEncodings(config) {
   };
 }
 
+function ecosystemMapFilterDimensions(config) {
+  return {
+    ...ecosystemNodeEncodings(config),
+    sales_tier: {
+      title: "销量档位",
+      labels: Object.fromEntries(ECOSYSTEM_SALES_FILTER_OPTIONS),
+      legend: ECOSYSTEM_SALES_FILTER_OPTIONS,
+      source: "sales"
+    }
+  };
+}
+
 function ecosystemNicheMapFocus(config) {
   const nicheMap = config.niche_map;
-  const nodeEncodings = ecosystemNodeEncodings(config);
+  const filterDimensions = ecosystemMapFilterDimensions(config);
   const activeFilters = Object.entries(state.ecosystemMapFilters ?? {})
-    .filter(([dimension, value]) => value && nodeEncodings[dimension]);
+    .filter(([dimension, value]) => value && filterDimensions[dimension]);
 
   if (activeFilters.length) {
     const matchingPositions = config.positions.filter((position) => activeFilters.every(
-      ([dimension, value]) => position[nodeEncodings[dimension].position_key] === value
+      ([dimension, value]) => {
+        const filter = filterDimensions[dimension];
+        if (filter.source === "sales") {
+          const product = state.data.productById.get(position.product_id);
+          return product && ecosystemSalesSnapshot(product).tierKey === value;
+        }
+        return position[filter.position_key] === value;
+      }
     ));
     const productIds = new Set(matchingPositions.map((position) => position.product_id));
     const edgeIds = new Set();
@@ -2634,7 +2674,7 @@ function ecosystemNicheMapFocus(config) {
         .filter((branchId) => nicheMap.zones.some((zone) => zone.id === branchId))
     );
     const filterLabels = activeFilters.map(([dimension, value]) => {
-      const encoding = nodeEncodings[dimension];
+      const encoding = filterDimensions[dimension];
       return {
         dimension,
         value,
@@ -2652,7 +2692,8 @@ function ecosystemNicheMapFocus(config) {
       fields: filterLabels.map((item) => ({
         topology: "Show_TP",
         color: "C2",
-        secondary_badge: "C1"
+        secondary_badge: "C1",
+        sales_tier: "销量估算"
       })[item.dimension]).filter(Boolean),
       productIds,
       edgeIds,
@@ -2833,9 +2874,11 @@ function ecosystemNicheMapMarkup(config, prototype, products, positionedProducts
   const topologyEncoding = nodeEncodings.topology;
   const colorEncoding = nodeEncodings.color;
   const secondaryEncoding = nodeEncodings.secondary_badge;
+  const salesEncoding = ecosystemMapFilterDimensions(config).sales_tier;
   const topologyLegend = topologyEncoding.legend ?? Object.entries(topologyEncoding.labels ?? {});
   const colorLegend = colorEncoding.legend ?? Object.entries(colorEncoding.labels ?? {});
   const secondaryLegend = secondaryEncoding.legend ?? Object.entries(secondaryEncoding.labels ?? {});
+  const salesLegend = salesEncoding.legend;
   const activeFilterMap = new Map((focus.activeFilters ?? []).map((item) => [item.dimension, item.value]));
   const coordinateById = new Map();
   nicheMap.anchors.forEach((anchor) => coordinateById.set(`anchor:${anchor.id}`, anchor));
@@ -3048,6 +3091,13 @@ function ecosystemNicheMapMarkup(config, prototype, products, positionedProducts
           ${secondaryLegend.map(([value, label]) => {
             const active = activeFilterMap.get("secondary_badge") === value;
             return `<button type="button" class="legend-badge badge-c1-${escapeHtml(ecosystemClassToken(value))} ${active ? "is-active" : ""}" data-ecosystem-map-filter-dimension="secondary_badge" data-ecosystem-map-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
+          }).join("")}
+        </div>
+        <div class="ecosystem-sales-tier-filters" role="group" aria-label="按 ${escapeHtml(salesEncoding.title)} 筛选">
+          <b>${escapeHtml(salesEncoding.title)}</b>
+          ${salesLegend.map(([value, label]) => {
+            const active = activeFilterMap.get("sales_tier") === value;
+            return `<button type="button" class="legend-sales-tier tier-${escapeHtml(ecosystemClassToken(value))} ${active ? "is-active" : ""}" data-ecosystem-map-filter-dimension="sales_tier" data-ecosystem-map-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
           }).join("")}
         </div>
         <div class="ecosystem-map-filter-status" aria-live="polite">
