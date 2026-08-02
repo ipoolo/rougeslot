@@ -6,15 +6,15 @@
       "cornerstone_product_id": "product.slotbound-demo",
       "summary": "以《Slotbound Demo》为基石，比较保留 Slot 核心 C₁ 的产品如何在 C₂ 中形成战斗二次揭晓。",
       "analysis_basis": {
-        "inheritance_summary": "Random、自动 Put、Show_TP 与 Slot C₁ 保持可读，主要变化集中在 C₂、P(t)、N 与 BD。",
-        "cornerstone_role": "《Slotbound Demo》用多兵种、位置和战斗时序沿 Slot 结果进行有悬念的二次揭晓，作为品类比较基准。",
+        "inheritance_summary": "继承 Slot 母体的固定 Pool_Symbol、从固定池抽取的 Random、自动 Put、2D Show_TP，以及支付线、同符号、连续符号等 C₁ 先验规则。",
+        "cornerstone_role": "《Slotbound Demo》是该品类的基石案例，用于展示“保留 Slot C₁，在 C₂ 中把既有结果沿战斗过程进行二次揭晓”的具体实现；品类定义以正式公式字段为准。",
         "differentiation_fields": [
           "C2",
           "P_t",
           "N",
           "BD"
         ],
-        "axis_rationale": "横轴观察 C₂ 是否产生结果悬念，纵轴观察战斗表现从轻量触发到多单位时序表演的密度。"
+        "axis_rationale": "横轴由 C₂ 与 P(t) 推导，观察结果悬念如何延续；纵轴由 Show_TP 与 C₂ 推导，观察战斗表现从轻量触发到多单位时序演出的密度。"
       },
       "axes": {
         "x": {
@@ -152,14 +152,15 @@
       "cornerstone_product_id": "product.cloverpit",
       "summary": "以《四叶草深渊》为基石，比较保留 Slot 核心 C₁ 的产品如何用倍率、连锁、资源转译和目标压力放大数值结果。",
       "analysis_basis": {
-        "inheritance_summary": "Random、自动 Put、2D Slot 网格与 Slot C₁ 保持可读，主要变化集中在数值型 C₂、P(t) 与 BD。",
-        "cornerstone_role": "《四叶草深渊》用护身符和多层叠乘形成爆炸数值，同时以债务检查维持强压力，作为品类比较基准。",
+        "inheritance_summary": "继承 Slot 母体的固定 Pool_Symbol、从固定池抽取的 Random、自动 Put、2D Show_TP，以及支付线、同符号、连续符号等 C₁ 先验规则。",
+        "cornerstone_role": "《四叶草深渊》是该品类的基石案例，用于展示“保留 Slot C₁，通过倍率、连击和规则修饰形成数值二次揭晓”的具体实现；品类定义以正式公式字段为准。",
         "differentiation_fields": [
           "C2",
           "P_t",
+          "N",
           "BD"
         ],
-        "axis_rationale": "横轴观察 C₂ 从资源直译到爆炸叠乘的放大程度，纵轴观察数值结果与外层失败压力的耦合强度。"
+        "axis_rationale": "横轴由 C₂ 与 BD 推导，观察从资源直译到爆炸叠乘的放大程度；纵轴由 P(t) 与 N 推导，观察数值结果与外层失败压力的耦合强度。"
       },
       "axes": {
         "x": {
@@ -404,20 +405,17 @@
       "cornerstone_product_id": "product.endgame-of-devil",
       "summary": "以 11 个游戏变体为证据，观察 Slot改·战斗型如何沿单 Spin 玩家介入强度与战斗生存复杂度形成不同生态位。",
       "analysis_basis": {
-        "inheritance_summary": "共同核心是保留 Spin 的随机揭晓认知，以 BD 控制当前局内 Pool_Symbol 的类型与数量，并在大 Show_TP、大有效池与长进度需要时显式引入 Symbol_Quality 级别控制，再由自有 C₁ 形成战斗基础结果、C₂ 完成战斗转译；品质加权 Random、Put、Show_TP、战斗关系与资源压力均可继续分化。",
-        "cornerstone_role": "《魔王终局》展示了品类基线：直接 Random、自动 Put、2D 盘面、敌方符号参与 C₁，并以只有我方攻击的数值检测完成 C₂。",
+        "inheritance_summary": "保留 Slot 的 Spin 装置认知、Random 从 Pool_Symbol 产生结果的职责、自动 Put 与 2D Show_TP；不再要求固定符号池和传统支付线 C₁。",
+        "cornerstone_role": "《魔王终局》是该品类的基石案例，用于展示“可构筑战斗符号池、自有符号协同，以及战斗二次揭晓”的具体实现；品类定义以正式公式字段为准。",
         "differentiation_fields": [
           "P_t",
           "Pool_Symbol",
-          "Random",
-          "Put",
-          "Show_TP",
           "C1",
           "C2",
           "N",
           "BD"
         ],
-        "axis_rationale": "横轴回答一次 Spin 中玩家需要介入多少阶段，纵轴回答一次结果需要理解多少战斗与生存状态；两轴共同解释操作连续性与认知复杂度的主要分化。"
+        "axis_rationale": "横轴由 Random、Put 与 C₂ 推导，回答一次 Spin 中玩家需要介入多少阶段；纵轴由 Pool_Symbol、C₂、P(t) 与 BD 推导，回答一次结果需要理解多少战斗与生存状态。"
       },
       "axes": {
         "x": {
@@ -1033,17 +1031,17 @@
       "cornerstone_product_id": "product.luck-be-a-landlord",
       "summary": "以《幸运房东》为基石，比较同属“Slot改·数值型”的产品怎样修改公式字段，并用空间拓扑和协同叠层观察当前生态位。",
       "analysis_basis": {
-        "inheritance_summary": "保留 Spin、Random 与自动 Put 的装置认知，把 Pool_Symbol 改写为由 BD 控制当前局内类型与数量的可构筑动态池，并在大 Show_TP、大有效池与长进度需要时显式引入 Symbol_Quality 级别控制；Show_TP、C₁ 与数值二次揭晓仍可继续分化。",
-        "cornerstone_role": "《幸运房东》以符号组成、可用品质维度、2D Slot 网格、邻接 C₁ 和道具修饰建立品类基准；稀有度梯度不证明 BD 已改变高稀有度 Random 概率，品质加权 Random 仍不上升为原型默认能力。",
+        "inheritance_summary": "保留 Slot 的 Spin 装置认知、Random 从 Pool_Symbol 产生结果的职责、自动 Put 与 2D Show_TP；不再要求固定符号池和传统支付线 C₁。",
+        "cornerstone_role": "《幸运房东》是该品类的基石案例，用于展示“可构筑数值符号池、自有符号协同，以及数值二次揭晓”的具体实现；品类定义以正式公式字段为准。",
         "differentiation_fields": [
+          "P_t",
           "Pool_Symbol",
-          "Put",
-          "Show_TP",
           "C1",
           "C2",
+          "N",
           "BD"
         ],
-        "axis_rationale": "横轴统一观察 C₂ 从直接产出到跨系统资源网络的二次揭晓深度，纵轴观察数值协同对空间位置的依赖。"
+        "axis_rationale": "横轴由 Pool_Symbol、C₁、C₂ 与 BD 推导，观察从直接产出到跨系统资源网络的二次揭晓深度；纵轴由 Put、Show_TP 与 C₁ 推导，观察数值协同对空间位置的依赖。"
       },
       "axes": {
         "x": {
