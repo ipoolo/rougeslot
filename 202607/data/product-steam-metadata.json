@@ -1,11 +1,11 @@
 {
-  "version": "20260801.1",
+  "version": "20260803.1",
   "source": {
     "name": "Steam",
     "details_endpoint": "https://store.steampowered.com/api/appdetails",
     "reviews_endpoint": "https://store.steampowered.com/appreviews/{appid}",
     "review_scope": "all_languages_all_purchase_types",
-    "fetched_at": "2026-07-31T19:15:15.125Z"
+    "fetched_at": "2026-08-02T21:20:30.394Z"
   },
   "summary": {
     "total_products": 46,
@@ -24,7 +24,10 @@
       "release_date_text": "Jan 6, 2023",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 11503
+      "total_positive": 10725,
+      "total_negative": 779,
+      "total_reviews": 11504,
+      "positive_percentage": 93
     },
     {
       "product_id": "product.lucky-mayor",
@@ -37,7 +40,10 @@
       "release_date_text": "Nov 28, 2023",
       "review_score": 6,
       "review_label": "多半好评",
-      "total_reviews": 101
+      "total_positive": 80,
+      "total_negative": 21,
+      "total_reviews": 101,
+      "positive_percentage": 79
     },
     {
       "product_id": "product.slotbound-demo",
@@ -50,7 +56,10 @@
       "release_date_text": "Jul 10, 2026",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 340
+      "total_positive": 284,
+      "total_negative": 70,
+      "total_reviews": 354,
+      "positive_percentage": 80
     },
     {
       "product_id": "product.balatro",
@@ -63,7 +72,10 @@
       "release_date_text": "Feb 20, 2024",
       "review_score": 9,
       "review_label": "好评如潮",
-      "total_reviews": 195874
+      "total_positive": 191804,
+      "total_negative": 4223,
+      "total_reviews": 196027,
+      "positive_percentage": 98
     },
     {
       "product_id": "product.peglin",
@@ -76,7 +88,10 @@
       "release_date_text": "Aug 27, 2024",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 17562
+      "total_positive": 14707,
+      "total_negative": 2860,
+      "total_reviews": 17567,
+      "positive_percentage": 84
     },
     {
       "product_id": "product.ballionaire",
@@ -89,7 +104,10 @@
       "release_date_text": "Dec 10, 2024",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 2576
+      "total_positive": 2205,
+      "total_negative": 371,
+      "total_reviews": 2576,
+      "positive_percentage": 86
     },
     {
       "product_id": "product.dicey-dungeons",
@@ -102,7 +120,10 @@
       "release_date_text": "Aug 13, 2019",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 11744
+      "total_positive": 10471,
+      "total_negative": 1270,
+      "total_reviews": 11741,
+      "positive_percentage": 89
     },
     {
       "product_id": "product.slice-and-dice",
@@ -115,7 +136,10 @@
       "release_date_text": "Mar 20, 2024",
       "review_score": 9,
       "review_label": "好评如潮",
-      "total_reviews": 2546
+      "total_positive": 2470,
+      "total_negative": 78,
+      "total_reviews": 2548,
+      "positive_percentage": 97
     },
     {
       "product_id": "product.astrea-six-sided-oracles",
@@ -128,7 +152,10 @@
       "release_date_text": "Sep 21, 2023",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 4494
+      "total_positive": 4123,
+      "total_negative": 374,
+      "total_reviews": 4497,
+      "positive_percentage": 92
     },
     {
       "product_id": "product.die-in-the-dungeon",
@@ -141,7 +168,10 @@
       "release_date_text": "May 1, 2026",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 3421
+      "total_positive": 3155,
+      "total_negative": 272,
+      "total_reviews": 3427,
+      "positive_percentage": 92
     },
     {
       "product_id": "product.aotenjo-infinite-hands",
@@ -154,7 +184,10 @@
       "release_date_text": "Jan 19, 2025",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 1078
+      "total_positive": 950,
+      "total_negative": 128,
+      "total_reviews": 1078,
+      "positive_percentage": 88
     },
     {
       "product_id": "product.raccoin",
@@ -167,7 +200,10 @@
       "release_date_text": "Mar 31, 2026",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 4399
+      "total_positive": 3654,
+      "total_negative": 764,
+      "total_reviews": 4418,
+      "positive_percentage": 83
     },
     {
       "product_id": "product.roulette-hero",
@@ -180,7 +216,10 @@
       "release_date_text": "Oct 23, 2025",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 317
+      "total_positive": 299,
+      "total_negative": 18,
+      "total_reviews": 317,
+      "positive_percentage": 94
     },
     {
       "product_id": "product.bingo-betty",
@@ -193,7 +232,10 @@
       "release_date_text": "Jul 30, 2026",
       "review_score": 0,
       "review_label": "暂无用户评测",
-      "total_reviews": 1
+      "total_positive": 7,
+      "total_negative": 0,
+      "total_reviews": 7,
+      "positive_percentage": 100
     },
     {
       "product_id": "product.spinera",
@@ -206,7 +248,10 @@
       "release_date_text": "Apr 24, 2026",
       "review_score": 6,
       "review_label": "多半好评",
-      "total_reviews": 132
+      "total_positive": 103,
+      "total_negative": 30,
+      "total_reviews": 133,
+      "positive_percentage": 77
     },
     {
       "product_id": "product.spin-hero",
@@ -219,7 +264,10 @@
       "release_date_text": "Oct 8, 2024",
       "review_score": 6,
       "review_label": "多半好评",
-      "total_reviews": 1088
+      "total_positive": 782,
+      "total_negative": 303,
+      "total_reviews": 1085,
+      "positive_percentage": 72
     },
     {
       "product_id": "product.cloverpit",
@@ -232,7 +280,10 @@
       "release_date_text": "Sep 26, 2025",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 25272
+      "total_positive": 22820,
+      "total_negative": 2477,
+      "total_reviews": 25297,
+      "positive_percentage": 90
     },
     {
       "product_id": "product.dice-player-one",
@@ -245,7 +296,10 @@
       "release_date_text": "Sep 12, 2024",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 525
+      "total_positive": 481,
+      "total_negative": 44,
+      "total_reviews": 525,
+      "positive_percentage": 92
     },
     {
       "product_id": "product.coin-push-rpg",
@@ -258,7 +312,10 @@
       "release_date_text": "May 22, 2025",
       "review_score": 6,
       "review_label": "多半好评",
-      "total_reviews": 757
+      "total_positive": 585,
+      "total_negative": 172,
+      "total_reviews": 757,
+      "positive_percentage": 77
     },
     {
       "product_id": "product.luckland",
@@ -271,7 +328,10 @@
       "release_date_text": "Aug 26, 2023",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 457
+      "total_positive": 435,
+      "total_negative": 22,
+      "total_reviews": 457,
+      "positive_percentage": 95
     },
     {
       "product_id": "product.lucky-island",
@@ -284,7 +344,10 @@
       "release_date_text": "May 23, 2024",
       "review_score": 5,
       "review_label": "褒贬不一",
-      "total_reviews": 16
+      "total_positive": 11,
+      "total_negative": 5,
+      "total_reviews": 16,
+      "positive_percentage": 69
     },
     {
       "product_id": "product.lucky-lord",
@@ -297,7 +360,10 @@
       "release_date_text": "May 30, 2025",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 111
+      "total_positive": 92,
+      "total_negative": 19,
+      "total_reviews": 111,
+      "positive_percentage": 83
     },
     {
       "product_id": "product.lucky-hero",
@@ -310,7 +376,10 @@
       "release_date_text": "Nov 16, 2023",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 112
+      "total_positive": 94,
+      "total_negative": 18,
+      "total_reviews": 112,
+      "positive_percentage": 84
     },
     {
       "product_id": "product.bingle-bingle",
@@ -323,7 +392,10 @@
       "release_date_text": "Jun 22, 2026",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 675
+      "total_positive": 556,
+      "total_negative": 120,
+      "total_reviews": 676,
+      "positive_percentage": 82
     },
     {
       "product_id": "product.die-shou-wei-cheng",
@@ -336,7 +408,10 @@
       "release_date_text": "Jan 21, 2022",
       "review_score": 0,
       "review_label": "暂无用户评测",
-      "total_reviews": 8
+      "total_positive": 5,
+      "total_negative": 3,
+      "total_reviews": 8,
+      "positive_percentage": 63
     },
     {
       "product_id": "product.crop-rotation",
@@ -349,7 +424,10 @@
       "release_date_text": "Sep 15, 2023",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 559
+      "total_positive": 523,
+      "total_negative": 36,
+      "total_reviews": 559,
+      "positive_percentage": 94
     },
     {
       "product_id": "product.cat-god-ranch",
@@ -362,7 +440,10 @@
       "release_date_text": "Sep 12, 2024",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 2190
+      "total_positive": 2045,
+      "total_negative": 145,
+      "total_reviews": 2190,
+      "positive_percentage": 93
     },
     {
       "product_id": "product.lucky-hunter",
@@ -375,7 +456,10 @@
       "release_date_text": "Nov 4, 2024",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 456
+      "total_positive": 412,
+      "total_negative": 44,
+      "total_reviews": 456,
+      "positive_percentage": 90
     },
     {
       "product_id": "product.insider-trading",
@@ -388,7 +472,10 @@
       "release_date_text": "Feb 18, 2026",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 629
+      "total_positive": 506,
+      "total_negative": 123,
+      "total_reviews": 629,
+      "positive_percentage": 80
     },
     {
       "product_id": "product.vampire-crawlers",
@@ -401,7 +488,10 @@
       "release_date_text": "Apr 21, 2026",
       "review_score": 9,
       "review_label": "好评如潮",
-      "total_reviews": 18492
+      "total_positive": 17828,
+      "total_negative": 697,
+      "total_reviews": 18525,
+      "positive_percentage": 96
     },
     {
       "product_id": "product.card-hog",
@@ -414,7 +504,10 @@
       "release_date_text": "Dec 4, 2023",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 552
+      "total_positive": 519,
+      "total_negative": 33,
+      "total_reviews": 552,
+      "positive_percentage": 94
     },
     {
       "product_id": "product.dice-tribes-ambitions",
@@ -427,7 +520,10 @@
       "release_date_text": "Jun 15, 2022",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 128
+      "total_positive": 124,
+      "total_negative": 4,
+      "total_reviews": 128,
+      "positive_percentage": 97
     },
     {
       "product_id": "product.right-and-down",
@@ -440,7 +536,10 @@
       "release_date_text": "Oct 18, 2022",
       "review_score": 6,
       "review_label": "多半好评",
-      "total_reviews": 229
+      "total_positive": 180,
+      "total_negative": 49,
+      "total_reviews": 229,
+      "positive_percentage": 79
     },
     {
       "product_id": "product.dog-and-goblin",
@@ -453,7 +552,10 @@
       "release_date_text": "Nov 14, 2024",
       "review_score": 6,
       "review_label": "多半好评",
-      "total_reviews": 171
+      "total_positive": 134,
+      "total_negative": 37,
+      "total_reviews": 171,
+      "positive_percentage": 78
     },
     {
       "product_id": "product.endgame-of-devil",
@@ -466,7 +568,10 @@
       "release_date_text": "Apr 8, 2023",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 1034
+      "total_positive": 917,
+      "total_negative": 117,
+      "total_reviews": 1034,
+      "positive_percentage": 89
     },
     {
       "product_id": "product.runeborn",
@@ -479,7 +584,10 @@
       "release_date_text": "Mar 10, 2026",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 307
+      "total_positive": 252,
+      "total_negative": 57,
+      "total_reviews": 309,
+      "positive_percentage": 82
     },
     {
       "product_id": "product.slots-and-daggers",
@@ -492,7 +600,10 @@
       "release_date_text": "Oct 24, 2025",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 7394
+      "total_positive": 6976,
+      "total_negative": 428,
+      "total_reviews": 7404,
+      "positive_percentage": 94
     },
     {
       "product_id": "product.rogue-slots",
@@ -505,7 +616,10 @@
       "release_date_text": "Dec 25, 2025",
       "review_score": 5,
       "review_label": "褒贬不一",
-      "total_reviews": 56
+      "total_positive": 36,
+      "total_negative": 20,
+      "total_reviews": 56,
+      "positive_percentage": 64
     },
     {
       "product_id": "product.spinny-dungeon",
@@ -518,7 +632,10 @@
       "release_date_text": "Apr 6, 2026",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 85
+      "total_positive": 79,
+      "total_negative": 7,
+      "total_reviews": 86,
+      "positive_percentage": 92
     },
     {
       "product_id": "product.slot-or-not",
@@ -531,7 +648,10 @@
       "release_date_text": "May 25, 2026",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 155
+      "total_positive": 142,
+      "total_negative": 14,
+      "total_reviews": 156,
+      "positive_percentage": 91
     },
     {
       "product_id": "product.devils-due",
@@ -544,7 +664,10 @@
       "release_date_text": "Jul 29, 2026",
       "review_score": 0,
       "review_label": "暂无用户评测",
-      "total_reviews": 2
+      "total_positive": 1,
+      "total_negative": 2,
+      "total_reviews": 3,
+      "positive_percentage": 33
     },
     {
       "product_id": "product.peglotto-demo",
@@ -557,7 +680,10 @@
       "release_date_text": "Feb 20, 2026",
       "review_score": 7,
       "review_label": "好评",
-      "total_reviews": 15
+      "total_positive": 14,
+      "total_negative": 1,
+      "total_reviews": 15,
+      "positive_percentage": 93
     },
     {
       "product_id": "product.spin-tactics-demo",
@@ -570,7 +696,10 @@
       "release_date_text": "Coming soon",
       "review_score": 0,
       "review_label": "暂无用户评测",
-      "total_reviews": 0
+      "total_positive": 0,
+      "total_negative": 0,
+      "total_reviews": 0,
+      "positive_percentage": null
     },
     {
       "product_id": "product.lever-warrior-bow-and-magic",
@@ -583,7 +712,10 @@
       "release_date_text": "Jul 15, 2025",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 58
+      "total_positive": 51,
+      "total_negative": 7,
+      "total_reviews": 58,
+      "positive_percentage": 88
     },
     {
       "product_id": "product.hoptale-demo",
@@ -596,7 +728,10 @@
       "release_date_text": "Nov 9, 2025",
       "review_score": 8,
       "review_label": "特别好评",
-      "total_reviews": 66
+      "total_positive": 65,
+      "total_negative": 1,
+      "total_reviews": 66,
+      "positive_percentage": 98
     },
     {
       "product_id": "product.re-spin-die-repeat-demo",
@@ -609,7 +744,10 @@
       "release_date_text": "Q4 2026",
       "review_score": 0,
       "review_label": "暂无用户评测",
-      "total_reviews": 0
+      "total_positive": 0,
+      "total_negative": 0,
+      "total_reviews": 0,
+      "positive_percentage": null
     }
   ]
 }

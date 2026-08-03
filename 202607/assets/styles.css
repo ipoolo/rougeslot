@@ -9893,6 +9893,157 @@ footer {
   }
 }
 
+/* Major numbered sections: shared collapse control across all five tabs. */
+.major-collapsible-section {
+  position: relative;
+}
+
+.major-section-toggle-bar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  margin: 0 0 24px;
+}
+
+.major-section-toggle-label {
+  min-width: 0;
+}
+
+.major-section-toggle-label .eyebrow,
+.major-section-toggle-label .ecosystem-kicker,
+.major-section-toggle-label > span {
+  display: block;
+  margin: 0;
+  color: var(--blue);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.major-section-toggle {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 86px;
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  font-size: 7px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 160ms ease, opacity 160ms ease;
+}
+
+.major-section-toggle:hover,
+.major-section-toggle:focus-visible {
+  color: var(--blue);
+  opacity: 0.72;
+}
+
+.major-section-toggle:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--blue) 55%, transparent);
+  outline-offset: -7px;
+}
+
+.major-section-toggle i {
+  width: 4px;
+  height: 4px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg) translateY(-1px);
+  transform-origin: center;
+  transition: transform 160ms ease;
+}
+
+.major-section-toggle.is-collapsed i {
+  transform: rotate(-135deg) translate(-1px, -1px);
+}
+
+.major-section-content {
+  display: contents;
+}
+
+.major-section-content[hidden] {
+  display: none !important;
+}
+
+.major-collapsible-section.is-major-collapsed {
+  min-height: 0 !important;
+}
+
+.major-collapsible-section.is-major-collapsed > .major-section-toggle-bar {
+  margin-bottom: 0;
+}
+
+.analysis-page .major-section-toggle-label .eyebrow,
+.analysis-page .major-section-toggle-label .ecosystem-kicker,
+.analysis-page .major-section-toggle-label > span {
+  color: #8aa8ff;
+}
+
+.analysis-page .major-section-toggle {
+  border-color: transparent;
+  background: transparent;
+  color: #dbe5f8;
+}
+
+.analysis-page .major-section-toggle:hover,
+.analysis-page .major-section-toggle:focus-visible {
+  color: #fff;
+}
+
+.atlas-major-section + .atlas-major-section {
+  margin-top: 84px;
+}
+
+.ecosystem-major-intro + .ecosystem-prototype-picker {
+  margin-top: 48px;
+}
+
+.ecosystem-workbench .major-collapsible-section + .major-collapsible-section {
+  margin-top: 28px;
+}
+
+@media (max-width: 760px) {
+  .major-section-toggle-bar {
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .major-section-toggle {
+    min-width: 74px;
+    min-height: 36px;
+    padding-inline: 12px;
+    font-size: 6px;
+  }
+
+  .major-section-toggle-label .eyebrow,
+  .major-section-toggle-label .ecosystem-kicker,
+  .major-section-toggle-label > span {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  .atlas-major-section + .atlas-major-section {
+    margin-top: 56px;
+  }
+}
+
 @media (max-width: 480px) {
   .main-nav {
     width: 100%;

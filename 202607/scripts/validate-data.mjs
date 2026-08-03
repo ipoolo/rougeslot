@@ -180,6 +180,20 @@ for (const metadata of data.steamMetadata) {
     if (!Number.isInteger(metadata.total_reviews) || metadata.total_reviews < 0) {
       errors.push(`Steam 评价数量无效：${metadata.product_id}`);
     }
+    if (!Number.isInteger(metadata.total_positive) || metadata.total_positive < 0) {
+      errors.push(`Steam 好评数量无效：${metadata.product_id}`);
+    }
+    if (!Number.isInteger(metadata.total_negative) || metadata.total_negative < 0) {
+      errors.push(`Steam 差评数量无效：${metadata.product_id}`);
+    }
+    if (
+      metadata.positive_percentage !== null
+      && (!Number.isInteger(metadata.positive_percentage)
+        || metadata.positive_percentage < 0
+        || metadata.positive_percentage > 100)
+    ) {
+      errors.push(`Steam 好评比例无效：${metadata.product_id}`);
+    }
     if (!metadata.release_date_iso && !metadata.release_date_text) {
       errors.push(`Steam 上市时间缺失：${metadata.product_id}`);
     }

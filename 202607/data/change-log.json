@@ -2,6 +2,98 @@
   "version": "202607-draft.1",
   "items": [
     {
+      "id": "change.20260803070753879.23ptai",
+      "timestamp": "2026-08-03T07:07:53.878Z",
+      "action": "confirm",
+      "node_id": "variant.custom-ms46plmn-clrp8",
+      "node_name": "狗与哥布林",
+      "node_type": "category_variant",
+      "field": "C1",
+      "before": {
+        "operation": "extend",
+        "constraint_label": "扩展：方向与前后排协同 + 移动我方符号",
+        "summary": "继承：由棋子类型、邻接、阈值、阵营、羁绊或阵容关系产生基础结果。\n扩展：依据我方单位的方向与前后排位置关系形成基础战斗布局；固定敌人不作为符号参与 C₁ 协同计算。\n扩展 2：移动我方符号",
+        "review_status": "confirmed",
+        "review_note": "",
+        "last_modified_at": "2026-08-03T07:07:53.844Z",
+        "evidence_images": [
+          {
+            "id": "evidence-1785486582294-0-589x8",
+            "url": "./assets/uploads/formula-fields/variant.custom-ms46plmn-clrp8-C1-1785486582293-0-x7yk3r.png",
+            "name": "image.png",
+            "caption": "",
+            "created_at": "2026-07-31T08:29:42.291Z"
+          }
+        ],
+        "confirmed_at": "2026-08-03T07:07:53.844Z"
+      },
+      "after": {
+        "operation": "extend",
+        "constraint_label": "扩展：方向与前后排协同 + 移动我方符号",
+        "summary": "继承：由棋子类型、邻接、阈值、阵营、羁绊或阵容关系产生基础结果。\n扩展：依据我方单位的方向与前后排位置关系形成基础战斗布局；固定敌人不作为符号参与 C₁ 协同计算。\n扩展 2：移动我方符号",
+        "review_status": "confirmed",
+        "review_note": "",
+        "last_modified_at": "2026-08-03T07:07:53.878Z",
+        "evidence_images": [
+          {
+            "id": "evidence-1785486582294-0-589x8",
+            "url": "./assets/uploads/formula-fields/variant.custom-ms46plmn-clrp8-C1-1785486582293-0-x7yk3r.png",
+            "name": "image.png",
+            "caption": "",
+            "created_at": "2026-07-31T08:29:42.291Z"
+          }
+        ],
+        "confirmed_at": "2026-08-03T07:07:53.878Z"
+      },
+      "note": ""
+    },
+    {
+      "id": "change.20260803070753849.bbb48m",
+      "timestamp": "2026-08-03T07:07:53.844Z",
+      "action": "update",
+      "node_id": "variant.custom-ms46plmn-clrp8",
+      "node_name": "狗与哥布林",
+      "node_type": "category_variant",
+      "field": "C1",
+      "before": {
+        "operation": "extend",
+        "constraint_label": "扩展：方向与前后排协同",
+        "summary": "继承：由棋子类型、邻接、阈值、阵营、羁绊或阵容关系产生基础结果。\n扩展：依据我方单位的方向与前后排位置关系形成基础战斗布局；固定敌人不作为符号参与 C₁ 协同计算。",
+        "review_status": "confirmed",
+        "review_note": "",
+        "last_modified_at": "2026-07-31T08:46:45.035Z",
+        "evidence_images": [
+          {
+            "id": "evidence-1785486582294-0-589x8",
+            "url": "./assets/uploads/formula-fields/variant.custom-ms46plmn-clrp8-C1-1785486582293-0-x7yk3r.png",
+            "name": "image.png",
+            "caption": "",
+            "created_at": "2026-07-31T08:29:42.291Z"
+          }
+        ],
+        "confirmed_at": "2026-07-31T08:46:45.035Z"
+      },
+      "after": {
+        "operation": "extend",
+        "constraint_label": "扩展：方向与前后排协同 + 移动我方符号",
+        "summary": "继承：由棋子类型、邻接、阈值、阵营、羁绊或阵容关系产生基础结果。\n扩展：依据我方单位的方向与前后排位置关系形成基础战斗布局；固定敌人不作为符号参与 C₁ 协同计算。\n扩展 2：移动我方符号",
+        "review_status": "confirmed",
+        "review_note": "",
+        "last_modified_at": "2026-08-03T07:07:53.844Z",
+        "evidence_images": [
+          {
+            "id": "evidence-1785486582294-0-589x8",
+            "url": "./assets/uploads/formula-fields/variant.custom-ms46plmn-clrp8-C1-1785486582293-0-x7yk3r.png",
+            "name": "image.png",
+            "caption": "",
+            "created_at": "2026-07-31T08:29:42.291Z"
+          }
+        ],
+        "confirmed_at": "2026-08-03T07:07:53.844Z"
+      },
+      "note": ""
+    },
+    {
       "id": "change.20260731231703397.7d009v",
       "timestamp": "2026-07-31T23:17:03.396Z",
       "action": "confirm",

@@ -70,6 +70,18 @@ async function fetchMetadata(product) {
     const reviewScore = Number.isInteger(reviews?.review_score)
       ? reviews.review_score
       : 0;
+    const totalPositive = Number.isInteger(reviews?.total_positive)
+      ? reviews.total_positive
+      : 0;
+    const totalNegative = Number.isInteger(reviews?.total_negative)
+      ? reviews.total_negative
+      : 0;
+    const totalReviews = Number.isFinite(reviews?.total_reviews)
+      ? reviews.total_reviews
+      : totalPositive + totalNegative;
+    const positivePercentage = totalReviews > 0
+      ? Math.round((totalPositive / totalReviews) * 100)
+      : null;
     const isDemo = details?.type === "demo"
       || /\bdemo\b/i.test(`${product.name ?? ""} ${product.name_en ?? ""} ${details?.name ?? ""}`);
 
@@ -84,9 +96,10 @@ async function fetchMetadata(product) {
       release_date_text: details?.release_date?.date || null,
       review_score: reviewScore,
       review_label: reviewLabels[reviewScore] ?? "暂无用户评测",
-      total_reviews: Number.isFinite(reviews?.total_reviews)
-        ? reviews.total_reviews
-        : 0
+      total_positive: totalPositive,
+      total_negative: totalNegative,
+      total_reviews: totalReviews,
+      positive_percentage: positivePercentage
     };
   } catch (error) {
     return {
@@ -113,7 +126,7 @@ for (let index = 0; index < products.length; index += concurrency) {
 
 const available = items.filter((item) => item.status === "available").length;
 const document = {
-  version: "20260801.1",
+  version: "20260803.1",
   source: {
     name: "Steam",
     details_endpoint: "https://store.steampowered.com/api/appdetails",

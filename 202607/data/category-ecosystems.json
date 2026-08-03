@@ -469,6 +469,7 @@
             "width": 40,
             "height": 32,
             "tone": "amber",
+            "label_placement": "bottom-right",
             "description": "操作较轻，C₂ 主要回答本次造成多少伤害。"
           },
           {
@@ -602,8 +603,8 @@
           "boundary": {
             "kind": "BOUNDARY",
             "label": "风险总览",
-            "title": "四类边界风险需要分别观察，不能合并为一个复杂度结论",
-            "summary": "操作过载、认知复杂度、峰值稀释与原型偏离拥有不同触发条件、证据字段和应对方式。",
+            "title": "三类边界风险需要分别观察，不能合并为一个复杂度结论",
+            "summary": "操作过载、认知复杂度与峰值稀释拥有不同触发条件、证据字段和应对方式。",
             "boundary": "风险案例不是坏游戏标签，也不代表产品已经越界；它们用于标记需要继续验证的结构组合。",
             "products": ["product.lucky-hero", "product.slot-or-not", "product.spinny-dungeon", "product.lucky-hunter", "product.slots-and-daggers", "product.lever-warrior-bow-and-magic"],
             "fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "C1", "C2", "P_t"]
@@ -611,7 +612,7 @@
         }
       },
       "four_layer_architecture": {
-        "version": "20260801.1",
+        "version": "20260802.1",
         "core_preset_id": "core",
         "branch_ids": [
           "numeric-check",
@@ -655,17 +656,6 @@
             "branch_ids": ["manual-control", "payline"],
             "product_ids": ["product.slot-or-not", "product.slots-and-daggers"],
             "fields": ["Random", "Put", "C1", "C2"]
-          },
-          {
-            "id": "prototype-drift",
-            "label": "原型偏离",
-            "title": "单 Spin 决策成为主体，Spin 随机揭晓不再是体验中心",
-            "trigger": "高介入与轻战斗组合没有产生足够结果价值，或操作、资源与策略层持续侵入最小爽环。",
-            "consequence": "产品可能从 Slot改·战斗型滑向逐步策略或资源管理玩法，原型的双峰节奏不再成立。",
-            "mitigation": "持续检查 CORE：Spin 随机揭晓、可构筑 Pool_Symbol、自有 C₁ 与承接 C₁ 的 C₂；若核心不再成立，应重新分类。",
-            "branch_ids": ["manual-control", "resource-survival"],
-            "product_ids": ["product.lucky-hero", "product.slot-or-not"],
-            "fields": ["Pool_Symbol", "Random", "Put", "C1", "C2", "BD"]
           }
         ]
       },

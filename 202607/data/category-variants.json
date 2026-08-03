@@ -39,10 +39,10 @@
           "summary": "继承 Slot Random，每次 Spin 从预设符号池中随机产生本次 3×3 盘面的单位或符号结果。",
           "review_status": "confirmed"
         },
-      "Put": {
-        "operation": "extend",
-        "constraint_label": "扩展 额外转动与位置交换",
-        "summary": "继承自动 Put：装置把本次 Spin 结果自动写入 3×3 Slot 盘面，玩家不决定主要落位。扩展：BD 可以提供额外转动与盘面位置互换能力；按当前公式责任，两者都属于 Put 阶段的结果写入与位置调整，Random 仍只负责从 Pool_Symbol 生成 SingleSpin_Symbol。",
+        "Put": {
+          "operation": "extend",
+          "constraint_label": "扩展 额外转动与位置交换",
+          "summary": "继承自动 Put：装置把本次 Spin 结果自动写入 3×3 Slot 盘面，玩家不决定主要落位。扩展：BD 可以提供额外转动与盘面位置互换能力；按当前公式责任，两者都属于 Put 阶段的结果写入与位置调整，Random 仍只负责从 Pool_Symbol 生成 SingleSpin_Symbol。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-30T06:54:08.470Z",
@@ -86,9 +86,9 @@
         }
       },
       "inheritance_summary": {
-      "inherited_fields": 5,
-      "changed_fields": 4,
-      "note": "Pool_Symbol、Put、C₂ 与 BD 发生扩展；Random 仍仅负责从 Pool_Symbol 生成 SingleSpin_Symbol，额外转动与位置交换归入 Put。"
+        "inherited_fields": 5,
+        "changed_fields": 4,
+        "note": "Pool_Symbol、Put、C₂ 与 BD 发生扩展；Random 仍仅负责从 Pool_Symbol 生成 SingleSpin_Symbol，额外转动与位置交换归入 Put。"
       },
       "updated_at": "2026-07-30T06:54:08.470Z"
     },
@@ -173,9 +173,9 @@
         }
       },
       "inheritance_summary": {
-      "inherited_fields": 8,
-      "changed_fields": 1,
-      "note": "Pool_Symbol 扩展为固定符号类型集合内的概率养成；其余八个字段继承原型。"
+        "inherited_fields": 8,
+        "changed_fields": 1,
+        "note": "Pool_Symbol 扩展为固定符号类型集合内的概率养成；其余八个字段继承原型。"
       },
       "updated_at": "2026-07-30T06:54:08.470Z"
     },
@@ -900,11 +900,11 @@
         },
         "C1": {
           "operation": "extend",
-          "constraint_label": "扩展：方向与前后排协同",
-          "summary": "继承：由棋子类型、邻接、阈值、阵营、羁绊或阵容关系产生基础结果。\n扩展：依据我方单位的方向与前后排位置关系形成基础战斗布局；固定敌人不作为符号参与 C₁ 协同计算。",
+          "constraint_label": "扩展：方向与前后排协同 + 移动我方符号",
+          "summary": "继承：由棋子类型、邻接、阈值、阵营、羁绊或阵容关系产生基础结果。\n扩展：依据我方单位的方向与前后排位置关系形成基础战斗布局；固定敌人不作为符号参与 C₁ 协同计算。\n扩展 2：移动我方符号",
           "review_status": "confirmed",
           "review_note": "",
-          "last_modified_at": "2026-07-31T08:46:45.035Z",
+          "last_modified_at": "2026-08-03T07:07:53.878Z",
           "evidence_images": [
             {
               "id": "evidence-1785486582294-0-589x8",
@@ -914,7 +914,7 @@
               "created_at": "2026-07-31T08:29:42.291Z"
             }
           ],
-          "confirmed_at": "2026-07-31T08:46:45.035Z"
+          "confirmed_at": "2026-08-03T07:07:53.878Z"
         },
         "C2": {
           "operation": "extend",
@@ -948,9 +948,9 @@
         }
       },
       "inheritance_summary": {
-      "inherited_fields": 5,
-      "changed_fields": 4,
-      "note": "Pool_Symbol、Put、C₂ 与 BD 扩展；C₂ 保留分数×倍率与位置增益，确定性资源分配、科技与经营规划归入 BD。"
+        "inherited_fields": 5,
+        "changed_fields": 4,
+        "note": "Pool_Symbol、Put、C₂ 与 BD 扩展；C₂ 保留分数×倍率与位置增益，确定性资源分配、科技与经营规划归入 BD。"
       },
       "created_at": "2026-07-28T04:57:32.351Z",
       "updated_at": "2026-07-31T06:39:58.176Z"
@@ -1024,10 +1024,10 @@
           "last_modified_at": "2026-07-31T06:04:12.455Z",
           "confirmed_at": "2026-07-31T06:04:12.455Z"
         },
-      "C2": {
-        "operation": "extend",
-        "constraint_label": "扩展 分数×倍率·盘面位置增益",
-        "summary": "继承沿 C₁ 结果展开的数值二次揭晓；扩展类似小丑牌的分数×倍率与盘面位置增益，逐步兑现本次 C₁ 已建立的分数结果。Spin 也可产出后续经营资源，但确定性的资源分配、科技发展与经营规划不属于 C₂。",
+        "C2": {
+          "operation": "extend",
+          "constraint_label": "扩展 分数×倍率·盘面位置增益",
+          "summary": "继承沿 C₁ 结果展开的数值二次揭晓；扩展类似小丑牌的分数×倍率与盘面位置增益，逐步兑现本次 C₁ 已建立的分数结果。Spin 也可产出后续经营资源，但确定性的资源分配、科技发展与经营规划不属于 C₂。",
           "review_status": "confirmed",
           "review_note": "C2 部分比较明显的有问题\n1.引入了更复杂的资源线，稀释了C1“中大奖的概念”\n2.解耦了BD 与Spin 的关系，绑到了资源上，增加了认知复杂度\n3.C2 阶段在不主动操作的情况下并没有带来多巴胺二峰。\n\n双峰多巴胺游戏，应该限制玩家的决策复杂度（决策数与决策复杂度），从而保持连续的 少量操作 + 看表演激发多巴胺分泌的循环",
           "last_modified_at": "2026-07-31T07:55:32.005Z",
@@ -1045,8 +1045,8 @@
         },
         "BD": {
           "operation": "extend",
-        "constraint_label": "扩展 资源分配·科技发展·类文明经营",
-        "summary": "继承规则、概率、倍率、资源与全局修饰构筑；扩展将 Spin 产出的资源用于确定性分配、科技发展、领袖或类文明经营规划，持续改变后续概率、规则、倍率与目标达成能力。",
+          "constraint_label": "扩展 资源分配·科技发展·类文明经营",
+          "summary": "继承规则、概率、倍率、资源与全局修饰构筑；扩展将 Spin 产出的资源用于确定性分配、科技发展、领袖或类文明经营规划，持续改变后续概率、规则、倍率与目标达成能力。",
           "review_status": "confirmed",
           "review_note": "1",
           "last_modified_at": "2026-07-31T06:18:16.305Z",
@@ -1054,9 +1054,9 @@
         }
       },
       "inheritance_summary": {
-      "inherited_fields": 5,
-      "changed_fields": 4,
-      "note": "Pool_Symbol、Put、C₂ 与 BD 扩展；C₂ 保留分数×倍率与位置增益，确定性资源分配、科技与经营规划归入 BD。"
+        "inherited_fields": 5,
+        "changed_fields": 4,
+        "note": "Pool_Symbol、Put、C₂ 与 BD 扩展；C₂ 保留分数×倍率与位置增益，确定性资源分配、科技与经营规划归入 BD。"
       },
       "created_at": "2026-07-28T06:42:11.976Z",
       "updated_at": "2026-07-31T06:38:18.867Z"
@@ -1075,20 +1075,20 @@
       "summary": "“Slot+数值型”下的具体游戏变体：老虎机与牌组构建结合的 Roguelite，通过符文匹配、连接和遗物修饰形成大数值战斗结果。",
       "definition": "本节点以《死而符生》作为“Slot+数值型”下的具体游戏变体；九个公式字段均已确认，固定符文类型下的数量调整改变 Random 权重，并通过锁定、序列执行与分数×倍率形成数值放大。",
       "formula_changes": {
-      "P_t": {
-        "operation": "inherit",
-        "constraint_label": "继承原型",
-        "summary": "继承：以债务、目标分、余额、期限和未达标后果包裹循环；P(t) 判断本次与累计 Spin_Result 是否足够。",
+        "P_t": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承：以债务、目标分、余额、期限和未达标后果包裹循环；P(t) 判断本次与累计 Spin_Result 是否足够。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T07:02:36.913Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T07:02:36.913Z"
         },
-      "Pool_Symbol": {
-        "operation": "extend",
-        "constraint_label": "扩展 列独立库·固定类型数量配比",
-        "summary": "继承 Slot+ 的固定核心符文类型集合，BD 不创造新符文类型。扩展：每一列使用独立符文库，包含魔法元素与万能符号；玩家通过增加或减少固定类型下的符文个数，改变各类型在 Pool_Symbol 中的数量配比与抽取权重。",
+        "Pool_Symbol": {
+          "operation": "extend",
+          "constraint_label": "扩展 列独立库·固定类型数量配比",
+          "summary": "继承 Slot+ 的固定核心符文类型集合，BD 不创造新符文类型。扩展：每一列使用独立符文库，包含魔法元素与万能符号；玩家通过增加或减少固定类型下的符文个数，改变各类型在 Pool_Symbol 中的数量配比与抽取权重。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T07:23:28.616Z",
@@ -1106,7 +1106,7 @@
         "Random": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-        "summary": "继承：Random 仍只负责从固定符文类型的 Pool_Symbol 产生本次结果；各固定类型的当前个数会影响其被抽取的概率，但不改变 Random 的责任。",
+          "summary": "继承：Random 仍只负责从固定符文类型的 Pool_Symbol 产生本次结果；各固定类型的当前个数会影响其被抽取的概率，但不改变 Random 的责任。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T07:39:59.256Z",
@@ -1187,10 +1187,10 @@
           "evidence_images": [],
           "confirmed_at": "2026-07-31T07:37:05.903Z"
         },
-      "BD": {
-        "operation": "extend",
-        "constraint_label": "扩展 固定符文类型的数量配比",
-        "summary": "继承规则、概率、倍率与全局修饰构筑；扩展通过增加、移除或调整固定符文类型下的具体个数，改变后续 Random 的类型权重。这是固定类型集合内的概率构筑，不是新增符文类型。",
+        "BD": {
+          "operation": "extend",
+          "constraint_label": "扩展 固定符文类型的数量配比",
+          "summary": "继承规则、概率、倍率与全局修饰构筑；扩展通过增加、移除或调整固定符文类型下的具体个数，改变后续 Random 的类型权重。这是固定类型集合内的概率构筑，不是新增符文类型。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T07:37:07.139Z",
@@ -1198,11 +1198,11 @@
           "confirmed_at": "2026-07-31T07:37:07.139Z"
         }
       },
-    "inheritance_summary": {
-      "inherited_fields": 4,
-      "changed_fields": 5,
-      "note": "Pool_Symbol、Put、C₁、C₂ 与 BD 扩展；固定的是符文类型集合，BD 通过调整各固定类型的个数改变 Random 权重。"
-    },
+      "inheritance_summary": {
+        "inherited_fields": 4,
+        "changed_fields": 5,
+        "note": "Pool_Symbol、Put、C₁、C₂ 与 BD 扩展；固定的是符文类型集合，BD 通过调整各固定类型的个数改变 Random 权重。"
+      },
       "created_at": "2026-07-28T06:52:49.107Z",
       "updated_at": "2026-07-31T06:39:58.176Z"
     },
@@ -2954,10 +2954,10 @@
           "evidence_images": [],
           "confirmed_at": "2026-07-31T07:37:36.917Z"
         },
-      "Put": {
-        "operation": "extend",
-        "constraint_label": "扩展 玩家可开关的自动 Spin",
-        "summary": "继承自动落位；扩展为玩家可主动开启自动 Spin。开启后，每次结果完成 Put 与结算后自动启动下一次 Spin；玩家主动关闭时停止，或在当前阶段完成 N 次 Spin 后自动停止并进入 P(t) 压力检查。Random 仍只负责每次的 Pool_Symbol → SingleSpin_Symbol。",
+        "Put": {
+          "operation": "extend",
+          "constraint_label": "扩展 玩家可开关的自动 Spin",
+          "summary": "继承自动落位；扩展为玩家可主动开启自动 Spin。开启后，每次结果完成 Put 与结算后自动启动下一次 Spin；玩家主动关闭时停止，或在当前阶段完成 N 次 Spin 后自动停止并进入 P(t) 压力检查。Random 仍只负责每次的 Pool_Symbol → SingleSpin_Symbol。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T23:15:28.663Z",
@@ -2994,20 +2994,20 @@
           "evidence_images": [],
           "confirmed_at": "2026-07-31T07:38:58.915Z"
         },
-      "N": {
-        "operation": "inherit",
-        "constraint_label": "继承原型",
-        "summary": "继承进入 BD 前的 Spin 周期：N 表示当前阶段完成 P(t) 压力检查前需要连续发生的 Spin 数量；自动 Spin 在达到 N 时停止。",
+        "N": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承进入 BD 前的 Spin 周期：N 表示当前阶段完成 P(t) 压力检查前需要连续发生的 Spin 数量；自动 Spin 在达到 N 时停止。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T07:38:59.913Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T07:38:59.913Z"
         },
-      "BD": {
-        "operation": "inherit",
-        "constraint_label": "继承原型",
-        "summary": "继承规则、概率、倍率、资源与全局修饰构筑；只有在当前 N 次 Spin 结束后通过 P(t) 压力检查，才进入 BD，检查失败则本局结束。",
+        "BD": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承规则、概率、倍率、资源与全局修饰构筑；只有在当前 N 次 Spin 结束后通过 P(t) 压力检查，才进入 BD，检查失败则本局结束。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T07:39:01.475Z",
@@ -3016,9 +3016,9 @@
         }
       },
       "inheritance_summary": {
-      "inherited_fields": 7,
-      "changed_fields": 2,
-      "note": "Pool_Symbol 扩展为固定符号类型集合内的概率养成；Put 扩展为玩家可开关的自动 Spin，并在玩家关闭或当前 N 周期结束时停止。"
+        "inherited_fields": 7,
+        "changed_fields": 2,
+        "note": "Pool_Symbol 扩展为固定符号类型集合内的概率养成；Put 扩展为玩家可开关的自动 Spin，并在玩家关闭或当前 N 周期结束时停止。"
       },
       "created_at": "2026-07-28T14:30:00.000Z",
       "updated_at": "2026-07-31T06:39:58.176Z"
@@ -3137,9 +3137,9 @@
         }
       },
       "inheritance_summary": {
-      "inherited_fields": 7,
-      "changed_fields": 2,
-      "note": "C₂ 覆写为弹珠机重新开奖，BD 扩展弹珠位置构筑；九个变体字段与产品观察均已同步为用户确认。"
+        "inherited_fields": 7,
+        "changed_fields": 2,
+        "note": "C₂ 覆写为弹珠机重新开奖，BD 扩展弹珠位置构筑；九个变体字段与产品观察均已同步为用户确认。"
       },
       "created_at": "2026-07-28T14:30:00.000Z",
       "updated_at": "2026-07-31T06:39:58.176Z"
@@ -3204,20 +3204,20 @@
           "evidence_images": [],
           "confirmed_at": "2026-07-31T07:52:34.194Z"
         },
-      "Put": {
-        "operation": "inherit",
-        "constraint_label": "继承原型",
-        "summary": "继承自动 Put：装置将本次结果写入当前 Show_TP 已解锁的符号位。符号位的锁定与解锁由 Show_TP 与 BD 定义，Put 只受可用空间影响，未改变自身责任。",
+        "Put": {
+          "operation": "inherit",
+          "constraint_label": "继承原型",
+          "summary": "继承自动 Put：装置将本次结果写入当前 Show_TP 已解锁的符号位。符号位的锁定与解锁由 Show_TP 与 BD 定义，Put 只受可用空间影响，未改变自身责任。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T07:54:04.219Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T07:54:04.219Z"
         },
-      "Show_TP": {
-        "operation": "extend",
-        "constraint_label": "扩展 符号位锁定／解锁",
-        "summary": "继承传统 Slot 的 2D 网格与支付线承载；扩展为部分符号位初始锁定，玩家通过 BD 消耗 Gold 逐步解锁盘面可用空间。",
+        "Show_TP": {
+          "operation": "extend",
+          "constraint_label": "扩展 符号位锁定／解锁",
+          "summary": "继承传统 Slot 的 2D 网格与支付线承载；扩展为部分符号位初始锁定，玩家通过 BD 消耗 Gold 逐步解锁盘面可用空间。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T07:55:41.264Z",
@@ -3242,10 +3242,10 @@
           ],
           "confirmed_at": "2026-07-31T23:17:03.396Z"
         },
-      "C2": {
-        "operation": "extend",
-        "constraint_label": "扩展 Gold 资源产出",
-        "summary": "继承沿 C₁ 结果展开的数值二次揭晓；扩展在 Spin_Result 中产出 Gold 资源。Gold 的后续消费、盘面符号位解锁与能力解锁归入 BD，不作为 C₂ 的确定性规划过程。",
+        "C2": {
+          "operation": "extend",
+          "constraint_label": "扩展 Gold 资源产出",
+          "summary": "继承沿 C₁ 结果展开的数值二次揭晓；扩展在 Spin_Result 中产出 Gold 资源。Gold 的后续消费、盘面符号位解锁与能力解锁归入 BD，不作为 C₂ 的确定性规划过程。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T08:00:08.431Z",
@@ -3270,10 +3270,10 @@
           "evidence_images": [],
           "confirmed_at": "2026-07-31T08:00:13.515Z"
         },
-      "BD": {
-        "operation": "extend",
-        "constraint_label": "扩展 Gold 消费·盘面与能力解锁",
-        "summary": "继承规则、概率、倍率、资源与全局修饰构筑；扩展将 C₂ 产出的 Gold 用于解锁 Show_TP 符号位、新能力与后续规则。",
+        "BD": {
+          "operation": "extend",
+          "constraint_label": "扩展 Gold 消费·盘面与能力解锁",
+          "summary": "继承规则、概率、倍率、资源与全局修饰构筑；扩展将 C₂ 产出的 Gold 用于解锁 Show_TP 符号位、新能力与后续规则。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T08:00:36.579Z",
@@ -3290,9 +3290,9 @@
         }
       },
       "inheritance_summary": {
-      "inherited_fields": 5,
-      "changed_fields": 4,
-      "note": "Show_TP、C₁、C₂ 与 BD 扩展；符号位锁定属于 Show_TP，Put 只继承自动写入并受当前可用空间影响。"
+        "inherited_fields": 5,
+        "changed_fields": 4,
+        "note": "Show_TP、C₁、C₂ 与 BD 扩展；符号位锁定属于 Show_TP，Put 只继承自动写入并受当前可用空间影响。"
       },
       "created_at": "2026-07-28T14:30:00.000Z",
       "updated_at": "2026-07-31T06:39:58.176Z"
