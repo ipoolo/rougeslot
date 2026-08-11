@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.8",
+  "version": "202607-draft.9",
   "migration": {
     "source": "data/games.json",
     "imported_at": "2026-07-25",
@@ -38,11 +38,11 @@
         "老虎机",
         "符号 RPB"
       ],
-      "core_loop": "3×5 老虎机每回合 spin，符号 + 道具构筑应对房租压力",
+      "core_loop": "5×4 盘面每回合 Spin，从当前符号池随机抽取并自动落位，通过符号与道具构筑应对房租压力",
       "observed_mechanics": [
-        "3×5 老虎机每回合 spin，符号 + 道具构筑应对房租压力",
-        "Show_TP：2D_grid",
-        "Put：auto_place",
+        "固定 5×4 盘面，每次 Spin 从当前 Pool_Symbol 随机取出最多 20 个符号",
+        "Show_TP：2D_grid（5×4）",
+        "Put：auto_place，玩家不控制具体落位",
         "C₁：threshold + adjacency"
       ],
       "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
@@ -53,7 +53,8 @@
         "imported_at": "2026-07-25"
       },
       "evidence": [
-        "用户已确认其作为“Slot改·数值型”的品类原型来源、基石游戏和代表产品。"
+        "用户已确认其作为“Slot改·数值型”的品类原型来源、基石游戏和代表产品。",
+        "用户于 2026-08-10 确认：Show_TP 为固定 5×4；每次 Spin 从当前 Pool_Symbol 随机取出最多 20 个符号并自动落位；每次结算后进行一次三选一新增符号；房租在约定的 Spin 周期检查，具体次数尚未冻结。"
       ],
       "last_classified_at": "2026-07-28T14:30:00.000Z"
     },
@@ -883,6 +884,7 @@
         "variant.custom-ms4atune-6ml6f"
       ],
       "classification_status": "confirmed",
+      "exclude_from_market_ranking": true,
       "summary": "旋转棋盘格子蓄能触发卡牌效果，构筑卡组推进 roguelike 闯关",
       "source_url": "https://store.steampowered.com/app/2516820/",
       "header_image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2516820/header.jpg?t=1726290426",

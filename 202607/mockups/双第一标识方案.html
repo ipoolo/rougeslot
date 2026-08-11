@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>销量第一与好评第一标识方案</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: #192943;
+      background: #f5f2eb;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    main { width: min(1320px, calc(100% - 64px)); margin: 0 auto; padding: 44px 0 56px; }
+    .eyebrow { color: #6289d7; font-size: 13px; font-weight: 800; letter-spacing: .12em; }
+    h1 { margin: 10px 0 6px; font-family: Georgia, "Songti SC", serif; font-size: 32px; }
+    .intro { margin: 0 0 30px; color: #66748a; font-size: 14px; }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .option {
+      min-height: 430px;
+      padding: 22px;
+      border: 1px solid #c5cede;
+      border-radius: 22px;
+      background: rgba(255,255,255,.8);
+      box-shadow: 0 14px 34px rgba(45,62,90,.07);
+    }
+    .option-head { display: flex; gap: 12px; align-items: center; }
+    .letter {
+      display: grid; place-items: center; flex: 0 0 34px; height: 34px;
+      border-radius: 50%; color: #fff; background: #244d95; font-weight: 900;
+    }
+    h2 { margin: 0; font-size: 18px; }
+    .desc { margin: 8px 0 28px 46px; min-height: 42px; color: #738096; font-size: 13px; line-height: 1.6; }
+    .stage {
+      min-height: 225px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #c3d0e1;
+      border-radius: 17px;
+      background:
+        linear-gradient(rgba(104,129,169,.13) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(104,129,169,.13) 1px, transparent 1px),
+        #f2f6fc;
+      background-size: 118px 78px;
+    }
+    .game-card {
+      position: relative;
+      width: 286px;
+      height: 136px;
+      padding: 25px 13px 25px;
+      border: 2px solid #c37d0e;
+      border-radius: 17px;
+      background: #fff;
+      box-shadow: 0 9px 18px rgba(33,54,86,.14);
+    }
+    .tags { position: absolute; left: 12px; top: -10px; display: flex; gap: 3px; }
+    .tag { padding: 4px 9px; border-radius: 999px; color: #fff; font-size: 10px; font-weight: 800; line-height: 1; }
+    .tag.blue { background: #5479bd; }
+    .tag.slate { background: #66768a; }
+    .tag.gold { background: #ad781c; }
+    .content { display: flex; gap: 10px; align-items: center; }
+    .cover { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: #142037; }
+    .name { margin: 0; font-size: 15px; font-weight: 850; }
+    .sales { margin-top: 4px; color: #66748a; font-size: 12px; font-weight: 700; }
+    .review { position: absolute; left: 10px; bottom: -9px; padding: 5px 9px; border-radius: 999px; color: #147aa8; background: #e8f5fb; font-size: 11px; }
+    .scores { position: absolute; right: 10px; bottom: -9px; display: flex; gap: 3px; }
+    .score { min-width: 28px; padding: 4px 5px; border: 1px solid #c8d6e6; border-radius: 999px; background: #fff; font-size: 10px; text-align: center; }
+    .score:nth-child(1) { color: #2a65af; }
+    .score:nth-child(2) { color: #177a67; border-color: #9ed4c6; }
+    .score:nth-child(3) { color: #8a650e; }
+    .rank-zone { position: absolute; right: 11px; top: 30px; }
+
+    /* 方案 A：两枚完整文字奖牌 */
+    .stacked { display: grid; gap: 5px; justify-items: end; }
+    .stacked span { display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 999px; color: #fff; font-size: 10px; font-weight: 900; box-shadow: 0 3px 8px rgba(35,52,78,.15); }
+    .stacked .sales-first { background: #b77812; }
+    .stacked .review-first { background: #147d99; }
+    .stacked i { font-style: normal; font-size: 11px; }
+
+    /* 方案 B：一个双冠合并徽章 */
+    .combined {
+      width: 72px; padding: 7px 8px; border: 1px solid #d6b568; border-radius: 10px;
+      color: #f8e6af; background: #172a48; box-shadow: 0 4px 10px rgba(18,35,63,.2);
+      font-size: 10px; font-weight: 900; text-align: center; line-height: 1.4;
+    }
+    .combined b { display: block; color: #fff; font-size: 11px; }
+    .combined em { color: #7cd7e4; font-style: normal; }
+
+    /* 方案 C：图标徽章，文字仅悬停时显示 */
+    .icon-pair { display: flex; gap: 5px; }
+    .icon-medal {
+      display: grid; place-items: center; width: 30px; height: 30px;
+      border: 2px solid #fff; border-radius: 50%; color: #fff;
+      box-shadow: 0 3px 8px rgba(35,52,78,.2); font-size: 15px;
+    }
+    .icon-medal.gold { background: #b77812; }
+    .icon-medal.cyan { background: #147d99; }
+    .legend { display: flex; justify-content: center; gap: 18px; margin-top: 15px; color: #68758a; font-size: 12px; }
+    .legend span { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot.gold { background: #b77812; }
+    .dot.cyan { background: #147d99; }
+    .note { margin: 18px 2px 0; color: #7b8799; font-size: 12px; line-height: 1.6; }
+    @media (max-width: 980px) { .board { grid-template-columns: 1fr; } .option { min-height: auto; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">交互图 · 双第一标识</div>
+    <h1>销量第一与好评第一，三种呈现方式</h1>
+    <p class="intro">排名统一排除 Demo。当前数据下，《命运转轮》同时获得销量第一（20万+）与好评第一（94%）。</p>
+    <section class="board">
+      <article class="option">
+        <div class="option-head"><span class="letter">A</span><h2>双奖牌标签</h2></div>
+        <p class="desc">两项排名直接写全，识别最快；标签略占空间。</p>
+        <div class="stage">
+          <div class="game-card">
+            <div class="tags"><span class="tag blue">1D 序列</span><span class="tag slate">敌方盘外</span><span class="tag gold">支付线</span></div>
+            <div class="content"><img class="cover" src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3631290/e6717abc9fe7d15049543614ffd69317b9e1e4b4/header.jpg?t=1780064257" alt=""><div><p class="name">命运转轮</p><div class="sales">销量 20万+</div></div></div>
+            <div class="rank-zone stacked"><span class="sales-first"><i>♛</i>销量第一</span><span class="review-first"><i>★</i>好评第一</span></div>
+            <span class="review">特别好评-94%</span><div class="scores"><span class="score">认4</span><span class="score">介4</span><span class="score">揭2</span></div>
+          </div>
+        </div>
+        <p class="note">适合强调榜首信息；即使截图缩小，文字仍能辨认。</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><span class="letter">B</span><h2>双冠合并章</h2></div>
+        <p class="desc">同一款同时拿两项第一时合并为一枚，最紧凑。</p>
+        <div class="stage">
+          <div class="game-card">
+            <div class="tags"><span class="tag blue">1D 序列</span><span class="tag slate">敌方盘外</span><span class="tag gold">支付线</span></div>
+            <div class="content"><img class="cover" src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3631290/e6717abc9fe7d15049543614ffd69317b9e1e4b4/header.jpg?t=1780064257" alt=""><div><p class="name">命运转轮</p><div class="sales">销量 20万+</div></div></div>
+            <div class="rank-zone combined">♛ 双冠<b>销量第一</b><em>好评第一</em></div>
+            <span class="review">特别好评-94%</span><div class="scores"><span class="score">认4</span><span class="score">介4</span><span class="score">揭2</span></div>
+          </div>
+        </div>
+        <p class="note">适合本例；若两项第一属于不同游戏，则自动退化为单项徽章。</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><span class="letter">C</span><h2>双图标徽章</h2></div>
+        <p class="desc">默认只显示图标，悬浮显示完整名称；画面最轻。</p>
+        <div class="stage">
+          <div class="game-card">
+            <div class="tags"><span class="tag blue">1D 序列</span><span class="tag slate">敌方盘外</span><span class="tag gold">支付线</span></div>
+            <div class="content"><img class="cover" src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3631290/e6717abc9fe7d15049543614ffd69317b9e1e4b4/header.jpg?t=1780064257" alt=""><div><p class="name">命运转轮</p><div class="sales">销量 20万+</div></div></div>
+            <div class="rank-zone icon-pair"><span class="icon-medal gold" title="销量第一">♛</span><span class="icon-medal cyan" title="好评第一">★</span></div>
+            <span class="review">特别好评-94%</span><div class="scores"><span class="score">认4</span><span class="score">介4</span><span class="score">揭2</span></div>
+          </div>
+        </div>
+        <div class="legend"><span><i class="dot gold"></i>销量第一</span><span><i class="dot cyan"></i>好评第一</span></div>
+        <p class="note">适合卡片很多的投影图，但首次使用需要图例或悬浮提示。</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

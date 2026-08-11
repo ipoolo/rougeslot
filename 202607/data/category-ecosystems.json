@@ -1,5 +1,5 @@
 {
-  "version": "20260801-draft.9",
+  "version": "20260811-draft.56",
   "items": [
     {
       "prototype_id": "prototype.slot-plus-combat",
@@ -40,21 +40,15 @@
       },
       "four_layer_architecture": {
         "version": "20260801.1",
+        "presentation_mode": "single_case_mechanisms",
         "core_preset_id": "core",
-        "branch_ids": ["probability-build", "put-control", "combat-simulation", "unit-evolution"],
-        "case_evidence_policy": "当前四条 BRANCH 都由同一基石 CASE 提供字段证据；它们是对《Slotbound Demo》改动方向的拆分，不代表已形成多产品分支。",
+        "branch_ids": [
+          "probability-build",
+          "put-control",
+          "combat-simulation",
+          "unit-evolution"
+        ],
         "boundaries": [
-          {
-            "id": "single-case-evidence",
-            "label": "单案例证据",
-            "title": "当前只有一款基石游戏，分支稳定性尚未被交叉验证",
-            "trigger": "CORE、BRANCH 与 BOUNDARY 全部从《Slotbound Demo》的一组字段推导。",
-            "consequence": "很难分辨哪些是品类稳定结构，哪些只是基石游戏的个体实现。",
-            "mitigation": "将当前四条分支标记为第一版分析维度，等新 CASE 进入后再决定是否上升为稳定生态分支。",
-            "branch_ids": ["probability-build", "put-control", "combat-simulation", "unit-evolution"],
-            "product_ids": ["product.slotbound-demo"],
-            "fields": ["Pool_Symbol", "Put", "C2", "BD"]
-          },
           {
             "id": "put-operation-load",
             "label": "Put 操作负荷",
@@ -62,9 +56,18 @@
             "trigger": "BD 同时解锁额外转动和盘面位置交换能力。",
             "consequence": "单 Spin 中的决策次数增加，可能延长 C₁ 揭晓到 C₂ 战斗表演的间隔。",
             "mitigation": "限制额外转动和交换的使用频率，并让操作直接服务于已揭晓的 C₁ 结果。",
-            "branch_ids": ["put-control"],
-            "product_ids": ["product.slotbound-demo"],
-            "fields": ["Put", "C1", "C2", "BD"]
+            "branch_ids": [
+              "put-control"
+            ],
+            "product_ids": [
+              "product.slotbound-demo"
+            ],
+            "fields": [
+              "Put",
+              "C1",
+              "C2",
+              "BD"
+            ]
           },
           {
             "id": "combat-readability",
@@ -73,9 +76,18 @@
             "trigger": "C₂ 同时追踪召唤、稀有度、伤害、防御、单位等级、种类、阶级与自动战斗。",
             "consequence": "玩家可能看到了战斗表演，却无法快速理解这一结果如何由当前支付线 C₁ 产生。",
             "mitigation": "保留从支付线、单位生成到战斗结果的可视化连续链路。",
-            "branch_ids": ["combat-simulation", "unit-evolution"],
-            "product_ids": ["product.slotbound-demo"],
-            "fields": ["C1", "C2", "P_t"]
+            "branch_ids": [
+              "combat-simulation",
+              "unit-evolution"
+            ],
+            "product_ids": [
+              "product.slotbound-demo"
+            ],
+            "fields": [
+              "C1",
+              "C2",
+              "P_t"
+            ]
           },
           {
             "id": "fixed-pool-drift",
@@ -84,9 +96,80 @@
             "trigger": "单位吸收、升星与职业进化不再只改变属性、概率或 C₂，而是持续增删核心抽取类型。",
             "consequence": "Pool_Symbol 不再保持 Slot+ 的固定类型身份。",
             "mitigation": "区分“固定类型的属性／阶级成长”与“新增抽取类型”；只有前者保持 Slot+。",
-            "branch_ids": ["probability-build", "unit-evolution"],
-            "product_ids": ["product.slotbound-demo"],
-            "fields": ["Pool_Symbol", "Random", "C2", "BD"]
+            "branch_ids": [
+              "probability-build",
+              "unit-evolution"
+            ],
+            "product_ids": [
+              "product.slotbound-demo"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "C2",
+              "BD"
+            ]
+          }
+        ]
+      },
+      "bd_analysis": {
+        "version": "20260810-draft.1",
+        "status": "confirmed",
+        "formula_status": "confirmed",
+        "title": "BD 设计分类：围绕固定单位池建立概率、操作与成长控制",
+        "formula": "BD = 固定池概率构筑 × Put 能力解锁 × 单位合成升星 × 职业分支构筑",
+        "principle": "公式中的 × 表示四个可以同时存在的构筑维度，不是数学乘法。Items 与 Cores 在战斗或 Spin 之间选择并于本局后续持续生效；Demo 阶段只能持续叠加。",
+        "conclusion_label": "当前案例",
+        "conclusion": "《Slotbound Demo》的 BD 不通过增删 Slot 核心符号类型建立动态池，而是在固定单位类型内调整出现概率、解锁落位能力，并以有消耗的升星和兵种职业分支承载长期成长。",
+        "modes": [
+          {
+            "id": "fixed-pool-probability",
+            "kind": "CONTROL",
+            "label": "概率构筑",
+            "title": "Items 与 Cores 调整固定单位与符号的出现概率",
+            "description": "构筑改变预设单位与符号的触发权重，在不增删核心类型的前提下塑造后续 Spin 的结果倾向。",
+            "boundary": "新增或删除 Slot 核心抽取类型属于 Pool_Symbol 组成变化，不属于当前 Slot+ 的概率构筑。",
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "BD"
+            ]
+          },
+          {
+            "id": "put-ability-unlock",
+            "kind": "CONTROL",
+            "label": "落位能力",
+            "title": "Items 与 Cores 解锁额外转动和位置交换",
+            "description": "构筑长期赋予玩家干预 Put 结果的能力；实际转动或交换发生在单次 Spin 的结果写入阶段。",
+            "boundary": "单次执行转动或交换属于 Put；只有能力由构筑获得并持续生效时，才同时记录为 BD。",
+            "fields": [
+              "Put",
+              "BD"
+            ]
+          },
+          {
+            "id": "unit-merge-rank",
+            "kind": "QUALITY",
+            "label": "合成／升星",
+            "title": "消耗重复单位或指定素材提升单位等级",
+            "description": "玩家在构筑阶段主动选择吸收或升星，以有消耗的方式强化对应单位。",
+            "boundary": "这是构筑阶段的主动成长，不是盘面结算时自动发生的 C₁ 合成。",
+            "fields": [
+              "C2",
+              "BD"
+            ]
+          },
+          {
+            "id": "class-branch",
+            "kind": "RULE",
+            "label": "职业进化",
+            "title": "为单一兵种选择持续生效的职业分支",
+            "description": "玩家在构筑阶段为对应兵种选择具体职业方向，后续通过属性、能力与战斗表现持续体现。",
+            "boundary": "职业分支只改变对应兵种的成长与战斗规则，不据此创建新的 Slot 核心抽取类型。",
+            "fields": [
+              "C2",
+              "BD"
+            ]
           }
         ]
       },
@@ -100,26 +183,223 @@
           "size": "节点大小不表示销量"
         },
         "node_encodings": {
-          "topology": {"title": "Show_TP", "position_key": "topology", "labels": {"2d-fixed": "固定 2D"}, "legend": [["2d-fixed", "固定 2D"]]},
-          "color": {"title": "C₂ 战斗表演", "position_key": "c2_relation", "labels": {"shared": "多单位时序"}, "legend": [["shared", "多单位时序"]]},
-          "secondary_badge": {"title": "BD", "position_key": "bd_mode", "labels": {"hybrid": "单位成长"}, "legend": [["hybrid", "单位成长"]]}
+          "topology": {
+            "title": "Show_TP",
+            "position_key": "topology",
+            "labels": {
+              "2d-fixed": "固定 2D"
+            },
+            "legend": [
+              [
+                "2d-fixed",
+                "固定 2D"
+              ]
+            ]
+          },
+          "color": {
+            "title": "C₂ 战斗表演",
+            "position_key": "c2_relation",
+            "labels": {
+              "shared": "多单位时序"
+            },
+            "legend": [
+              [
+                "shared",
+                "多单位时序"
+              ]
+            ]
+          },
+          "secondary_badge": {
+            "title": "BD",
+            "position_key": "bd_mode",
+            "labels": {
+              "hybrid": "单位成长"
+            },
+            "legend": [
+              [
+                "hybrid",
+                "单位成长"
+              ]
+            ]
+          }
         },
-        "anchors": [{"id": "core", "x": 8, "y": 10, "label": "Slot+战斗型 CORE", "summary": "固定 Slot 核心 → 支付线 C₁ → C₂ 战斗二次揭晓"}],
-        "zones": [
-          {"id": "dense-suspense", "label": "高悬念×多单位时序", "x": 50, "y": 50, "width": 45, "height": 45, "tone": "coral", "description": "当前 Slotbound Demo 所在的基石区域。"},
-          {"id": "readable-suspense", "label": "稀疏：高悬念×轻战斗", "x": 50, "y": 5, "width": 45, "height": 38, "tone": "blue", "status": "hypothesis", "description": "用更少单位与更短时序保留第二次开奖悬念。"},
-          {"id": "weak-combat", "label": "边界：低悬念战斗展示", "x": 5, "y": 5, "width": 38, "height": 90, "tone": "violet", "status": "hypothesis", "description": "若战斗只是确定性动画，可能无法形成有效 C₂ 峰值。"}
+        "anchors": [
+          {
+            "id": "core",
+            "x": 8,
+            "y": 10,
+            "label": "Slot+战斗型 CORE",
+            "summary": "固定 Slot 核心 → 支付线 C₁ → C₂ 战斗二次揭晓"
+          }
         ],
-        "edges": [{"id": "core-slotbound", "from": "anchor:core", "to": "product.slotbound-demo", "branch": "core"}],
+        "zones": [
+          {
+            "id": "dense-suspense",
+            "label": "高悬念×多单位时序",
+            "x": 50,
+            "y": 50,
+            "width": 45,
+            "height": 45,
+            "tone": "coral",
+            "description": "当前 Slotbound Demo 所在的基石区域。"
+          },
+          {
+            "id": "readable-suspense",
+            "label": "稀疏：高悬念×轻战斗",
+            "x": 50,
+            "y": 5,
+            "width": 45,
+            "height": 38,
+            "tone": "blue",
+            "status": "hypothesis",
+            "description": "用更少单位与更短时序保留第二次开奖悬念。"
+          },
+          {
+            "id": "weak-combat",
+            "label": "边界：低悬念战斗展示",
+            "x": 5,
+            "y": 5,
+            "width": 38,
+            "height": 90,
+            "tone": "violet",
+            "status": "hypothesis",
+            "description": "若战斗只是确定性动画，可能无法形成有效 C₂ 峰值。"
+          }
+        ],
+        "edges": [
+          {
+            "id": "core-slotbound",
+            "from": "anchor:core",
+            "to": "product.slotbound-demo",
+            "branch": "core"
+          }
+        ],
         "presets": {
-          "all": {"kind": "ALL", "label": "全部生态", "title": "当前只有 1 个已定位基石 CASE", "summary": "地图先把基石游戏拆成可复用的分析维度，新 CASE 进入后再检查分支是否成立。", "boundary": "当前空白区域只是假设，不是市场机会结论。", "fields": []},
-          "core": {"kind": "CORE", "label": "原型核心", "title": "保留 Slot Random、自动 Put、2D 支付线 C₁，用 C₂ 转译战斗", "summary": "Pool_Symbol 保持固定类型身份，C₂ 沿 C₁ 价值锚点展开召唤、属性与自动战斗。", "boundary": "若增删核心抽取类型或让战斗规则替代 Slot C₁，则开始偏离 Slot+ 身份。", "anchors": ["core"], "edges": ["core-slotbound"], "fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "C1", "C2"]},
-          "probability-build": {"kind": "BRANCH", "label": "概率养成", "title": "保留固定类型，BD 改变单位与符号触发概率", "summary": "构筑改变固定类型的出现权重，而不把 Pool_Symbol 改成可自由增删类型的动态池。", "boundary": "增加新核心抽取类型会越过 Slot+ 边界。", "products": ["product.slotbound-demo"], "zones": ["dense-suspense"], "fields": ["Pool_Symbol", "Random", "BD"]},
-          "put-control": {"kind": "BRANCH", "label": "Put 控制", "title": "额外转动与位置交换进入结果写入阶段", "summary": "Random 仍只生成本次符号，Put 负责额外转动和位置修正。", "boundary": "控制能力过多会延长 C₁ 到 C₂ 的间隔。", "products": ["product.slotbound-demo"], "zones": ["dense-suspense"], "fields": ["Put", "C1", "C2", "BD"]},
-          "combat-simulation": {"kind": "BRANCH", "label": "战斗演绎", "title": "支付线结果转译为多单位自动战斗", "summary": "召唤、伤害、防御与战斗状态在 C₂ 中形成第二次揭晓。", "boundary": "战斗结果必须能够追溯到当前 C₁ 支付线价值。", "products": ["product.slotbound-demo"], "zones": ["dense-suspense"], "fields": ["C1", "C2", "P_t"]},
-          "unit-evolution": {"kind": "BRANCH", "label": "单位成长", "title": "吸收、升星与职业进化改变后续战斗兑现", "summary": "BD 调整单位属性、阶级、职业和触发概率，持续放大 C₂。", "boundary": "成长应优先修改固定类型的属性与概率，不应无限增加核心符号类型。", "products": ["product.slotbound-demo"], "zones": ["dense-suspense"], "fields": ["Pool_Symbol", "C2", "BD"]},
-          "boundary": {"kind": "BOUNDARY", "label": "风险总览", "title": "单案例证据、Put 操作负荷、战斗可读性与固定池偏移", "summary": "当前风险既来自产品结构，也来自样本数不足。", "boundary": "在第二个 CASE 出现前，不将单一产品特征写成稳定市场规律。", "products": ["product.slotbound-demo"], "fields": ["Pool_Symbol", "Put", "C1", "C2", "BD"]}
+          "all": {
+            "kind": "ALL",
+            "label": "全部生态",
+            "title": "当前案例观察到的 4 个机制改动",
+            "summary": "概率构筑、落位干预、战斗转译与单位成长同时出现在《Slotbound Demo》中。",
+            "boundary": "四项用于拆解当前案例的机制变化，不作为已经由多款游戏验证的品类分支。",
+            "fields": []
+          },
+          "core": {
+            "kind": "CORE",
+            "label": "原型核心",
+            "title": "保留 Slot Random、自动 Put、2D 支付线 C₁，用 C₂ 转译战斗",
+            "summary": "Pool_Symbol 保持固定类型身份，C₂ 沿 C₁ 价值锚点展开召唤、属性与自动战斗。",
+            "boundary": "若增删核心抽取类型或让战斗规则替代 Slot C₁，则开始偏离 Slot+ 身份。",
+            "anchors": [
+              "core"
+            ],
+            "edges": [
+              "core-slotbound"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "Put",
+              "Show_TP",
+              "C1",
+              "C2"
+            ]
+          },
+          "probability-build": {
+            "kind": "BRANCH",
+            "label": "概率构筑",
+            "title": "通过 Items 与 Cores 调整固定类型的出现概率",
+            "summary": "Items 与 Cores 改变固定单位与符号的出现概率，不把 Pool_Symbol 改成可自由增删核心类型的动态池。",
+            "boundary": "增加新核心抽取类型会越过 Slot+ 边界。",
+            "products": [
+              "product.slotbound-demo"
+            ],
+            "zones": [
+              "dense-suspense"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "BD"
+            ]
+          },
+          "put-control": {
+            "kind": "BRANCH",
+            "label": "落位干预",
+            "title": "额外转动与位置交换进入 Put 阶段",
+            "summary": "Random 仍生成本次符号，玩家通过额外转动和位置交换干预最终落位。",
+            "boundary": "控制能力过多会延长 C₁ 到 C₂ 的间隔。",
+            "products": [
+              "product.slotbound-demo"
+            ],
+            "zones": [
+              "dense-suspense"
+            ],
+            "fields": [
+              "Put",
+              "C1",
+              "C2",
+              "BD"
+            ]
+          },
+          "combat-simulation": {
+            "kind": "BRANCH",
+            "label": "战斗转译",
+            "title": "支付线结果转译为多单位自动战斗",
+            "summary": "召唤、伤害、防御与战斗状态在 C₂ 中形成第二次揭晓。",
+            "boundary": "战斗结果必须能够追溯到当前 C₁ 支付线价值。",
+            "products": [
+              "product.slotbound-demo"
+            ],
+            "zones": [
+              "dense-suspense"
+            ],
+            "fields": [
+              "C1",
+              "C2",
+              "P_t"
+            ]
+          },
+          "unit-evolution": {
+            "kind": "BRANCH",
+            "label": "单位成长",
+            "title": "吸收、升星与职业进化改变后续战斗兑现",
+            "summary": "BD 调整单位属性、阶级、职业和触发概率，持续放大 C₂。",
+            "boundary": "成长应优先修改固定类型的属性与概率，不应无限增加核心符号类型。",
+            "products": [
+              "product.slotbound-demo"
+            ],
+            "zones": [
+              "dense-suspense"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "C2",
+              "BD"
+            ]
+          },
+          "boundary": {
+            "kind": "BOUNDARY",
+            "label": "风险总览",
+            "title": "Put 操作负荷、战斗可读性与固定池偏移",
+            "summary": "风险分别来自操作节奏、C₁ 到战斗结果的可读性，以及 Slot+ 固定池边界。",
+            "boundary": "三项风险独立判断，不把样本数量作为产品设计风险。",
+            "products": [
+              "product.slotbound-demo"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Put",
+              "C1",
+              "C2",
+              "BD"
+            ]
+          }
         }
+      },
+      "coordinate_projection": {
+        "active_source": "dimensions",
+        "legacy_xy_status": "retained_not_used",
+        "legacy_xy_note": "positions 中的 x/y 仅用于旧版对照与回滚；当前三维评分投影运行时不读取。"
       },
       "positions": [
         {
@@ -131,9 +411,39 @@
           "topology": "2d-fixed",
           "c2_relation": "shared",
           "bd_mode": "hybrid",
-          "branch_ids": ["probability-build", "put-control", "combat-simulation", "unit-evolution"],
-          "changed_fields": ["Pool_Symbol", "Put", "C2", "BD"],
-          "position_note": "基石位置：保留传统 Slot C₁，再用多兵种、位置关系和紧凑战斗时序形成第二次结果揭晓。"
+          "branch_ids": [
+            "probability-build",
+            "put-control",
+            "combat-simulation",
+            "unit-evolution"
+          ],
+          "changed_fields": [
+            "Pool_Symbol",
+            "Put",
+            "C2",
+            "BD"
+          ],
+          "position_note": "基石位置：保留传统 Slot C₁，再用多兵种、位置关系和紧凑战斗时序形成第二次结果揭晓。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 0,
+              "band": "low",
+              "basis": "Slot 结果立即可读，不需要额外学习本轮好坏。"
+            },
+            "spin_intervention": {
+              "score": 1,
+              "band": "low",
+              "basis": "玩家可在单 Spin 内让某一轴整体向下移动一格。"
+            },
+            "c2_reveal_depth": {
+              "score": 3,
+              "band": "high",
+              "basis": "多兵种、位置与局部交互使战果分阶段揭晓。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         }
       ],
       "niches": [
@@ -187,20 +497,15 @@
       "four_layer_architecture": {
         "version": "20260801.1",
         "core_preset_id": "core",
-        "branch_ids": ["probability-weights", "hold-lock", "multiplier-chain", "resource-planning", "auto-spin", "redraw-c2", "topology-unlock"],
+        "branch_ids": [
+          "probability-weights",
+          "hold-lock",
+          "multiplier-chain",
+          "resource-planning",
+          "redraw-c2"
+        ],
         "case_evidence_policy": "CASE 继承所属 BRANCH 的证据字段，读取具体游戏的变体字段与已同步的产品观察。",
         "boundaries": [
-          {
-            "id": "automatic-spin-interruption",
-            "label": "自动 Spin 中断",
-            "title": "连续自动转动压缩玩家在两次揭晓之间建立期待的窗口",
-            "trigger": "玩家开启后，每次 Put 与结算立即自动启动下一次 Spin，直到主动关闭或 N 周期结束。",
-            "consequence": "玩家操作数降低，但少量操作→看表演→再建立下一次期待的主动节奏被打断。",
-            "mitigation": "保留明确的玩家开关、阶段终止与结果暂停，并验证自动化是否真的放大而不是淡化峰值。",
-            "branch_ids": ["auto-spin"],
-            "product_ids": ["product.devils-due"],
-            "fields": ["Put", "N", "P_t", "BD"]
-          },
           {
             "id": "c2-anchor-reset",
             "label": "C₂ 锚点重置",
@@ -208,37 +513,121 @@
             "trigger": "C₂ 的弹珠路径与时间不确定性可以重置或推翻 C₁ 已建立的价值锚点。",
             "consequence": "两个峰值可能变成两次彼此断开的开奖，前一阶段的可读结果对后一阶段的意义变弱。",
             "mitigation": "让 C₁ 结果明确决定弹珠数量、初始价值、落点范围或放大上限，保持可追溯的兑现链路。",
-            "branch_ids": ["redraw-c2"],
-            "product_ids": ["product.peglotto-demo"],
-            "fields": ["C1", "C2", "BD"]
+            "branch_ids": [
+              "redraw-c2"
+            ],
+            "product_ids": [
+              "product.peglotto-demo"
+            ],
+            "fields": [
+              "C1",
+              "C2",
+              "BD"
+            ]
           },
           {
             "id": "planning-blocks-loop",
             "label": "规划阻塞循环",
-            "title": "确定性资源规划或盘面锁定持续延迟下一次 Spin",
+            "title": "确定性资源规划持续延迟下一次 Spin",
             "trigger": "Spin 产出资源后，玩家需要进行科技、经营、Gold 消费、盘面解锁与能力解锁等确定性规划。",
             "consequence": "BD 从短时构筑决策扩张为策略经营主体，可能让产品节奏从 Slot 双峰滑向资源管理。",
             "mitigation": "将确定性规划集中在清晰 BD 窗口，限制每个周期的决策数，不让解锁持续侵入单 Spin 循环。",
-            "branch_ids": ["resource-planning", "topology-unlock"],
-            "product_ids": ["product.spinera", "product.spin-tactics-demo"],
-            "fields": ["C2", "Show_TP", "BD", "N"]
+            "branch_ids": [
+              "resource-planning"
+            ],
+            "product_ids": [
+              "product.spinera",
+              "product.spin-tactics-demo"
+            ],
+            "fields": [
+              "C2",
+              "Show_TP",
+              "BD",
+              "N"
+            ]
+          }
+        ]
+      },
+      "bd_analysis": {
+        "version": "20260811-draft.1",
+        "status": "confirmed",
+        "formula_status": "confirmed",
+        "title": "BD 设计分类：围绕固定符号池、抽取控制与数值兑现建立构筑",
+        "formula": "BD = 固定池概率构筑 × 保留／锁定控制 × 倍率与规则构筑 × 资源规划 × C₂ 装置构筑",
+        "principle": "公式中的 × 表示五个可以并列组合的构筑维度，不是数学乘法，也不设置主路径。分类关注 BD 长期改变了什么；单次 Spin 中临时执行一次锁定、消费或装置结算，不会自动成为新的 BD 分类。",
+        "conclusion_label": "集中方向",
+        "conclusion": "当前 Slot+·数值型样本主要围绕固定核心符号类型调整概率与数量，以保留、锁定等能力干预抽取，再通过倍率、外部规则和资源规划放大数值兑现；少数案例进一步直接构筑 C₂ 的揭晓装置。",
+        "modes": [
+          {
+            "id": "fixed-pool-probability",
+            "kind": "POOL",
+            "label": "固定池概率构筑",
+            "title": "在固定核心符号类型内调整个数、权重与出现概率",
+            "description": "不新增核心 Symbol Type，而是通过增加或减少固定类型的个数、修改权重或直接养成出现概率，持续改变后续 Random 的结果倾向。",
+            "boundary": "调整固定类型的 Count、Weight 或概率仍属于 Slot+；若 BD 持续新增或删除核心抽取类型，则进入 Pool_Symbol 组成变化，更接近 Slot改。",
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "BD"
+            ]
           },
           {
-            "id": "fixed-type-identity",
-            "label": "固定类型身份",
-            "title": "概率构筑可以调整固定类型的个数，但不能无限增加新类型",
-            "trigger": "Pool_Symbol 构筑从概率、权重或固定类型个数，滑向玩家自由增删核心抽取类型。",
-            "consequence": "核心符号池不再固定，品类身份开始从 Slot+ 转向 Slot改。",
-            "mitigation": "在数据中分开记录 Symbol_Type_Set 是否固定与每类型 Count／Weight 如何变化。",
-            "branch_ids": ["probability-weights"],
-            "product_ids": ["product.cloverpit", "product.runeborn", "product.devils-due"],
-            "fields": ["Pool_Symbol", "Random", "BD"]
+            "id": "hold-lock-control",
+            "kind": "CONTROL",
+            "label": "保留／锁定控制",
+            "title": "赋予或强化保留、锁定与局部重抽能力",
+            "description": "构筑决定玩家能否保留当前符号、锁定位置或对未锁定部分重新 Random，并控制这些操作的次数、成本和作用范围。",
+            "boundary": "一次临时的保留、锁定或重抽属于单 Spin 操作；只有能力由 BD 获得、持续强化或配置时，才同时记录为构筑维度。",
+            "fields": [
+              "Random",
+              "Put",
+              "BD"
+            ]
+          },
+          {
+            "id": "multiplier-rule-build",
+            "kind": "RULE",
+            "label": "倍率与规则构筑",
+            "title": "用倍率、护身符、遗物与全局规则放大数值兑现",
+            "description": "构筑不改变核心符号身份，而是持续修改 C₁／C₂ 的触发条件、倍率、额外效果与全局结算规则，让同一组 Slot 结果产生不同的数值兑现。",
+            "boundary": "若效果直接改变固定类型的抽取权重，归入固定池概率构筑；若主要改变结算规则、倍率或额外效果，则归入本类，两者可以同时存在。",
+            "fields": [
+              "C1",
+              "C2",
+              "BD"
+            ]
+          },
+          {
+            "id": "resource-planning",
+            "kind": "CONTROL",
+            "label": "资源规划",
+            "title": "把 Spin 产出转化为经营、科技、解锁或能力消费",
+            "description": "玩家在构筑窗口中分配 Spin 产出的资源或 Gold，用于经营、科技发展、盘面与能力解锁，并持续改变后续概率、规则、倍率或目标达成能力。",
+            "boundary": "资源只是 C₂ 的即时数值产出时不构成本类；只有资源进入跨 Spin 的分配与消费，并持续改变后续循环时，才记录为资源规划。",
+            "fields": [
+              "C2",
+              "N",
+              "BD"
+            ]
+          },
+          {
+            "id": "c2-device-build",
+            "kind": "RULE",
+            "label": "C₂ 装置构筑",
+            "title": "直接改变二次揭晓装置的结构、位置与结果路径",
+            "description": "构筑对象不是 Slot 核心符号，而是承载 C₂ 的外部装置；玩家通过位置或结构选择改变后续揭晓路径、落点和结果分布。",
+            "boundary": "只给 C₁ 结果增加倍率或已知修饰属于倍率与规则构筑；只有构筑直接改变 C₂ 装置及其揭晓路径时，才归入本类。",
+            "fields": [
+              "C1",
+              "C2",
+              "BD"
+            ]
           }
         ]
       },
       "niche_map": {
         "version": "20260801-draft.1",
-        "status": "draft",
+        "status": "confirmed",
         "encodings": {
           "topology_badge": "Show_TP：固定 2D／独立符文列／符号位锁定 2D",
           "color": "C₂ 与 C₁ 的关系：连续放大／资源转译／重新开奖",
@@ -249,54 +638,348 @@
           "topology": {
             "title": "Show_TP",
             "position_key": "topology",
-            "labels": {"2d-fixed": "固定 2D", "2d-columns": "独立符文列", "2d-locked": "锁位 2D"},
-            "legend": [["2d-fixed", "固定 2D"], ["2d-columns", "独立符文列"], ["2d-locked", "锁位 2D"]]
+            "labels": {
+              "2d-fixed": "固定 2D",
+              "2d-columns": "独立符文列",
+              "2d-locked": "锁位 2D"
+            },
+            "legend": [
+              [
+                "2d-fixed",
+                "固定 2D"
+              ],
+              [
+                "2d-columns",
+                "独立符文列"
+              ],
+              [
+                "2d-locked",
+                "锁位 2D"
+              ]
+            ]
           },
           "color": {
             "title": "C₂ 关系",
             "position_key": "c2_relation",
-            "labels": {"external": "连续放大", "fixed": "资源转译", "shared": "重新开奖"},
-            "legend": [["external", "连续放大"], ["fixed", "资源转译"], ["shared", "重新开奖"]]
+            "labels": {
+              "external": "连续放大",
+              "fixed": "资源转译",
+              "shared": "重新开奖"
+            },
+            "legend": [
+              [
+                "external",
+                "连续放大"
+              ],
+              [
+                "fixed",
+                "资源转译"
+              ],
+              [
+                "shared",
+                "重新开奖"
+              ]
+            ]
           },
           "secondary_badge": {
             "title": "BD",
             "position_key": "bd_mode",
-            "labels": {"formation": "概率构筑", "payline": "资源规划", "hybrid": "位置复合"},
-            "legend": [["formation", "概率构筑"], ["payline", "资源规划"], ["hybrid", "位置复合"]]
+            "labels": {
+              "formation": "概率构筑",
+              "payline": "资源规划",
+              "hybrid": "位置复合"
+            },
+            "legend": [
+              [
+                "formation",
+                "概率构筑"
+              ],
+              [
+                "payline",
+                "资源规划"
+              ],
+              [
+                "hybrid",
+                "位置复合"
+              ]
+            ]
           }
         },
-        "anchors": [{"id": "core", "x": 7, "y": 8, "label": "Slot+数值型 CORE", "summary": "固定类型 Slot → 支付线 C₁ → C₂ 数值二次揭晓"}],
+        "anchors": [
+          {
+            "id": "core",
+            "x": 7,
+            "y": 8,
+            "label": "Slot+数值型 CORE",
+            "summary": "固定类型 Slot → 支付线 C₁ → C₂ 数值二次揭晓"
+          }
+        ],
         "zones": [
-          {"id": "explosive-hard", "label": "爆发叠乘×硬压力", "x": 53, "y": 52, "width": 42, "height": 43, "tone": "coral", "description": "连锁、遗物与概率构筑持续放大 C₂，外层以债务或失败阈值验证。"},
-          {"id": "planning-soft", "label": "资源规划×阶段目标", "x": 28, "y": 5, "width": 48, "height": 40, "tone": "amber", "description": "Spin 产出资源，BD 用于科技、经营、Gold 消费或盘面解锁。"},
-          {"id": "redraw-hard", "label": "重新开奖×硬压力", "x": 5, "y": 50, "width": 35, "height": 45, "tone": "violet", "description": "C₂ 弹珠过程带来新的路径与时间不确定性。"},
-          {"id": "explosive-soft", "label": "稀疏：高叠乘×软压力", "x": 78, "y": 5, "width": 17, "height": 40, "tone": "blue", "status": "hypothesis", "description": "保留爆发数值，降低债务或失败阈值的稀疏区域。"}
+          {
+            "id": "explosive-hard",
+            "label": "爆发叠乘×硬压力",
+            "x": 53,
+            "y": 52,
+            "width": 42,
+            "height": 43,
+            "tone": "coral",
+            "description": "连锁、遗物与概率构筑持续放大 C₂，外层以债务或失败阈值验证。"
+          },
+          {
+            "id": "planning-soft",
+            "label": "资源规划×阶段目标",
+            "x": 28,
+            "y": 5,
+            "width": 48,
+            "height": 40,
+            "tone": "amber",
+            "description": "Spin 产出资源，BD 用于科技、经营、Gold 消费或盘面解锁。"
+          },
+          {
+            "id": "redraw-hard",
+            "label": "重新开奖×硬压力",
+            "x": 5,
+            "y": 50,
+            "width": 35,
+            "height": 45,
+            "tone": "violet",
+            "description": "C₂ 弹珠过程带来新的路径与时间不确定性。"
+          },
+          {
+            "id": "explosive-soft",
+            "label": "稀疏：高叠乘×软压力",
+            "x": 78,
+            "y": 5,
+            "width": 17,
+            "height": 40,
+            "tone": "blue",
+            "status": "hypothesis",
+            "description": "保留爆发数值，降低债务或失败阈值的稀疏区域。"
+          }
         ],
         "edges": [
-          {"id": "core-clover", "from": "anchor:core", "to": "product.cloverpit", "branch": "core"},
-          {"id": "probability-a", "from": "product.cloverpit", "to": "product.runeborn", "branch": "probability-weights"},
-          {"id": "probability-b", "from": "product.runeborn", "to": "product.devils-due", "branch": "probability-weights"},
-          {"id": "lock-a", "from": "product.cloverpit", "to": "product.spinera", "branch": "hold-lock"},
-          {"id": "lock-b", "from": "product.spinera", "to": "product.runeborn", "branch": "hold-lock"},
-          {"id": "multiplier-a", "from": "product.cloverpit", "to": "product.spinera", "branch": "multiplier-chain"},
-          {"id": "multiplier-b", "from": "product.cloverpit", "to": "product.runeborn", "branch": "multiplier-chain"},
-          {"id": "resource-a", "from": "product.spinera", "to": "product.spin-tactics-demo", "branch": "resource-planning"},
-          {"id": "auto-a", "from": "product.cloverpit", "to": "product.devils-due", "branch": "auto-spin"},
-          {"id": "redraw-a", "from": "product.cloverpit", "to": "product.peglotto-demo", "branch": "redraw-c2"},
-          {"id": "topology-a", "from": "product.spinera", "to": "product.spin-tactics-demo", "branch": "topology-unlock"}
+          {
+            "id": "core-clover",
+            "from": "anchor:core",
+            "to": "product.cloverpit",
+            "branch": "core"
+          },
+          {
+            "id": "probability-a",
+            "from": "product.cloverpit",
+            "to": "product.runeborn",
+            "branch": "probability-weights"
+          },
+          {
+            "id": "probability-b",
+            "from": "product.runeborn",
+            "to": "product.devils-due",
+            "branch": "probability-weights"
+          },
+          {
+            "id": "lock-a",
+            "from": "product.cloverpit",
+            "to": "product.spinera",
+            "branch": "hold-lock"
+          },
+          {
+            "id": "lock-b",
+            "from": "product.spinera",
+            "to": "product.runeborn",
+            "branch": "hold-lock"
+          },
+          {
+            "id": "multiplier-a",
+            "from": "product.cloverpit",
+            "to": "product.spinera",
+            "branch": "multiplier-chain"
+          },
+          {
+            "id": "multiplier-b",
+            "from": "product.cloverpit",
+            "to": "product.runeborn",
+            "branch": "multiplier-chain"
+          },
+          {
+            "id": "resource-a",
+            "from": "product.spinera",
+            "to": "product.spin-tactics-demo",
+            "branch": "resource-planning"
+          },
+          {
+            "id": "redraw-a",
+            "from": "product.cloverpit",
+            "to": "product.peglotto-demo",
+            "branch": "redraw-c2"
+          }
         ],
         "presets": {
-          "all": {"kind": "ALL", "label": "全部生态", "title": "查看 6 个 Slot+数值型变体", "summary": "地图同时观察 C₂ 放大、压力耦合、固定类型概率构筑、资源规划与揭晓连续性。", "boundary": "坐标与连线是基于当前已确认字段的第一版分析，不表示产品优劣。", "fields": []},
-          "core": {"kind": "CORE", "label": "原型核心", "title": "固定核心符号类型、Slot Random、自动 Put、2D 支付线 C₁ 与数值 C₂", "summary": "BD 可以改变固定类型的概率、倍率、规则和外部修饰，但不以自由增删核心抽取类型为身份。", "boundary": "C₂ 应延续 C₁ 价值锚点；自动 Spin、重新开奖与确定性策略规划都属于需要单独验证的扩展。", "anchors": ["core"], "edges": ["core-clover"], "fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "C1", "C2"]},
-          "probability-weights": {"kind": "BRANCH", "label": "概率权重", "title": "固定符号类型下的概率或个数养成", "summary": "四叶草深渊与 Devils Due 直接养成出现概率；死而符生通过各固定类型的个数改变抽取权重。", "boundary": "调整固定类型 Count／Weight 仍是 Slot+；新增核心 Symbol Type 则进入 Slot改。", "products": ["product.cloverpit", "product.runeborn", "product.devils-due"], "zones": ["explosive-hard"], "edges": ["probability-a", "probability-b"], "fields": ["Pool_Symbol", "Random", "BD"]},
-          "hold-lock": {"kind": "BRANCH", "label": "保留／锁定", "title": "在不改变 Random 责任的前提下干预当前盘面", "summary": "帝国轮盘锁定盘面符号，死而符生使用保留与刷新，干预本次 Put 结果。", "boundary": "过多重抽、锁定与局部操作会增加单 Spin 操作数。", "products": ["product.spinera", "product.runeborn"], "edges": ["lock-a", "lock-b"], "fields": ["Random", "Put", "C1"]},
-          "multiplier-chain": {"kind": "BRANCH", "label": "倍率连锁", "title": "沿 C₁ 支付线价值进行连锁、倍率与额外效果放大", "summary": "从护身符多层叠乘，到分数×倍率、遗物与符文额外效果，都保持 C₁→C₂ 的连续兑现。", "boundary": "放大链必须可视化，否则玩家只看到最终大数而不理解构筑如何生效。", "products": ["product.cloverpit", "product.spinera", "product.runeborn"], "zones": ["explosive-hard", "planning-soft"], "edges": ["multiplier-a", "multiplier-b"], "fields": ["C1", "C2", "BD"]},
-          "resource-planning": {"kind": "BRANCH", "label": "资源规划", "title": "Spin 产出资源，BD 用于经营、科技或 Gold 消费", "summary": "帝国轮盘将资源用于类文明经营；Spin Tactics 将 Gold 用于盘面和能力解锁。", "boundary": "确定性规划属于 BD，不应写成 C₂ 的二次揭晓。", "products": ["product.spinera", "product.spin-tactics-demo"], "zones": ["planning-soft"], "edges": ["resource-a"], "fields": ["C2", "BD", "N"]},
-          "auto-spin": {"kind": "BRANCH", "label": "自动 Spin", "title": "玩家可开关的连续 Put／Spin 链", "summary": "开启后每次结算自动启动下一次 Spin；玩家关闭或 N 周期完成时停止。", "boundary": "自动化降低操作数，但可能打断每次峰值前的主动期待建立。", "products": ["product.devils-due"], "zones": ["explosive-hard"], "edges": ["auto-a"], "fields": ["Put", "N", "P_t", "BD"]},
-          "redraw-c2": {"kind": "BRANCH", "label": "重新开奖", "title": "C₂ 覆写为弹珠机路径与时间不确定性", "summary": "弹珠机过程形成新的揭晓，并可通过位置 BD 改变后续路径。", "boundary": "若弹珠结果无法追溯到 C₁，第二峰将从“兑现”变成“重新开奖”。", "products": ["product.peglotto-demo"], "zones": ["redraw-hard"], "edges": ["redraw-a"], "fields": ["C1", "C2", "BD"]},
-          "topology-unlock": {"kind": "BRANCH", "label": "盘面解锁", "title": "Show_TP 符号位从锁定到逐步开放", "summary": "Put 仍自动写入当前已解锁空间；C₁ 只在可用区域计算，BD 消耗 Gold 解锁新符号位。", "boundary": "锁位是 Show_TP 容量边界，Put 只受影响，不应标记为 Put 扩展。", "products": ["product.spin-tactics-demo"], "zones": ["planning-soft"], "edges": ["topology-a"], "fields": ["Show_TP", "Put", "C1", "C2", "BD"]},
-          "boundary": {"kind": "BOUNDARY", "label": "风险总览", "title": "自动 Spin、C₂ 锚点重置、规划阻塞与固定类型身份", "summary": "四类边界分别改变操作节奏、双峰连续性、BD 时长与品类归属。", "boundary": "边界标记用于验证结构风险，不是对产品好坏的评价。", "products": ["product.devils-due", "product.peglotto-demo", "product.spinera", "product.spin-tactics-demo", "product.runeborn"], "fields": ["Pool_Symbol", "Put", "Show_TP", "C1", "C2", "N", "BD"]}
+          "all": {
+            "kind": "ALL",
+            "label": "全部生态",
+            "title": "查看 6 个 Slot+数值型变体",
+            "summary": "地图同时观察 C₂ 放大、压力耦合、固定类型概率构筑、资源规划与揭晓连续性。",
+            "boundary": "坐标与连线是基于当前已确认字段的第一版分析，不表示产品优劣。",
+            "fields": []
+          },
+          "core": {
+            "kind": "CORE",
+            "label": "原型核心",
+            "title": "固定核心符号类型、Slot Random、自动 Put、2D 支付线 C₁ 与数值 C₂",
+            "summary": "BD 可以改变固定类型的概率、倍率、规则和外部修饰，但不以自由增删核心抽取类型为身份。",
+            "boundary": "C₂ 应延续 C₁ 价值锚点；重新开奖与确定性策略规划属于需要单独验证的扩展。",
+            "anchors": [
+              "core"
+            ],
+            "edges": [
+              "core-clover"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "Put",
+              "Show_TP",
+              "C1",
+              "C2"
+            ]
+          },
+          "probability-weights": {
+            "kind": "BRANCH",
+            "label": "概率构筑",
+            "title": "固定符号类型下的概率或个数养成",
+            "summary": "四叶草深渊与 Devils Due 直接养成出现概率；死而符生通过各固定类型的个数改变抽取权重。",
+            "boundary": "调整固定类型 Count／Weight 仍是 Slot+；新增核心 Symbol Type 则进入 Slot改。",
+            "products": [
+              "product.cloverpit",
+              "product.runeborn",
+              "product.devils-due"
+            ],
+            "zones": [
+              "explosive-hard"
+            ],
+            "edges": [
+              "probability-a",
+              "probability-b"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "BD"
+            ]
+          },
+          "hold-lock": {
+            "kind": "BRANCH",
+            "label": "落位干预",
+            "title": "在不改变 Random 责任的前提下干预当前盘面",
+            "summary": "帝国轮盘锁定盘面符号，死而符生使用保留与刷新，干预本次 Put 结果。",
+            "boundary": "过多重抽、锁定与局部操作会增加单 Spin 操作数。",
+            "products": [
+              "product.spinera",
+              "product.runeborn"
+            ],
+            "edges": [
+              "lock-a",
+              "lock-b"
+            ],
+            "fields": [
+              "Random",
+              "Put",
+              "C1"
+            ]
+          },
+          "multiplier-chain": {
+            "kind": "BRANCH",
+            "label": "倍率连锁",
+            "title": "沿 C₁ 支付线价值进行连锁、倍率与额外效果放大",
+            "summary": "从护身符多层叠乘，到分数×倍率、遗物与符文额外效果，都保持 C₁→C₂ 的连续兑现。",
+            "boundary": "放大链必须可视化，否则玩家只看到最终大数而不理解构筑如何生效。",
+            "products": [
+              "product.cloverpit",
+              "product.spinera",
+              "product.runeborn"
+            ],
+            "zones": [
+              "explosive-hard",
+              "planning-soft"
+            ],
+            "edges": [
+              "multiplier-a",
+              "multiplier-b"
+            ],
+            "fields": [
+              "C1",
+              "C2",
+              "BD"
+            ]
+          },
+          "resource-planning": {
+            "kind": "BRANCH",
+            "label": "资源规划",
+            "title": "Spin 产出资源，BD 用于经营、科技或 Gold 消费",
+            "summary": "帝国轮盘将资源用于类文明经营；Spin Tactics 将 Gold 用于盘面和能力解锁。",
+            "boundary": "确定性规划属于 BD，不应写成 C₂ 的二次揭晓。",
+            "products": [
+              "product.spinera",
+              "product.spin-tactics-demo"
+            ],
+            "zones": [
+              "planning-soft"
+            ],
+            "edges": [
+              "resource-a"
+            ],
+            "fields": [
+              "C2",
+              "BD",
+              "N"
+            ]
+          },
+          "redraw-c2": {
+            "kind": "BRANCH",
+            "label": "二次开奖",
+            "title": "C₂ 覆写为弹珠机路径与时间不确定性",
+            "summary": "弹珠机过程形成新的揭晓，并可通过位置 BD 改变后续路径。",
+            "boundary": "若弹珠结果无法追溯到 C₁，第二峰将从“兑现”变成“重新开奖”。",
+            "products": [
+              "product.peglotto-demo"
+            ],
+            "zones": [
+              "redraw-hard"
+            ],
+            "edges": [
+              "redraw-a"
+            ],
+            "fields": [
+              "C1",
+              "C2",
+              "BD"
+            ]
+          },
+          "boundary": {
+            "kind": "BOUNDARY",
+            "label": "风险总览",
+            "title": "C₂ 锚点重置与规划阻塞",
+            "summary": "两类风险分别影响双峰连续性与下一次 Spin 前的 BD 时长。",
+            "boundary": "设计风险不是游戏优劣结论，而是需要检查是否破坏目标体验的结构问题。",
+            "products": [
+              "product.peglotto-demo",
+              "product.spinera",
+              "product.spin-tactics-demo"
+            ],
+            "fields": [
+              "Show_TP",
+              "C1",
+              "C2",
+              "N",
+              "BD"
+            ]
+          }
         }
+      },
+      "coordinate_projection": {
+        "active_source": "dimensions",
+        "legacy_xy_status": "retained_not_used",
+        "legacy_xy_note": "positions 中的 x/y 仅用于旧版对照与回滚；当前三维评分投影运行时不读取。"
       },
       "positions": [
         {
@@ -308,38 +991,91 @@
           "topology": "2d-fixed",
           "c2_relation": "external",
           "bd_mode": "formation",
-          "branch_ids": ["probability-weights", "multiplier-chain"],
-          "changed_fields": ["Pool_Symbol"],
-          "position_note": "基石位置：护身符、连锁与多层倍率形成爆炸数值，债务到期检查构成强硬失败压力。"
+          "branch_ids": [
+            "probability-weights",
+            "multiplier-chain"
+          ],
+          "changed_fields": [
+            "Pool_Symbol"
+          ],
+          "position_note": "基石位置：护身符、连锁与多层倍率形成爆炸数值，债务到期检查构成强硬失败压力。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 0,
+              "band": "low",
+              "basis": "Slot 基础结果可直接识别。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "从 Spin 到结果封闭均由系统自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 4,
+              "band": "high",
+              "basis": "倍率与连锁持续生成新的结果节点，形成链式揭晓。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.spinera",
           "x": 28,
           "y": 48,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "c2_relation": "fixed",
           "bd_mode": "payline",
-          "branch_ids": ["hold-lock", "multiplier-chain", "resource-planning"],
+          "branch_ids": [
+            "hold-lock",
+            "multiplier-chain",
+            "resource-planning"
+          ],
           "changed_fields": [
             "Pool_Symbol",
             "Put",
             "C2",
             "BD"
           ],
-          "position_note": "暂定位置：C₂ 保留分数×倍率与盘面位置增益；Spin 产出的资源在 BD 中用于分配、科技发展与类文明经营规划。"
+          "position_note": "C₂ 保留分数×倍率与盘面位置增益；Spin 产出的资源在 BD 中用于分配、科技发展与类文明经营规划。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 0,
+              "band": "low",
+              "basis": "Slot 结果容易判断。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 过程由系统自动完成。"
+            },
+            "c2_reveal_depth": {
+              "score": 1,
+              "band": "low",
+              "basis": "答案在 C₁ 后基本封闭，后续经营与策略决策不构成独立揭晓。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.runeborn",
           "x": 74,
           "y": 72,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-columns",
           "c2_relation": "external",
           "bd_mode": "formation",
-          "branch_ids": ["probability-weights", "hold-lock", "multiplier-chain"],
+          "branch_ids": [
+            "probability-weights",
+            "hold-lock",
+            "multiplier-chain"
+          ],
           "changed_fields": [
             "Pool_Symbol",
             "Put",
@@ -347,46 +1083,145 @@
             "C2",
             "BD"
           ],
-          "position_note": "暂定位置：核心符文类型固定，BD 通过调整各固定类型的个数改变 Random 权重；符文序列执行、遗物与额外效果继续放大数值。"
+          "position_note": "核心符文类型固定，BD 通过调整各固定类型的个数改变 Random 权重；符文序列执行、遗物与额外效果继续放大数值。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 1,
+              "band": "low",
+              "basis": "基础 Slot 上增加少量符文关系。"
+            },
+            "spin_intervention": {
+              "score": 1,
+              "band": "low",
+              "basis": "单 Spin 内存在少量结果干预。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "结果通过一次进一步的数值或效果兑现更新预测。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.devils-due",
           "x": 52,
           "y": 58,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "c2_relation": "external",
           "bd_mode": "formation",
-          "branch_ids": ["probability-weights", "auto-spin"],
-          "changed_fields": ["Pool_Symbol", "Put"],
-          "position_note": "已确认固定符号类型集合内的概率养成；Put 扩展为玩家可开关的自动 Spin，玩家关闭或当前 N 周期完成时停止，然后进入 P(t) 压力检查。"
+          "branch_ids": [
+            "probability-weights"
+          ],
+          "changed_fields": [
+            "Pool_Symbol",
+            "Put"
+          ],
+          "position_note": "固定符号类型集合内进行概率构筑；Put 扩展为玩家可开关的自动 Spin，玩家关闭或当前 N 周期完成时停止，然后进入 P(t) 压力检查。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 0,
+              "band": "low",
+              "basis": "保留传统 Slot 的即时认知，固定符号类型不增加单次结果理解成本。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 的 Random、Put 与结算自动完成；自动 Spin 的开启与关闭不构成本次 Spin 内持续介入。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "C₁ 结果之后只有一次关键数值兑现，没有形成多阶段递进揭晓。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": "用户于 2026-08-10 确认 C₂ 为 2 分；设计质量判断不进入二次揭晓深度评分。"
         },
         {
           "product_id": "product.peglotto-demo",
           "x": 18,
           "y": 66,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "c2_relation": "shared",
           "bd_mode": "hybrid",
-          "branch_ids": ["redraw-c2"],
-          "changed_fields": ["C2", "BD"],
-          "position_note": "九个产品观察与变体字段已同步为用户确认；C₂ 覆写为弹珠机重新开奖，BD 扩展弹珠位置构筑。坐标仍为第一版草稿。"
+          "branch_ids": [
+            "redraw-c2"
+          ],
+          "changed_fields": [
+            "C2",
+            "BD"
+          ],
+          "position_note": "C₂ 覆写为弹珠机重新开奖，BD 扩展弹珠位置构筑。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 0,
+              "band": "low",
+              "basis": "第一阶段结果容易识别。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "弹珠过程由系统自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 3,
+              "band": "high",
+              "basis": "弹珠机形成多阶段反馈，但可能明显重置 C₁ 的价值锚点。"
+            }
+          },
+          "risk_tags": [
+            "c1_reset_risk"
+          ],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.spin-tactics-demo",
           "x": 46,
           "y": 34,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-locked",
           "c2_relation": "fixed",
           "bd_mode": "payline",
-          "branch_ids": ["resource-planning", "topology-unlock"],
-          "changed_fields": ["Show_TP", "C1", "C2", "BD"],
-          "position_note": "已确认符号位锁定属于 Show_TP，Put 仅继承自动写入；C₂ 产出 Gold，BD 消费 Gold 解锁盘面与能力。坐标仍为第一版草稿。"
+          "branch_ids": [
+            "resource-planning"
+          ],
+          "changed_fields": [
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "符号位锁定属于 Show_TP，Put 仅继承自动写入；C₂ 产出 Gold，BD 消费 Gold 解锁盘面与能力。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 1,
+              "band": "low",
+              "basis": "锁定符号位与当前可用支付区域增加少量即时理解成本。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 的 Random、Put 与结算自动完成；使用 Gold 解锁盘面属于 BD。"
+            },
+            "c2_reveal_depth": {
+              "score": 1,
+              "band": "low",
+              "basis": "支付线结果确定后转译为 Gold，答案已经封闭，没有释放新的关键未知信息。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": "用户于 2026-08-10 确认 C₂ 为 1 分；Gold 的后续消费与解锁属于 BD。"
         }
       ],
       "niches": [
@@ -505,19 +1340,84 @@
           }
         ],
         "edges": [
-          { "id": "core-numeric", "from": "anchor:core", "to": "product.endgame-of-devil", "branch": "core" },
-          { "id": "core-survival", "from": "anchor:core", "to": "product.lucky-hunter", "branch": "core" },
-          { "id": "core-manual", "from": "anchor:core", "to": "product.slots-and-daggers", "branch": "core" },
-          { "id": "numeric-pair", "from": "product.endgame-of-devil", "to": "product.dog-and-goblin", "branch": "numeric-check" },
-          { "id": "survival-auto-a", "from": "product.lucky-hunter", "to": "product.spin-hero", "branch": "automatic-survival" },
-          { "id": "survival-auto-b", "from": "product.spin-hero", "to": "product.lever-warrior-bow-and-magic", "branch": "automatic-survival" },
-          { "id": "shared-enemy-a", "from": "product.endgame-of-devil", "to": "product.rogue-slots", "branch": "shared-enemy" },
-          { "id": "shared-enemy-b", "from": "product.rogue-slots", "to": "product.spinny-dungeon", "branch": "shared-enemy" },
-          { "id": "shared-enemy-c", "from": "product.spinny-dungeon", "to": "product.hoptale-demo", "branch": "shared-enemy" },
-          { "id": "manual-a", "from": "product.slots-and-daggers", "to": "product.lucky-hero", "branch": "manual-control" },
-          { "id": "manual-b", "from": "product.lucky-hero", "to": "product.slot-or-not", "branch": "manual-control" },
-          { "id": "payline-a", "from": "product.slots-and-daggers", "to": "product.rogue-slots", "branch": "payline" },
-          { "id": "payline-b", "from": "product.rogue-slots", "to": "product.slot-or-not", "branch": "payline" }
+          {
+            "id": "core-numeric",
+            "from": "anchor:core",
+            "to": "product.endgame-of-devil",
+            "branch": "core"
+          },
+          {
+            "id": "core-survival",
+            "from": "anchor:core",
+            "to": "product.lucky-hunter",
+            "branch": "core"
+          },
+          {
+            "id": "core-manual",
+            "from": "anchor:core",
+            "to": "product.slots-and-daggers",
+            "branch": "core"
+          },
+          {
+            "id": "numeric-pair",
+            "from": "product.endgame-of-devil",
+            "to": "product.dog-and-goblin",
+            "branch": "numeric-check"
+          },
+          {
+            "id": "survival-auto-a",
+            "from": "product.lucky-hunter",
+            "to": "product.spin-hero",
+            "branch": "automatic-survival"
+          },
+          {
+            "id": "survival-auto-b",
+            "from": "product.spin-hero",
+            "to": "product.lever-warrior-bow-and-magic",
+            "branch": "automatic-survival"
+          },
+          {
+            "id": "shared-enemy-a",
+            "from": "product.endgame-of-devil",
+            "to": "product.rogue-slots",
+            "branch": "shared-enemy"
+          },
+          {
+            "id": "shared-enemy-b",
+            "from": "product.rogue-slots",
+            "to": "product.spinny-dungeon",
+            "branch": "shared-enemy"
+          },
+          {
+            "id": "shared-enemy-c",
+            "from": "product.spinny-dungeon",
+            "to": "product.hoptale-demo",
+            "branch": "shared-enemy"
+          },
+          {
+            "id": "manual-a",
+            "from": "product.slots-and-daggers",
+            "to": "product.lucky-hero",
+            "branch": "manual-control"
+          },
+          {
+            "id": "manual-b",
+            "from": "product.lucky-hero",
+            "to": "product.slot-or-not",
+            "branch": "manual-control"
+          },
+          {
+            "id": "payline-a",
+            "from": "product.slots-and-daggers",
+            "to": "product.rogue-slots",
+            "branch": "payline"
+          },
+          {
+            "id": "payline-b",
+            "from": "product.rogue-slots",
+            "to": "product.slot-or-not",
+            "branch": "payline"
+          }
         ],
         "presets": {
           "all": {
@@ -534,9 +1434,21 @@
             "title": "Spin 随机揭晓、BD 可控的战斗符号池、可按规模启用的 Symbol_Quality、自有 C₁ 与 C₂ 战斗转译",
             "summary": "这是 11 个变体共享的品类身份：BD 首先控制 Pool_Symbol 类型与数量；Symbol_Quality 是大 Show_TP、大当局有效池与长进度时的成长控制维度，小空间与小池可保持单一默认品质。各分支继续改变玩家介入阶段、空间承载、敌方参与和战斗状态复杂度。",
             "boundary": "CORE 不默认品质加权 Random、Luck、稀有保底、2D、支付线、自动战斗或敌我互攻；这些属于可变分支。",
-            "anchors": ["core"],
-            "edges": ["core-numeric", "core-survival", "core-manual"],
-            "fields": ["Pool_Symbol", "Random", "C1", "C2", "BD"]
+            "anchors": [
+              "core"
+            ],
+            "edges": [
+              "core-numeric",
+              "core-survival",
+              "core-manual"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "C1",
+              "C2",
+              "BD"
+            ]
           },
           "numeric-check": {
             "kind": "BRANCH",
@@ -544,10 +1456,21 @@
             "title": "只有我方攻击，C₂ 主要验证伤害结果",
             "summary": "减少防御、我方血量与技能资源追踪，使战斗解释路径更短。",
             "boundary": "敌方仍可进入盘面参与 C₁；是否同盘不决定它是不是数值检测型。",
-            "products": ["product.endgame-of-devil", "product.dog-and-goblin"],
-            "zones": ["numeric-check"],
-            "edges": ["numeric-pair", "core-numeric"],
-            "fields": ["C2", "P_t"]
+            "products": [
+              "product.endgame-of-devil",
+              "product.dog-and-goblin"
+            ],
+            "zones": [
+              "numeric-check"
+            ],
+            "edges": [
+              "numeric-pair",
+              "core-numeric"
+            ],
+            "fields": [
+              "C2",
+              "P_t"
+            ]
           },
           "automatic-survival": {
             "kind": "BRANCH",
@@ -555,10 +1478,27 @@
             "title": "敌我互攻与资源状态增加，但操作主要停留在 Spin",
             "summary": "通过自动 Put 与自动战斗，把复杂度集中在 Pool、C₁ 和状态理解，而不是连续输入。",
             "boundary": "自动推进降低操作数，但不会自动降低大盘面、多符号与多资源带来的认知负荷。",
-            "products": ["product.spin-hero", "product.lucky-hunter", "product.rogue-slots", "product.spinny-dungeon", "product.lever-warrior-bow-and-magic", "product.hoptale-demo"],
-            "zones": ["automatic-survival"],
-            "edges": ["core-survival", "survival-auto-a", "survival-auto-b"],
-            "fields": ["Put", "C2", "P_t"]
+            "products": [
+              "product.spin-hero",
+              "product.lucky-hunter",
+              "product.rogue-slots",
+              "product.spinny-dungeon",
+              "product.lever-warrior-bow-and-magic",
+              "product.hoptale-demo"
+            ],
+            "zones": [
+              "automatic-survival"
+            ],
+            "edges": [
+              "core-survival",
+              "survival-auto-a",
+              "survival-auto-b"
+            ],
+            "fields": [
+              "Put",
+              "C2",
+              "P_t"
+            ]
           },
           "manual-control": {
             "kind": "BRANCH",
@@ -566,10 +1506,25 @@
             "title": "候选选择、逐轴或逐符号操作进入单 Spin 主循环",
             "summary": "控制感上升，但新增阶段会增加操作数，并可能拆散集中揭晓。",
             "boundary": "一维与小盘面可以补偿操作负荷；大盘面叠加逐符号操作风险最高。",
-            "products": ["product.slots-and-daggers", "product.lucky-hero", "product.slot-or-not"],
-            "zones": ["interactive-survival"],
-            "edges": ["core-manual", "manual-a", "manual-b"],
-            "fields": ["Random", "Put", "Show_TP", "C2"]
+            "products": [
+              "product.slots-and-daggers",
+              "product.lucky-hero",
+              "product.slot-or-not"
+            ],
+            "zones": [
+              "interactive-survival"
+            ],
+            "edges": [
+              "core-manual",
+              "manual-a",
+              "manual-b"
+            ],
+            "fields": [
+              "Random",
+              "Put",
+              "Show_TP",
+              "C2"
+            ]
           },
           "shared-enemy": {
             "kind": "BRANCH",
@@ -577,9 +1532,25 @@
             "title": "敌方从外部目标变成 Pool、Put、C₁ 与 C₂ 的盘面参与者",
             "summary": "这一分支同时改变抽取对象、空间占位、协同计算和战斗演绎。",
             "boundary": "固定在上方区域的敌人不是敌方符号入盘，狗与哥布林不属于这一分支。",
-            "products": ["product.endgame-of-devil", "product.rogue-slots", "product.spinny-dungeon", "product.slot-or-not", "product.hoptale-demo"],
-            "edges": ["shared-enemy-a", "shared-enemy-b", "shared-enemy-c"],
-            "fields": ["Pool_Symbol", "Put", "Show_TP", "C1", "C2"]
+            "products": [
+              "product.endgame-of-devil",
+              "product.rogue-slots",
+              "product.spinny-dungeon",
+              "product.slot-or-not",
+              "product.hoptale-demo"
+            ],
+            "edges": [
+              "shared-enemy-a",
+              "shared-enemy-b",
+              "shared-enemy-c"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Put",
+              "Show_TP",
+              "C1",
+              "C2"
+            ]
           },
           "payline": {
             "kind": "BRANCH",
@@ -587,9 +1558,20 @@
             "title": "用支付线或支付线混合规则建立 C₁",
             "summary": "支付线提供 Slot 先验，但要求控制单 Spin 同屏符号类型，避免相同符号密度过低。",
             "boundary": "Choice_Pool 能提高局部密度，却可能以更多操作和更弱集中揭晓为代价。",
-            "products": ["product.slots-and-daggers", "product.rogue-slots", "product.slot-or-not"],
-            "edges": ["payline-a", "payline-b"],
-            "fields": ["Pool_Symbol", "Random", "C1"]
+            "products": [
+              "product.slots-and-daggers",
+              "product.rogue-slots",
+              "product.slot-or-not"
+            ],
+            "edges": [
+              "payline-a",
+              "payline-b"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "C1"
+            ]
           },
           "resource-survival": {
             "kind": "BRANCH",
@@ -597,8 +1579,18 @@
             "title": "魔法、能量、货币与食物进入战斗和生存循环",
             "summary": "资源可以提供攻击类型与长期压力，也会同时提高 Pool_Symbol、C₂ 与 P(t) 的认知负荷。",
             "boundary": "资源维度增加时，需要从盘面、符号类型或操作阶段归还复杂度预算。",
-            "products": ["product.spin-hero", "product.lucky-hero", "product.spinny-dungeon", "product.lever-warrior-bow-and-magic"],
-            "fields": ["Pool_Symbol", "C2", "P_t", "BD"]
+            "products": [
+              "product.spin-hero",
+              "product.lucky-hero",
+              "product.spinny-dungeon",
+              "product.hoptale-demo"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "C2",
+              "P_t",
+              "BD"
+            ]
           },
           "boundary": {
             "kind": "BOUNDARY",
@@ -606,8 +1598,23 @@
             "title": "三类边界风险需要分别观察，不能合并为一个复杂度结论",
             "summary": "操作过载、认知复杂度与峰值稀释拥有不同触发条件、证据字段和应对方式。",
             "boundary": "风险案例不是坏游戏标签，也不代表产品已经越界；它们用于标记需要继续验证的结构组合。",
-            "products": ["product.lucky-hero", "product.slot-or-not", "product.spinny-dungeon", "product.lucky-hunter", "product.slots-and-daggers", "product.lever-warrior-bow-and-magic"],
-            "fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "C1", "C2", "P_t"]
+            "products": [
+              "product.lucky-hero",
+              "product.slot-or-not",
+              "product.spinny-dungeon",
+              "product.lucky-hunter",
+              "product.slots-and-daggers",
+              "product.lever-warrior-bow-and-magic"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "Put",
+              "Show_TP",
+              "C1",
+              "C2",
+              "P_t"
+            ]
           }
         }
       },
@@ -631,9 +1638,22 @@
             "trigger": "5×5 大盘面叠加逐符号操作，或将 Random 拆成 Choice_Pool、主动选择、Put 等多阶段输入。",
             "consequence": "少量操作 → 看表演的循环被持续输入打断，疲劳上升，下一次 Spin 的期待建立变慢。",
             "mitigation": "缩小盘面、改为 1D、减少每 Spin 的操作阶段，或把复杂决策集中到 BD 阶段。",
-            "branch_ids": ["manual-control", "payline"],
-            "product_ids": ["product.lucky-hero", "product.slot-or-not", "product.slots-and-daggers"],
-            "fields": ["Random", "Put", "Show_TP", "C1"]
+            "solution_example": "《命运转轮》保留并强调单 Spin 操作，但将盘面缩小为 1D，降低单次操作需要处理的空间规模。",
+            "branch_ids": [
+              "manual-control",
+              "payline"
+            ],
+            "product_ids": [
+              "product.lucky-hero",
+              "product.slot-or-not",
+              "product.slots-and-daggers"
+            ],
+            "fields": [
+              "Random",
+              "Put",
+              "Show_TP",
+              "C1"
+            ]
           },
           {
             "id": "cognitive-complexity",
@@ -642,9 +1662,25 @@
             "trigger": "大盘面、多符号类型、敌我互攻，以及攻防血、魔法、货币或食物等资源线同时增加。",
             "consequence": "玩家先计算规则与状态，C₁ 的大奖识别变慢，双峰体验的第一峰被削弱。",
             "mitigation": "战斗认知增加时，相应降低 C₁ 空间规模与 Pool_Symbol 类型：从 5×5+ 收缩到 3×3，或降为 1D 序列。",
-            "branch_ids": ["automatic-survival", "resource-survival", "shared-enemy"],
-            "product_ids": ["product.lucky-hunter", "product.spinny-dungeon", "product.lucky-hero", "product.lever-warrior-bow-and-magic"],
-            "fields": ["Pool_Symbol", "Show_TP", "C1", "C2", "P_t"]
+            "solution_example": "《幸运猎人》《猫神牧场》《魔王终局》在单次游戏中限定／选定符号池类型范围；符号 BD 只在选定范围内进行随机，从而缩小符号池类型的概率空间。",
+            "branch_ids": [
+              "automatic-survival",
+              "resource-survival",
+              "shared-enemy"
+            ],
+            "product_ids": [
+              "product.lucky-hunter",
+              "product.spinny-dungeon",
+              "product.lucky-hero",
+              "product.lever-warrior-bow-and-magic"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Show_TP",
+              "C1",
+              "C2",
+              "P_t"
+            ]
           },
           {
             "id": "peak-dilution",
@@ -653,18 +1689,30 @@
             "trigger": "在结果进入盘面前加入候选池、主动选择与多次落位，或让 C₂ 脱离 C₁ 重新开奖。",
             "consequence": "盘面中大奖的认知刺激被提前拆散，C₁ 价值锚点与后续 C₂ 的连续性一起变弱。",
             "mitigation": "保留一个清晰、集中的盘面揭晓点；C₂ 必须延续 C₁ 的既有结果，而不是重置结果来源。",
-            "branch_ids": ["manual-control", "payline"],
-            "product_ids": ["product.slot-or-not", "product.slots-and-daggers"],
-            "fields": ["Random", "Put", "C1", "C2"]
+            "branch_ids": [
+              "manual-control",
+              "payline"
+            ],
+            "product_ids": [
+              "product.slot-or-not",
+              "product.slots-and-daggers"
+            ],
+            "fields": [
+              "Random",
+              "Put",
+              "C1",
+              "C2"
+            ]
           }
         ]
       },
       "bd_analysis": {
-        "version": "20260801-draft.1",
+        "version": "20260810-draft.4",
         "status": "draft",
-        "formula": "BD = Pool_Symbol 组成控制 × Symbol_Quality 级别控制 × 外部规则构筑",
-        "principle": "Symbol_Quality 级别控制是 BD 管理 Pool_Symbol 的手段，不是每个变体都必须显式做成多品质层。先根据 Show_TP 有效承载、当前局内有效池与进度跨度判断是否需要品质控制，再选择直接升级、合成升阶或高品质获取等实现。",
-        "conclusion": "第一版样本显示：战斗型已出现合成升阶和直接升级两条品质路径；大量产品仍主要依赖池组成与道具／技能规则构筑。",
+        "formula_status": "confirmed",
+        "formula": "BD = Pool_Symbol 组成控制 × Random／Put 抽取控制 × Symbol_Quality 级别控制 × 外部规则构筑",
+        "principle": "公式中的 × 表示四个可并列组合的观察维度，不是数学乘法，也不要求一款游戏同时具备四项。刷新、重抽、锁定与保留属于抽取控制；只有当 BD 解锁或持续强化这些能力时才计入 BD。Symbol_Quality 级别控制则用于在大空间、大有效池与长进度中压缩成长表达。",
+        "conclusion": "当前样本的 BD 设计高度集中在构建与精简 Pool_Symbol、赋予刷新／重抽／锁定等抽取控制能力，以及用道具、技能和遗物改变外部规则；品质控制是可选的补充方式。",
         "evidence_boundary": "Pool_Symbol 规模指当前局内实际参与 Random 的有效类型与数量，不等于全游戏图鉴总量。当前没有已确认案例能证明 BD 直接提高 Random 抽到高稀有度符号的概率；稀有度梯度、购买新符号和品质加权 Random 必须分开记录。",
         "control_model": {
           "formula": "品质级别控制价值 = Show_TP 有效承载 × 当前局内 Pool_Symbol 规模 × 进度跨度",
@@ -709,10 +1757,26 @@
             "id": "composition",
             "kind": "POOL",
             "label": "池组成",
-            "title": "选入、删除、保留、重抽与配置符号",
-            "description": "直接改变当前局内 Pool_Symbol 中有哪些类型与各有多少。",
-            "boundary": "组成变化不等于品质成长，也不证明高稀有度 Random 概率被提高。",
-            "fields": ["Pool_Symbol", "BD"]
+            "title": "增加或删除符号，调整数量、出现权重与候选范围",
+            "description": "长期改变当前局内 Pool_Symbol 中有哪些类型、各有多少，以及它们进入候选池的权重与范围。",
+            "boundary": "刷新、锁定与重抽本身属于单次抽取控制，不算池组成；只有新增、删除、替换或长期调整权重与候选范围才改变 Pool_Symbol。",
+            "fields": [
+              "Pool_Symbol",
+              "BD"
+            ]
+          },
+          {
+            "id": "draw-control",
+            "kind": "CONTROL",
+            "label": "抽取控制",
+            "title": "赋予刷新、重抽、锁定或保留候选的能力",
+            "description": "BD 可以解锁或持续强化这些操作的次数、成本与作用范围，从而改变 Random／Put 的可控程度。",
+            "boundary": "某次 Spin 中执行一次刷新或锁定不是长期池组成；只有能力由 BD 获得或成长时，才将其记录为 BD。",
+            "fields": [
+              "Random",
+              "Put",
+              "BD"
+            ]
           },
           {
             "id": "direct-upgrade",
@@ -720,17 +1784,25 @@
             "label": "直接升级",
             "title": "BD 直接提升已有符号的品质级别",
             "description": "不消耗多个同类符号，通过升级、附魔或强化让同一符号向更高阶状态发展。",
-            "boundary": "需区分升级符号自身品质，还是只提高角色、道具或 C₂ 战斗数值。",
-            "fields": ["Pool_Symbol", "C1", "BD"]
+            "boundary": "当前战斗型样本没有已确认案例；需区分升级符号自身品质，还是只提高角色、道具或 C₂ 战斗数值。",
+            "fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "id": "merge-rank",
             "kind": "QUALITY",
             "label": "合成／升阶",
             "title": "用多个同类或特定组合产生更高阶符号",
-            "description": "合成将池数量、盘面邻接与 Symbol_Quality 成长绑在一起；《幸运猎人》是当前最明确的主路径案例。",
+            "description": "合成将池数量、盘面邻接与 Symbol_Quality 成长绑在一起；《幸运猎人》是当前最明确的合成升阶案例。",
             "boundary": "必须标明合成是 BD 阶段的主动决策，还是 Put／C₁ 中自动发生的协同结果。",
-            "fields": ["Pool_Symbol", "C1", "BD"]
+            "fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "id": "quality-acquisition",
@@ -739,7 +1811,11 @@
             "title": "BD 提高高品质符号的获取或替换能力",
             "description": "可以是直接换入高品质符号，也可以是改变候选品质；若改变抽取概率则还必须显式记录 Random 扩展。",
             "boundary": "当前样本无已确认 CASE；稀有度梯度或商店买新符号不足以支撑这一判定。",
-            "fields": ["Pool_Symbol", "Random", "BD"]
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "BD"
+            ]
           },
           {
             "id": "external-rules",
@@ -748,99 +1824,168 @@
             "title": "用道具、遗物、技能或地形改变符号结算",
             "description": "改变 C₁／C₂ 的触发和兑现，但可以不改变符号自身的 Symbol_Quality。",
             "boundary": "外部强化与符号品质必须分开，否则无法判断成长究竟改变 Pool_Symbol 还是只改变结算规则。",
-            "fields": ["C1", "C2", "BD"]
+            "fields": [
+              "C1",
+              "C2",
+              "BD"
+            ]
           }
         ],
         "cases": [
           {
             "product_id": "product.endgame-of-devil",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "composition",
-            "status": "draft",
-            "summary": "战后财宝与重新 Spin 随从池同时指向池组成和外部规则；品质级别路径尚未拆出。",
-            "evidence_fields": ["Pool_Symbol", "BD"]
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
+            "status": "confirmed",
+            "summary": "每次 Spin 战后可增加我方符号，并可通过专门的删除能力移除符号；战后财宝也可通过规则、数值或技能改变 C₁／C₂，因此同时属于池组成与外部规则。敌方固定独立池不受玩家 BD 影响。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "C2",
+              "BD"
+            ]
           },
           {
             "product_id": "product.dog-and-goblin",
-            "mode_ids": ["composition", "merge-rank", "external-rules"],
-            "dominant_mode_id": "merge-rank",
+            "mode_ids": [
+              "composition",
+              "merge-rank",
+              "external-rules"
+            ],
             "status": "draft",
             "summary": "棋子保留／重抽、物品商店与合成决策并存；特定棋子组合升为新棋子，支撑合成升阶路径。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.spin-hero",
-            "mode_ids": ["composition", "direct-upgrade"],
-            "dominant_mode_id": "direct-upgrade",
-            "status": "draft",
-            "summary": "路线节点获取新图标并升级已有图标，是当前最清晰的直接升级样本。",
-            "evidence_fields": ["Pool_Symbol", "BD"]
+            "mode_ids": [
+              "composition"
+            ],
+            "status": "confirmed",
+            "summary": "每次 Spin 结束后选择符号，所选结果改变后续玩家符号池与战斗能力，属于池组成；没有证据表明它会不消耗同类符号直接提升已有符号品质。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "BD"
+            ]
           },
           {
             "product_id": "product.slots-and-daggers",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "external-rules",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "pending",
             "summary": "战后奖励可扩充符号配置或强化战斗；“升级老虎机”是否直接改变符号品质仍待确认。",
-            "evidence_fields": ["Pool_Symbol", "BD"]
+            "evidence_fields": [
+              "Pool_Symbol",
+              "BD"
+            ]
           },
           {
             "product_id": "product.lucky-hunter",
-            "mode_ids": ["composition", "merge-rank", "external-rules"],
-            "dominant_mode_id": "merge-rank",
+            "mode_ids": [
+              "composition",
+              "merge-rank",
+              "external-rules"
+            ],
             "status": "confirmed",
-            "summary": "5×5 大盘面与较大有效棋子池需要品质级别控制；三个相同棋子相邻自动合成更高阶棋子，合成升阶是 BD 主路径。",
-            "evidence_fields": ["Pool_Symbol", "Random", "C1", "BD"]
+            "summary": "7×7 大盘面与较大有效棋子池需要品质级别控制；三个相同棋子相邻自动合成更高阶棋子，明确具备合成升阶构筑方式。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "Random",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.lucky-hero",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "composition",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "draft",
             "summary": "5×5 大盘面、大符号范围与逐符号操作形成压力；已知 BD 主要是买删符号、技能与事件，尚无明确品质级别控制证据。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.rogue-slots",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "external-rules",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "pending",
             "summary": "获得与配置物品会改变后续池与战斗效果，但符号品质层及其控制方式尚未证实。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.spinny-dungeon",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "external-rules",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "pending",
             "summary": "武器、植物、魔法物品与伙伴的选择组合已确定；“组合”当前指协同配置，不直接等同合成升阶。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.slot-or-not",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "external-rules",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "pending",
             "summary": "装备与饰品改变候选空间和战斗能力；盘面与有效池会随进度成长，品质级别是否参与控制尚待拆解。",
-            "evidence_fields": ["Pool_Symbol", "Random", "BD"]
+            "evidence_fields": [
+              "Pool_Symbol",
+              "Random",
+              "BD"
+            ]
           },
           {
             "product_id": "product.lever-warrior-bow-and-magic",
             "mode_ids": [],
-            "dominant_mode_id": null,
             "status": "pending",
             "summary": "BD 字段尚未补录，暂不判定池组成、品质控制或外部规则路径。",
-            "evidence_fields": ["Pool_Symbol", "BD"]
+            "evidence_fields": [
+              "Pool_Symbol",
+              "BD"
+            ]
           },
           {
             "product_id": "product.hoptale-demo",
             "mode_ids": [],
-            "dominant_mode_id": null,
             "status": "pending",
             "summary": "1D 序列已确认，但当前局内有效池规模与 BD 方式尚未补录，不预设需要品质级别。",
-            "evidence_fields": ["Show_TP", "Pool_Symbol", "BD"]
+            "evidence_fields": [
+              "Show_TP",
+              "Pool_Symbol",
+              "BD"
+            ]
           }
         ]
+      },
+      "coordinate_projection": {
+        "active_source": "dimensions",
+        "legacy_xy_status": "retained_not_used",
+        "legacy_xy_note": "positions 中的 x/y 仅用于旧版对照与回滚；当前三维评分投影运行时不读取。"
       },
       "positions": [
         {
@@ -852,9 +1997,37 @@
           "topology": "2d-fixed",
           "enemy_space": "shared",
           "c1_mode": "formation",
-          "branch_ids": ["numeric-check", "shared-enemy"],
-          "changed_fields": ["Pool_Symbol", "Put", "C1", "C2"],
-          "position_note": "第一版草稿：直接抽取与自动落位使单 Spin 介入较轻；敌方符号进入同一 2D 盘面并参与 C₁，但 C₂ 只有我方攻击，战斗状态更接近数值检测。"
+          "branch_ids": [
+            "numeric-check",
+            "shared-enemy"
+          ],
+          "changed_fields": [
+            "Pool_Symbol",
+            "Put",
+            "C1",
+            "C2"
+          ],
+          "position_note": "限定回合内击败冒险者构成目标压力；直接抽取与自动落位使单 Spin 介入较轻。敌方符号来自独立且固定的敌方池，不受玩家 BD 影响，但会进入同一 2D 盘面并参与 C₁；C₂ 只有我方攻击、没有被攻击，因此归入数值检测与敌方入盘分支。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "需要理解自定义棋子协同，才能即时判断本轮好坏。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "从 Spin 到结果封闭均由系统自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 4,
+              "band": "high",
+              "basis": "相邻战斗持续生成新的结果节点，形成链式反馈。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.spin-hero",
@@ -865,9 +2038,34 @@
           "topology": "2d-fixed",
           "enemy_space": "external",
           "c1_mode": "formation",
-          "branch_ids": ["automatic-survival", "resource-survival"],
-          "changed_fields": ["C2"],
-          "position_note": "第一版草稿：自动落位与自动战斗维持较低操作数；敌我互攻及攻击、防御、血量／资源状态把它推入自动生存分支。"
+          "branch_ids": [
+            "automatic-survival",
+            "resource-survival"
+          ],
+          "changed_fields": [
+            "C2"
+          ],
+          "position_note": "攻击、金币、技能与防御类构成玩家符号池，每类还包含剑、刀等不同具体符号；系统自动落位与自动战斗，玩家在每次 Spin 后选择后续符号。敌人会攻击玩家并影响血量／防御，魔法还会消耗需要管理的独立资源，因此归入自动生存与资源生存分支。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 1,
+              "band": "low",
+              "basis": "改动较直观，只需少量额外理解。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 基本自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 1,
+              "band": "low",
+              "basis": "攻击与血量结果过早可计算，后续接近确定答案播放。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.lucky-hero",
@@ -878,9 +2076,37 @@
           "topology": "2d-fixed",
           "enemy_space": "external",
           "c1_mode": "formation",
-          "branch_ids": ["manual-control", "resource-survival", "boundary"],
-          "changed_fields": ["Pool_Symbol", "C2", "BD"],
-          "position_note": "第一版草稿：5×5 大盘面叠加单 Spin 逐符号操作，介入强度与疲劳风险最高；战斗及资源状态也较复杂，是观察“操作、盘面、符号池不能同时扩张”的边界案例。"
+          "branch_ids": [
+            "manual-control",
+            "resource-survival",
+            "boundary"
+          ],
+          "changed_fields": [
+            "Pool_Symbol",
+            "C2",
+            "BD"
+          ],
+          "position_note": "符号池以武器与其他战斗功能符号为主，不包含装备类符号；BD 包括购买／删除符号、选择技能与处理事件。5×5 大盘面叠加单 Spin 连续多符号操作，能量会被消耗、货币可跨 Spin 保留；敌人位于盘面外，因此归入主动控制与资源生存，并作为操作过载边界案例。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "需要理解角色与战斗协同。"
+            },
+            "spin_intervention": {
+              "score": 3,
+              "band": "high",
+              "basis": "Spin 内存在连续且有意义的能量操作。"
+            },
+            "c2_reveal_depth": {
+              "score": 3,
+              "band": "high",
+              "basis": "操作后产生多段反馈，玩家多次修正预测。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.lucky-hunter",
@@ -891,9 +2117,34 @@
           "topology": "2d-fixed",
           "enemy_space": "external",
           "c1_mode": "formation",
-          "branch_ids": ["automatic-survival", "boundary"],
-          "changed_fields": ["C2"],
-          "position_note": "第一版草稿：保留 5×5 盘面与自动推进，操作数较少；敌我互攻提高战斗状态负载，也是推导缩小盘面或符号池认知预算的主要压力案例。"
+          "branch_ids": [
+            "automatic-survival",
+            "boundary"
+          ],
+          "changed_fields": [
+            "C2"
+          ],
+          "position_note": "已确认使用 7×7 盘面并自动推进，操作数较少；敌人位于盘面外但会攻击玩家。游戏没有独立的魔法、能量、货币或食物资源线，因此归入自动生存与风险边界，不归入资源生存。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "需要理解自定义符号和战斗关系。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "一次 Spin 内没有玩家操作。"
+            },
+            "c2_reveal_depth": {
+              "score": 3,
+              "band": "high",
+              "basis": "战斗结果分阶段展开。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.dog-and-goblin",
@@ -904,9 +2155,35 @@
           "topology": "2d-split",
           "enemy_space": "fixed",
           "c1_mode": "formation",
-          "branch_ids": ["numeric-check"],
-          "changed_fields": ["Show_TP", "C1", "C2"],
-          "position_note": "第一版草稿：敌人固定在上方 3×5 敌方区而非符号入盘，我方存在前后排；自动落位且以我方攻击为主，因此仍靠近数值检测区。"
+          "branch_ids": [
+            "numeric-check"
+          ],
+          "changed_fields": [
+            "Show_TP",
+            "C1",
+            "C2"
+          ],
+          "position_note": "已确认敌人位于我方盘面外，不作为敌方符号进入盘面，也不参与 C₁；战斗中只有我方攻击敌方，并且没有独立护甲／防御数值，因此只归入数值检测分支。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "自定义棋子关系需要学习。"
+            },
+            "spin_intervention": {
+              "score": 3,
+              "band": "high",
+              "basis": "可在单 Spin 内多次移动我方布阵符号。"
+            },
+            "c2_reveal_depth": {
+              "score": 3,
+              "band": "high",
+              "basis": "战斗分阶段揭晓并持续更新预测。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.slots-and-daggers",
@@ -917,9 +2194,40 @@
           "topology": "1d",
           "enemy_space": "external",
           "c1_mode": "payline",
-          "branch_ids": ["manual-control", "payline", "resource-survival"],
-          "changed_fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "C1", "C2", "BD"],
-          "position_note": "第一版草稿：1D 序列与单步操作提高主动介入，却用更小的承载面控制 C₁ 认知；攻击、防御与资源状态形成较完整生存模型。"
+          "branch_ids": [
+            "manual-control",
+            "payline"
+          ],
+          "changed_fields": [
+            "Pool_Symbol",
+            "Random",
+            "Put",
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "已确认以 1D 转轮序列承载结果，玩家在单次 Spin 中主动控制并停止转轮；敌人会攻击玩家，护盾只在本次 Spin 内生效，金币作为可管理资源存在。结合既有确认，其核心仍是主动控制与支付线协同，不归入资源生存分支。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "需要理解轮盘及武器关系。"
+            },
+            "spin_intervention": {
+              "score": 4,
+              "band": "high",
+              "basis": "精细的单轴控制构成单 Spin 的主要操作。"
+            },
+            "c2_reveal_depth": {
+              "score": 4,
+              "band": "high",
+              "basis": "战果形成链式、多阶段持续揭晓。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.spinny-dungeon",
@@ -930,9 +2238,41 @@
           "topology": "2d-fixed",
           "enemy_space": "shared",
           "c1_mode": "formation",
-          "branch_ids": ["automatic-survival", "shared-enemy", "resource-survival", "boundary"],
-          "changed_fields": ["P_t", "Pool_Symbol", "Put", "C1", "C2", "BD"],
-          "position_note": "第一版草稿：敌方入盘并参与协同，敌我互相攻击但没有独立护甲；食物消耗又增加一条独立于战斗的生存压力，因此纵轴最高。"
+          "branch_ids": [
+            "automatic-survival",
+            "shared-enemy",
+            "resource-survival",
+            "boundary"
+          ],
+          "changed_fields": [
+            "P_t",
+            "Pool_Symbol",
+            "Put",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "敌方使用独立池并先被放入固定二维盘面，随后再从武器、食物、魔法物品与伙伴组成的玩家 Pool_Symbol 中随机落位；敌方仍进入同盘并参与 C₁。敌我会互相攻击但没有独立护甲；食物需要持续管理，玩家还可在单次 Spin 内主动释放魔法，BD 通过选择和组合上述对象改变后续符号池与战斗能力。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 3,
+              "band": "high",
+              "basis": "需要识别武器、食物、魔法等关系，食物不足的即时风险也必须同时判断。"
+            },
+            "spin_intervention": {
+              "score": 1,
+              "band": "low",
+              "basis": "可在单 Spin 内释放魔法。"
+            },
+            "c2_reveal_depth": {
+              "score": 3,
+              "band": "high",
+              "basis": "结果通过多个战斗阶段逐步展示。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.slot-or-not",
@@ -943,9 +2283,42 @@
           "topology": "2d-grow",
           "enemy_space": "shared",
           "c1_mode": "payline",
-          "branch_ids": ["manual-control", "shared-enemy", "payline", "boundary"],
-          "changed_fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "C1", "C2", "BD"],
-          "position_note": "第一版草稿：盘面从 1×3 成长，用 Choice_Pool 主动选择降低单次上盘符号类型；敌方符号与我方符号由 Slot 装置自动写入同一盘面并占位，供 C₁ 协同计算。该结构增加操作并可能稀释集中揭晓。"
+          "branch_ids": [
+            "manual-control",
+            "shared-enemy",
+            "payline",
+            "boundary"
+          ],
+          "changed_fields": [
+            "Pool_Symbol",
+            "Random",
+            "Put",
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "盘面从 1×3 起步并逐行／逐列成长至约 5×5；玩家池由装备与物品组成，固定敌方符号会被额外放入 Choice_Symbol。若本次共有 5 个候选且敌方占 1 个，玩家只在剩余 4 个玩家候选中选择。敌我符号同盘并通过支付线参与 C₁；敌我互攻，但没有独立护甲、魔法、能量或其他资源线。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "候选池与牌组规则需要理解。"
+            },
+            "spin_intervention": {
+              "score": 3,
+              "band": "high",
+              "basis": "连续进行有意义的 choice_symbol 选择。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "战斗产生一次主要的后续兑现。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.rogue-slots",
@@ -956,9 +2329,39 @@
           "topology": "2d-fixed",
           "enemy_space": "shared",
           "c1_mode": "hybrid",
-          "branch_ids": ["automatic-survival", "shared-enemy", "payline"],
-          "changed_fields": ["Pool_Symbol", "Put", "C1", "C2", "BD"],
-          "position_note": "第一版草稿：敌方符号进入 Pool 与同一盘面并参与 C₁，支付线与阵容协同混合；敌我互相攻击但没有独立护甲，战斗主要自动推进。"
+          "branch_ids": [
+            "automatic-survival",
+            "shared-enemy",
+            "payline"
+          ],
+          "changed_fields": [
+            "Pool_Symbol",
+            "Put",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "已确认使用固定二维 Slot 盘面；敌方符号进入 Pool 与同一盘面并参与 C₁，支付线与阵容协同混合。单次 Spin 启动后自动停止、自动结算，玩家没有过程内操作；敌我互相攻击但没有独立护甲，因此归入自动生存、敌方入盘与支付线分支。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 1,
+              "band": "low",
+              "basis": "敌我符号关系较直观。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 主要自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "敌我交互使结果至少发生一次关键更新。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.lever-warrior-bow-and-magic",
@@ -969,9 +2372,34 @@
           "topology": "2d-fixed",
           "enemy_space": "external",
           "c1_mode": "formation",
-          "branch_ids": ["automatic-survival", "resource-survival"],
-          "changed_fields": ["C1", "C2"],
-          "position_note": "第一版草稿：总体操作仍偏自动；C₁ 生成普通、远程、魔法等不同攻击类型在单回合内的伤害值，C₂ 再结合攻防血、战斗距离与魔法资源进行演绎。"
+          "branch_ids": [
+            "automatic-survival"
+          ],
+          "changed_fields": [
+            "C1",
+            "C2"
+          ],
+          "position_note": "已确认使用固定 5×5 盘面，单次 Spin 主要自动结算；唯一的过程操作是选择符号，部分符号可被主动释放。敌人会攻击玩家，C₁ 生成普通、远程、魔法等不同攻击类型的伤害值；魔法不是跨 Spin 资源，护甲只在本次 Spin 有效，另有金币资源，因此归入自动生存，不归入资源生存。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "多类战斗符号需要少量学习。"
+            },
+            "spin_intervention": {
+              "score": 1,
+              "band": "low",
+              "basis": "单次 Spin 主要自动结算，但存在有限可操作内容。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "战斗通过一次关键过程继续兑现 C₁。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.hoptale-demo",
@@ -982,9 +2410,40 @@
           "topology": "1d",
           "enemy_space": "shared",
           "c1_mode": "formation",
-          "branch_ids": ["automatic-survival", "shared-enemy"],
-          "changed_fields": ["Pool_Symbol", "Put", "Show_TP", "C1", "C2", "BD"],
-          "position_note": "第一版草稿：Show_TP 覆写为由系统自动生成并展示的 1D 序列，敌方角色通过扩展 Put 进入承载序列；C₁ 按序列执行符号，C₂ 由系统自动完成敌我互相攻击的生存战斗，因此单 Spin 玩家介入较低。"
+          "branch_ids": [
+            "automatic-survival",
+            "shared-enemy",
+            "resource-survival"
+          ],
+          "changed_fields": [
+            "Pool_Symbol",
+            "Put",
+            "Show_TP",
+            "C1",
+            "C2",
+            "BD"
+          ],
+          "position_note": "系统从攻击类、金币、敌方攻击类、我方防御类等共同符号池生成固定 1D 序列；敌方角色进入同一序列并参与 C₁，敌我互相攻击。玩家可锁定并重新 Random；货币跨 Spin 持续，其余资源仅当前 Spin 生效。Demo 阶段的 BD 主要改变符号，因此归入自动生存、敌方入盘与资源生存。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "自定义角色和关系产生学习成本。"
+            },
+            "spin_intervention": {
+              "score": 1,
+              "band": "low",
+              "basis": "可锁定部分结果并重新 Random，但仍属于一次有限介入。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "结果通过一次主要战斗过程继续揭晓。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         }
       ],
       "innovations": [
@@ -994,6 +2453,8 @@
           "status": "tradeoff",
           "title": "候选池式 Random：结构思路与峰值代价",
           "primary_field": "Random",
+          "image_url": "./assets/uploads/formula-fields/variant.slot-or-not-Random-1785515985252-0-1h05ju.png",
+          "image_caption": "候选符号先进入 Choice_Pool，玩家再选择放入本次盘面的符号。",
           "related_fields": [
             "Pool_Symbol"
           ],
@@ -1059,178 +2520,177 @@
         }
       },
       "bd_analysis": {
-        "version": "20260801-draft.1",
-        "status": "draft",
-        "formula": "BD = Pool_Symbol 组成控制 × Symbol_Quality 级别控制 × 外部规则构筑",
-        "principle": "Symbol_Quality 级别控制是 BD 管理 Pool_Symbol 的手段，不是每个变体都必须显式做成多品质层。先根据 Show_TP 有效承载、当前局内有效池与进度跨度判断是否需要品质控制，再选择直接升级、合成升阶或高品质获取等实现。",
-      "conclusion": "第一版数值型样本以池组成和外部规则构筑为主。《猫神牧场》不存在通用养成池品质梯度，仅少量特殊符号有有限品质变化；《Re: Spin. Die. Repeat. Demo》保留 Pool_Symbol 构筑，但不提供 C₂ 养成。",
-        "evidence_boundary": "Pool_Symbol 规模指当前局内实际参与 Random 的有效类型与数量，不等于全游戏图鉴总量。《幸运房东》已有稀有度梯度，但现有字段仍不能证明 BD 会提高 Random 抽到高稀有度符号的概率。",
-        "control_model": {
-          "formula": "品质级别控制价值 = Show_TP 有效承载 × 当前局内 Pool_Symbol 规模 × 进度跨度",
-          "scope_note": "品质是大空间、大有效池随进度扩张时的控制手段；它可以压缩成长表达，但不能代替对符号类型数和单 Spin 认知负载的控制。",
-          "cells": [
-            {
-              "id": "small-small",
-              "show_tp": "小",
-              "pool": "小",
-              "value": "通常不需要品质级别",
-              "recommendation": "用类型与数量构筑已能建立成长；额外品质层容易只增加记忆成本。",
-              "tone": "low"
-            },
-            {
-              "id": "large-small",
-              "show_tp": "大",
-              "pool": "小",
-              "value": "品质级别可选",
-              "recommendation": "先用位置、邻接与 C₁ 协同消化空间；只在长进度需要压缩成长时引入品质。",
-              "tone": "optional"
-            },
-            {
-              "id": "small-large",
-              "show_tp": "小",
-              "pool": "大",
-              "value": "先缩池，品质无法救类型污染",
-              "recommendation": "优先删除、分池、限制当局类型或减少候选；升品质不会提高协同符号的出现密度。",
-              "tone": "risk"
-            },
-            {
-              "id": "large-large",
-              "show_tp": "大",
-              "pool": "大",
-              "value": "品质级别控制价值最高",
-              "recommendation": "用直接升级、合成升阶或高品质替换承载进度，避免只靠无限新增类型造成池膨胀。",
-              "tone": "high"
-            }
-          ]
-        },
+        "version": "20260810-draft.4",
+        "status": "confirmed",
+        "formula": "BD = Pool_Symbol 组成控制 × Random／Put 抽取与顺序控制 × 外部规则构筑",
+        "principle": "三个分类可以并列组合，不设置互斥关系。长期增删、替换或调整权重属于池组成；刷新、重抽、锁定、保留与直接调整序列属于抽取与顺序控制；道具、建筑、技能、地形和被动对 C₁／C₂ 的改写属于外部规则。",
+        "conclusion": "当前数值型样本集中在构建与精简 Pool_Symbol、提供刷新／锁定／重排等控制能力，以及用道具、建筑、技能和地形改变结算规则。",
         "modes": [
           {
             "id": "composition",
             "kind": "POOL",
             "label": "池组成",
-            "title": "选入、删除、保留、重抽与配置符号",
-            "description": "直接改变当前局内 Pool_Symbol 中有哪些类型与各有多少。",
-            "boundary": "组成变化不等于品质成长，也不证明高稀有度 Random 概率被提高。",
-            "fields": ["Pool_Symbol", "BD"]
+            "title": "增加或删除符号，调整数量、出现权重与候选范围",
+            "description": "长期增加、删除、替换符号，调整数量、出现权重和候选范围；符号升级只有在改变池内身份或变成另一种符号时才归入此类。",
+            "boundary": "单次刷新、重抽、锁定和顺序调整不算池组成；只改变已有符号能力或数值的升级归入外部规则。",
+            "fields": [
+              "Pool_Symbol",
+              "BD"
+            ]
           },
           {
-            "id": "direct-upgrade",
-            "kind": "QUALITY",
-            "label": "直接升级",
-            "title": "BD 直接提升已有符号的品质级别",
-            "description": "不消耗多个同类符号，通过升级或强化让同一符号向更高阶状态发展。",
-            "boundary": "需确认“升级”对象是符号自身品质，还是道具、规则或直接数值。",
-            "fields": ["Pool_Symbol", "C1", "BD"]
-          },
-          {
-            "id": "merge-rank",
-            "kind": "QUALITY",
-            "label": "合成／升阶",
-            "title": "用多个同类或特定组合产生更高阶符号",
-            "description": "合成同时消化池数量并建立品质成长；它是一种可选品质控制路径，不是 Slot改·数值型的默认要求。",
-            "boundary": "当前数值型样本没有已确认 CASE；字段中的“组合”或“协同”不得自动解释为合成。",
-            "fields": ["Pool_Symbol", "C1", "BD"]
-          },
-          {
-            "id": "quality-acquisition",
-            "kind": "QUALITY",
-            "label": "高品质获取",
-            "title": "BD 提高高品质符号的获取或替换能力",
-            "description": "可以是直接换入高品质符号，也可以是改变候选品质；若改变抽取概率则还必须显式记录 Random 扩展。",
-            "boundary": "当前样本无已确认 CASE；稀有度梯度或商店买新符号不足以支撑这一判定。",
-            "fields": ["Pool_Symbol", "Random", "BD"]
+            "id": "draw-control",
+            "kind": "CONTROL",
+            "label": "抽取与顺序控制",
+            "title": "刷新、重抽、锁定、保留或直接调整符号序列",
+            "description": "控制刷新、重抽、锁定、保留候选的次数、成本和范围；也可以直接调整符号序列，决定本轮取用区段、数量或候选，并影响 Random／Put 的可控程度。",
+            "boundary": "系统自动随机抽取或落位不属于 BD；默认单次操作也不自动计入，只有能力由构筑获得、强化、配置，或序列本身就是主要构筑对象时才记录。",
+            "fields": [
+              "Random",
+              "Put",
+              "BD"
+            ]
           },
           {
             "id": "external-rules",
             "kind": "RULE",
             "label": "外部规则",
             "title": "用道具、建筑、技能或地形改变符号结算",
-            "description": "改变 C₁／C₂ 的触发和兑现，但可以不改变符号自身的 Symbol_Quality。",
-            "boundary": "外部强化与符号品质必须分开，否则无法判断成长究竟改变 Pool_Symbol 还是只改变结算规则。",
-            "fields": ["C1", "C2", "BD"]
+            "description": "通过道具、建筑、技能、地形、天赋和被动改变 C₁／C₂ 的触发、邻接、倍率与最终兑现，也可生成、删除、移动、转化符号或增加资源与后续结算。",
+            "boundary": "新增一个具有自身能力的符号首先归入池组成；统一修改一个或多个符号、升级能力或触发条件归入外部规则。不能由构筑获得或强化的临时效果不计入 BD。",
+            "fields": [
+              "C1",
+              "C2",
+              "BD"
+            ]
           }
         ],
         "cases": [
           {
             "product_id": "product.luck-be-a-landlord",
-            "mode_ids": ["composition", "direct-upgrade"],
-            "dominant_mode_id": "direct-upgrade",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "draft",
-            "summary": "三选一买符号、付费删除与升级已被记录；稀有度梯度存在，但 BD 是否改变高稀有度 Random 概率没有证据。",
-            "evidence_fields": ["Pool_Symbol", "Random", "BD"]
+            "summary": "三选一买符号与付费删除调整池组成，升级效果按其实际作用记录为外部规则。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "Random",
+              "BD"
+            ]
           },
           {
             "product_id": "product.lucky-mayor",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "composition",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "draft",
-            "summary": "招募市民扩充池组成，产业链与道具建立外部规则；品质级别路径尚未确认。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "summary": "招募市民扩充池组成，产业链、建筑与道具建立外部规则。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.cat-god-ranch",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "composition",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "draft",
-          "summary": "动物添加／移除控制有效池，道具、地形与玩具改变协同规则；不存在面向全池的通用品质梯度，仅少量特殊符号有有限品质变化。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "summary": "动物添加／移除控制有效池，道具、地形与玩具改变邻接结果和最终产出规则。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.crop-rotation",
-            "mode_ids": ["composition", "direct-upgrade"],
-            "dominant_mode_id": "direct-upgrade",
+            "mode_ids": [
+              "composition",
+              "draw-control",
+              "external-rules"
+            ],
             "status": "draft",
-            "summary": "Drafting、移除与升级卡共同构成 BD；当前可作为直接升级样本，但卡牌升级如何映射 Symbol_Quality 待细化。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "summary": "Drafting、移除与玩家直接调整顺序控制池组成；升级和被动会改写能力、触发、邻接、符号操作及资源效果，当前应记录为外部规则，而不是直接推定为 Symbol_Quality 升级。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.die-shou-wei-cheng",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "composition",
+            "mode_ids": [
+              "composition",
+              "draw-control",
+              "external-rules"
+            ],
             "status": "draft",
             "summary": "局内重抽、删除与阶段间增删符号主要控制池组成，守护者英雄负责外部规则。",
-            "evidence_fields": ["Pool_Symbol", "Random", "BD"]
+            "evidence_fields": [
+              "Pool_Symbol",
+              "Random",
+              "BD"
+            ]
           },
           {
             "product_id": "product.luckland",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "external-rules",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "draft",
-            "summary": "区域选路决定后续补入的棋子与宝物；它同时改变池组成和外部规则，未证明品质概率被修改。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "summary": "区域选路决定后续补入的棋子与宝物，同时改变池组成和外部规则。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
           {
             "product_id": "product.lucky-island",
-            "mode_ids": ["composition", "external-rules"],
-            "dominant_mode_id": "external-rules",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
             "status": "draft",
-            "summary": "商店与事件提供构筑选择，建筑和技能改变资源兑现；品质级别的必要性与实现尚待确认。",
-            "evidence_fields": ["Pool_Symbol", "C1", "BD"]
+            "summary": "商店与事件提供构筑选择，建筑和技能作为外部规则直接增加最终数值。",
+            "evidence_fields": [
+              "Pool_Symbol",
+              "C1",
+              "BD"
+            ]
           },
-      {
-        "product_id": "product.re-spin-die-repeat-demo",
-        "mode_ids": [
-          "composition"
-        ],
-        "dominant_mode_id": "composition",
-        "status": "confirmed",
-        "summary": "玩家仍可构筑 Pool_Symbol，但候选范围受任务限制，且 BD 不能养成 C₂ 修饰；它是“池组成可构筑、第二峰不可构筑”的边界样本。",
-            "evidence_fields": ["Show_TP", "Pool_Symbol", "BD"]
+          {
+            "product_id": "product.re-spin-die-repeat-demo",
+            "mode_ids": [
+              "composition"
+            ],
+            "status": "confirmed",
+            "summary": "玩家仍可构筑 Pool_Symbol，但候选范围受任务限制，且 BD 不能养成 C₂ 修饰；它是“池组成可构筑、第二峰不可构筑”的边界样本。",
+            "evidence_fields": [
+              "Show_TP",
+              "Pool_Symbol",
+              "BD"
+            ]
           }
         ]
       },
       "four_layer_architecture": {
-        "version": "20260801.1",
+        "version": "20260810.2",
+        "review_status": "confirmed",
         "core_preset_id": "core",
         "branch_ids": [
-          "weak-c2",
-          "zero-d-industry",
           "spatial-expansion",
           "resource-network",
-          "ordered-pool",
-          "task-constrained"
+          "ordered-pool"
         ],
-        "case_evidence_policy": "CASE 继承所属 BRANCH 的证据字段，读取具体游戏的公式字段描述；字段可继续点击进入产品定位详情。",
+        "case_evidence_policy": "游戏案例继承所属改动分支的证据字段，读取具体游戏的公式字段描述；字段可继续点击进入产品定位详情。",
         "boundaries": [
           {
             "id": "second-peak-attenuation",
@@ -1239,13 +2699,16 @@
             "trigger": "道具、天赋、建筑或技能只对 C₁ 结果做少量全局／局部修饰，且修饰成长不足。",
             "consequence": "玩家能看懂基础产出，但“基础结果 → 大幅兑现”的第二峰较弱，长线构筑更依赖 Pool_Symbol 本身。",
             "mitigation": "保留轻量 C₂ 时，至少让关键修饰拥有清晰的触发、数值跳变与可养成路径，同时不引入大量额外状态。",
-            "branch_ids": ["weak-c2"],
+            "branch_ids": [],
             "product_ids": [
               "product.die-shou-wei-cheng",
-              "product.luckland",
-              "product.lucky-island"
+              "product.luckland"
             ],
-            "fields": ["C1", "C2", "BD"]
+            "fields": [
+              "C1",
+              "C2",
+              "BD"
+            ]
           },
           {
             "id": "topology-rule-overload",
@@ -1254,14 +2717,23 @@
             "trigger": "0D 分区生产链、错位六邻接或从 2×2 成长到 6×6 的盘面，又同时增加符号标签、资源转换与被动规则。",
             "consequence": "玩家需要在空间位置、类型字典和资源链之间往返换算，大奖的瞬时可读性下降。",
             "mitigation": "明确每种 Show_TP 只承载一种主要 C₁ 读法；盘面变大时控制当局有效 Pool_Symbol 规模，必要时再用 Symbol_Quality 压缩成长表达。",
-            "branch_ids": ["zero-d-industry", "spatial-expansion", "resource-network"],
+            "branch_ids": [
+              "spatial-expansion",
+              "resource-network"
+            ],
             "product_ids": [
               "product.lucky-mayor",
               "product.cat-god-ranch",
               "product.crop-rotation",
               "product.lucky-island"
             ],
-            "fields": ["Pool_Symbol", "Show_TP", "C1", "C2", "BD"]
+            "fields": [
+              "Pool_Symbol",
+              "Show_TP",
+              "C1",
+              "C2",
+              "BD"
+            ]
           },
           {
             "id": "random-responsibility-shift",
@@ -1270,20 +2742,20 @@
             "trigger": "Pool_Symbol 以有序序列直接生成 SingleSpin_Symbol，随机性全部移到自动落位。",
             "consequence": "玩家对“抽中高价值符号”的期待会转为“符号落到有利位置”，其概率认知与奖励峰值来源已经改变。",
             "mitigation": "将随机落位做成一次集中、可读的盘面揭晓，并让 BD 能够清楚地影响有序符号池与落位结果之间的关系。",
-            "branch_ids": ["ordered-pool", "spatial-expansion"],
-            "product_ids": ["product.crop-rotation"],
-            "fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "BD"]
-          },
-          {
-            "id": "task-driven-prototype-drift",
-            "label": "任务化偏移",
-            "title": "构筑目标从放大大奖概率转为求解固定任务",
-            "trigger": "任务限定候选符号池，玩家只能构筑 Pool_Symbol，无法通过 BD 养成 C₂ 修饰。",
-            "consequence": "体验重心可能从“我构建了大奖的可能性，然后抽中”转为“在有限候选中找到当前任务的解”。",
-            "mitigation": "持续检查任务是否仍服务于 Spin 随机揭晓与数值二次兑现；若最优策略求解成为主体，应重新检查品类归属。",
-            "branch_ids": ["task-constrained"],
-            "product_ids": ["product.re-spin-die-repeat-demo"],
-            "fields": ["P_t", "Pool_Symbol", "C2", "BD"]
+            "branch_ids": [
+              "ordered-pool",
+              "spatial-expansion"
+            ],
+            "product_ids": [
+              "product.crop-rotation"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "Put",
+              "Show_TP",
+              "BD"
+            ]
           }
         ]
       },
@@ -1293,7 +2765,7 @@
         "encodings": {
           "topology_badge": "右上角 Show_TP 角标：0D 多重集／固定 2D／错位 2D／成长 2D",
           "color": "C₂ 叠层深度：弱修饰／规则修饰／资源网络",
-          "c1_badge": "右上角 C₁ 角标：邻接／数量、顺序生产、混合规则",
+          "c1_badge": "右上角 C₁ 角标：邻接／数量、生产链、混合规则",
           "size": "第一版不编码市场表现，所有节点保持同尺寸"
         },
         "node_encodings": {
@@ -1307,10 +2779,22 @@
               "2d-grow": "成长 2D"
             },
             "legend": [
-              ["0d", "0D 多重集"],
-              ["2d-fixed", "固定 2D"],
-              ["2d-staggered", "错位 2D"],
-              ["2d-grow", "成长 2D"]
+              [
+                "0d",
+                "0D 多重集"
+              ],
+              [
+                "2d-fixed",
+                "固定 2D"
+              ],
+              [
+                "2d-staggered",
+                "错位 2D"
+              ],
+              [
+                "2d-grow",
+                "成长 2D"
+              ]
             ]
           },
           "color": {
@@ -1323,9 +2807,18 @@
               "pending": "待确认"
             },
             "legend": [
-              ["external", "弱修饰"],
-              ["fixed", "规则修饰"],
-              ["shared", "资源网络"]
+              [
+                "external",
+                "弱修饰"
+              ],
+              [
+                "fixed",
+                "规则修饰"
+              ],
+              [
+                "shared",
+                "资源网络"
+              ]
             ]
           },
           "secondary_badge": {
@@ -1333,13 +2826,22 @@
             "position_key": "c1_mode",
             "labels": {
               "formation": "邻接／数量",
-              "payline": "顺序生产",
+              "payline": "生产链",
               "hybrid": "混合规则"
             },
             "legend": [
-              ["formation", "邻接／数量"],
-              ["payline", "顺序生产"],
-              ["hybrid", "混合规则"]
+              [
+                "formation",
+                "邻接／数量"
+              ],
+              [
+                "payline",
+                "生产链"
+              ],
+              [
+                "hybrid",
+                "混合规则"
+              ]
             ]
           }
         },
@@ -1348,7 +2850,7 @@
             "id": "core",
             "x": 6,
             "y": 8,
-            "label": "Slot改·数值型 CORE",
+            "label": "Slot改·数值型原型核心",
             "summary": "Spin 随机揭晓 → BD 控制 Pool_Symbol 组成 → 自有 C₁ → C₂ 数值二次兑现"
           }
         ],
@@ -1381,21 +2883,40 @@
             "width": 43,
             "height": 38,
             "tone": "amber",
-            "description": "弱化空间邻接，用类型字典、顺序生产与资源消耗建立深层协同。"
+            "description": "弱化空间邻接，用分区集合、类型字典、生产与资源消耗建立深层协同。"
           }
         ],
         "edges": [
-          {"id": "core-baseline", "from": "anchor:core", "to": "product.luck-be-a-landlord", "branch": "core"},
-          {"id": "weak-a", "from": "product.luck-be-a-landlord", "to": "product.die-shou-wei-cheng", "branch": "weak-c2"},
-          {"id": "weak-b", "from": "product.die-shou-wei-cheng", "to": "product.luckland", "branch": "weak-c2"},
-          {"id": "weak-c", "from": "product.luckland", "to": "product.lucky-island", "branch": "weak-c2"},
-          {"id": "zero-d-a", "from": "product.luck-be-a-landlord", "to": "product.lucky-mayor", "branch": "zero-d-industry"},
-          {"id": "spatial-a", "from": "product.luck-be-a-landlord", "to": "product.cat-god-ranch", "branch": "spatial-expansion"},
-          {"id": "spatial-b", "from": "product.cat-god-ranch", "to": "product.crop-rotation", "branch": "spatial-expansion"},
-          {"id": "resource-a", "from": "product.lucky-mayor", "to": "product.cat-god-ranch", "branch": "resource-network"},
-          {"id": "resource-b", "from": "product.cat-god-ranch", "to": "product.lucky-island", "branch": "resource-network"},
-          {"id": "ordered-a", "from": "product.luck-be-a-landlord", "to": "product.crop-rotation", "branch": "ordered-pool"},
-          {"id": "task-a", "from": "product.luck-be-a-landlord", "to": "product.re-spin-die-repeat-demo", "branch": "task-constrained"}
+          {
+            "id": "core-baseline",
+            "from": "anchor:core",
+            "to": "product.luck-be-a-landlord",
+            "branch": "core"
+          },
+          {
+            "id": "zero-d-a",
+            "from": "product.luck-be-a-landlord",
+            "to": "product.lucky-mayor",
+            "branch": "resource-network"
+          },
+          {
+            "id": "spatial-a",
+            "from": "product.luck-be-a-landlord",
+            "to": "product.cat-god-ranch",
+            "branch": "spatial-expansion"
+          },
+          {
+            "id": "spatial-b",
+            "from": "product.cat-god-ranch",
+            "to": "product.crop-rotation",
+            "branch": "spatial-expansion"
+          },
+          {
+            "id": "ordered-a",
+            "from": "product.luck-be-a-landlord",
+            "to": "product.crop-rotation",
+            "branch": "ordered-pool"
+          }
         ],
         "presets": {
           "all": {
@@ -1409,97 +2930,126 @@
           "core": {
             "kind": "CORE",
             "label": "原型核心",
-            "title": "Spin 随机揭晓、可构筑 Pool_Symbol、自有 C₁ 与承接 C₁ 的数值 C₂",
-            "summary": "BD 首先控制 Pool_Symbol 的类型与数量；只在大 Show_TP、大当局有效池与长进度同时成立时，Symbol_Quality 才上升为有价值的池管理手段。",
-            "boundary": "CORE 不默认 2D、邻接、品质加权 Random、多资源网络或强 C₂；这些属于可变分支。",
-            "anchors": ["core"],
-            "edges": ["core-baseline"],
-            "fields": ["Pool_Symbol", "Random", "C1", "C2", "BD"]
-          },
-          "weak-c2": {
-            "kind": "BRANCH",
-            "label": "弱 C₂",
-            "title": "第二峰仅保留少量英雄、天赋、建筑或工具修饰",
-            "summary": "结算路径更短、认知负担更低，但 C₁ 到 C₂ 的二次揭晓强度也同步下降。",
-            "boundary": "弱 C₂ 不等于无 C₂；只要存在全局／局部修饰或结果映射，就应记录为低强度二次揭晓。",
-            "products": ["product.die-shou-wei-cheng", "product.luckland", "product.lucky-island"],
-            "zones": ["direct-2d"],
-            "edges": ["weak-a", "weak-b", "weak-c"],
-            "fields": ["C1", "C2", "BD"]
-          },
-          "zero-d-industry": {
-            "kind": "BRANCH",
-            "label": "0D 产业链",
-            "title": "从 2D 邻接改为 0D 多重集、类型字典与顺序生产",
-            "summary": "空间位置不再是主要协同条件，符号类型、资源产出与消耗顺序构成新 C₁／C₂。",
-            "boundary": "0D 降低位置认知，但产业链过深时仍会产生高规则负荷。",
-            "products": ["product.lucky-mayor"],
-            "zones": ["resource-0d"],
-            "edges": ["zero-d-a"],
-            "fields": ["Put", "Show_TP", "C1", "C2"]
+            "title": "4 组品类变化：目标约束、符号池、数值结算与构筑循环",
+            "summary": "目标约束通过 P(t) 增加阶段性数值压力；符号池把固定 Pool_Symbol 改为可构筑动态池；数值结算以自有 C₁ 建立基础结果，再由 C₂ 继续揭晓；构筑循环通过 N 与 BD 持续调整后续池组成，并按实际需要启用 Symbol_Quality。",
+            "boundary": "原型核心不默认 2D、邻接、品质加权 Random、多资源网络或强 C₂；这些属于可变分支。",
+            "anchors": [
+              "core"
+            ],
+            "edges": [
+              "core-baseline"
+            ],
+            "fields": [
+              "P_t",
+              "Pool_Symbol",
+              "C1",
+              "C2",
+              "N",
+              "BD"
+            ]
           },
           "spatial-expansion": {
             "kind": "BRANCH",
-            "label": "空间扩张",
-            "title": "通过错位六邻接或逐格解锁改写 Show_TP",
-            "summary": "一条路径提高单符号的邻接容量，另一条路径让盘面随进度从 2×2 成长到 6×6。",
-            "boundary": "空间扩张必须同步控制当局有效 Pool_Symbol 规模，否则位置与类型认知会同时膨胀。",
-            "products": ["product.cat-god-ranch", "product.crop-rotation"],
-            "zones": ["resource-2d"],
-            "edges": ["spatial-a", "spatial-b"],
-            "fields": ["Show_TP", "C1", "Pool_Symbol", "BD"]
+            "status": "confirmed",
+            "label": "空间变化",
+            "title": "通过邻接结构、盘面形态或成长方式改写 Show_TP",
+            "summary": "空间可以从常规网格改为错位邻接，也可以随进度扩展或改变可用区域，使位置关系成为新的 C₁ 输入。",
+            "boundary": "空间变化必须同步控制当局有效 Pool_Symbol 规模，否则位置与类型认知会同时膨胀。",
+            "products": [
+              "product.cat-god-ranch",
+              "product.crop-rotation"
+            ],
+            "zones": [
+              "resource-2d"
+            ],
+            "edges": [
+              "spatial-a",
+              "spatial-b"
+            ],
+            "fields": [
+              "Show_TP",
+              "C1",
+              "Pool_Symbol",
+              "BD"
+            ]
           },
           "resource-network": {
             "kind": "BRANCH",
+            "status": "confirmed",
             "label": "资源网络",
             "title": "符号生产、消耗、转换与外部建设共同叠层",
             "summary": "第二峰从直接倍率增益扩展为跨符号、资源、物品或建筑的结果网络。",
             "boundary": "资源网络增强长线构筑，但不能代替对单 Spin C₁ 可读性的保护。",
-            "products": ["product.lucky-mayor", "product.cat-god-ranch", "product.lucky-island"],
-            "zones": ["resource-0d", "resource-2d"],
-            "edges": ["resource-a", "resource-b"],
-            "fields": ["Pool_Symbol", "C1", "C2", "BD"]
+            "products": [
+              "product.lucky-mayor"
+            ],
+            "zones": [
+              "resource-0d"
+            ],
+            "edges": [
+              "zero-d-a"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "C1",
+              "C2",
+              "BD"
+            ]
           },
           "ordered-pool": {
             "kind": "BRANCH",
+            "status": "confirmed",
             "label": "有序符号池",
             "title": "Pool_Symbol 序列直接定义本次内容，随机性后移到 Put",
-            "summary": "BD 管理的不只是符号类型与数量，还包括顺序；系统再把这些符号随机落到盘面。",
+            "summary": "BD 管理的不只是符号类型与数量，还包括排列顺序；系统再把这些符号随机落到盘面。这种将 Random 职责后移到 Put 的结构，是该品类中具有一定创新性的改动方向。",
             "boundary": "这是随机职责的转移，不应写成“游戏完全无随机”。",
-            "products": ["product.crop-rotation"],
-            "zones": ["resource-2d"],
-            "edges": ["ordered-a"],
-            "fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "BD"]
-          },
-          "task-constrained": {
-            "kind": "BRANCH",
-            "label": "任务收敛",
-            "title": "Pool_Symbol 仍可构筑，但候选范围受任务限制且 C₂ 不可养成",
-            "summary": "玩家的 BD 决策集中在当前任务的符号池解法，高值 C₂ 更像系统给定条件下抽中超级大奖。",
-            "boundary": "如果任务求解成为主体，而不是构筑并见证大奖概率，体验会逼近策略解谜边界。",
-            "products": ["product.re-spin-die-repeat-demo"],
-            "zones": [],
-            "edges": ["task-a"],
-            "fields": ["P_t", "Pool_Symbol", "C2", "BD"]
+            "products": [
+              "product.crop-rotation"
+            ],
+            "zones": [
+              "resource-2d"
+            ],
+            "edges": [
+              "ordered-a"
+            ],
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "Put",
+              "Show_TP",
+              "BD"
+            ]
           },
           "boundary": {
             "kind": "BOUNDARY",
             "label": "风险总览",
-            "title": "第二峰衰减、拓扑过载、随机职责后移与任务化偏移",
-            "summary": "四类边界分别改变峰值强度、结果可读性、概率认知与体验主体，不能合并为一个“复杂度”结论。",
-            "boundary": "风险 CASE 只用于标记需要验证的结构组合，不等于产品好坏评价或已经越界。",
+            "title": "第二峰衰减、拓扑过载与随机职责后移",
+            "summary": "三类风险分别影响峰值强度、结果可读性与概率认知；它们是需要单独检查的设计问题，不作为改动分支。",
+            "boundary": "风险案例只用于标记需要验证的结构组合，不等于产品好坏评价或已经越界。",
             "products": [
               "product.die-shou-wei-cheng",
               "product.luckland",
               "product.lucky-island",
               "product.lucky-mayor",
               "product.cat-god-ranch",
-              "product.crop-rotation",
-              "product.re-spin-die-repeat-demo"
+              "product.crop-rotation"
             ],
-            "fields": ["Pool_Symbol", "Random", "Put", "Show_TP", "C1", "C2", "BD"]
+            "fields": [
+              "Pool_Symbol",
+              "Random",
+              "Put",
+              "Show_TP",
+              "C1",
+              "C2",
+              "BD"
+            ]
           }
         }
+      },
+      "coordinate_projection": {
+        "active_source": "dimensions",
+        "legacy_xy_status": "retained_not_used",
+        "legacy_xy_note": "positions 中的 x/y 仅用于旧版对照与回滚；当前三维评分投影运行时不读取。"
       },
       "positions": [
         {
@@ -1513,7 +3063,27 @@
           "c1_mode": "formation",
           "branch_ids": [],
           "changed_fields": [],
-          "position_note": "基石位置：2D Slot 网格、邻接 C₁ 与道具修饰形成品类比较基准。"
+          "position_note": "基石位置：固定 5×4 Slot 网格，共 20 个承载格；每次 Spin 从当前 Pool_Symbol 随机取出最多 20 个符号并自动落位，邻接 C₁ 与道具修饰形成品类比较基准。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "需要理解多种自定义符号、数量与协同关系，不能只依靠一种直观规则判断本次结果。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "Spin 过程自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "道具与连锁在 C₁ 后继续放大基础产出。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.lucky-mayor",
@@ -1524,13 +3094,35 @@
           "topology": "0d",
           "c2_layer": "shared",
           "c1_mode": "payline",
-          "branch_ids": ["zero-d-industry", "resource-network"],
+          "branch_ids": [
+            "resource-network"
+          ],
           "changed_fields": [
             "Show_TP",
             "C1",
             "C2"
           ],
-          "position_note": "把基石的 2D 网格改成 0D 多重集，主要依赖类型、数量和产业链关系形成协同。"
+          "position_note": "把基石的 2D 网格改成四个分区的 0D 集合；集合内没有顺序、相邻或距离关系，但同集合归属会参与生产链协同。建筑与道具继续修改资源兑现规则。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 3,
+              "band": "high",
+              "basis": "需要同时追踪四个分区集合的归属、生产消耗链和外部资源修饰。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "Spin 过程全自动，外层安置不计入本维度。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "生产关系使结果发生一次主要更新。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.cat-god-ranch",
@@ -1539,74 +3131,159 @@
           "role": "member",
           "status": "confirmed",
           "topology": "2d-staggered",
-          "c2_layer": "shared",
+          "c2_layer": "fixed",
           "c1_mode": "formation",
-          "branch_ids": ["spatial-expansion", "resource-network"],
+          "branch_ids": [
+            "spatial-expansion"
+          ],
           "changed_fields": [
             "Show_TP",
             "C1",
             "BD"
           ],
-          "position_note": "保留 2D 邻接承载，并把动物类型、产出链和进贡压力叠成更深的资源网络。"
+          "position_note": "把常规网格改为错位排列的六方向邻接盘面；动物每轮自动随机落位，C₁ 主要读取相邻关系。地形、玩具和道具修改最终产出，但不存在动物间的生产／消耗资源传递。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "需要读取错位六向邻接、动物能力与最终产出修饰。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "地形、玩具和道具在基础邻接结果后修改最终产出。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.luckland",
           "x": 25,
           "y": 80,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "c2_layer": "external",
-          "c1_mode": "formation",
-          "branch_ids": ["weak-c2"],
+          "c1_mode": "hybrid",
+          "branch_ids": [],
           "changed_fields": [
             "C2"
           ],
-          "position_note": "暂定位置：4×5 棋盘和区域棋子保持高空间依赖，天赋、宝物与区域主题形成较深叠层。"
+          "position_note": "固定 5×4 盘面同时读取位置组合与游戏自有规则；天赋和宝物只提供已知修饰，基础结果后没有新的随机、连锁或多阶段资源转换。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "需要同时理解多种自定义符号与协同规则，不能只依靠一种直观关系判断本次结果。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 1,
+              "band": "low",
+              "basis": "天赋和宝物是已知修饰，基础结果后不会触发新的随机、连锁或资源转换。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": "2026-08-10 用户确认：5×4 盘面使用混合 C₁ 规则，C₂ 只做已知修饰，二次揭晓深度保持 1 分。"
         },
         {
           "product_id": "product.lucky-island",
           "x": 40,
           "y": 58,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "c2_layer": "external",
           "c1_mode": "hybrid",
-          "branch_ids": ["weak-c2", "resource-network"],
+          "branch_ids": [],
           "changed_fields": [
             "P_t",
             "C2",
             "N",
             "BD"
           ],
-          "position_note": "暂定位置：仍有 2D 装置承载，但协同更多依赖职业、资源和建筑类型，而非纯邻接。"
+          "position_note": "固定 5×5 盘面自动落入资源、工具等符号，玩家不能在 Spin 后分派位置。建筑和技能直接增加最终数值，不存在生产／消耗／再生产的资源转换链。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 3,
+              "band": "high",
+              "basis": "需要同时读取 5×5 盘面的资源／工具符号，以及建筑和技能的数值修饰。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 2,
+              "band": "mid",
+              "basis": "建筑和技能在基础结果之后对最终数值形成一次主要更新；按用户确认保留 2 分。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": "2026-08-10 用户确认：二次揭晓深度保留 2 分，不再调整。"
         },
         {
           "product_id": "product.die-shou-wei-cheng",
           "x": 16,
           "y": 65,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "c2_layer": "external",
           "c1_mode": "formation",
-          "branch_ids": ["weak-c2"],
+          "branch_ids": [],
           "changed_fields": [
             "C2"
           ],
-          "position_note": "暂定位置：格子化符号组合产生防御值，空间依赖较高；英雄与工具修饰的系统层数中等。"
+          "position_note": "固定 5×3 盘面通过相邻关系生成防御值；英雄与工具只提供已知修饰，随后与僵尸数量直接比较，不会继续触发新的未知结果。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "需要同时理解多种自定义符号、防守数值与协同规则，不能只依靠一种直观关系判断本次结果。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 1,
+              "band": "low",
+              "basis": "防御值与僵尸数量在比较前已经确定，英雄和工具不会继续触发新结果。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": "2026-08-10 用户确认：5×3 邻接生成防御值，后续只比较已知数值，二次揭晓深度保持 1 分。"
         },
         {
           "product_id": "product.crop-rotation",
           "x": 64,
           "y": 66,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-grow",
           "c2_layer": "fixed",
           "c1_mode": "hybrid",
-          "branch_ids": ["spatial-expansion", "ordered-pool"],
+          "branch_ids": [
+            "spatial-expansion",
+            "ordered-pool"
+          ],
           "changed_fields": [
             "P_t",
             "Pool_Symbol",
@@ -1615,23 +3292,63 @@
             "Show_TP",
             "BD"
           ],
-          "position_note": "暂定位置：卡牌与作物协同弱化 Slot 邻接中心，升级、被动和贷款压力形成中高叠层。"
+          "position_note": "盘面在单局内从 2×2 成长到最大 6×6，容量决定有序符号池中参与本轮结算的前 K 个符号；玩家可直接调整池顺序，系统再随机分配具体格位。C₁ 同时读取位置邻接与作物类型／卡牌能力两个独立维度。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 3,
+              "band": "high",
+              "basis": "需要同时判断成长盘面的邻接关系、有序池取用范围和作物／卡牌能力。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 主要自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 1,
+              "band": "low",
+              "basis": "结果展开偏短，C₁ 后很快封闭。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         },
         {
           "product_id": "product.re-spin-die-repeat-demo",
           "x": 24,
           "y": 64,
           "role": "member",
-          "status": "pending",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "c2_layer": "external",
-          "c1_mode": "hybrid",
-          "branch_ids": ["task-constrained"],
+          "c1_mode": "formation",
+          "branch_ids": [],
           "changed_fields": [
             "C2",
             "BD"
           ],
-          "position_note": "保留固定 2D Show_TP，当前按中等空间拓扑依赖放置；Pool_Symbol 的候选范围受任务限制，且 C₂ 不可由 BD 养成。任务收敛属于 BRANCH／BOUNDARY，不再影响纵轴坐标。"
+          "position_note": "使用固定 5×4 二维 Show_TP，每次从当前 Pool_Symbol 随机取出最多 20 个符号并自动落位；C₁ 读取相邻关系。Pool_Symbol 的候选范围受具体任务约束，且 C₂ 不可由 BD 养成。",
+          "dimensions": {
+            "cognitive_load": {
+              "score": 2,
+              "band": "mid",
+              "basis": "自定义循环规则需要理解。"
+            },
+            "spin_intervention": {
+              "score": 0,
+              "band": "low",
+              "basis": "单 Spin 主要自动运行。"
+            },
+            "c2_reveal_depth": {
+              "score": 1,
+              "band": "low",
+              "basis": "结果以短链形式封闭。"
+            }
+          },
+          "risk_tags": [],
+          "assessment_status": "confirmed",
+          "assessment_note": ""
         }
       ],
       "niches": [

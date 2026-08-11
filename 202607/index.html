@@ -7,10 +7,10 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、游戏变体图谱。">
-  <title>持续爱干 · 游戏体验模型与原型图谱</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260802-10">
-  <link rel="stylesheet" href="./assets/insights.css?v=20260801-2">
-  <link rel="stylesheet" href="./assets/ecosystem.css?v=20260802-8">
+  <title>双峰多巴胺体验模型 · 原型图谱</title>
+  <link rel="stylesheet" href="./assets/styles.css?v=20260811-93">
+  <link rel="stylesheet" href="./assets/insights.css?v=20260811-96">
+  <link rel="stylesheet" href="./assets/ecosystem.css?v=20260811-93">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -19,7 +19,7 @@
     <a class="brand" href="#model" aria-label="返回体验模型">
       <span class="brand-mark" aria-hidden="true">R</span>
       <span>
-        <strong>持续爱干</strong>
+        <strong>双峰多巴胺体验模型</strong>
         <small>体验模型与原型图谱</small>
       </span>
     </a>
@@ -30,7 +30,7 @@
       <a href="#library" data-nav="library">游戏库</a>
       <a href="#insights" data-nav="insights">核心洞察</a>
     </nav>
-    <span class="version-label">202607 · draft.27</span>
+    <span class="version-label">202607 · draft.28</span>
     <nav class="cross-tab-trail" id="cross-tab-trail" aria-label="跨页跳转路径" hidden>
       <span class="cross-tab-trail-label">跨页路径</span>
       <div class="cross-tab-trail-items" id="cross-tab-trail-items"></div>
@@ -100,7 +100,6 @@
             <span class="formula-peak-group build-loop-group">
               <span class="formula-peak-label">
                 <b>长期循环</b>
-                <small>不是第三峰值</small>
               </span>
               <span class="formula-group-row">
                 <span class="formula-stage stage-build">BD<small>构筑决策</small></span>
@@ -126,7 +125,7 @@
           <div class="formula-note note-cycle">
             <span class="note-index">长期循环</span>
             <strong>构筑更新下一轮期待</strong>
-            <p>BD 不是第三峰值；它在周期边界修改后续条件，让玩家再次期待下一轮。</p>
+            <p>BD 在周期边界修改后续条件，让玩家再次期待下一轮。</p>
           </div>
         </div>
         <p class="model-positioning">本模型本质上是对这类游戏的抽象假设。</p>
@@ -195,7 +194,7 @@
               </span>
               <span class="case-evidence-copy">
                 <small>真实界面 01 · Spin 主舞台</small>
-                <strong>符号被抽取并自动进入 3 × 5 Slot</strong>
+                <strong>最多 20 个符号被抽取并自动进入 5 × 4 盘面</strong>
                 <em>Random → Put @ Show_TP；落位后的盘面继续交给 C₁ 判定。</em>
                 <span class="case-evidence-tags">
                   <b>Random</b><b>Put</b><b>2D Show_TP</b>
@@ -220,7 +219,7 @@
                 <strong>同一游戏画面里，可以定位 Combo 的三个组成部分</strong>
                 <em>Combo 不是抽象黑盒：盘面先建立基础结果，道具再沿该结果完成二次揭晓，最后把本次收入呈现给玩家。</em>
                 <span class="case-evidence-mapping">
-                  <span><b>C₁</b><i>中央 3 × 5 盘面：直接产出、数量阈值与邻接协同</i></span>
+                  <span><b>C₁</b><i>中央 5 × 4 盘面：直接产出、数量阈值与邻接协同</i></span>
                   <span><b>C₂</b><i>两侧已持有道具：增强、修饰或改变 C₁ 基础结果</i></span>
                   <span><b>Spin_Result</b><i>金币增长与结算表演：玩家实际看到的本次输出</i></span>
                 </span>
@@ -329,7 +328,7 @@
                   data-case-node="put" data-case-select="reveal" aria-pressed="false">
                   <small>自动 Put</small>
                   <strong>落入 Slot</strong>
-                  <em>写入 3 × 5 网格</em>
+                  <em>写入 5 × 4 网格</em>
                 </button>
                 <span class="case-edge" data-case-edge="put-state" aria-hidden="true">→</span>
                 <button type="button" class="case-node node-object"
@@ -663,6 +662,81 @@
           <p class="loading-copy">正在载入公式定义…</p>
         </article>
       </div>
+
+      <section class="c2-depth-page" id="c2-reveal-depth" aria-labelledby="c2-depth-title" hidden>
+        <header class="c2-depth-head">
+          <button type="button" class="c2-depth-back" data-c2-depth-back>← 返回 C₂ 字段详情</button>
+          <div>
+            <p class="eyebrow">C₂ · 二次揭晓深度</p>
+            <h3 id="c2-depth-title">答案如何从价值锚点，逐步封闭为最终结果</h3>
+          </div>
+          <div class="c2-depth-definition">
+            <p>C₂ 深度衡量的不是动画长度，而是 C₁ 之后关键结果信息随时间释放、使玩家修正预测的结构。</p>
+            <strong>攻击次数多、动画时间长，不等于 C₂ 分数高。只有过程真正释放新信息，并继续改变玩家对 C₁ 兑现程度的预测，才构成更深的二次揭晓。</strong>
+          </div>
+        </header>
+
+        <div class="c2-depth-scale" aria-hidden="true">
+          <span>C₁ 建立价值锚点</span><i></i><span>Spin_Result 最终封闭</span>
+        </div>
+
+        <div class="c2-depth-rows" role="group" aria-label="C₂ 二次揭晓深度零到四分">
+          <button type="button" class="c2-depth-row" data-c2-depth-score="0" aria-pressed="false">
+            <span class="c2-depth-score"><b>0</b><small>无独立 C₂</small></span>
+            <span class="c2-depth-track">
+              <i class="is-anchor" style="--at:0"><b>C₁</b><small>20 点基础攻击</small></i>
+              <i class="is-result" style="--at:13"><b>Spin_Result</b><small>立即封闭</small></i>
+            </span>
+            <span class="c2-depth-closure">立即封闭</span>
+          </button>
+          <button type="button" class="c2-depth-row" data-c2-depth-score="1" aria-pressed="false">
+            <span class="c2-depth-score"><b>1</b><small>确定结果展示</small></span>
+            <span class="c2-depth-track">
+              <i class="is-anchor" style="--at:0"><b>C₁</b><small>20 点基础攻击</small></i>
+              <i class="is-animation" style="--at:48"><b>确定动画</b><small>答案未改变</small></i>
+              <i class="is-result" style="--at:94"><b>Spin_Result</b><small>播放后封闭</small></i>
+            </span>
+            <span class="c2-depth-closure">已经封闭，只在播放</span>
+          </button>
+          <button type="button" class="c2-depth-row is-active" data-c2-depth-score="2" aria-pressed="true">
+            <span class="c2-depth-score"><b>2</b><small>单次关键揭晓</small></span>
+            <span class="c2-depth-track">
+              <i class="is-anchor" style="--at:0"><b>C₁</b><small>20 点基础攻击</small></i>
+              <i class="is-reveal" style="--at:52"><b>关键揭晓</b><small>暴击成立，预测更新</small></i>
+              <i class="is-result" style="--at:94"><b>Spin_Result</b><small>40 点后封闭</small></i>
+            </span>
+            <span class="c2-depth-closure">一个关键节点后封闭</span>
+          </button>
+          <button type="button" class="c2-depth-row" data-c2-depth-score="3" aria-pressed="false">
+            <span class="c2-depth-score"><b>3</b><small>多阶段递进</small></span>
+            <span class="c2-depth-track">
+              <i class="is-anchor" style="--at:0"><b>C₁</b><small>20 点基础攻击</small></i>
+              <i class="is-phase" style="--at:34"><b>阶段反馈</b><small>破甲生效</small></i>
+              <i class="is-phase" style="--at:66"><b>阶段反馈</b><small>追加目标出现</small></i>
+              <i class="is-result" style="--at:94"><b>Spin_Result</b><small>逐步封闭</small></i>
+            </span>
+            <span class="c2-depth-closure">分阶段逐步封闭</span>
+          </button>
+          <button type="button" class="c2-depth-row" data-c2-depth-score="4" aria-pressed="false">
+            <span class="c2-depth-score"><b>4</b><small>链式持续揭晓</small></span>
+            <span class="c2-depth-track">
+              <i class="is-anchor" style="--at:0"><b>C₁</b><small>20 点基础攻击</small></i>
+              <i class="is-chain" style="--at:27"><b>链式触发</b><small>生成新目标</small></i>
+              <i class="is-chain" style="--at:50"><b>链式触发</b><small>再次结算</small></i>
+              <i class="is-chain" style="--at:73"><b>链式触发</b><small>结束时点未知</small></i>
+              <i class="is-result" style="--at:96"><b>Spin_Result</b><small>链末封闭</small></i>
+            </span>
+            <span class="c2-depth-closure">链式展开后封闭</span>
+          </button>
+        </div>
+
+        <div class="c2-depth-info" data-c2-depth-info aria-live="polite">
+          <span data-c2-depth-info-label>2 分 · 单次关键揭晓</span>
+          <strong data-c2-depth-info-title>一个此前未知的关键信息，使玩家明显更新一次预测。</strong>
+          <p data-c2-depth-info-copy>同样从 20 点基础攻击开始；暴击是否成立在 C₁ 后揭晓，答案在这个关键节点之后封闭。</p>
+          <small data-c2-depth-info-boundary>边界：多次播放同一答案不会自动升到 3 分。</small>
+        </div>
+      </section>
     </section>
     </div>
 
@@ -958,7 +1032,7 @@
           </div>
           <p>
             先以品类基石产品作为公式基准，再横向比较成员产品修改的字段；
-            最后把主要变化压缩到二维坐标，观察已有聚类与尚未占据的生态位。
+            最后用统一的认知、操作与 C₂ 深度评分生成三个二维投影，观察品类内部的真实分布。
           </p>
         </div>
 
@@ -2045,10 +2119,248 @@
         </div>
       </section>
 
+      <section class="section insights-section insight-pool-section" id="insight-effective-pool">
+        <div class="section-heading insight-heading">
+          <div>
+            <p class="eyebrow">05 · 洞察五</p>
+            <h2>盘面扩大时，<br>符号种类不能按面积增长</h2>
+          </div>
+          <p>
+            有效池不是游戏的完整图鉴，而是当前局内真正参与 Random 的符号。
+            先控制可辨认的符号种类，再用重复数量、权重和品质跨度延长构筑成长。
+          </p>
+        </div>
+
+        <div class="effective-pool-analysis">
+          <header class="effective-pool-definition">
+            <div>
+              <span>分析口径</span>
+              <strong>同屏机会由种类密度决定，构筑耐久度由符号总数决定</strong>
+              <p>
+                下列区间适用于以支付线、邻接或轻度合成为主，并提供少量锁定、重抽或候选选择的 Slot+ 原型。
+                它们是原型起测区间，不是脱离 C₁ 规则与抽取权重的绝对上限。
+              </p>
+            </div>
+            <div class="effective-pool-metrics" aria-label="有效池分析指标">
+              <article><b>C</b><span>承载格数</span><small>Show_TP 当前可用格</small></article>
+              <article><b>T</b><span>有效种类数</span><small>当局可被抽到的类型</small></article>
+              <article><b>P</b><span>有效符号总数</span><small>实体副本或等价权重</small></article>
+              <article><b>D</b><span>同类机会密度</span><small>C ÷ T，用于比较同屏机会</small></article>
+            </div>
+          </header>
+
+          <div class="effective-pool-table-wrap">
+            <table class="effective-pool-table">
+              <thead>
+                <tr>
+                  <th scope="col">盘面</th>
+                  <th scope="col">承载格数 C</th>
+                  <th scope="col">建议有效种类 T</th>
+                  <th scope="col">建议有效总数 P</th>
+                  <th scope="col">原型判断</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row"><span>1×3</span></th>
+                  <td>3</td>
+                  <td><strong>3–5 种</strong></td>
+                  <td><strong>6–12 个</strong></td>
+                  <td>优先高密度与立即可读；三连、合成类规则需要明显提高重复权重。</td>
+                </tr>
+                <tr>
+                  <th scope="row"><span>3×3</span></th>
+                  <td>9</td>
+                  <td><strong>5–9 种</strong></td>
+                  <td><strong>18–36 个</strong></td>
+                  <td>可容纳少量类型关系，适合支付线、邻接与轻构筑。</td>
+                </tr>
+                <tr class="is-bridge-layout">
+                  <th scope="row"><span>3×5</span><small>中间档</small></th>
+                  <td>15</td>
+                  <td><strong>6–12 种</strong></td>
+                  <td><strong>30–60 个</strong></td>
+                  <td>传统 Slot 的平衡档；可以扩展类型，但要控制低频符号污染支付线。</td>
+                </tr>
+                <tr>
+                  <th scope="row"><span>5×5</span></th>
+                  <td>25</td>
+                  <td><strong>8–15 种</strong></td>
+                  <td><strong>50–90 个</strong></td>
+                  <td>类型与位置关系同时放大，建议使用分池、候选池或删符号能力。</td>
+                </tr>
+                <tr>
+                  <th scope="row"><span>7×7</span></th>
+                  <td>49</td>
+                  <td><strong>12–24 种</strong></td>
+                  <td><strong>90–160 个</strong></td>
+                  <td>大盘面能容纳更多类型，但必须用合成、职业或分区压缩认知。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="effective-pool-adjustments" aria-label="有效池区间修正条件">
+            <article>
+              <span>强匹配／合成</span>
+              <strong>种类上限下调 25%–40%</strong>
+              <p>必须三连、同类合成或精确配对时，应减少 T，或显著增加关键类型的重复权重。</p>
+            </article>
+            <article>
+              <span>锁定／重抽／候选池</span>
+              <strong>种类上限可提高 25%–40%</strong>
+              <p>玩家能修正随机结果时可以容纳更多类型，但只统计本轮真正可见、可选的候选。</p>
+            </article>
+            <article>
+              <span>独立敌方池</span>
+              <strong>分池记录，入盘后再合并</strong>
+              <p>固定敌方池不计入玩家 Pool_Symbol；进入 Choice_Symbol 或同一盘面后，计入当轮认知与空间负担。</p>
+            </article>
+            <article>
+              <span>长进度构筑</span>
+              <strong>先增加 P，再增加 T</strong>
+              <p>优先加入同类副本、升级品质与权重变化，避免每次成长都新增一种低频符号。</p>
+            </article>
+          </div>
+
+          <footer class="effective-pool-boundary">
+            <span>使用边界</span>
+            <p>
+              最终是否有效，仍要同时观察命中率、空转率、关键关系出现频率与玩家的结果修正能力。
+              同样的 T／P，在支付线、邻接、合成和独立列池中会产生完全不同的体验。
+            </p>
+          </footer>
+        </div>
+
+        <div class="insight-rule-banner rule-banner-pool">
+          <span>规则 05</span>
+          <strong>盘面扩大优先增加重复实例和品质跨度，不要按面积同比增加符号种类。</strong>
+          <p>种类决定玩家需要理解多少关系；总数与权重决定这些关系能否稳定出现并支撑长期构筑。</p>
+        </div>
+      </section>
+
+      <section class="section insights-section insight-c2-tempo-section" id="insight-c2-tempo">
+        <div class="section-heading insight-heading">
+          <div>
+            <p class="eyebrow">06 · 洞察六</p>
+            <h2>C₂ 不只看揭晓深度，<br>还要观察信息如何随时间释放</h2>
+          </div>
+          <p>
+            这是后续持续补证的观察框架：同时记录单次 C₂ 的时长、单位时间信息烈度、烈度曲线与演绎方式，
+            再比较这些指标如何随构筑进度跨 Spin 变化。
+          </p>
+        </div>
+
+        <div class="c2-tempo-analysis">
+          <header class="c2-tempo-definition">
+            <div>
+              <span>初步观察框架 · 待持续补证</span>
+              <h3>把一次 C₂ 看成随时间展开的信息曲线</h3>
+              <p>
+                C₂ 的体验不只由“揭晓了几层”决定。同样数量的信息，可以均匀铺开，也可以并行爆发，
+                或由前一结果不断生成下一结果。三者会形成完全不同的节奏、峰值与可读性。
+              </p>
+            </div>
+            <code>C₂ 演绎 = 总体时间 T<sub>C₂</sub> × 信息烈度 ρ(t) × 演绎结构 S</code>
+          </header>
+
+          <div class="c2-tempo-metrics" aria-label="单次 C₂ 演绎观察指标">
+            <article>
+              <b>T<sub>C₂</sub></b>
+              <span>总体时间</span>
+              <small>从 C₁ 基础结果成立，到最终结果封闭所经历的时间。</small>
+            </article>
+            <article>
+              <b>Q<sub>C₂</sub></b>
+              <span>总信息量</span>
+              <small>期间新增的关键结果节点、状态变化与预测修正总量。</small>
+            </article>
+            <article>
+              <b>ρ(t)</b>
+              <span>单位时间信息烈度</span>
+              <small>短时间窗口内新增了多少需要玩家识别的有效信息。</small>
+            </article>
+            <article>
+              <b>Δρ/Δt</b>
+              <span>烈度随时间的变化</span>
+              <small>信息密度保持稳定、逐渐衰减，还是在演绎后段持续加速。</small>
+            </article>
+          </div>
+
+          <section class="c2-tempo-shapes" aria-labelledby="c2-tempo-shapes-title">
+            <header>
+              <span>单次 Spin 内</span>
+              <h3 id="c2-tempo-shapes-title">记录 C₂ 的演绎方式</h3>
+            </header>
+            <div>
+              <article class="shape-linear">
+                <span>线性</span>
+                <strong>A → B → C</strong>
+                <p>结果按固定次序逐项出现；节点之间不继续生成新节点，信息烈度通常较稳定。</p>
+              </article>
+              <article class="shape-parallel">
+                <span>并行</span>
+                <strong>A → B₁＋B₂＋B₃</strong>
+                <p>多个结果在同一时间窗口同时释放；总体时间可能较短，但瞬时信息峰值更高。</p>
+              </article>
+              <article class="shape-chain">
+                <span>链式</span>
+                <strong>A → B → C → …</strong>
+                <p>前一结果继续触发下一结果；链长与结束时间可能未知，信息烈度也可能随演绎推进而加速。</p>
+              </article>
+              <article class="shape-mixed">
+                <span>混合</span>
+                <strong>线性起点 → 并行／链式爆发</strong>
+                <p>先建立清晰价值锚点，再在后段集中释放多条结果；需要重点检查峰值是否仍然可读。</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="c2-tempo-across-spins" aria-labelledby="c2-tempo-across-title">
+            <header>
+              <span>跨 Spin 观察</span>
+              <h3 id="c2-tempo-across-title">构筑成长是否改变 C₂ 的时间结构</h3>
+              <p>不要只比较最终数值大小；应持续记录 C₂ 时长、平均烈度、峰值烈度和演绎结构是否随局内进度改变。</p>
+            </header>
+            <div class="c2-tempo-progression" aria-label="跨 Spin 的 C₂ 演绎变化示意">
+              <article><span>前期</span><strong>短时 · 低密度</strong><i style="--level: 24%"></i></article>
+              <b aria-hidden="true">→</b>
+              <article><span>中期</span><strong>触发增多 · 密度上升</strong><i style="--level: 55%"></i></article>
+              <b aria-hidden="true">→</b>
+              <article><span>后期</span><strong>并行／链式 · 峰值压缩</strong><i style="--level: 88%"></i></article>
+            </div>
+            <aside class="c2-tempo-working-example">
+              <span>工作假设 · 四叶草深渊</span>
+              <p>
+                后期护身符与连锁反应可能让演绎速度随时间加快；新增信息没有等比例拉长表演，
+                而是被压缩进较短窗口，使单位时间信息烈度逐步提高。后续需要用实际录像和事件时间戳验证。
+              </p>
+            </aside>
+          </section>
+
+          <footer class="c2-tempo-observation-list">
+            <span>后续记录项</span>
+            <div>
+              <b>开始与封闭时间</b>
+              <b>关键结果节点数</b>
+              <b>同时发生的最大节点数</b>
+              <b>节点之间的触发关系</b>
+              <b>前／中／后期的烈度曲线</b>
+            </div>
+          </footer>
+        </div>
+
+        <div class="insight-rule-banner rule-banner-c2-tempo">
+          <span>提醒 06</span>
+          <strong>后续评估 C₂ 时，同时记录“多深、多久、多密、如何展开，以及它如何跨 Spin 变化”。</strong>
+          <p>单一的二次揭晓深度分数无法代替时间结构分析；相同深度可能对应平缓、并行爆发或链式加速三种完全不同的体验。</p>
+        </div>
+      </section>
+
       <section class="section insights-section insight-check-section" id="insight-checks">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">05 · 设计检查</p>
+            <p class="eyebrow">07 · 设计检查</p>
             <h2>把洞察变成<br>可验证的问题</h2>
           </div>
           <p>这些问题用于检查新原型，而不是把洞察固化成不可调整的数值上限。</p>
@@ -2056,32 +2368,42 @@
 
         <div class="insight-check-grid">
           <article>
-            <span>CHECK 01 · C₁</span>
+            <span>检查 01 · C₁</span>
             <h3>第一次看就能判断好坏吗？</h3>
             <p>不解释规则，让玩家完成一次 Spin：他能否指出哪里形成了基础协同、为什么这是好结果？</p>
           </article>
           <article>
-            <span>CHECK 02 · C₂</span>
+            <span>检查 02 · C₂</span>
             <h3>暂停在 C₂开始前，答案已经算完了吗？</h3>
             <p>如果玩家能够直接准确报出最终结果，后续表演大概率只是结算动画，而不是二次揭晓。</p>
           </article>
           <article>
-            <span>CHECK 03 · 决策节奏</span>
+            <span>检查 03 · 决策节奏</span>
             <h3>下一次表演前，玩家还要做多少决定？</h3>
             <p>同时记录决策数量、每次选择的分支与依赖；只统计操作时长，会漏掉真正的思考负荷。</p>
           </article>
           <article>
-            <span>CHECK 04 · 主动触发</span>
+            <span>检查 04 · 主动触发</span>
             <h3>每一次 Spin 都由玩家明确触发吗？</h3>
             <p>如果系统可以连续自动 Spin，期待就失去清晰起点，C₁／C₂ 会退化为没有边界的连续结果流。</p>
           </article>
           <article>
-            <span>CHECK 05 · 认知预算</span>
+            <span>检查 05 · 认知预算</span>
             <h3>棋盘是否还处在不耗力观察区？</h3>
             <p>共同检查棋盘大小、符号类型、关系层数与跨区域依赖；Slot改+战斗尤其需要控制这些变量。</p>
           </article>
           <article>
-            <span>CHECK 06 · 边界</span>
+            <span>检查 06 · 有效池</span>
+            <h3>种类、总数和权重被分开记录了吗？</h3>
+            <p>记录 T、P 与关键类型权重；仅写“池里有 100 个符号”，无法判断这是 10 种重复还是 100 种关系。</p>
+          </article>
+          <article>
+            <span>检查 07 · C₂ 演绎</span>
+            <h3>信息是在展开，还是被一次性挤进短时间？</h3>
+            <p>同时记录 T<sub>C₂</sub>、ρ(t) 与演绎结构；平均时长接近的两个结果，可能具有完全不同的瞬时信息峰值。</p>
+          </article>
+          <article>
+            <span>检查 08 · 边界</span>
             <h3>复杂规则真的必须属于 C₁吗？</h3>
             <p>决定基础协同是否成立的规则留在 C₁；在基础结果之上进行修饰或转译的规则优先归入 C₂。</p>
           </article>
@@ -2366,13 +2688,15 @@
           hash === "model-content" ||
           hash === "model-case" ||
           hash === "top" ||
+          hash === "c2-reveal-depth" ||
           hash.startsWith("formula-term-")
         ) return "model";
         if (hash === "atlas-content" || hash === "atlas-method") return "atlas";
-        if (hash === "ecosystem-content") return "ecosystem";
+        if (hash === "ecosystem-content" || hash === "ecosystem-baseline") return "ecosystem";
         if (hash === "insights-content" || hash === "insight-prior" ||
           hash === "insight-reveal" || hash === "insight-decision" ||
-          hash === "insight-autospin" ||
+          hash === "insight-autospin" || hash === "insight-effective-pool" ||
+          hash === "insight-c2-tempo" ||
           hash === "insight-checks") return "insights";
         return "model";
       }
@@ -2405,6 +2729,6 @@
       activateTab();
     })();
   </script>
-  <script type="module" src="./assets/app.js?v=20260802-9"></script>
+  <script type="module" src="./assets/app.js?v=20260811-108"></script>
 </body>
 </html>

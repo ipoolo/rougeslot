@@ -1,5 +1,5 @@
 {
-  "version": "20260801-draft.8",
+  "version": "20260811-draft.42",
   "mapping_policy": "legacy_mechanical_import_plus_retained_new_product_observations",
   "formula_fields": [
     "P_t",
@@ -16,73 +16,82 @@
     {
       "product_id": "product.luck-be-a-landlord",
       "legacy_slug": "luck-be-a-landlord",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：房租机制：每 5 次 spin 触发 checkpoint · 达标分数才能继续 · 目标分数型 · 补充：M=17（共 17 个 floor 的房租 checkpoint）；N=5（每 5 spin 一关）；T0=5（首周房租 5 金币，scoring-rubric 实测）；r≈1.7（前期翻倍 5→10→20，后期略缓和到 ~1.5）；无显式 boss 关。；旧版压力参数：M=17 · N=5 · T0=5 · r=1.7；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "在约定的 Spin 数量后检查房租目标；期限内未完成目标则本局失败。具体每段包含多少次 Spin 尚未冻结，不再沿用旧资料中的固定 5 次假设。",
           "source_fields": [
             "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "analysis.pressure_params",
+            "2026-08-10 用户确认：约定 Spin 数下未完成房租目标则失败，具体次数不确定"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "200+ 符号 · 3×5 slot 转动 · 稀有度梯度（普 60% / 非 25% / 稀 12% / 极稀 3%）",
+          "value": "玩家通过构筑持续增删符号，形成当前局内 Pool_Symbol；每个符号保留自身品质，图鉴规模不等于当前有效池规模。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：当前 Pool_Symbol 用于每次 Spin 的随机抽取"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "slot 机械装置 · 0.7-1.5s 转动落位 · 关键在转动加速→减速→定格的节奏曲线 + 符号清晰可读",
+          "value": "每次 Spin 从当前 Pool_Symbol 随机取出最多 20 个符号，生成本次 5×4 盘面结果。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "analysis.qualitative.random_design",
+            "2026-08-10 用户确认：从当前 Pool_Symbol 随机取出最多 20 个符号"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统自动将本次随机结果放入盘面，玩家不控制具体落位。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "analysis.qualitative.put_form",
+            "2026-08-10 用户确认：系统自动填入盘面，玩家不控制落位"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "固定 5×4 二维盘面，共 20 个承载格。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "analysis.qualitative.show_topology",
+            "2026-08-10 用户确认：Show_TP 为固定 5×4"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "邻接互动（邻位加成）+ 单个符号直接产出 · 例：3 个樱桃 → 丰收 +5 · 空间布局的邻接联动；判定：threshold、adjacency",
+          "value": "单个符号先产生基础产出，再读取同类数量门槛、邻接关系与符号之间的自定义协同，形成本次 C₁ 结果。",
           "source_fields": [
             "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "analysis.qualitative.combo_predicate",
+            "2026-08-10 用户确认：C₁ 包含单符号基础产出、数量门槛、邻接与自定义协同"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "道具应用全局倍率修饰 · 例：水果 +50% / 每个 ⭐ 倍率 ×2 · 修饰强度从普到传颠覆",
+          "value": "道具与符号效果继续修饰、放大 C₁ 产出，部分效果会继续触发其他符号，形成后续连锁结算。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：道具与符号效果修饰并放大 C₁，部分效果形成连锁结算"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
+          "value": "N = 1；每次 Spin 结算后触发一次三选一新增符号的 BD 决策。",
           "source_fields": [
-            "新版迁移规则：N 与 P(t) 分离"
+            "新版迁移规则：N 与 P(t) 分离",
+            "2026-08-10 用户确认：每次 Spin 后三选一新增符号"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "商店三选一买符号 / 付费删符号 / 升级 · 玩家在主舞台直接看到变化",
+          "value": "每次 Spin 后三选一新增符号，并可通过删除、升级等长期决策持续调整 Pool_Symbol 与外部规则。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "analysis.qualitative.rpbd_construction",
+            "2026-08-10 用户确认：每次 Spin 后触发三选一新增符号"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -96,7 +105,7 @@
         "pool_active_desc": "100+ 道具 · 永远生效的修饰 · 威力梯度（普温和 / 非中等 / 稀强力 / 传颠覆）",
         "pressure_params": {
           "M": "17",
-          "N": "5",
+          "N": null,
           "T0": "5",
           "r": "1.7",
           "m_boss": null
@@ -1219,44 +1228,44 @@
     {
       "product_id": "product.spin-hero",
       "legacy_slug": "spin-hero",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：敌人波次/路线节点推进，6 种关卡 + 8 boss 作为周期性硬 checkpoint；未达标 → 战斗失败 → roguelike 重开 · 补充：M=8（8 boss）；N≈5（每 boss 约 5 spin）；T0≈50（首关目标估算）；r≈1.3（线性偏跳跃）；m_boss≈1.8（boss 比普通敌人强）。[T0/N 估算待校核]；旧版压力参数：M=8 · N=5 · T0=50 · r=1.3 · m_boss=1.8；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "敌人会攻击玩家并影响血量／防御，玩家生存与击败敌人构成持续战斗压力；具体波次曲线仍待逐局拆解。",
           "source_fields": [
-            "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "2026-08-10 用户确认：敌人会攻击玩家，并影响血量／防御"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "120+ 图标符号池；图标对应攻击/金币/技能/防御等类型；稀有度梯度未明确披露但 4 角色 × 120 图标暗示分级",
+          "value": "玩家符号池由攻击、金币、技能与防御类图标组成；每个大类内还包含不同具体符号，例如攻击类包含剑、刀等。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：攻击、金币、技能、防御类；每类包含不同具体符号"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
           "value": "老虎机风格转轮 spin（具体格子待校核），符号落位后映射为本回合的攻击/收益动作，进入自动战斗结算",
           "source_fields": [
             "analysis.qualitative.random_design"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统自动完成本次符号落位并进入战斗结算，玩家不在单次 Spin 内直接控制主要落位。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "2026-08-10 已确认三维评分：自动落位与自动战斗"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
           "value": "2D_grid",
           "source_fields": [
             "analysis.qualitative.show_topology"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
           "value": "图标按类型字典触发不同战斗效果（如剑图标→攻击 N、金币图标→收益、闪电→技能）；具体阈值/邻接规则待校核——以 type_dict 主导；判定：type_dict、threshold",
@@ -1264,28 +1273,28 @@
             "analysis.qualitative.combo_synergy",
             "analysis.qualitative.combo_predicate"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "局内累积的图标升级/天赋为符号产出施加倍率（待校核具体叠乘逻辑）",
+          "value": "符号结果进入自动战斗；敌人会攻击玩家并影响血量／防御，魔法消耗需要管理的独立资源。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "2026-08-10 用户确认：敌人会攻击玩家；魔法消耗独立资源"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
             "新版迁移规则：N 与 P(t) 分离"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "路线节点间选择不同事件/商店；可获得新图标加入符号池、升级现有图标；4 角色提供元构筑变体",
+          "value": "每次 Spin 结束后进行一次符号选择，用所选结果改变后续玩家符号池与战斗能力。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "2026-08-10 用户确认：每次 Spin 后选择"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -1576,73 +1585,82 @@
     {
       "product_id": "product.luckland",
       "legacy_slug": "luckland",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：段末生死对决（boss 战），敌人随推进逐渐增强；线性/指数难度递增（待校核），失败结束本局 · 补充：M≈8（约 8 段，估算）；N≈5（每段约 5 旋转）；T0≈50（首段目标估算）；r≈1.5（段间递增）；m_boss≈2.0（段末生死对决）。[全部估算待校核]；旧版压力参数：M=8 · N=5 · T0=50 · r=1.5 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "阶段末通过战斗／Boss 进行纯数值目标检查；当前数值未达到目标则战斗失败并结束本局。具体阶段数与增长曲线尚未写死。",
           "source_fields": [
             "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "analysis.pressure_params",
+            "2026-08-10 用户确认：阶段末战斗／Boss 是纯数值目标检查，失败则结束本局"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "4×5 棋盘格子，棋子来自不同区域（彩色工坊/宝藏海湾/命运赌场等），约 30-50 种棋子和宝物（待校核）；具体稀有度梯度未公开",
+          "value": "当前棋子池由路线和区域奖励获得的棋子组成；BD 可以增加、删除或升级棋子，天赋与宝物作为外部规则单独记录。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：路线与区域奖励可以增删或升级棋子"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "旋转棋盘装置，玩家转动棋盘后系统自动结算棋子组合落位；表演节奏接近 slot 但呈现为格子转动而非滚轴，落位戏剧化弱于物理类",
+          "value": "每次 Spin 从当前棋子池随机抽取本次参与结算的棋子。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "analysis.qualitative.random_design",
+            "2026-08-10 用户确认：每次从当前棋子池随机抽取"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统自动把抽取结果填入固定 5×4 盘面，玩家不能控制具体落位。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "analysis.qualitative.put_form",
+            "2026-08-10 用户确认：系统自动填入 5×4 盘面，玩家不能控制落位"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "固定 5×4 二维盘面。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "analysis.qualitative.show_topology",
+            "2026-08-10 用户确认：盘面固定为 5×4"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "棋盘上不同棋子的位置组合会自动结算能量产出，区域棋子形成主题协同（彩色工坊重产出、海湾重宝物、赌场重高风险）；具体邻接/类型规则未详述但属于网格族；判定：adjacency、type_dict",
+          "value": "在 5×4 盘面读取棋子的位置／组合关系，同时包含游戏自有的符号与区域规则；不是单一邻接规则。",
           "source_fields": [
             "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "analysis.qualitative.combo_predicate",
+            "2026-08-10 用户确认：C₁ 除位置组合外还有自有规则"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "天赋和宝物对全局结算施加倍率/加成，部分宝物改变特定棋子产出规则（待校核具体数值）",
+          "value": "天赋和宝物提供已知的倍率、加法或规则修饰；C₁ 基础结果生成后，不会继续触发新的随机结果、连锁事件或多阶段资源转换。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：天赋与宝物是已知修饰，之后没有新随机、连锁或资源转换"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
+          "value": "N = 1；每次 Spin 结算后进入一次构筑。",
           "source_fields": [
-            "新版迁移规则：N 与 P(t) 分离"
+            "新版迁移规则：N 与 P(t) 分离",
+            "2026-08-10 用户确认：每次 Spin 后进行一次构筑"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "段间在彩色工坊接订单换奖励、宝藏海湾开箱、命运赌场博弈；玩家选择不同区域路径决定下一段补什么棋子和宝物，形成卡牌构筑+地图选路的双层决策",
+          "value": "通过路线与区域奖励增加、删除或升级棋子，并获得天赋、宝物等外部规则，持续修改后续 Pool_Symbol 与数值结算。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "analysis.qualitative.rpbd_construction",
+            "2026-08-10 用户确认：路线与区域奖励修改棋子池，并获得天赋、宝物等外部规则"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -1655,11 +1673,11 @@
       "supplemental": {
         "pool_active_desc": "天赋系统 + 解锁专属宝物 + 区域奖励道具，规模约 30+（待校核）；通过完成订单、开宝箱、赌场 all-in 获取，部分永久解锁",
         "pressure_params": {
-          "M": "8",
-          "N": "5",
-          "T0": "50",
-          "r": "1.5",
-          "m_boss": "2.0"
+          "M": null,
+          "N": null,
+          "T0": null,
+          "r": null,
+          "m_boss": null
         }
       },
       "source": {
@@ -1670,8 +1688,8 @@
     {
       "product_id": "product.lucky-island",
       "legacy_slug": "lucky-island",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
           "value": "目标检查：日夜循环作为 checkpoint 节奏；推测有阶段性目标（资源/进度），失败条件未公开（待校核） · 补充：M≈10（约 10 天）；N≈3（每天约 3 spin）；T0≈50（首日目标资源估算）；r≈1.4（日夜循环递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=3 · T0=50 · r=1.4；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
@@ -1679,35 +1697,38 @@
             "analysis.qualitative.checkpoint_mechanism",
             "analysis.pressure_params"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "拉霸机符号池（岛民/资源/建筑符号），规模约 40-60 种（待校核）；分普通/稀有度梯度未公开但牌组系统暗示存在分级",
+          "value": "进入 5×5 盘面的符号主要是资源、工具等对象；具体类型数量与品质分级仍待补录。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：Spin 产生资源、工具等类型的符号"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
           "value": "经典老虎机滚轴落位，3×N 格子（具体未公开），转动 → 加速 → 减速 → 定格的标准 slot 表演，约 0.7-1.5s",
           "source_fields": [
             "analysis.qualitative.random_design"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统自动把符号放入 5×5 盘面；Spin 结束后玩家不能主动分派岛民或选择工作位置。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "analysis.qualitative.put_form",
+            "2026-08-10 用户确认：玩家不能在 Spin 后分派或选择工作位置"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "固定 5×5 二维 Slot 盘面。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "analysis.qualitative.show_topology",
+            "2026-08-10 用户确认：固定 5×5 盘面"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
           "value": "符号落位后分派给岛民工作，符号间协同通过技能搭配触发；缺失明确的邻接/连线判定描述，更偏向类型字典（不同符号对应不同岛民职业的产出加成）；判定：type_dict、threshold",
@@ -1715,28 +1736,29 @@
             "analysis.qualitative.combo_synergy",
             "analysis.qualitative.combo_predicate"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "建筑和技能对岛民产出做全局/局部修饰；Rogue 风格的触发事件正负影响产出",
+          "value": "建筑和技能直接增加最终数值；不存在原料生产、消耗并继续生成后续资源的转换链。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：不存在资源转换链，建筑和技能只增加数值"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
             "新版迁移规则：N 与 P(t) 分离"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
           "value": "白天指挥岛民工作（消化 spin 产出），晚上规划小岛（购买建筑/选技能）；商店/事件机制提供构筑选择",
           "source_fields": [
             "analysis.qualitative.rpbd_construction"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -1858,44 +1880,44 @@
     {
       "product_id": "product.lucky-hero",
       "legacy_slug": "lucky-hero",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：对抗各种强大敌人，3 职业 + 区域效果 + 随机事件构成 roguelike 推进；敌人有独特能力，具体血量/目标未公开（待校核） · 补充：M≈10（约 10 战斗，估算）；N≈3（每战 3 旋）；T0≈30（首战敌人 HP 估算）；r≈1.2（roguelike 推进）；m_boss≈1.5（区域 boss）。[全部估算待校核]；旧版压力参数：M=10 · N=3 · T0=30 · r=1.2 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "敌人位于盘面外并形成战斗压力；能量在单次 Spin 内被操作消耗，货币跨 Spin 保留并参与后续生存与构筑循环。",
           "source_fields": [
-            "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "2026-08-10 已确认三维评分：敌人位于盘面外；能量消耗，货币跨 Spin 保留"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "300+ 神秘符号（武器和装备化为符号），规模庞大；3 个职业各自起手不同，稀有度梯度未公开但池规模暗示有分级（待校核）",
+          "value": "玩家符号池以武器与其他战斗功能符号为主，不包含装备类符号。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：符号池没有装备类符号"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "命运轮盘旋转装置，类似轮盘英雄的圆环旋转 → 减速 → 定格停在符号位；旋转节奏 1-2s，缺少物理冲击但等待感强",
+          "value": "系统先生成本次 5×5 盘面结果；玩家随后可消耗能量，对多个符号执行连续且有意义的局部操作。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "2026-08-10 已确认三维评分：5×5 盘面与单 Spin 连续多符号操作"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统完成初始落位后，玩家可在单次 Spin 内连续调整多个符号结果；这些局部操作会改变本轮最终盘面。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "2026-08-10 已确认三维评分：单 Spin 连续多符号操作"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "使用固定 5×5 的二维盘面承载本次符号结果；敌人位于盘面外。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "2026-08-10 已确认三维评分：5×5 盘面，敌人位于盘面外"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
           "value": "符号间通过武器化设定形成协同（如同类武器叠加伤害、装备符号触发被动技能），与 30+ 技能配合构筑流派；判定包含轮盘邻接和类型字典双层；判定：adjacency、type_dict",
@@ -1903,28 +1925,29 @@
             "analysis.qualitative.combo_synergy",
             "analysis.qualitative.combo_predicate"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "30+ 主动/被动技能对符号产出施加修饰，区域效果作为局部全局修饰器，事件提供随机正负影响",
+          "value": "连续符号操作后的结果进入战斗结算；能量在本次 Spin 内消耗，货币跨 Spin 保留并影响后续循环。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "2026-08-10 已确认三维评分：能量消耗，货币跨 Spin 保留"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
             "新版迁移规则：N 与 P(t) 分离"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "商店购买/删除符号 + 技能选择 + 随机事件抉择 + 区域风险收益选择；构筑维度多但池过载风险高（300+ 符号 vs 轮盘英雄 100+ 反例）",
+          "value": "通过购买／删除符号、选择技能与处理事件，持续改变后续玩家符号池及战斗能力。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "analysis.qualitative.rpbd_construction",
+            "2026-08-10 用户确认：购买／删除符号、选择技能和事件"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -2046,30 +2069,33 @@
     {
       "product_id": "product.die-shou-wei-cheng",
       "legacy_slug": "die-shou-wei-cheng",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：回合数倒计时为 0 时僵尸进攻；防御值 < 僵尸数则 GG；类塔防波次结构，每波难度递增，具体增长率/M 数页面未公开 · 补充：M≈10（约 10 波塔防，估算）；N=1（每回合 1 spin）；T0≈30（首波僵尸数估算）；r≈1.3（每波难度递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=1 · T0=30 · r=1.3；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "僵尸进攻时比较已生成的防御值与僵尸数量；比较前胜负结果已经确定，不会再释放新的随机信息。具体波次数与增长曲线仍待补录。",
           "source_fields": [
             "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "analysis.pressure_params",
+            "2026-08-10 用户确认：防御值与僵尸数量比较前，结果已经确定"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "从仓库'最多随机选择 15 个符号'落到黑板上；不同守卫拥有不同的初始符号集和最佳组合策略；具体符号种类数和稀有度梯度页面未公开",
+          "value": "当前 Pool_Symbol 由玩家构筑的防守符号组成；每次 Spin 最多从中取出 15 个符号进入本次盘面。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：每次从当前符号池随机取出最多 15 个符号"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "点击旋转按钮 → 黑板上随机生成 15 个符号 → 按规则自动结算防御值；视觉接近 slot 落位但页面未强调表演时长/锁定动画",
+          "value": "每次 Spin 从当前 Pool_Symbol 随机取出最多 15 个符号，生成本次 5×3 盘面结果。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "analysis.qualitative.random_design",
+            "2026-08-10 用户确认：最多 15 个符号随机进入本次盘面"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
           "value": "auto_place：系统将本次符号结果自动落入盘面，玩家不决定主要落位。",
@@ -2079,40 +2105,45 @@
           "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "固定 5×3 二维盘面，共 5 列、3 行。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "analysis.qualitative.show_topology",
+            "2026-08-10 用户确认：实际盘面为 5 列×3 行"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "符号之间产生协同生成防御值（'构建你的符号组合以产生更多的防御值'）；具体规则（邻接/阈值/类型字典）未公开但格子化结构暗示 2D_grid + adjacency；判定：line_complete、type_dict",
+          "value": "主要根据 5×3 盘面中的相邻关系计算符号协同并生成防御值。",
           "source_fields": [
             "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "analysis.qualitative.combo_predicate",
+            "2026-08-10 用户确认：C₁ 依据相邻关系生成防御值"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "守护者英雄被动 + 工具效果作为全局修饰；具体倍率/范围未公开",
+          "value": "守护者英雄与工具提供已知的全局／局部数值修饰；防御值生成后只与僵尸数量比较，不会继续触发新的未知结果。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：英雄和工具不会在结算后触发新结果"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
+          "value": "N = 1；每次 Spin 结算后进入一次构筑。",
           "source_fields": [
-            "新版迁移规则：N 与 P(t) 分离"
+            "新版迁移规则：N 与 P(t) 分离",
+            "2026-08-10 用户确认：每次 Spin 后进行一次构筑"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "每回合可使用'重新滚动''删除'工具调整符号组合 + 选择守护者英雄 + 在阶段间增删符号；决策粒度比 LBL 更细（局内可重抽）",
+          "value": "Spin 结算后可以增加或删除符号、选择守护者英雄，并获得重新滚动／删除工具；重新滚动属于构筑获得的能力，不计为当前 Spin 过程内操作。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "analysis.qualitative.rpbd_construction",
+            "2026-08-10 用户确认：增删符号、英雄及重抽／删除工具属于 Spin 后构筑"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -2125,10 +2156,10 @@
       "supplemental": {
         "pool_active_desc": "守护者英雄（多职业/多流派）+ 重新滚动/删除工具 + 升级；规模中等，主动池层级清楚但梯度细节缺失",
         "pressure_params": {
-          "M": "10",
-          "N": "1",
-          "T0": "30",
-          "r": "1.3",
+          "M": null,
+          "N": null,
+          "T0": null,
+          "r": null,
           "m_boss": null
         }
       },
@@ -2140,73 +2171,82 @@
     {
       "product_id": "product.crop-rotation",
       "legacy_slug": "crop-rotation",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：还贷压力：每段需赚到目标金额还贷；'债务高得吓人'暗示指数级增长但具体 r 值未公开；目标分族结构清晰 · 补充：M≈8（约 8 段还贷期，估算）；N≈5（每段约 5 季）；T0≈100（首段贷款估算）；r≈1.8（指数还贷压力，'债务高得吓人'）；无显式 boss 关。[全部估算待校核]；旧版压力参数：M=8 · N=5 · T0=100 · r=1.8；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "周期性检查还贷金额；期限内未赚到当期目标金额则本局失败。具体周期长度和债务增长曲线尚未写死。",
           "source_fields": [
             "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "analysis.pressure_params",
+            "2026-08-10 用户确认：周期性检查还贷金额，期限内未达标则失败"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "作物/卡牌池（具体数量未公开）；通过 drafting 进入玩家牌组，每张牌代表一种作物/操作；稀有度分级页面未提及",
+          "value": "玩家管理一个可直接调整排列顺序的作物／卡牌序列；当前盘面容量决定本轮从序列中取多少符号参与结算。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：盘面大小决定参与数量，玩家可直接调整符号顺序"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "Pool_Symbol 以有序序列直接生成 SingleSpin_Symbol，不存在从符号池随机抽取的过程；随机性只存在于后续 Put 到 Show_TP 时的自动随机落位。",
+          "value": "Pool_Symbol 以有序序列直接生成本轮内容：盘面容量 K 决定取序列前 K 个符号，不再随机决定抽到什么；随机性后移到 Put 的格位分配。",
           "source_fields": [
-            "2026-08-01 用户确认"
+            "2026-08-01 用户确认",
+            "2026-08-10 用户确认：取前 K 个符号后随机分配到盘面格位"
           ],
           "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place：系统将 SingleSpin_Symbol 自动随机落入 Show_TP 的可用位置，玩家不决定主要落位。",
+          "value": "系统把有序池选出的前 K 个符号随机分配到 Show_TP 的可用格位；玩家可以调整池顺序，但不决定本轮具体落位。",
           "source_fields": [
-            "2026-08-01 用户确认"
+            "2026-08-01 用户确认",
+            "2026-08-10 用户确认：符号随机分配到不同格子"
           ],
           "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "单局内逐步成长的二维盘面，从 2×2 扩大至最大 6×6。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "analysis.qualitative.show_topology",
+            "2026-08-10 用户确认：盘面从 2×2 成长到最大 6×6"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "牌组构建强调'卡牌之间的协同效果'，存在类型字典式触发（如某类作物 + 某类工具）；具体规则未公开但以多重集结构为主；判定：adjacency、type_dict",
+          "value": "同时存在两个独立的结算维度：符号落位后的邻接／位置关系，以及作物类型与卡牌能力产生的规则协同。",
           "source_fields": [
             "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "analysis.qualitative.combo_predicate",
+            "2026-08-10 用户确认：位置邻接与作物类型／卡牌能力是两个独立 C₁ 维度"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "升级卡 + 被动加成施加在结算时；详细叠乘规则未公开",
+          "value": "升级卡与被动效果不只增加最终数值，也会涉及卡牌能力与触发条件、邻接规则、符号生成／删除／移动、资源效果及进一步触发。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：升级与被动会涉及能力、触发、邻接、符号操作和资源等多类效果"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
+          "value": "N = 1；每次盘面结算后进入一次选卡、升级或符号顺序调整。",
           "source_fields": [
-            "新版迁移规则：N 与 P(t) 分离"
+            "新版迁移规则：N 与 P(t) 分离",
+            "2026-08-10 用户确认：每次结算后进行一次选卡、升级或调序"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "drafting 选卡（季末/段末加入新卡）+ 移除卡 + 升级卡；自动结算让 RPBD 时长成为主要游戏时间",
+          "value": "drafting 选卡、移除卡、升级卡，并允许玩家直接调整 Pool_Symbol 的排列顺序；顺序与盘面容量共同决定本轮参与结算的符号。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "analysis.qualitative.rpbd_construction",
+            "2026-08-10 用户确认：玩家可直接调整符号排列顺序"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -2219,10 +2259,10 @@
       "supplemental": {
         "pool_active_desc": "升级/被动卡（具体数量未公开）；属于卡组中长期生效的修饰层",
         "pressure_params": {
-          "M": "8",
-          "N": "5",
-          "T0": "100",
-          "r": "1.8",
+          "M": null,
+          "N": null,
+          "T0": null,
+          "r": null,
           "m_boss": null
         }
       },
@@ -2234,73 +2274,82 @@
     {
       "product_id": "product.cat-god-ranch",
       "legacy_slug": "cat-god-ranch",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：周期性给猫神'上贡'：每段达标金币才能继续；'是持续压榨还是早日解放'暗示玩家可选不同结束节奏，结构性 GG 阈值清晰但增长曲线未公开 · 补充：M≈10（约 10 段进贡周期，估算）；N≈7（每段约 7 天）；T0≈100（首段进贡金币估算）；r≈1.5（递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=7 · T0=100 · r=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "周期性检查上贡金币目标；未达到当期上贡要求则本局失败。具体周期长度与目标增长曲线尚未写死。",
           "source_fields": [
             "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "analysis.pressure_params",
+            "2026-08-10 用户确认：周期性完成上贡金币目标，未达标则失败"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "100+ 动物（每只独特能力）+ 7 大动物家族（流派分类）+ 10+ 地形卡 + 20+ 玩具；基础池规模偏大，存在'过载池'风险，但家族流派分类减轻信息密度",
+          "value": "当前 Pool_Symbol 主要由动物符号组成；地形、玩具和道具属于外部规则，不进入动物的随机落位池。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：动物属于符号池，地形、玩具和道具不参与随机落位"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "夜晚动物回窝 → 次日早晨随机重新落位到牧场格子上（每日格子站位都不同）；落位戏剧化温和（无物理冲击但有'今天会落到哪'的期待感），整体节奏接近 slot 的机械落位但视觉爆发偏弱",
+          "value": "每轮动物由系统随机重新落位，玩家不能决定具体位置；随机结果的价值取决于动物在错位六向邻接盘面形成的相邻关系。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "analysis.qualitative.random_design",
+            "2026-08-10 用户确认：每轮随机重新落位，玩家不能决定位置"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统自动把动物放入盘面，玩家不直接控制具体落位。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "analysis.qualitative.put_form",
+            "2026-08-10 用户确认：动物自动随机落位"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "错位排列的二维盘面，使用六方向邻接关系。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "analysis.qualitative.show_topology",
+            "2026-08-10 用户确认：错位排列／六方向邻接"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "结算 = 邻接 + 食物链双层判定：(1) 相邻动物协同（如母鸡旁边有公鸡 +X 分）；(2) 食物链触发（火鸡被食肉动物吃掉 +X 分；如该食肉动物本身有'食鸡 +Y'特性则叠加）；(3) 7 大家族流派组合提供宏观字典层。基础得分 = 每只动物的固定产出，邻接 + 食物链事件叠加在结算时；判定：adjacency、type_dict",
+          "value": "主要依据六方向相邻关系计算动物协同和基础产出；动物之间不存在真实的生产、消耗或食物链资源传递。",
           "source_fields": [
             "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "analysis.qualitative.combo_predicate",
+            "2026-08-10 用户确认：不存在生产／消耗传递，主要根据相邻关系结算"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "道具卡 + 玩具在每日产出时叠乘加成；地形卡为局部场地修饰",
+          "value": "地形、玩具和道具在基础邻接结果之后修改最终产出；属于规则修饰，不构成跨符号资源网络。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：地形、玩具和道具会改变最终产出"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
+          "value": "N = 1；每次 Spin 结算后进入一次动物或外部规则的构筑选择。",
           "source_fields": [
-            "新版迁移规则：N 与 P(t) 分离"
+            "新版迁移规则：N 与 P(t) 分离",
+            "2026-08-10 用户确认：每次 Spin 后进行一次构筑"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "玩家主动管理动物牌组（添加/移除）+ 每阶段选道具/地形/玩具；不是传统 drafting 而是持续管理",
+          "value": "玩家可以增加或删除动物符号，并选择地形、玩具和道具，持续修改后续动物池与邻接产出规则。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "analysis.qualitative.rpbd_construction",
+            "2026-08-10 用户确认：可增删动物，并用地形、玩具和道具修改后续邻接产出"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -2313,10 +2362,10 @@
       "supplemental": {
         "pool_active_desc": "100+ 道具卡 + 玩具；每阶段选入；规模与小丑牌相当，是双层池架构",
         "pressure_params": {
-          "M": "10",
-          "N": "7",
-          "T0": "100",
-          "r": "1.5",
+          "M": null,
+          "N": null,
+          "T0": null,
+          "r": null,
           "m_boss": null
         }
       },
@@ -2328,44 +2377,43 @@
     {
       "product_id": "product.lucky-hunter",
       "legacy_slug": "lucky-hunter",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：随机生成的狩猎地图，4 章节，每章末 Boss 战；战败后退出本局 · 补充：M=4（4 章节）；N≈10（每章约 10 战）；T0≈30（首战敌人 HP 估算）；r≈1.5（章节间跳跃）；m_boss=2.0（章末 Boss）。[T0/N 估算待校核]；旧版压力参数：M=4 · N=10 · T0=30 · r=1.5 · m_boss=2.0；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "盘面外敌人会攻击玩家，玩家生存与击败敌人构成战斗压力；游戏没有独立的魔法、能量、货币或食物资源线。",
           "source_fields": [
-            "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "2026-08-10 用户确认：盘面外敌人会攻击玩家；不存在独立资源线"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
           "value": "100+ 棋子 + 圣物，按等级/职业分类；每回合从池抽取若干棋子放入战场格子",
           "source_fields": [
             "analysis.qualitative.pool_base_desc"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
           "value": "格子上放置棋子 + 三个相同棋子相邻自动合成升级；落位本身无物理戏剧化，戏剧性来自合成连锁动画与自动战斗回放",
           "source_fields": [
             "analysis.qualitative.random_design"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统自动将本次棋子写入 7×7 盘面并继续合成与战斗流程，玩家不在单次 Spin 内控制落位。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "2026-08-10 用户确认：7×7 盘面自动推进，单次 Spin 内没有玩家操作"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "使用 7×7 的固定 2D 网格承载棋子、相邻合成与自动战斗；敌人位于盘面外。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "2026-08-10 用户确认：实际盘面为 7×7，敌人位于盘面外"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
           "value": "网格相邻三消合成（3 同名 → 1 高级），合成后单位在自动战斗中按职业/种族协同；战场为自走棋自动结算；判定：adjacency、threshold、type_dict",
@@ -2373,28 +2421,29 @@
             "analysis.qualitative.combo_synergy",
             "analysis.qualitative.combo_predicate"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "圣物全局加成（如某职业攻击 +X、合成产出额外棋子），自动战斗阶段对全单位结算",
+          "value": "C₁ 建立阵容与合成结果后进入自动战斗；盘面外敌人会攻击玩家，战斗结果分阶段展开。没有独立的魔法、能量、货币或食物资源线需要并行管理。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：盘面外敌人会攻击玩家，且不存在独立魔法、能量、货币或食物资源线"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
             "新版迁移规则：N 与 P(t) 分离"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
           "value": "回合间在地图节点选择（战斗/商店/附魔/事件），商店购买棋子和圣物，附魔升级单位；每回合获得新棋子",
           "source_fields": [
             "analysis.qualitative.rpbd_construction"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -2422,73 +2471,82 @@
     {
       "product_id": "product.lucky-mayor",
       "legacy_slug": "lucky-mayor",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：最终期限内累积金币达目标 → 通过；典型目标分族（资金条曲线待校核） · 补充：M≈10（约 10 回合期限，估算）；N≈3（每回合约 3 招募）；T0≈100（首回合金币目标估算）；r≈1.3（线性递增）；无明确 boss 关。[全部估算待校核]；旧版压力参数：M=10 · N=3 · T0=100 · r=1.3；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "在限定回合内检查金币／繁荣目标；期限内未达到目标则本局失败。具体回合数与目标曲线尚未写死。",
           "source_fields": [
             "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "analysis.pressure_params",
+            "2026-08-10 用户确认：限定回合内未达到金币／繁荣目标则失败"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "150+ 市民卡，每个有独特能力与喜好；按职业/类型分类，稀有度梯度（待校核）",
+          "value": "当前局内 Pool_Symbol 由已招募的市民符号组成；BD 可以增加或修改符号池，但不会直接改写当前 Spin 结果。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：招募只把市民加入符号池"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "卡牌抽取 → 选择招募/安置；无物理落位，戏剧化来自市民进入城市的反馈与金币结算",
+          "value": "每轮从当前 Pool_Symbol 随机产生参与本次结算的市民；招募候选属于 Spin 后的 BD，不属于本次 Random。",
           "source_fields": [
-            "analysis.qualitative.random_design"
+            "analysis.qualitative.random_design",
+            "2026-08-10 用户确认：选择招募只增加后续符号池"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统自动把本次随机结果放入四个 0D 集合；玩家不能决定具体符号进入哪个集合。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "analysis.qualitative.put_form",
+            "2026-08-10 用户确认：玩家不能决定四个集合中的具体落位"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "0D_multiset",
+          "value": "四个 0D 分区集合；集合内部不存在顺序、相邻或距离关系，但市民是否属于同一个集合会参与协同判断。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "analysis.qualitative.show_topology",
+            "2026-08-10 用户确认：市民进入四个 0D 集合，集合内无顺序与相邻关系"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "市民间能力协同（如生产链：A 产出物喂给 B 产生金币）；按市民类型字典触发组合加成；判定：type_dict",
+          "value": "市民按所属分区集合与类型建立生产／消耗链：A 生产资源，B 消耗该资源并继续生成金币或其他产出；不是单纯的同类型数量加成。",
           "source_fields": [
             "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "analysis.qualitative.combo_predicate",
+            "2026-08-10 用户确认：存在明确生产与消耗链，且同集合关系参与判断"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "道具全局加成（如某类市民产出 +50%、所有市民需求降低）",
+          "value": "建筑与道具继续修改生产链、资源消耗与最终兑现规则，使基础产出进入外部系统修饰和资源网络结算。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：建筑、道具会修改生产链或资源兑现规则"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
-          "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
+          "value": "N = 1；每轮结算后进入一次招募或构筑选择。",
           "source_fields": [
-            "新版迁移规则：N 与 P(t) 分离"
+            "新版迁移规则：N 与 P(t) 分离",
+            "2026-08-10 用户确认：每轮结算后进行一次招募或构筑选择"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "回合内招募市民、建设产业链、购买道具；最终期限前不断扩充和优化卡组",
+          "value": "结算后通过招募市民、建筑和道具修改后续 Pool_Symbol 与产业链规则；不能移动当前结果，也不直接改写已经生成的 Spin 结果。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "analysis.qualitative.rpbd_construction",
+            "2026-08-10 用户确认：BD 可以修改符号池，但不能影响当前 Spin 结果或移动已有结果"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -2501,10 +2559,10 @@
       "supplemental": {
         "pool_active_desc": "大量道具（约 N 待校核），全局修饰市民产出/需求满足",
         "pressure_params": {
-          "M": "10",
-          "N": "3",
-          "T0": "100",
-          "r": "1.3",
+          "M": null,
+          "N": null,
+          "T0": null,
+          "r": null,
           "m_boss": null
         }
       },
@@ -2986,73 +3044,75 @@
     {
       "product_id": "product.dog-and-goblin",
       "legacy_slug": "dog-and-goblin",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：波次推进 + 自动战斗结算;失败 GG;具体 boss 关数和难度曲线待校核 · 补充：M≈10（约 10 波次，估算）；N=1（每波 1 spin 出棋）；T0≈30（首波敌人血量估算）；r≈1.3（波次推进）；m_boss≈1.5（boss 关加强）。[全部估算待校核]；旧版压力参数：M=10 · N=1 · T0=30 · r=1.3 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "盘面外敌人的生命与波次推进构成目标压力；战斗只有我方攻击敌方，敌人不会反击玩家，也没有独立护甲／防御数值。",
           "source_fields": [
-            "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "2026-08-10 用户确认：只有我方攻击；敌人不会反击；没有独立护甲／防御"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
           "value": "150 棋子 · 19 种类（斗士/法师/野兽/恶魔等）· 含合成棋（哥布林+白银=哥布林商人，兽人步兵+狼=狼骑士）;稀有度梯度待校核",
           "source_fields": [
             "analysis.qualitative.pool_base_desc"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
           "value": "战斗准备阶段通过 slot/spin 式装置随机产出棋子到战场格位（用户确认）;落位伴随 slot 转动表演 0.7-1.5s,接近 LBL 节奏",
           "source_fields": [
             "analysis.qualitative.random_design"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
           "value": "manual_place",
           "source_fields": [
             "analysis.qualitative.put_form"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "我方使用独立的 2D 布阵盘面；敌人位于盘面外，不作为敌方符号进入我方盘面。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "analysis.qualitative.show_topology",
+            "2026-08-10 用户确认：敌方不会进入与我方相同的盘面"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "双层协同：(1) 类型字典——同种族/职业棋子达到阈值激活羁绊（斗士抗性/法师 AOE）;(2) 邻接——某些棋子（如猎人+野兽）相邻获得攻击加成;(3) 化学合成——特定棋子组合升级为新棋子；判定：type_dict、adjacency、threshold",
+          "value": "我方棋子通过类型字典、邻接、数量阈值与特定组合合成建立协同；敌人不进入我方盘面，也不参与 C₁ 判定。",
           "source_fields": [
             "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "analysis.qualitative.combo_predicate",
+            "2026-08-10 用户确认：敌方不参与 C₁"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "buff 物品（肉/装备）作用于特定棋子类别;遗物提供全局倍率（待校核）",
+          "value": "C₁ 建立我方阵容结果后，由我方单向攻击盘面外敌人；敌人不会反击玩家，游戏也没有独立护甲／防御数值。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "analysis.qualitative.combo_modifier",
+            "2026-08-10 用户确认：只有我方攻击，且没有独立护甲／防御数值"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
             "新版迁移规则：N 与 P(t) 分离"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
           "value": "战斗间 reroll/选择保留棋子 + 物品商店 + 合成决策;多角色提供起手分支",
           "source_fields": [
             "analysis.qualitative.rpbd_construction"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -3080,73 +3140,75 @@
     {
       "product_id": "product.endgame-of-devil",
       "legacy_slug": "endgame-of-devil",
-      "mapping_status": "mechanical_import_unconfirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "目标检查：回合制：在限定回合内击败冒险者保住宝石;否则宝石被偷;每波冒险者强度递增 · 补充：M≈10（约 10 回合保护宝石期，估算）；N=1（每回合 1 spin 出随从）；T0≈30（首波冒险者强度估算）；r≈1.2（每波递增）；m_boss≈1.5（高难度冒险者 boss）。[全部估算待校核]；旧版压力参数：M=10 · N=1 · T0=30 · r=1.2 · m_boss=1.5；注意：旧版 pressure_params.N 属于压力检查资料，不直接等于新版公式中触发 BD 的 N。",
+          "value": "玩家需要在限定回合内击败冒险者；回合耗尽前未完成击败即未达成本轮目标。",
           "source_fields": [
-            "analysis.qualitative.checkpoint_mechanism",
-            "analysis.pressure_params"
+            "2026-08-10 用户确认：限定回合内击败冒险者"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "240 种随从（极大池）· 战斗前随机出现到阵营槽位（用户确认 slot/spin 装置）· 稀有度梯度未明示;池规模接近轮盘英雄过载风险线",
+          "value": "我方使用玩家可通过 BD 改变的随从池；敌方符号来自另一个独立且固定的敌方池，玩家 BD 不会改变敌方池。两类符号随后可进入同一盘面。",
           "source_fields": [
-            "analysis.qualitative.pool_base_desc"
+            "analysis.qualitative.pool_base_desc",
+            "2026-08-10 用户确认：敌方使用固定独立池，不受玩家 BD 影响"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Random": {
           "value": "战斗前 slot/spin 式装置随机产出随从到战场（用户确认）;一键自动战斗后结算;装置表演接近 LBL slot 节奏",
           "source_fields": [
             "analysis.qualitative.random_design"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "auto_place",
+          "value": "系统自动把抽取出的我方与敌方符号写入同一二维盘面，玩家不在单次 Spin 内控制主要落位。",
           "source_fields": [
-            "analysis.qualitative.put_form"
+            "2026-08-10 已确认三维评分：直接抽取与自动落位；敌方符号进入同盘"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "2D_grid",
+          "value": "使用固定二维盘面共同承载我方与敌方符号。",
           "source_fields": [
-            "analysis.qualitative.show_topology"
+            "2026-08-10 已确认三维评分：敌我符号进入同一 2D 盘面"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "阵营协同——'相辅相成的强大阵容',通过随从类型组合触发羁绊（具体羁绊字典待校核）;一键自动战斗后展示连锁结算；判定：type_dict、adjacency",
+          "value": "我方与敌方符号进入同一二维盘面，敌方符号参与 C₁；我方阵容继续按类型与邻接关系形成协同。",
           "source_fields": [
             "analysis.qualitative.combo_synergy",
-            "analysis.qualitative.combo_predicate"
+            "analysis.qualitative.combo_predicate",
+            "2026-08-10 用户确认：敌方符号进入同盘并参与 C₁"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "C2": {
-          "value": "201+ 财宝作用于全局：某类随从攻击 +N、回合开始触发 X 等;传奇财宝颠覆规则",
+          "value": "C₁ 建立阵容与数值结果后，由我方单向攻击敌方；玩家不会受到敌方攻击。",
           "source_fields": [
-            "analysis.qualitative.combo_modifier"
+            "2026-08-10 用户确认：只有我方攻击，没有被攻击"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待按新版定义确认：N 只表示触发一次 BD 之前连续发生的 Spin 数量；旧版目标压力检查周期不再直接映射到 N。",
           "source_fields": [
             "新版迁移规则：N 与 P(t) 分离"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "战斗后选财宝（基于阵容） + 重新 spin 随从池（待校核 reroll 机制）;'魔王视角'反派叙事",
+          "value": "每次 Spin 战后可以增加我方符号；通过专门的删除能力可以删除我方符号。战后财宝既可改变我方 Pool_Symbol 组成，也可通过规则、数值或技能改变 C₁／C₂。",
           "source_fields": [
-            "analysis.qualitative.rpbd_construction"
+            "analysis.qualitative.rpbd_construction",
+            "2026-08-10 用户确认：每次 Spin 战后可增加我方符号，并可通过删除能力删除我方符号；战后财宝同时存在池组成与外部规则效果"
           ],
-          "review_status": "draft"
+          "review_status": "confirmed"
         }
       },
       "legacy_scores": {
@@ -3198,9 +3260,10 @@
           "review_status": "confirmed"
         },
         "Put": {
-          "value": "装置自动把本次 Spin 结果写入 3×3 Slot 舞台；BD 可提供额外转动与盘面位置互换。按当前公式责任，两者均记入 Put；Random 仅负责从 Pool_Symbol 生成 SingleSpin_Symbol。",
+          "value": "装置自动把本次 Spin 结果写入 3×3 Slot 舞台；Items 与 Cores 在战斗或 Spin 之间选择并于本局后续持续生效，可解锁额外转动与盘面位置互换。按当前公式责任，两者均记入 Put；Random 仅负责从 Pool_Symbol 生成 SingleSpin_Symbol。",
           "source_fields": [
-            "2026-08-01 用户确认的游戏变体九字段"
+            "2026-08-01 用户确认的游戏变体九字段",
+            "2026-08-10 用户确认 Items／Cores 的选择时机与落位能力来源"
           ],
           "review_status": "confirmed"
         },
@@ -3233,9 +3296,12 @@
           "review_status": "confirmed"
         },
         "BD": {
-          "value": "继承战斗相关内容、规则、倍率、概率或编队构筑；扩展通过单位吸收、升星与分支职业进化调整概率、单位属性和后续战斗表现。",
+          "value": "Items 与 Cores 在战斗或 Spin 之间选择并于本局后续持续生效；Demo 阶段只能持续累积叠加，不能替换、删除或升级。它们可以改变固定单位与符号的出现概率，并解锁额外转动与位置交换。单位吸收与升星由玩家在构筑阶段主动选择，需要消耗重复单位或指定素材；职业进化也由玩家选择具体分支，只作用于对应兵种，并在本局后续持续生效。",
           "source_fields": [
-            "2026-08-01 用户确认的游戏变体九字段"
+            "2026-08-01 用户确认的游戏变体九字段",
+            "2026-08-10 用户确认 Items／Cores 的选择时机与落位能力来源",
+            "2026-08-10 用户确认单位成长与职业进化的决策方式",
+            "2026-08-10 用户确认升星消耗与 Demo 阶段 Items／Cores 叠加规则"
           ],
           "review_status": "confirmed"
         }
@@ -3321,43 +3387,48 @@
     },
     {
       "product_id": "product.slots-and-daggers",
-      "mapping_status": "new_record_partially_confirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "以奇幻敌人的生命、伤害与战斗失败作为目标压力；具体波次曲线等待逐局分析。",
+          "value": "以奇幻敌人的生命与玩家生存作为目标压力；敌人会攻击玩家，具体波次曲线等待逐局分析。",
           "source_fields": [
-            "Steam 商店页：老虎机中的奇幻 Roguelike"
+            "Steam 商店页：老虎机中的奇幻 Roguelike",
+            "2026-08-10 用户确认：敌人会攻击玩家"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "由武器、护盾、金币及其他功能符号构成可成长的老虎机符号池。",
+          "value": "由武器、护盾、金币及其他功能符号构成可成长的老虎机符号池；护盾只在单次 Spin 内生效，金币是可管理资源。",
           "source_fields": [
-            "Steam 商店页与官方介绍"
+            "Steam 商店页与官方介绍",
+            "2026-08-10 用户确认：存在护盾与金币，护盾为单次 Spin 资源"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "装置从当前配置的符号池进行老虎机 Spin，生成本回合的攻击、防御与资源结果。",
+          "value": "装置从当前配置的符号池驱动 1D 转轮随机运行；玩家可以控制并停止转轮，而不是启动后完全自动结算。",
           "source_fields": [
-            "Steam 商店页：Fun slot machine"
+            "Steam 商店页：Fun slot machine",
+            "2026-08-10 用户确认：玩家可以控制、停止转轮"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "Spin 结果由老虎机自动写入转轮位置，玩家不直接决定主要落位。",
+          "value": "玩家通过控制并停止转轮决定本次结果的定格位置；不是系统全自动写入最终落位。",
           "source_fields": [
-            "Steam 商店页：slot machine"
+            "Steam 商店页：slot machine",
+            "2026-08-10 用户确认：玩家可以控制、停止转轮"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "以老虎机转轮序列承载符号结果；具体列数和空间规则等待逐局确认。",
+          "value": "以单条 1D 转轮序列承载本次符号结果。",
           "source_fields": [
-            "Steam 商店页与游戏截图"
+            "Steam 商店页与游戏截图",
+            "2026-08-10 用户确认：主要承载面为 1D 转轮序列"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
           "value": "围绕武器与功能符号建立本作自己的触发和组合规则；用户将其归为 Slot改·战斗型。",
@@ -3367,25 +3438,26 @@
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "把 Spin 与符号组合结果转译为攻击、防御、资源获得和敌我战斗状态。",
+          "value": "把 Spin 与符号组合结果转译为敌我战斗：敌人会攻击玩家，护盾承担本次 Spin 的临时防御，金币作为可管理资源进入后续循环。",
           "source_fields": [
-            "Steam 商店页：slot machine + fantasy RPG"
+            "Steam 商店页：slot machine + fantasy RPG",
+            "2026-08-10 用户确认：敌人会攻击玩家，存在护盾和金币，护盾只在单次 Spin 内生效"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "一次构筑决策前的 Spin／战斗回合数等待逐局分析。",
           "source_fields": [
             "202607 公式定义"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
           "value": "战后使用奖励升级老虎机、扩充符号配置或强化战斗能力，影响后续 Random、Pool_Symbol 与 C2。",
           "source_fields": [
             "Steam 商店页与官方介绍"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
@@ -3395,48 +3467,54 @@
     },
     {
       "product_id": "product.rogue-slots",
-      "mapping_status": "new_record_partially_confirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "以地下城敌人、生命消耗与战斗失败构成目标压力；具体波次与失败代价等待逐局确认。",
+          "value": "地下城敌人与玩家生命构成生存压力；敌我会互相攻击，玩家可能因受到攻击而失败，但没有独立护甲数值。",
           "source_fields": [
-            "Steam 商店页：Dungeon Master 与战斗循环"
+            "Steam 商店页：Dungeon Master 与战斗循环",
+            "2026-08-10 用户确认：敌我互相攻击，没有独立护甲"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "由武器、金币、诅咒遗物及其他可获得物品组成可构筑的转轮内容。",
+          "value": "由武器、金币、诅咒遗物、敌方符号及其他可获得物品组成可构筑的转轮内容；敌方符号会进入当前抽取池。",
           "source_fields": [
-            "Steam 商店页：weapons, coins, cursed relics"
+            "Steam 商店页：weapons, coins, cursed relics",
+            "2026-08-10 用户确认：敌方符号会进入符号池"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "传统 Slot 式 Spin 从当前转轮配置中产生符号结果。",
+          "value": "传统 Slot 式 Spin 从当前转轮配置中产生符号结果；启动后自动停止并进入自动结算，玩家没有过程内操作。",
           "source_fields": [
-            "Steam 商店页：slot machine"
+            "Steam 商店页：slot machine",
+            "2026-08-10 用户确认：Spin 自动停止、自动结算，过程内没有玩家操作"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "装置自动完成转轮停止和结果呈现，玩家主要在 Spin 之前配置内容。",
+          "value": "装置自动完成转轮停止、符号落位与结果呈现；玩家不在单次 Spin 内移动、选择或控制落位。",
           "source_fields": [
-            "Steam 商店页与官方截图"
+            "Steam 商店页与官方截图",
+            "2026-08-10 用户确认：单次 Spin 内没有过程操作"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "使用 Slot 转轮／窗口承载本次符号结果，具体支付关系等待逐局拆解。",
+          "value": "使用固定二维 Slot 盘面承载本次我方与敌方符号结果。",
           "source_fields": [
-            "Steam 商店页与官方截图"
+            "Steam 商店页与官方截图",
+            "2026-08-10 用户确认：主要承载面为固定二维 Slot 盘面"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "延续传统 Slot 的即时读数与组合认知；用户将其归为 Slot+战斗型。",
+          "value": "延续传统 Slot 的即时读数与组合认知；敌方符号与我方符号进入同一盘面，并参与 C₁ 组合计算。",
           "source_fields": [
-            "用户确认：Slot+战斗型"
+            "用户确认：Slot+战斗型",
+            "2026-08-10 用户确认：敌方符号同盘并参与 C₁"
           ],
           "review_status": "confirmed"
         },
@@ -3453,14 +3531,14 @@
           "source_fields": [
             "202607 公式定义"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
           "value": "通过获得与配置物品改变后续 Pool_Symbol、协同和战斗效果。",
           "source_fields": [
             "Steam 商店页：超过 30 种物品"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
@@ -3470,56 +3548,63 @@
     },
     {
       "product_id": "product.spinny-dungeon",
-      "mapping_status": "new_record_partially_confirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "怪物持续逼近 RED ZONE，进入红区构成直接战斗压力与失败风险。",
+          "value": "怪物持续逼近 RED ZONE，进入红区构成直接战斗压力与失败风险；食物还是需要跨过程持续管理的独立生存压力。",
           "source_fields": [
-            "Steam 商店页：monsters approach the RED ZONE"
+            "Steam 商店页：monsters approach the RED ZONE",
+            "2026-08-10 用户确认：存在需要持续管理的食物资源"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "由武器、植物、魔法物品、伙伴等可构筑对象组成。",
+          "value": "玩家 Pool_Symbol 由武器、食物、魔法物品与伙伴组成；敌方使用独立池，不与玩家构筑池混合。",
           "source_fields": [
-            "Steam 商店页：weapons, plants, magical artifacts, companions"
+            "Steam 商店页：weapons, magical artifacts, companions",
+            "2026-08-10 用户确认：植物应为食物；敌方使用独立池"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "每次 Spin 会随机重新排列棋盘上的构筑对象，改变当轮组合与战斗状态。",
+          "value": "系统先从固定敌方池放置敌方单位，再从玩家 Pool_Symbol 随机生成武器、食物、魔法物品与伙伴结果。",
           "source_fields": [
-            "Steam 商店页：randomly rearranged after every spin"
+            "Steam 商店页：randomly rearranged after every spin",
+            "2026-08-10 用户确认：先放敌方，再随机玩家池"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "装置自动将对象重新排列到棋盘位置，玩家不直接控制每次落位。",
+          "value": "系统先把独立敌方池的单位放入盘面，再自动把玩家池的随机结果写入剩余承载位置；玩家不直接控制敌我落位。",
           "source_fields": [
-            "Steam 商店页：randomly rearranged on the board"
+            "Steam 商店页：randomly rearranged on the board",
+            "2026-08-10 用户确认：单次 Spin 内只主动释放魔法，不直接控制敌我落位"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "以带有位置关系的棋盘承载构筑对象与战斗单位，具体网格规则等待逐局确认。",
+          "value": "使用固定二维盘面承载我方构筑对象与敌方单位；敌方会进入与我方相同的盘面。",
           "source_fields": [
-            "Steam 商店页与官方截图"
+            "Steam 商店页与官方截图",
+            "2026-08-10 用户确认：敌方进入与我方相同的二维盘面"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "不只沿用传统 Slot 支付线，而是读取棋盘中对象的位置、组合和功能关系；用户将其归为 Slot改·战斗型。",
+          "value": "不只沿用传统 Slot 支付线，而是读取棋盘中我方对象与敌方单位的位置、组合和功能关系；敌方会参与 C₁ 计算。",
           "source_fields": [
-            "用户确认：Slot改·战斗型"
+            "用户确认：Slot改·战斗型",
+            "2026-08-10 用户确认：敌方进入同盘并参与 C₁"
           ],
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "把棋盘组合结果转译为自动攻血战斗，敌我互相攻击但没有独立防御／护甲数值；怪物持续逼近 RED ZONE。",
+          "value": "把棋盘组合结果转译为敌我互相攻击的战斗，游戏没有独立防御／护甲数值；食物形成持续生存压力，玩家可在单次 Spin 内主动释放魔法干预战斗。",
           "source_fields": [
             "Steam 商店页：auto battler 与 RED ZONE",
-            "用户 2026-08-01 确认：没有护甲"
+            "用户 2026-08-01 确认：没有护甲",
+            "2026-08-10 用户确认：敌我互攻、持续管理食物，且可在单次 Spin 内主动施法"
           ],
           "review_status": "confirmed"
         },
@@ -3528,14 +3613,15 @@
           "source_fields": [
             "202607 公式定义"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "选择和组合武器、植物、魔法物品与伙伴，持续改变后续 Pool_Symbol、棋盘协同及战斗能力。",
+          "value": "选择和组合武器、食物、魔法物品与伙伴，持续改变后续玩家 Pool_Symbol、棋盘协同及战斗能力；敌方独立池不由该 BD 改变。",
           "source_fields": [
-            "Steam 商店页：deckbuilder"
+            "Steam 商店页：deckbuilder",
+            "2026-08-10 用户确认：BD 通过选择和组合上述对象改变后续符号池与战斗"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
@@ -3545,72 +3631,77 @@
     },
     {
       "product_id": "product.slot-or-not",
-      "mapping_status": "new_record_partially_confirmed",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "以回合制战斗中的敌人生命、玩家生存与关卡推进构成目标压力；具体检查周期和失败代价等待逐局确认。",
+          "value": "以回合制战斗中的敌人生命、玩家生存与关卡推进构成目标压力；敌人与玩家会互相攻击，但没有需要并行管理的独立护甲、魔法、能量或其他资源线。",
           "source_fields": [
-            "Steam 商店页：turn-based slot machine battling adventure"
+            "Steam 商店页：turn-based slot machine battling adventure",
+            "2026-08-10 用户确认：敌我互攻，且没有其他独立资源"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "由玩家携带并投入抽取池的装备与物品组成；官方资料记录 40+ 可用物品，并由饰品进一步改变构筑。",
+          "value": "玩家池由装备与物品组成；敌方符号来自固定敌方集合，不进入玩家 Pool_Symbol，而是在生成候选时额外加入 Choice_Symbol。",
           "source_fields": [
-            "Steam 商店页：40+ playable items 与 drawing pool"
+            "Steam 商店页：40+ playable items 与 drawing pool",
+            "2026-08-10 用户确认：玩家池为装备与物品；敌方固定并额外加入 Choice_Symbol"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "候选池式 Random：Pool_Symbol → Random 生成 Choice_Pool → 玩家主动选择 → SingleSpin_Symbol。随机性决定可选范围，玩家决策决定本次最终结果。",
+          "value": "候选池式 Random：玩家 Pool_Symbol 先生成玩家候选，固定敌方符号再进入 Choice_Symbol；玩家只能从剩余的玩家候选中选择。例如总计 5 个候选且敌方占 1 个时，玩家选择范围为其余 4 个。",
           "source_fields": [
             "用户确认：单次 Spin 的 Random 创新"
           ],
           "review_status": "confirmed"
         },
         "Put": {
-          "value": "继承：继续由 Slot 装置自动把本次结果写入主要承载空间。扩展：敌方符号与我方符号进入同一盘面并占据盘面位置，供后续 C₁ 协同计算。",
+          "value": "固定敌方符号随 Choice_Symbol 进入本次结果，玩家从其余玩家候选中选择；系统再把敌我结果写入同一成长盘面，供 C₁ 协同计算。",
           "source_fields": [
             "用户 2026-08-01 确认敌方 Put 方式"
           ],
           "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "Slot 装置与回合制战斗界面共同承载本次装备结果；具体空间拓扑和位置关系等待逐局确认。",
+          "value": "Slot 盘面从 1×3 起步，每次向上下增加一行或向左右增加一列，最终约成长为 5×5；敌我符号共享该盘面。",
           "source_fields": [
-            "Steam 商店页与官方截图"
+            "Steam 商店页与官方截图",
+            "2026-08-10 用户确认：盘面从 1×3 逐行或逐列成长，最终约 5×5"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "装备类型、组合与物品效果形成自有基础协同，不以传统 Slot 支付线为核心；用户将其归为 Slot改·战斗型。",
+          "value": "以支付线作为主要 C₁ 判定方式，读取同盘敌我符号及装备结果；装备与物品效果继续修饰支付线结果。",
           "source_fields": [
             "用户确认：Slot改·战斗型",
-            "Steam 商店页：wild synergies"
+            "Steam 商店页：wild synergies",
+            "2026-08-10 用户确认：C₁ 主要依靠支付线"
           ],
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "沿选择出的装备结果，通过攻击、防御与敌我战斗状态形成回合制战斗二次揭晓。",
+          "value": "沿选择出的装备与支付线结果形成敌我互相攻击的回合制战斗二次揭晓；没有独立护甲、魔法、能量或其他资源线需要并行结算。",
           "source_fields": [
-            "Steam 商店页：attack/defend based on the outcome"
+            "Steam 商店页：attack/defend based on the outcome",
+            "2026-08-10 用户确认：敌我互攻，且没有其他独立资源"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "触发一次装备构筑决策前的连续 Spin／战斗回合数量等待逐局确认。",
           "source_fields": [
             "202607 公式定义"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
           "value": "获得、携带和调整装备与饰品，持续改变后续 Pool_Symbol、候选选择空间与战斗能力。",
           "source_fields": [
             "Steam 商店页：40+ playable items、49 trinkets"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
@@ -3842,43 +3933,46 @@
     },
     {
       "product_id": "product.lever-warrior-bow-and-magic",
-      "mapping_status": "classification_confirmed_content_pending",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，P_t 的具体表现尚待补录。",
+          "value": "敌人会攻击玩家，玩家生存与击败敌人构成战斗压力；具体波次、失败条件与资源压力仍待拆解。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户确认：敌人会攻击玩家"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
           "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，Pool_Symbol 的具体表现尚待补录。",
           "source_fields": [
             "用户提供的 2026-07-28 最新品类分类截图"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
           "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，Random 的具体表现尚待补录。",
           "source_fields": [
             "用户提供的 2026-07-28 最新品类分类截图"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，Put 的具体表现尚待补录。",
+          "value": "单次 Spin 的主要落位与结算由系统自动完成；玩家唯一的过程操作是选择符号，部分选中符号可以被主动释放。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户确认：只能选择符号，部分符号可以释放"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，Show_TP 的具体表现尚待补录。",
+          "value": "使用固定 5×5 的二维 Slot 盘面承载本次符号与战斗结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户确认：主要承载面为固定 5×5 盘面"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
           "value": "C₁ 生成普通、远程、魔法等不同攻击类型在单回合内的伤害值，供 C₂ 战斗演绎。",
@@ -3888,25 +3982,26 @@
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，C2 的具体表现尚待补录。",
+          "value": "沿 C₁ 生成的普通、远程与魔法伤害进入战斗结算，敌人会攻击玩家；护甲只在本次 Spin 有效，金币是可管理资源，魔法不消耗跨 Spin 持续管理的独立资源。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户确认：敌人会攻击玩家；魔法不是跨 Spin 资源；存在金币，护甲只在单次 Spin 生效"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "N": {
           "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，N 的具体表现尚待补录。",
           "source_fields": [
             "用户提供的 2026-07-28 最新品类分类截图"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
           "value": "待拆解：已确认《拉杆战士：弓箭与魔法》的品类归属，BD 的具体表现尚待补录。",
           "source_fields": [
             "用户提供的 2026-07-28 最新品类分类截图"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
@@ -3916,55 +4011,55 @@
     },
     {
       "product_id": "product.hoptale-demo",
-      "mapping_status": "classification_confirmed_content_pending",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，P_t 的具体表现尚待补录。",
+          "value": "敌我互相攻击形成生存压力；货币跨 Spin 持续积累与消耗，其余资源只在当前 Spin 内生效，不进入长期资源线。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户 2026-08-10 确认：敌我互相攻击；货币跨 Spin，其余资源单次生效"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Pool_Symbol": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，Pool_Symbol 的具体表现尚待补录。",
+          "value": "攻击类、金币、敌方攻击类、我方防御类及其他单次资源共同进入本次符号池。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-10 用户确认：攻击、金币、敌方攻击、我方防御等都在池内"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Random": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，Random 的具体表现尚待补录。",
+          "value": "系统先生成固定 1D 序列；玩家可以锁定部分结果，并对未锁定部分重新 Random。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户 2026-08-10 确认：可以锁定并重新 Random"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，Put 的具体表现尚待补录。",
+          "value": "系统将我方与敌方角色共同放入固定 1D 序列；锁定后，被保留的结果不参与下一次 Random。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户 2026-08-10 确认：敌方进入同一序列；可以锁定并重新 Random"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "系统自动生成并展示本次 1D 序列；玩家不在单次 Spin 内移动、选择或控制该轴。",
+          "value": "系统自动生成并展示固定 1D 序列；玩家不直接移动序列位置，但可以锁定部分结果并重新 Random。",
           "source_fields": [
-            "用户 2026-08-01 确认：自动生成并展示 1D 序列"
+            "用户 2026-08-10 确认：固定 1D 序列；可以锁定并重新 Random"
           ],
           "review_status": "confirmed"
         },
         "C1": {
           "value": "敌方符号参与 C₁ 协同计算；C₁ 按 1D 序列依次执行本次符号，并将各符号产生的基础结果传入 C₂。",
           "source_fields": [
-            "用户 2026-08-01 确认：序列执行符号"
+            "用户 2026-08-10 确认：敌方进入同一序列并参与 C₁"
           ],
           "review_status": "confirmed"
         },
         "C2": {
-          "value": "敌方符号在盘中与我方互相攻击，战斗由系统自动进行，形成生存战斗演绎。",
+          "value": "敌方角色与玩家会互相攻击；货币结果跨 Spin 保留并进入后续循环，其余资源只修饰当前 Spin 的战斗结算。",
           "source_fields": [
-            "用户 2026-08-01 确认：敌我互相攻击，自动战斗"
+            "用户 2026-08-10 确认：敌我互相攻击；货币跨 Spin，其余资源单次生效"
           ],
           "review_status": "confirmed"
         },
@@ -3973,14 +4068,14 @@
           "source_fields": [
             "用户提供的 2026-07-28 最新品类分类截图"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，BD 的具体表现尚待补录。",
+          "value": "Demo 阶段的 BD 主要围绕符号进行，改变后续可出现的符号内容；当前 Demo 尚未展开更完整的构筑层。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "2026-08-10 用户确认：BD 主要改变符号；当前仍为 Demo"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         }
       },
       "source": {
@@ -3990,8 +4085,8 @@
     },
     {
       "product_id": "product.re-spin-die-repeat-demo",
-      "mapping_status": "classification_confirmed_content_pending",
-      "review_status": "draft",
+      "mapping_status": "user_confirmed",
+      "review_status": "confirmed",
       "fields": {
         "P_t": {
           "value": "任务给定固定目标与有限解题范围，玩家围绕当前任务完成数值检测。",
@@ -4008,32 +4103,36 @@
           "review_status": "confirmed"
         },
         "Random": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Random 的具体表现尚待补录。",
+          "value": "每次 Spin 从当前 Pool_Symbol 随机取出最多 20 个符号，生成本次 5×4 盘面结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户确认：从当前 Pool_Symbol 随机取出最多 20 个符号"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Put": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Put 的具体表现尚待补录。",
+          "value": "系统自动把本次随机结果填入固定 5×4 盘面，玩家不能锁定、重新 Random 或控制具体落位。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户确认：系统自动填入盘面，玩家不能锁定、重抽或控制落位"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "Show_TP": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，Show_TP 的具体表现尚待补录。",
+          "value": "固定 5×4 二维盘面，共 20 个承载格。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户最终更正：Show_TP 为固定 5×4；此前 1D 与 4×5 描述均不采用"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C1": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，C1 的具体表现尚待补录。",
+          "value": "主要读取 5×4 盘面中符号的相邻关系，形成基础数值结果。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户确认：C₁ 主要依据相邻关系"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "C2": {
           "value": "固定任务条件与系统给定增益可以形成高值结果，但玩家不能通过 BD 持续养成 C2 修饰，第二峰更像任务中抽中超级大奖。",
@@ -4043,11 +4142,12 @@
           "review_status": "confirmed"
         },
         "N": {
-          "value": "待拆解：已确认《Re: Spin. Die. Repeat. Demo》的品类归属，N 的具体表现尚待补录。",
+          "value": "N = 1；每次 Spin 结算后进入一次受当前任务范围限制的构筑。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户提供的 2026-07-28 最新品类分类截图",
+            "2026-08-10 用户确认：每次 Spin 后进行一次构筑"
           ],
-          "review_status": "pending"
+          "review_status": "confirmed"
         },
         "BD": {
           "value": "玩家仍可构筑 Pool_Symbol，但不能构筑 C2 修饰；决策空间被收敛到任务限定的符号池与候选范围，体验更像解任务，而非构筑大奖概率。",
