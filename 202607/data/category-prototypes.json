@@ -17,7 +17,7 @@
       "name": "Slot+战斗型",
       "name_status": "confirmed",
       "type": "category_prototype",
-      "status": "working",
+      "status": "reference_confirmed",
       "order": 10,
       "primary_mother_id": "mechanism.slot",
       "composed_mother_ids": [],
@@ -128,7 +128,7 @@
       "name": "Slot+数值型",
       "name_status": "confirmed",
       "type": "category_prototype",
-      "status": "working",
+      "status": "reference_confirmed",
       "order": 20,
       "primary_mother_id": "mechanism.slot",
       "composed_mother_ids": [],
@@ -240,7 +240,7 @@
       "name": "Slot改·战斗型",
       "name_status": "confirmed",
       "type": "category_prototype",
-      "status": "working",
+      "status": "reference_confirmed",
       "order": 30,
       "primary_mother_id": "mechanism.slot",
       "composed_mother_ids": [],
@@ -253,7 +253,7 @@
         "result_mode": "combat",
         "result_label": "战斗表现"
       },
-      "summary": "保留 Slot 的 Spin 认知与自动落位，建立可由 BD 控制类型、数量与必要时品质级别的战斗符号池，通过自有 C₁ 形成基础战斗结果，再由 C₂ 完成战斗二次揭晓。",
+      "summary": "保留 Slot 的 Spin 认知与自动落位，建立可由 BD 控制类型、数量与必要时品质级别的战斗符号池，通过自有 C₁ 与 C₂ 的组合完成战斗协同和二次揭晓。",
       "definition": "本品类原型以《魔王终局》为基石游戏：保留 Slot 的装置认知、随机揭晓与自动 Put，把固定符号池改为由符号类型与数量构成、并可根据 Show_TP 承载、当局有效池与进度跨度引入品质级别的可构筑棋子／随从池。BD 首先负责控制 Pool_Symbol 组成；当大空间、大有效池和长进度需要压缩成长时，再通过直接升级、合成升阶或高品质替换控制 Symbol_Quality。C₁ 根据符号类型、启用时的品质及阵容关系建立基础战斗结果，C₂ 再将其转译为战斗二次揭晓。",
       "formula_changes": {
         "P_t": {
@@ -296,7 +296,7 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承 2D 装置舞台",
-          "summary": "工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。",
+          "summary": "继承 Slot 母体的 2D 网格承载；具体游戏可以在变体层定义盘面尺寸、分区与战场承载方式。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-30T06:04:32.418Z",
@@ -354,7 +354,7 @@
       "name": "Slot改·数值型",
       "name_status": "confirmed",
       "type": "category_prototype",
-      "status": "working",
+      "status": "reference_confirmed",
       "order": 40,
       "primary_mother_id": "mechanism.slot",
       "composed_mother_ids": [],
@@ -367,7 +367,7 @@
         "result_mode": "numeric",
         "result_label": "数值表现"
       },
-      "summary": "保留 Slot 的 Spin 认知与自动落位，建立可由 BD 控制类型、数量与必要时品质级别的数值符号池，通过自有 C₁ 形成基础数值结果，再由 C₂ 继续放大与揭晓。",
+      "summary": "保留 Slot 的 Spin 认知与自动落位，建立可由 BD 控制类型、数量与必要时品质级别的数值符号池，通过自有 C₁ 与 C₂ 的组合完成数值协同、放大与二次揭晓。",
       "definition": "本品类原型以《幸运房东》为基石游戏：保留 Slot 的装置随机与自动 Put，把固定符号池改为由符号类型与数量构成、并可根据 Show_TP 承载、当局有效池与进度跨度引入品质级别的可构筑数值符号池。BD 首先负责控制 Pool_Symbol 组成；当大空间、大有效池和长进度需要压缩成长时，再通过直接升级、合成升阶或高品质替换控制 Symbol_Quality。C₁ 根据符号类型、启用时的品质及协同关系建立基础数值结果，C₂ 沿 C₁ 继续揭晓数值兑现程度，P(t) 负责验证结果是否足够。",
       "formula_changes": {
         "P_t": {
@@ -410,7 +410,7 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承 2D 装置舞台",
-          "summary": "工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。",
+          "summary": "继承 Slot 母体的 2D 网格承载；具体游戏可以在变体层定义盘面尺寸、分区与其他承载变化。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T18:41:15.417Z",

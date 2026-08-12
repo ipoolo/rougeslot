@@ -359,6 +359,30 @@
   font-size: 22px;
 }
 
+.insight-edge-composition {
+  gap: 4px;
+  min-width: 70px;
+  padding: 8px 6px;
+  border: 1px solid rgba(112, 84, 170, 0.22);
+  border-radius: 12px;
+  background: rgba(234, 228, 246, 0.56);
+}
+
+.insight-edge-composition b {
+  color: var(--violet);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.insight-edge-composition small {
+  max-width: 64px;
+  color: var(--ink-soft);
+  font-size: 8px;
+  font-weight: 760;
+  line-height: 1.35;
+  text-align: center;
+}
+
 .insight-next-cycle {
   display: grid;
   place-items: center;

@@ -6,7 +6,7 @@
       "key": "P_t",
       "name": "目标压力域",
       "kind": "outer_context",
-      "status": "working_definition",
+      "status": "stable",
       "definition": "以目标、期限、当前差距与失败代价包裹完整 Spin → BD 循环的可选外层边界条件。",
       "inputs": [
         "当前目标或达标阈值",
@@ -252,7 +252,7 @@
       "name": "单次 Spin 抽取结果",
       "kind": "intermediate_result",
       "status": "stable",
-      "definition": "一次 Random 完成后、Put 开始前，本次 Spin 已选出的符号结果；它不被严格定义为无序多重集。",
+      "definition": "一次 Random 完成后、Put 开始前，本次 Spin 已选出的符号结果。",
       "inputs": [
         "Random"
       ],
@@ -480,7 +480,7 @@
       "key": "Show_State",
       "name": "本次表演状态",
       "kind": "intermediate_result",
-      "status": "working_definition",
+      "status": "stable",
       "definition": "某一次 Spin 中，SingleSpin_Symbol 经 Put 写入 Show_TP 后形成的具体状态。",
       "inputs": [
         "Put"
@@ -538,7 +538,7 @@
             },
             {
               "name": "Combo 读取实例",
-              "description": "Combo 在 Show_TP 允许的关系范围内读取 Show_State，先执行 C₁，再按需执行 C₂。"
+              "description": "Combo 在 Show_TP 允许的关系范围内读取 Show_State，组合应用 C₁ 与 C₂；C₂ 可以接续、并行或嵌入 C₁。"
             }
           ]
         },
@@ -631,8 +631,8 @@
               "description": "写出可验证的参与对象、关系与触发条件。"
             },
             {
-              "name": "哪里开始变成 C₂？",
-              "description": "当规则开始沿 C₁ 的基础结果逐步释放信息、揭晓其兑现程度时，应转入 C₂ 二次揭晓。"
+              "name": "哪些内容属于 C₂？",
+              "description": "凡是依托 C₁ 协同持续释放关键信息、揭晓其兑现程度的规则，都应记录为 C₂；它可以接续、并行或嵌入 C₁。"
             }
           ]
         }
@@ -644,16 +644,16 @@
       "kind": "rule_set",
       "status": "stable",
       "optional": true,
-      "depends_on": "C1 基础结果",
-      "definition": "作用于 C₁ 基础结果之上的可选二次规则层：C₁ 先建立结果价值锚点，C₂ 再沿该结果逐步释放信息，揭晓它最终能够兑现到什么程度，并形成 Spin_Result。",
+      "depends_on": "C1 符号协同或基础结果",
+      "definition": "C₂ 依托 C₁ 符号协同工作，可以接续 C₁、与部分 C₁ 并行，或嵌入 C₁ 的结算过程，通过持续释放关键信息揭晓结果最终能够兑现到什么程度，并形成 Spin_Result。",
       "inputs": [
-        "C1 基础结果",
+        "C1 符号协同或基础结果",
         "Show_State（上下文）"
       ],
       "outputs": [
         "Combo"
       ],
-      "formula_location": "Combo 中位于 C₁ 之后的可选二次揭晓层",
+      "formula_location": "Combo 中依托 C₁ 工作的二次揭晓",
       "possible_effects": [
         "沿 C₁ 基础结果逐步释放其兑现信息",
         "通过倍率、条件、例外或连锁展开结果",
@@ -662,7 +662,7 @@
       ],
       "boundaries": [
         "C₁ 负责识别先验装置中的基础协同并产生基础结果",
-        "C₂ 只在 C₁ 基础结果之后工作，可以不启用",
+        "C₂ 依托 C₁ 协同工作，可以接续、并行或嵌入",
         "只有确定答案的播放只是结算动画，不属于有效的 C₂",
         "推翻 C₁ 或引入与 C₁ 无关的新随机接近重新开奖，不属于有效的 C₂",
         "C₂ 的不确定性必须来自 C₁ 结果的后续展开",
@@ -681,10 +681,6 @@
               "description": "把 C₁ 的基础结果映射到伤害、治疗、防御、技能触发、资源或状态等机制结果，并通过该过程逐步揭晓兑现程度。"
             },
             {
-              "name": "可以不启用",
-              "description": "当 C₁ 的基础结果已经能够直接成为 Spin_Result 时，C₂ 不参与本次 Combo。"
-            },
-            {
               "name": "不是结算动画或重新开奖",
               "description": "C₂ 必须延续 C₁ 的结果价值；只有确定答案的播放没有期待，与 C₁ 无关的新随机又会推翻价值锚点。"
             }
@@ -694,12 +690,12 @@
           "title": "与 C₁ 的边界",
           "items": [
             {
-              "name": "C₁ 先回答是否协同",
+              "name": "C₁ 回答是否协同",
               "description": "C₁ 描述装置先验中的基础符号关系与基础结果。"
             },
             {
-              "name": "C₂ 再回答能兑现多好",
-              "description": "C₂ 描述 C₁ 的基础结果如何在修饰或转译过程中逐步封闭为最终答案。"
+              "name": "C₂ 回答能兑现多好",
+              "description": "C₂ 描述 C₁ 协同或基础结果如何在修饰、转译或连锁过程中逐步封闭为最终答案；不要求固定晚于 C₁。"
             },
             {
               "name": "允许跨越多个对象",
@@ -731,7 +727,7 @@
       "name": "协同判定与结算",
       "kind": "operation",
       "status": "stable",
-      "definition": "在 Show_TP / Show_State 上先依据 C₁ 产生基础协同结果并建立价值锚点，再按需通过 C₂ 完成二次揭晓与结算的过程。",
+      "definition": "在 Show_TP / Show_State 上组合应用 C₁ 与 C₂，完成符号协同判定、二次揭晓与结果结算的过程；C₂ 可以接续、并行或嵌入 C₁。",
       "inputs": [
         "Show_TP",
         "Show_State",
@@ -743,23 +739,24 @@
       ],
       "formula_location": "Spin 第三步",
       "scope": "Show_TP",
-      "experience_role": "第二峰",
+      "experience_role": "横跨第一峰的即时识别与第二峰的二次揭晓",
       "boundaries": [
         "读取 Show_State，不负责从 Pool_Symbol 抽取符号",
-        "依据 C₁ 判断基础协同，再按需由 C₂ 沿该结果完成二次揭晓",
+        "公式中的 + 表示规则组合，不表示数值相加或固定先后顺序",
+        "组合应用 C₁ 与 C₂；C₂ 依托 C₁ 协同完成二次揭晓，但不限定固定先后顺序",
         "输出 Spin_Result，不直接执行后续 BD"
       ],
       "detail_sections": [
         {
-          "title": "Combo 的三个连续步骤",
+          "title": "Combo 的三个组合环节",
           "items": [
             {
               "name": "协同判定",
               "description": "读取 Show_State 中的符号与空间关系，判断哪些 C₁ 基础协同成立。"
             },
             {
-              "name": "二次揭晓（可选）",
-              "description": "由 C₂ 沿 C₁ 基础结果进行修饰或转译，逐步揭晓其最终兑现程度。"
+              "name": "二次揭晓",
+              "description": "由 C₂ 依托 C₁ 协同进行修饰或转译，逐步揭晓其最终兑现程度；允许接续、并行或嵌套。"
             },
             {
               "name": "结果结算",
@@ -775,8 +772,8 @@
               "description": "明确 Combo 读取整个 Show_State，还是只读取其中满足条件的区域或对象。"
             },
             {
-              "name": "触发顺序",
-              "description": "明确多个 C₁ 的判定顺序，以及可选 C₂ 的作用顺序、并行关系与冲突解决方式。"
+              "name": "触发关系",
+              "description": "明确多个 C₁ 的判定关系，以及 C₂ 采用接续、并行还是嵌套方式，并说明冲突解决规则。"
             },
             {
               "name": "结算顺序",
@@ -801,7 +798,7 @@
             },
             {
               "name": "最终怎样得到 Spin_Result？",
-              "description": "写出从 C₁ 判定、C₂ 可选二次揭晓到结算完成的可复核顺序。"
+              "description": "写出 C₁ 与 C₂ 如何组合，以及它们怎样形成最终 Spin_Result；若存在真实时序，再记录可复核顺序。"
             }
           ]
         }
@@ -811,7 +808,7 @@
       "key": "Spin_Result",
       "name": "单次 Spin 结果",
       "kind": "output_result",
-      "status": "working_definition",
+      "status": "stable",
       "definition": "单次 Spin 经 Combo 完成判定和结算后产生的可观察结果。",
       "inputs": [
         "Combo"

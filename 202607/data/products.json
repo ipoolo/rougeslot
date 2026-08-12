@@ -1794,7 +1794,7 @@
         "variant.custom-ms4blk85-wj4pu"
       ],
       "classification_status": "confirmed",
-      "summary": "老虎机 Roguelike、牌组构建与自动战斗的结合；每次 Spin 后，武器、植物、魔法物品和伙伴会在棋盘上重新随机排列。",
+      "summary": "老虎机 Roguelike、牌组构建与自动战斗的结合；每次 Spin 后，武器、食物、魔法物品和伙伴会在棋盘上重新随机排列。",
       "source_url": "https://store.steampowered.com/app/2837790/Spinny_Dungeon/",
       "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2837790/header.jpg?t=1775720977",
       "developer": "Typing Monkey",
@@ -1806,11 +1806,11 @@
         "自动战斗",
         "战斗表现"
       ],
-      "core_loop": "构筑包含武器、植物、魔法物品与伙伴的棋盘，每次 Spin 后重新排列并自动触发战斗，阻止怪物进入红区。",
+      "core_loop": "构筑包含武器、食物、魔法物品与伙伴的棋盘，每次 Spin 后重新排列并自动触发战斗，阻止怪物进入红区。",
       "observed_mechanics": [
         "老虎机 Roguelike 与自动战斗结合",
         "每次 Spin 后棋盘内容随机重排",
-        "武器、植物、魔法物品与伙伴共同构筑",
+        "武器、食物、魔法物品与伙伴共同构筑",
         "怪物逼近红区形成战斗压力"
       ],
       "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
@@ -1879,7 +1879,7 @@
       "name_en": "Devils Due",
       "type": "product",
       "record_type": "game",
-      "status": "classification_confirmed_content_pending",
+      "status": "reference_confirmed_content_unprocessed",
       "order": 490,
       "relation_types": [
         "variant_instance"
@@ -1894,16 +1894,16 @@
         "variant.devils-due"
       ],
       "classification_status": "confirmed",
-      "summary": "已依据最新分类清单归入“Slot+数值型”；具体玩法与公式字段等待补录。",
+      "summary": "分类与公式字段已确认；游戏摘要等资料暂未处理。",
       "source_url": "https://store.steampowered.com/app/3907520/Devils_Due/",
       "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3907520/fe419c334a88e04fcdb130fe7193ca97c85e40db/capsule_616x353_alt_assets_0.jpg?t=1775658131",
       "developer": "Data Illusion Studios",
       "release_year": 2025,
       "tags": [
         "Slot",
-        "待补充资料"
+        "资料暂未处理"
       ],
-      "core_loop": "待补录",
+      "core_loop": "暂未处理",
       "observed_mechanics": [],
       "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
       "evidence": [
@@ -1917,7 +1917,7 @@
       "name_en": "PegLotto! Demo",
       "type": "product",
       "record_type": "game",
-      "status": "classification_confirmed_content_pending",
+      "status": "reference_confirmed_content_unprocessed",
       "order": 500,
       "relation_types": [
         "variant_instance"
@@ -1932,16 +1932,16 @@
         "variant.peglotto-demo"
       ],
       "classification_status": "confirmed",
-      "summary": "已依据最新分类清单归入“Slot+数值型”；具体玩法与公式字段等待补录。",
+      "summary": "分类与公式字段已确认；游戏摘要等资料暂未处理。",
       "source_url": "https://store.steampowered.com/app/4372270/PegLotto_Demo/",
       "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4372270/9a0b6f39f5b4004333d9fec78ae25e61b7c521f4/capsule_616x353.jpg?t=1773815564",
       "developer": "Ludica Inc",
       "release_year": 2026,
       "tags": [
         "Slot",
-        "待补充资料"
+        "资料暂未处理"
       ],
-      "core_loop": "待补录",
+      "core_loop": "暂未处理",
       "observed_mechanics": [],
       "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
       "evidence": [
@@ -1955,7 +1955,7 @@
       "name_en": "Spin Tactics Demo",
       "type": "product",
       "record_type": "game",
-      "status": "classification_confirmed_content_pending",
+      "status": "reference_confirmed_content_unprocessed",
       "order": 510,
       "relation_types": [
         "variant_instance"
@@ -1970,16 +1970,16 @@
         "variant.spin-tactics-demo"
       ],
       "classification_status": "confirmed",
-      "summary": "已依据最新分类清单归入“Slot+数值型”；具体玩法与公式字段等待补录。",
+      "summary": "分类与公式字段已确认；游戏摘要等资料暂未处理。",
       "source_url": "https://store.steampowered.com/app/3856990/Spin_Tactics/",
       "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3856990/5fbc06fbaabd02d94292b925c8b7fb1ed6538ae1/capsule_616x353.jpg?t=1785228780",
       "developer": "Dead Broke Games",
       "release_year": 2026,
       "tags": [
         "Slot",
-        "待补充资料"
+        "资料暂未处理"
       ],
-      "core_loop": "待补录",
+      "core_loop": "暂未处理",
       "observed_mechanics": [],
       "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot+数值型”。",
       "evidence": [
@@ -1993,7 +1993,7 @@
       "name_en": "Spin Forward",
       "type": "product",
       "record_type": "game",
-      "status": "classification_confirmed_content_pending",
+      "status": "reference_confirmed_content_unprocessed",
       "order": 520,
       "relation_types": [
         "variant_instance"
@@ -2008,16 +2008,16 @@
         "variant.lever-warrior-bow-and-magic"
       ],
       "classification_status": "confirmed",
-      "summary": "已依据最新分类清单归入“Slot改·战斗型”；具体玩法与公式字段等待补录。",
+      "summary": "分类与公式字段已确认；游戏摘要等资料暂未处理。",
       "source_url": "https://store.steampowered.com/app/3343940/Spin_Forward/",
       "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3343940/ed803d67053b4ea66674307ba3d5bcacb5320075/capsule_616x353_schinese.jpg?t=1761150597",
       "developer": "Bean and Pea Studio",
       "release_year": 2025,
       "tags": [
         "Slot",
-        "待补充资料"
+        "资料暂未处理"
       ],
-      "core_loop": "待补录",
+      "core_loop": "暂未处理",
       "observed_mechanics": [],
       "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·战斗型”。",
       "evidence": [
@@ -2031,7 +2031,7 @@
       "name_en": "Hoptale Demo",
       "type": "product",
       "record_type": "game",
-      "status": "classification_confirmed_content_pending",
+      "status": "reference_confirmed_content_unprocessed",
       "order": 530,
       "relation_types": [
         "variant_instance"
@@ -2046,16 +2046,16 @@
         "variant.custom-ms97ik8h-ujrel"
       ],
       "classification_status": "confirmed",
-      "summary": "已依据最新分类清单归入“Slot改·战斗型”；具体玩法与公式字段等待补录。",
+      "summary": "分类与公式字段已确认；游戏摘要等资料暂未处理。",
       "source_url": "https://store.steampowered.com/app/4094560/Hoptale_Demo/",
       "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4094560/045f0c485d628f6529362d7019bd32e52607a4bd/capsule_616x353.jpg?t=1777352669",
       "developer": "LotteGames",
       "release_year": 2025,
       "tags": [
         "Slot",
-        "待补充资料"
+        "资料暂未处理"
       ],
-      "core_loop": "待补录",
+      "core_loop": "暂未处理",
       "observed_mechanics": [],
       "classification_note": "从图谱管理配置游戏归属。",
       "evidence": [
@@ -2069,7 +2069,7 @@
       "name_en": "Re: Spin. Die. Repeat. Demo",
       "type": "product",
       "record_type": "game",
-      "status": "classification_confirmed_content_pending",
+      "status": "reference_confirmed_content_unprocessed",
       "order": 540,
       "relation_types": [
         "variant_instance"
@@ -2084,16 +2084,16 @@
         "variant.re-spin-die-repeat-demo"
       ],
       "classification_status": "confirmed",
-      "summary": "已依据最新分类清单归入“Slot改·数值型”；具体玩法与公式字段等待补录。",
+      "summary": "分类与公式字段已确认；游戏摘要等资料暂未处理。",
       "source_url": "https://store.steampowered.com/app/3345680/Re_Spin_Die_Repeat/",
       "header_image_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3345680/ecc33098ed386c9ec362b198cbb52e39c6d1e36a/capsule_616x353.jpg?t=1782245564",
       "developer": "Isekai Interactive",
       "release_year": 2026,
       "tags": [
         "Slot",
-        "待补充资料"
+        "资料暂未处理"
       ],
-      "core_loop": "待补录",
+      "core_loop": "暂未处理",
       "observed_mechanics": [],
       "classification_note": "用户于 2026-07-28 通过最新分类清单确认该游戏属于“Slot改·数值型”。",
       "evidence": [

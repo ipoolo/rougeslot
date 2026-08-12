@@ -103,7 +103,7 @@ const NODE_TYPE_ORDER = {
   category_variant: 3
 };
 
-const DATA_VERSION = "20260811-108";
+const DATA_VERSION = "20260812-120";
 const DEFAULT_ATLAS_VARIANT_ID = "variant.custom-ms4430m6-dycxc";
 
 const DATA_FILES = {
@@ -136,6 +136,7 @@ const state = {
   atlasVariantViewMode: "compact",
   libraryView: "products",
   libraryProductQuery: "",
+  libraryProductScope: "current",
   libraryProductFilter: "all",
   libraryProductSort: "default",
   librarySlotMotherOnly: true,
@@ -224,6 +225,9 @@ const elements = {
   libraryViewButtons: [...document.querySelectorAll("[data-library-view]")],
   libraryPanels: [...document.querySelectorAll("[data-library-panel]")],
   productSearch: document.querySelector("#library-product-search"),
+  productScopeButtons: [...document.querySelectorAll("[data-library-product-scope]")],
+  productCatalogEyebrow: document.querySelector("#product-catalog-eyebrow"),
+  productCatalogTitle: document.querySelector("#product-catalog-title"),
   productFilter: document.querySelector("#library-product-filter"),
   productSort: document.querySelector("#library-product-sort"),
   motherFilter: document.querySelector("#library-mother-filter"),
@@ -326,14 +330,14 @@ const EXPERIENCE_STAGE_PRESETS = {
     copy: "P(t) 包裹 Spin 与 BD 的完整循环。它的检查周期独立于 N：N 只表示触发一次 BD 之前的连续 Spin 数量。"
   },
   reveal: {
-    label: "阶段 01 · 揭晓",
-    title: "第一峰：等待被答案替代，随机结果第一次成为可见事实。",
-    copy: "Random 从 Pool_Symbol 抽取；Put 把结果写入 Show_TP。玩家关注“抽到了什么、怎样落下”。"
+    label: "阶段 01 · 揭晓与识别",
+    title: "第一峰：随机结果成为可见事实，并通过 C₁ 被即时读懂。",
+    copy: "Random 从 Pool_Symbol 抽取，Put 把结果写入 Show_TP；玩家借助 C₁ 符号协同形成“这次大概好不好”的即时判断。"
   },
   settle: {
-    label: "阶段 02 · 结算",
-    title: "第二峰：玩家识别协同，并看到规则把组合转换成结果。",
-    copy: "Combo 先由 C₁ 建立基础结果的价值锚点，再由可选的 C₂ 沿该结果逐步完成二次揭晓，输出本次 Spin_Result。"
+    label: "阶段 02 · 二次揭晓与结算",
+    title: "第二峰：C₂ 依托 C₁ 协同继续释放信息，并将结果封闭为 Spin_Result。",
+    copy: "Combo 组合应用 C₁ 与 C₂；C₂ 可以接续、并行或嵌入 C₁，通过二次揭晓形成最终结果。"
   },
   build: {
     label: "阶段 03 · 构筑",
@@ -344,8 +348,8 @@ const EXPERIENCE_STAGE_PRESETS = {
 
 const CORE_INSIGHT_PRESETS = {
   all: {
-    label: "总原则",
-    title: "C₁ 负责立即可读，C₂ 负责二次揭晓，轻决策与手动 Spin 让双峰持续成立。",
+    label: "洞察 1 · 总原则",
+    title: "结果揭晓通过 C₁ 被立即读懂，C₂ 负责二次揭晓；轻决策与手动 Spin 让双峰持续成立。",
     copy: "学习、构筑和压力验证位于结果之后或循环外层，用来放大体验；单轮只保留少量、低复杂度操作，并由玩家主动开启。",
     boundary: "边界：复杂策略可以进入阶段性构筑，但不应占满两次表演之间的操作窗口；系统也不能替玩家触发下一次 Spin。",
     nodes: [],
@@ -353,7 +357,7 @@ const CORE_INSIGHT_PRESETS = {
     zones: []
   },
   c1: {
-    label: "洞察 1 · C₁ 先验可读性",
+    label: "洞察 2 · C₁ 先验可读性",
     title: "玩家不依赖新教学，也应能判断这次抽取的基础价值。",
     copy: "Slot改 可以替换支付线和基础协同，但新规则必须继续借用常识、物理关系或成熟的品类先验。学习应该在结果之后解释怎样变强，而不是在结果之前解释有没有中奖。",
     boundary: "检查边界：决定基础协同是否成立的规则属于 C₁；只在基础结果之上修饰或转译的规则应优先放入 C₂。",
@@ -362,16 +366,16 @@ const CORE_INSIGHT_PRESETS = {
     zones: ["first-peak", "long-cycle"]
   },
   c2: {
-    label: "洞察 2 · C₂ 二次揭晓",
+    label: "洞察 3 · C₂ 二次揭晓",
     title: "C₂ 不是播放确定答案，而是让最终答案在过程中逐步封闭。",
-    copy: "C₁结束时玩家可以知道“大概不错”，但仍不能精确算完结果；C₂通过位置、顺序、局部交互与连续反馈，让玩家持续预测并修正预测。",
+    copy: "玩家借助 C₁ 符号协同知道“大概不错”，但仍不能精确算完结果；C₂ 可以接续、并行或嵌入 C₁，通过位置、顺序、局部交互与连续反馈，让玩家持续预测并修正预测。",
     boundary: "检查边界：只有动画而没有主观不确定性，只是结算展示；目标是否达标仍由 P(t) 判断，不属于 C₂。",
     nodes: ["c1", "c2", "result"],
     edges: ["c1-c2", "c2-result"],
     zones: ["first-peak", "second-peak"]
   },
   c3: {
-    label: "洞察 3 · 决策复杂度",
+    label: "洞察 4 · 决策复杂度",
     title: "同时控制决策数与单次复杂度，让玩家尽快从操作回到下一次表演。",
     copy: "双峰多巴胺循环依赖短操作窗口与表演窗口持续交替。每次操作也可以成为低复杂度、带技巧的短开奖，但要控制持续输入造成的疲劳；复杂策略应在阶段边界集中处理。",
     boundary: "检查边界：限制的是单个双峰循环必须支付的决策成本，而不是游戏整体的策略上限。",
@@ -380,9 +384,9 @@ const CORE_INSIGHT_PRESETS = {
     zones: ["rhythm"]
   },
   c4: {
-    label: "洞察 4 · 禁止自动 Spin",
+    label: "洞察 5 · 禁止自动 Spin",
     title: "每一次 Spin 都必须由玩家明确触发，主动操作为期待建立清晰起点。",
-    copy: "自动 Spin 把离散的“操作 → 期待 → C₁／C₂ 揭晓”压成无边界结果流，使双峰失去起点与间隔，并滑向依赖变动奖励维持重复行为的斯金纳箱式循环。",
+    copy: "自动 Spin 把离散的“操作 → 期待 → 第一峰／第二峰”压成无边界结果流，使双峰失去起点与间隔，并滑向依赖变动奖励维持重复行为的斯金纳箱式循环。",
     boundary: "不可妥协：可以减少单次操作成本，但不能移除玩家对下一次 Spin 的主动触发权。",
     nodes: ["manual-spin", "anticipation", "double-peak", "c1", "c2", "result"],
     edges: ["manual-anticipation", "anticipation-peaks", "peaks-return", "c1-c2", "c2-result"],
@@ -392,7 +396,7 @@ const CORE_INSIGHT_PRESETS = {
     label: "高风险组合 · Slot改+战斗",
     title: "同时保护 C₁ 的大奖识别，并让 C₂ 的战斗结果保持悬念。",
     copy: "这种组合既改写基础协同，又通过战斗过程二次揭晓 C₁ 的兑现程度，最容易让两个体验阶段相互侵占。棋盘过大、符号过多或关系过深，会先削弱第一峰；结果过早可计算，又会削弱第二峰。",
-    boundary: "设计约束：控制棋盘大小、符号类型、关系层数与跨区域依赖；先让基础协同清晰成立，再进入紧凑的战斗时序。",
+    boundary: "设计约束：控制棋盘大小、符号类型、关系层数与跨区域依赖；让 C₁ 保持即时可读，并让 C₂ 的战斗时序紧凑。",
     nodes: ["reveal", "c1", "c2", "result"],
     edges: ["reveal-c1", "c1-c2", "c2-result"],
     zones: ["first-peak", "second-peak"]
@@ -425,19 +429,19 @@ const LUCK_LANDLORD_CASE_PRESETS = {
     zones: ["source"]
   },
   reveal: {
-    label: "第一峰 · 揭晓",
-    title: "Random 产生本次符号，自动 Put 把它们写入 2D Slot 网格。",
-    copy: "该阶段从 Pool_Symbol 开始，到 Show_State 形成结束。玩家关心“抽到了什么、怎样落下”；协同判定尚未发生。",
-    nodes: ["pool", "random", "spin-symbol", "put", "show-tp", "show-state"],
-    edges: ["pool-random", "random-symbol", "symbol-put", "put-state"],
+    label: "第一峰 · 揭晓与协同",
+    title: "Random 与 Put 形成可见盘面，玩家借助 C₁ 立即读懂大致价值。",
+    copy: "该阶段从 Pool_Symbol 开始，到 Show_State 被 C₁ 即时识别结束。玩家关心“抽到了什么、怎样落下、这次大概好不好”。",
+    nodes: ["pool", "random", "spin-symbol", "put", "show-tp", "show-state", "c1"],
+    edges: ["pool-random", "random-symbol", "symbol-put", "put-state", "state-c1"],
     zones: ["source", "reveal"]
   },
   settle: {
-    label: "第二峰 · 结算",
-    title: "C₁ 先产生基础数值，C₂ 再由道具增强或改变结果。",
-    copy: "C₁ 读取直接产出、数量阈值和邻接关系；C₂ 位于基础结果之后，最终形成 Spin_Result。它不重新负责随机抽取或落位。",
+    label: "第二峰 · 二次揭晓",
+    title: "C₂ 依托 C₁ 协同，由道具增强、转译或继续揭晓结果。",
+    copy: "C₁ 读取直接产出、数量阈值和邻接关系；C₂ 可以接续、并行或嵌入协同结算，最终形成 Spin_Result。它不重新负责随机抽取或落位。",
     nodes: ["show-state", "show-tp", "c1", "c2", "spin-result"],
-    edges: ["state-c1", "c1-c2", "c2-result"],
+    edges: ["state-c1", "c1-settle", "c1-c2", "c2-result"],
     zones: ["settle"]
   },
   build: {
@@ -722,6 +726,7 @@ function captureCrossTabContext() {
       atlasVariantViewMode: state.atlasVariantViewMode,
       libraryView: state.libraryView,
       libraryProductQuery: state.libraryProductQuery,
+      libraryProductScope: state.libraryProductScope,
       libraryProductFilter: state.libraryProductFilter,
       libraryProductSort: state.libraryProductSort,
       librarySlotMotherOnly: state.librarySlotMotherOnly,
@@ -895,6 +900,18 @@ function libraryNodes() {
   });
 }
 
+function isCurrentLibraryProduct(product) {
+  return (product.prototype_ids ?? []).length > 0;
+}
+
+function currentLibraryProducts() {
+  return state.data.products.filter(isCurrentLibraryProduct);
+}
+
+function historicalLibraryProducts() {
+  return state.data.products.filter((product) => !isCurrentLibraryProduct(product));
+}
+
 function libraryNodeById(id) {
   return state.data.mechanismById.get(id)
     ?? state.data.prototypeById.get(id)
@@ -913,7 +930,10 @@ function reviewStatusFor(node, entry) {
 }
 
 function productStatusCopy(product) {
-  if (product.status === "reference_confirmed") {
+  if (
+    product.status === "reference_confirmed"
+    || product.status === "reference_confirmed_content_unprocessed"
+  ) {
     return { label: "来源已确认", className: "confirmed" };
   }
   if (product.status === "content_pending") {
@@ -1373,6 +1393,13 @@ function bindFieldImageViewer() {
 }
 
 function productClassification(product) {
+  if (!isCurrentLibraryProduct(product)) {
+    return {
+      path: ["历史资料", "未分类", "未建立游戏变体"],
+      depth: "unclassified"
+    };
+  }
+
   const mechanisms = product.mother_ids
     .map((id) => state.data.mechanismById.get(id)?.name)
     .filter(Boolean);
@@ -1406,12 +1433,17 @@ function renderLibraryStats() {
   );
   const pending = reviewItems.filter((item) => item.status !== "confirmed").length;
   const confirmed = reviewItems.length - pending;
+  const currentProducts = currentLibraryProducts();
+  const historicalProducts = historicalLibraryProducts();
+  const unprocessedProducts = currentProducts.filter((product) => (
+    product.status === "reference_confirmed_content_unprocessed"
+  ));
   const values = [
-    [state.data.products.length, "具体游戏"],
+    [currentProducts.length, "当前游戏"],
+    [historicalProducts.length, "历史资料／未分类"],
+    [unprocessedProducts.length, "资料暂未处理"],
     [nodes.length, "模型节点"],
-    [reviewItems.length, "公式字段记录"],
-    [confirmed, "已人工确认"],
-    [pending, "待确认／草稿"]
+    [`${confirmed}/${reviewItems.length}`, pending ? `已确认 · ${pending} 项待确认` : "公式字段均已确认"]
   ];
 
   elements.libraryStats.innerHTML = values.map(([value, label]) => `
@@ -1424,6 +1456,23 @@ function renderLibraryStats() {
 
 function renderProductCatalog() {
   const query = state.libraryProductQuery.toLowerCase();
+  const currentScope = state.libraryProductScope === "current";
+  const scopedProducts = currentScope ? currentLibraryProducts() : historicalLibraryProducts();
+  const currentCount = currentLibraryProducts().length;
+  const historicalCount = historicalLibraryProducts().length;
+  elements.productScopeButtons.forEach((button) => {
+    const active = button.dataset.libraryProductScope === state.libraryProductScope;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+    const count = button.dataset.libraryProductScope === "current" ? currentCount : historicalCount;
+    const countElement = button.querySelector("b");
+    if (countElement) countElement.textContent = String(count);
+  });
+  elements.productCatalogEyebrow.textContent = currentScope ? "当前游戏" : "历史资料／未分类";
+  elements.productCatalogTitle.textContent = currentScope ? "当前品类生态游戏" : "历史资料／未分类";
+  elements.motherFilter.hidden = !currentScope;
+  elements.prototypeFilter.closest("label").hidden = !currentScope;
+  elements.productFilter.closest("label").hidden = !currentScope;
   const availablePrototypes = state.data.prototypes
     .filter((prototype) => (
       !state.librarySlotMotherOnly
@@ -1445,23 +1494,27 @@ function renderProductCatalog() {
   `;
   elements.prototypeFilter.value = state.libraryPrototypeFilter;
 
-  const slotMotherProductCount = state.data.products.filter((product) =>
+  const slotMotherProductCount = currentLibraryProducts().filter((product) =>
     product.mother_ids?.includes("mechanism.slot")
   ).length;
   const prototypeProductCount = state.libraryPrototypeFilter === "all"
     ? 0
-    : state.data.products.filter((product) =>
+    : currentLibraryProducts().filter((product) =>
       product.prototype_ids?.includes(state.libraryPrototypeFilter)
     ).length;
-  const products = state.data.products
+  const products = scopedProducts
     .filter((product) => {
       if (
+        currentScope
+        &&
         state.librarySlotMotherOnly
         && !product.mother_ids?.includes("mechanism.slot")
       ) {
         return false;
       }
       if (
+        currentScope
+        &&
         state.libraryPrototypeFilter !== "all"
         && !product.prototype_ids?.includes(state.libraryPrototypeFilter)
       ) {
@@ -1469,6 +1522,8 @@ function renderProductCatalog() {
       }
       const filter = state.libraryProductFilter;
       if (
+        currentScope
+        &&
         filter !== "all"
         && filter !== product.classification_status
         && !(filter === "legacy" && product.legacy_source)
@@ -1513,15 +1568,16 @@ function renderProductCatalog() {
 
   elements.productResultSummary.innerHTML = `
     <strong>${products.length}</strong>
-    <span> / ${state.data.products.length} 款正式游戏</span>
+    <span> / ${scopedProducts.length} 款${currentScope ? "当前游戏" : "历史资料"}</span>
     <small>
-      ${state.librarySlotMotherOnly ? `Slot 母体共 ${slotMotherProductCount} 款；` : "当前显示全部母体；"}
-      ${state.libraryPrototypeFilter !== "all"
-        ? `${escapeHtml(selectedPrototype?.name ?? "所选品类原型")}共 ${prototypeProductCount} 款；`
-        : "全部品类原型；"}
+      ${currentScope
+        ? `${state.librarySlotMotherOnly ? `Slot 母体共 ${slotMotherProductCount} 款；` : "当前显示全部母体；"}
+          ${state.libraryPrototypeFilter !== "all"
+            ? `${escapeHtml(selectedPrototype?.name ?? "所选品类原型")}共 ${prototypeProductCount} 款；`
+            : "全部品类原型；"}`
+        : "旧版迁入且尚未归入当前四个品类；不进入主游戏库和待确认队列；"}
       ${state.libraryProductSort === "sales_desc" ? "按销量数据从高到低排列；" : "默认排序；"}
-      旧版迁入 ${state.data.migrationReport.result.formal_legacy_games} 款；
-      设计样例 ${state.data.migrationReport.result.design_samples} 条，不计入游戏数量。
+      ${currentScope ? "6 款游戏摘要等资料暂未处理。" : "仅供历史回溯。"}
     </small>
   `;
 
@@ -1535,10 +1591,10 @@ function renderProductCatalog() {
       const relationRole = roleForProduct(product);
       const roleLabel = relationRole === "cornerstone"
         ? "基石游戏"
-        : product.prototype_ids.length
+        : isCurrentLibraryProduct(product)
           ? "变体游戏"
-          : "待归类游戏";
-      const prototypeIdentity = classification.path[1] ?? "品类原型待确认";
+          : "历史资料";
+      const prototypeIdentity = classification.path[1] ?? "未分类";
       const salesEstimate = salesEstimateCopy(product);
       const steamMetadata = steamMetadataCopy(product);
       return `
@@ -1641,7 +1697,7 @@ function productMetaItem(label, value) {
   `;
 }
 
-function productFormulaObservationMarkup(observation) {
+function productFormulaObservationMarkup(observation, variant) {
   if (!observation) {
     return `
       <div class="product-detail-empty">
@@ -1670,14 +1726,25 @@ function productFormulaObservationMarkup(observation) {
       <div class="product-formula-observations">
         ${FORMULA_FIELDS.map((field) => {
           const entry = observation.fields[field];
+          const evidenceEntry = variant?.formula_changes?.[field];
+          const evidenceImages = fieldEvidenceImages(evidenceEntry);
           return `
-            <article>
+            <article class="${evidenceImages.length ? "has-evidence-images" : ""}">
               <header>
                 <code>${escapeHtml(formulaDisplayKey(field))}</code>
                 <span>${escapeHtml(FIELD_LABELS[field])}</span>
               </header>
               <p>${escapeHtml(entry.value)}</p>
               <small>${mechanical ? "旧版来源" : "当前依据"}：${entry.source_fields.map(escapeHtml).join(" · ")}</small>
+              ${evidenceImages.length ? `
+                <div class="product-formula-evidence">
+                  <span>相关实机配图 · 点击放大</span>
+                  ${fieldEvidencePreviewMarkup(evidenceImages, {
+                    className: "product-detail-field-evidence",
+                    label: `${formulaDisplayKey(field)} · ${FIELD_LABELS[field]}配图`
+                  })}
+                </div>
+              ` : ""}
             </article>
           `;
         }).join("")}
@@ -1760,6 +1827,7 @@ function openProductDetail(productId) {
   const product = state.data.productById.get(productId);
   if (!product) return;
   const observation = state.data.productObservationById.get(productId);
+  const variant = state.data.variantByProductId.get(productId);
   const classification = productClassification(product);
   const classificationStatus = classificationStatusCopy(product);
   const sourceUrl = safeHttpUrl(product.source_url);
@@ -1834,7 +1902,7 @@ function openProductDetail(productId) {
       <p>${escapeHtml(product.classification_note || "当前分类关系已经记录。")}</p>
     </section>
 
-    ${productFormulaObservationMarkup(observation)}
+    ${productFormulaObservationMarkup(observation, variant)}
 
     ${productDetailLegacyMarkup(observation)}
 
@@ -2268,12 +2336,12 @@ const ECOSYSTEM_DIMENSIONS = {
   c2_reveal_depth: {
     label: "二次揭晓深度",
     shortLabel: "演绎",
-    low: "C₁ 后立即或快速封闭",
+    low: "基础结果立即或快速封闭",
     high: "结果链式持续生成",
-    boundary: "衡量 C₁ 之后关键结果信息如何释放；不按动画时长、攻击次数或战斗系统复杂度计分。",
+    boundary: "衡量围绕 C₁ 协同的关键结果信息如何继续释放；C₂ 可接续、并行或嵌套，不按动画时长、攻击次数或战斗系统复杂度计分。",
     scores: {
-      0: { title: "无独立 C₂", copy: "C₁ 后直接产生 Spin_Result，没有新的信息释放阶段。" },
-      1: { title: "确定结果展示", copy: "答案在 C₁ 后已经封闭，C₂ 只播放已知结果。" },
+      0: { title: "无独立 C₂", copy: "仅由 C₁ 直接产生 Spin_Result，没有新的信息释放阶段。" },
+      1: { title: "确定结果展示", copy: "答案在协同判定过程中已经封闭，后续只播放已知结果。" },
       2: { title: "单次关键揭晓", copy: "至少释放一个此前未知的关键信息，使玩家明显更新一次预测。" },
       3: { title: "多阶段递进揭晓", copy: "前段结果改变后段条件，玩家需要多次修正预测。" },
       4: { title: "链式持续揭晓", copy: "结果继续生成新的结果节点，链长或结束时间事前可能未知。" }
@@ -2780,28 +2848,6 @@ function selectEcosystemCoordinateView(viewKey) {
   if (!ECOSYSTEM_COORDINATE_VIEWS[viewKey]) return;
   state.selectedEcosystemCoordinateView = viewKey;
   state.expandedEcosystemCoordinateGroupKey = null;
-  renderEcosystemWorkbench();
-}
-
-function selectEcosystemNiche(nicheId) {
-  const config = state.data.ecosystemByPrototypeId.get(state.selectedEcosystemPrototypeId);
-  const niche = (config?.niches ?? []).find((item) => item.id === nicheId);
-  if (!niche) return;
-  state.selectedEcosystemNicheId = state.selectedEcosystemNicheId === nicheId ? null : nicheId;
-  if (state.selectedEcosystemNicheId) {
-    state.selectedEcosystemProductId = null;
-    state.selectedEcosystemField = null;
-    state.selectedEcosystemMapPreset = "all";
-    state.ecosystemMapFilters = {
-      topology: null,
-      color: null,
-      secondary_badge: null,
-      sales_tier: null,
-      branch: null
-    };
-    state.selectedEcosystemBdMode = "all";
-    state.expandedEcosystemCoordinateGroupKey = null;
-  }
   renderEcosystemWorkbench();
 }
 
@@ -3758,7 +3804,7 @@ function ecosystemLegacyNicheMapMarkup(config, prototype, products, positionedPr
       <div class="ecosystem-panel-head ecosystem-niche-map-head">
         <div>
           <span class="ecosystem-kicker">03-1 · 品类生态位图</span>
-          <h3 id="ecosystem-niche-map-title">品类原型生态位图 · 第一版</h3>
+          <h3 id="ecosystem-niche-map-title">品类原型生态位图</h3>
         </div>
         <p>切换分析镜头只改变聚焦；点击图中空白处返回全部生态</p>
       </div>
@@ -3808,7 +3854,7 @@ function ecosystemLegacyNicheMapMarkup(config, prototype, products, positionedPr
               const isFocused = focus.isAll || focus.zoneIds.has(zone.id);
               const labelPlacement = ecosystemClassToken(zone.label_placement ?? "top-left");
               return `
-                <span class="ecosystem-model-zone tone-${escapeHtml(ecosystemClassToken(zone.tone))} label-${escapeHtml(labelPlacement)} ${isFocused ? "is-focused" : "is-dimmed"} ${zone.status === "hypothesis" ? "is-hypothesis" : ""}"
+                <span class="ecosystem-model-zone tone-${escapeHtml(ecosystemClassToken(zone.tone))} label-${escapeHtml(labelPlacement)} ${isFocused ? "is-focused" : "is-dimmed"}"
                   style="--x:${zone.x};--y:${zone.y};--w:${zone.width};--h:${zone.height}"
                   data-model-zone="${escapeHtml(zone.id)}"
                   title="${escapeHtml(zone.description)}">
@@ -3963,7 +4009,7 @@ function ecosystemLegacyNicheMapMarkup(config, prototype, products, positionedPr
             ? `<strong>已筛选 ${focus.productIds.size} / ${positionedProducts.length} 款</strong><span>${focus.activeFilters.map((item) => escapeHtml(item.label)).join(" · ")}</span><button type="button" data-ecosystem-map-filter-clear>清除筛选</button>`
             : `<span>点击标签筛选上方生态图；跨维度组合时，只强调同时满足的游戏。</span>`}
         </div>
-        <p>每个节点右上角依次显示 ${escapeHtml(topologyEncoding.title)} 与 ${escapeHtml(secondaryEncoding.title)} 角标，文字和颜色共同区分类别。箭头表示同一改动分支中的案例展开路径，聚焦时在线上显示分支名；不表示产品继承、时间先后或优劣。问号表示存在待确认维度，可悬停或点击查看。节点大小暂不代表销量。</p>
+        <p>每个节点右上角依次显示 ${escapeHtml(topologyEncoding.title)} 与 ${escapeHtml(secondaryEncoding.title)} 角标，文字和颜色共同区分类别。箭头表示同一改动分支中的案例展开路径，聚焦时在线上显示分支名；不表示产品继承、时间先后或优劣。节点大小不代表销量。</p>
       </div>
       ${unpositioned.length ? `
         <p class="ecosystem-unpositioned"><strong>已归类、待定位：</strong>${unpositioned.map((product) => escapeHtml(product.name)).join(" · ")}</p>
@@ -4806,9 +4852,6 @@ function ecosystemGenericMapMarkup(config, prototype, products, positionedProduc
         aria-label="${escapeHtml(prototype.name)}产品二维定位图">
         <div class="ecosystem-axis x"><b>${escapeHtml(config.axes.x.label)}</b><span><i>${escapeHtml(config.axes.x.low)}</i><i>${escapeHtml(config.axes.x.high)}</i></span></div>
         <div class="ecosystem-axis y"><b>${escapeHtml(config.axes.y.label)}</b><span><i>${escapeHtml(config.axes.y.high)}</i><i>${escapeHtml(config.axes.y.low)}</i></span></div>
-        ${(config.niches ?? []).map((niche) => `
-          <span class="ecosystem-niche" style="--x:${niche.x};--y:${niche.y}" title="${escapeHtml(niche.hypothesis)}">${escapeHtml(niche.label)}</span>
-        `).join("")}
         ${positionedProducts.map(({ product, position }) => `
           <button type="button"
             class="ecosystem-dot ${position.role === "cornerstone" ? "is-cornerstone" : ""} ${position.status === "confirmed" ? "is-confirmed" : "is-draft"} ${product.id === state.selectedEcosystemProductId ? "is-active" : ""}"
@@ -5684,27 +5727,29 @@ function renderFieldFormulaMap() {
   const showTpSelected = selected === "Show_TP";
   const term = state.data.termByKey.get(selected);
   const activeStages = {
-    P_t: ["random", "put", "combo", "bd"],
+    P_t: ["random", "put", "c1-reference", "combo", "bd"],
     Pool_Symbol: ["random"],
     Random: ["random"],
     SingleSpin_Symbol: ["random", "put"],
     Put: ["put"],
     Show_TP: ["put", "combo"],
-    Show_State: ["put", "combo"],
+    Show_State: ["put", "c1-reference", "combo"],
     Combo: ["combo"],
-    C1: ["combo"],
+    C1: ["c1-reference", "combo"],
     C2: ["combo"],
     Spin_Result: ["combo"],
-    N: ["random", "put", "combo"],
+    N: ["random", "put", "c1-reference", "combo"],
     BD: ["bd"]
   }[selected] ?? [];
   const activeEdges = {
-    P_t: ["random-put", "put-combo", "cycle-bd"],
+    P_t: ["random-put", "put-c1-reference", "c1-reference-combo", "cycle-bd"],
     SingleSpin_Symbol: ["random-put"],
-    Put: ["random-put"],
-    Show_TP: ["put-combo"],
-    Show_State: ["put-combo"],
-    Combo: ["put-combo"],
+    Put: ["random-put", "put-c1-reference"],
+    Show_TP: ["put-c1-reference", "c1-reference-combo"],
+    Show_State: ["put-c1-reference", "c1-reference-combo"],
+    Combo: ["c1-reference-combo"],
+    C1: ["put-c1-reference", "c1-reference-combo"],
+    C2: ["c1-reference-combo"],
     BD: ["cycle-bd"]
   }[selected] ?? [];
   const locationCopies = {
@@ -5715,9 +5760,9 @@ function renderFieldFormulaMap() {
     Put: "单次 Spin 的第二步 · 第一峰",
     Show_TP: "Put 与 Combo 共同承载域 · 公式中出现 2 次",
     Show_State: "Put 输出、Combo 输入 · 流程中间状态",
-    Combo: "单次 Spin 的第三步 · 第二峰",
-    C1: "Combo 的符号协同参数 · 第二峰",
-    C2: "Combo 中位于 C₁ 之后的可选二次揭晓层 · 第二峰",
+    Combo: "单次 Spin 的第三步 · 横跨第一峰即时识别与第二峰二次揭晓",
+    C1: "Combo 的符号协同参数 · 第一峰即时识别",
+    C2: "Combo 中依托 C₁ 工作的二次揭晓层 · 第二峰",
     Spin_Result: "Combo 输出 · 单次 Spin 的可观察结果",
     N: "进入一次 BD 前的连续 Spin 数量",
     BD: "N 次 Spin 后的构筑决策"
@@ -5729,10 +5774,10 @@ function renderFieldFormulaMap() {
     SingleSpin_Symbol: "Random → SingleSpin_Symbol → Put",
     Put: "SingleSpin_Symbol → Put @ Show_TP → Show_State",
     Show_TP: "同时限定 Put 与 Combo 的承载空间",
-    Show_State: "Put → Show_State → Combo",
-    Combo: "Show_State → Combo(C₁ → C₂) → Spin_Result",
-    C1: "Show_State → C₁ 基础结果 → C₂／Spin_Result",
-    C2: "C₁ 基础结果 → C₂ 可选修饰或转译 → Spin_Result",
+    Show_State: "Put → Show_State → C₁ 即时识别 → Combo",
+    Combo: "C₁ 即时识别 → Combo(C₁ + C₂) → Spin_Result",
+    C1: "Show_State → C₁ 即时识别；同一 C₁ 同时作为 Combo 的符号协同参数",
+    C2: "Combo 内依托 C₁ 的二次揭晓、修饰或转译 → Spin_Result",
     Spin_Result: "Combo → Spin_Result → 累计 × N",
     N: "Spin_Result → 累计 × N → BD",
     BD: "累计 × N → BD → 修改参数 → 下一周期"
@@ -5743,7 +5788,8 @@ function renderFieldFormulaMap() {
       "random-single",
       "single-put",
       "put-state",
-      "state-combo",
+      "state-c1-reference",
+      "c1-reference-combo",
       "combo-result",
       "result-n",
       "n-bd",
@@ -5754,11 +5800,11 @@ function renderFieldFormulaMap() {
     Random: ["pool-random", "random-single"],
     SingleSpin_Symbol: ["random-single", "single-put"],
     Put: ["single-put", "put-state"],
-    Show_TP: ["single-put", "put-state", "state-combo", "combo-result"],
-    Show_State: ["put-state", "state-combo"],
-    Combo: ["state-combo", "combo-result"],
-    C1: ["state-combo", "combo-result"],
-    C2: ["state-combo", "combo-result"],
+    Show_TP: ["single-put", "put-state", "state-c1-reference", "c1-reference-combo", "combo-result"],
+    Show_State: ["put-state", "state-c1-reference"],
+    Combo: ["c1-reference-combo", "combo-result"],
+    C1: ["state-c1-reference", "c1-reference-combo", "combo-result"],
+    C2: ["c1-reference-combo", "combo-result"],
     Spin_Result: ["combo-result", "result-n"],
     N: ["result-n", "n-bd"],
     BD: ["n-bd", "bd-modify", "modify-next"]
@@ -5802,12 +5848,17 @@ function renderFieldFormulaMap() {
           <span class="scope-mark">@</span>
           ${formulaToken("Show_TP")}
         </div>
-        <span class="interactive-arrow ${activeEdges.includes("put-combo") ? "active" : ""}">→</span>
+        <span class="interactive-arrow ${activeEdges.includes("put-c1-reference") ? "active" : ""}">→</span>
+        <div class="interactive-stage interactive-c1-reference ${activeStages.includes("c1-reference") ? "has-active" : ""}">
+          ${formulaToken("C1", "C₁")}
+          <small>即时识别</small>
+        </div>
+        <span class="interactive-arrow ${activeEdges.includes("c1-reference-combo") ? "active" : ""}">→</span>
         <div class="interactive-stage ${activeStages.includes("combo") ? "has-active" : ""}">
           ${formulaToken("Combo")}
           <span class="formula-fixed-label">(</span>
           ${formulaToken("C1", "C₁")}
-          <span class="formula-separator">→</span>
+          <span class="formula-separator">+</span>
           ${formulaToken("C2", "C₂")}
           <span class="formula-fixed-label">)</span>
           <span class="scope-mark">@</span>
@@ -5859,11 +5910,16 @@ function renderFieldFormulaMap() {
             <small>当前承载状态</small>
           </span>
         </div>
-        ${flowDownArrow("state-combo")}
+        ${flowDownArrow("state-c1-reference")}
         <div class="flow-lane">
+          <span class="flow-step flow-rule flow-c1-reference ${selected === "C1" ? "has-active" : ""}">
+            ${flowToken("C1", "C₁")}
+            <small>即时识别</small>
+          </span>
+          ${flowArrow("c1-reference-combo")}
           <span class="flow-step flow-rule ${["Combo", "C1", "C2", "Show_TP"].includes(selected) ? "has-active" : ""}">
             <span>
-              ${flowToken("Combo")}<b>(</b>${flowToken("C1", "C₁")}<b>→</b>${flowToken("C2", "C₂")}<b>)</b>
+              ${flowToken("Combo")}<b>(</b>${flowToken("C1", "C₁")}<b>+</b>${flowToken("C2", "C₂")}<b>)</b>
               <i>@</i> ${flowToken("Show_TP")}
             </span>
             <small>协同判定与结算</small>
@@ -5966,7 +6022,7 @@ function navigateToFormulaTerm(key) {
 const C2_DEPTH_INFO = {
   0: {
     label: "0 分 · 无独立 C₂",
-    title: "C₁ 后直接产生 Spin_Result，没有新的信息释放阶段。",
+    title: "仅由 C₁ 直接产生 Spin_Result，没有新的信息释放阶段。",
     copy: "20 点基础攻击在 C₁ 建立时就已经成为最终答案，结果立即封闭。",
     boundary: "边界：不把必要的数值落盘或界面刷新算作 C₂。"
   },
@@ -5979,7 +6035,7 @@ const C2_DEPTH_INFO = {
   2: {
     label: "2 分 · 单次关键揭晓",
     title: "一个此前未知的关键信息，使玩家明显更新一次预测。",
-    copy: "同样从 20 点基础攻击开始；暴击是否成立在 C₁ 后揭晓，答案在这个关键节点之后封闭。",
+    copy: "同样从 20 点基础攻击开始；暴击是否成立通过 C₂ 揭晓，答案在这个关键节点之后封闭。",
     boundary: "边界：多次播放同一答案不会自动升到 3 分。"
   },
   3: {
@@ -5991,7 +6047,7 @@ const C2_DEPTH_INFO = {
   4: {
     label: "4 分 · 链式持续揭晓",
     title: "结果继续生成新的结果节点，链长或结束时间事前可能未知。",
-    copy: "20 点基础攻击触发新目标、再次结算与后续触发，玩家无法在 C₁ 时预先封闭最终答案。",
+    copy: "20 点基础攻击触发新目标、再次结算与后续触发，玩家无法只凭 C₁ 预先封闭最终答案。",
     boundary: "边界：深度表示链式揭晓程度，不直接表示设计质量。"
   }
 };
@@ -6052,7 +6108,6 @@ function renderTermDetail() {
     return;
   }
 
-  const status = statusCopy(term.status);
   const inputs = term.inputs?.length ? term.inputs.join(" · ") : "无直接输入";
   const outputs = term.outputs?.length ? term.outputs.join(" · ") : "无直接输出";
   const details = [
@@ -6084,7 +6139,6 @@ function renderTermDetail() {
     ></span>
     <div class="detail-kicker">
       <span class="detail-key">${escapeHtml(term.key)}</span>
-      <span class="status-pill ${status.className}">${escapeHtml(status.label)}</span>
     </div>
     <h3>${escapeHtml(term.name)}</h3>
     <p class="detail-definition">${escapeHtml(term.definition)}</p>
@@ -6100,10 +6154,6 @@ function renderTermDetail() {
       <div class="meta-card">
         <span>公式位置</span>
         <strong>${escapeHtml(term.formula_location ?? "待补充")}</strong>
-      </div>
-      <div class="meta-card">
-        <span>模型状态</span>
-        <strong>${escapeHtml(status.description)}</strong>
       </div>
     </div>
     ${details.length ? `
@@ -7980,6 +8030,17 @@ function bindLibrary() {
   elements.productSearch.addEventListener("input", () => {
     state.libraryProductQuery = elements.productSearch.value.trim();
     renderProductCatalog();
+  });
+
+  elements.productScopeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const scope = button.dataset.libraryProductScope;
+      if (!['current', 'history'].includes(scope) || scope === state.libraryProductScope) return;
+      state.libraryProductScope = scope;
+      state.libraryProductQuery = "";
+      elements.productSearch.value = "";
+      renderProductCatalog();
+    });
   });
 
   elements.productFilter.addEventListener("change", () => {

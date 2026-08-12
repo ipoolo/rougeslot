@@ -6,10 +6,10 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="description" content="双峰多巴胺体验模型与机制母型、品类原型、游戏变体图谱。">
-  <title>双峰多巴胺体验模型 · 原型图谱</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260811-93">
-  <link rel="stylesheet" href="./assets/insights.css?v=20260811-96">
+  <meta name="description" content="RougeSlot 体验研究：双峰多巴胺模型、原型图谱与品类生态。">
+  <title>RougeSlot 体验研究 · 双峰多巴胺模型</title>
+  <link rel="stylesheet" href="./assets/styles.css?v=20260811-108">
+  <link rel="stylesheet" href="./assets/insights.css?v=20260811-97">
   <link rel="stylesheet" href="./assets/ecosystem.css?v=20260811-93">
 </head>
 <body>
@@ -17,10 +17,9 @@
 
   <header class="site-header">
     <a class="brand" href="#model" aria-label="返回体验模型">
-      <span class="brand-mark" aria-hidden="true">R</span>
       <span>
-        <strong>双峰多巴胺体验模型</strong>
-        <small>体验模型与原型图谱</small>
+        <strong>RougeSlot 体验研究</strong>
+        <small>双峰多巴胺模型 · 原型图谱 · 品类生态</small>
       </span>
     </a>
     <nav class="main-nav" aria-label="主要导航">
@@ -54,7 +53,7 @@
         </div>
         <div class="hero-thesis">
           <span>体验目标</span>
-          <strong>持续爱干</strong>
+          <strong>持续沉迷</strong>
           <p>玩家在多次短循环后，仍愿意主动开始下一次操作、观察结果并调整构筑。</p>
         </div>
       </div>
@@ -72,55 +71,61 @@
             </span>
             <strong>为每次结果提供“够不够”的判断，但不参与单次符号运算</strong>
           </div>
-          <div class="hero-formula">
-            <span class="formula-bracket">[</span>
-            <span class="formula-peak-group peak-one-group">
-              <span class="formula-peak-label">
-                <b>多巴胺峰值 ①</b>
-                <small>结果揭晓 · 控制感</small>
-              </span>
-              <span class="formula-group-row">
+          <div class="hero-formula-scroll">
+            <div class="hero-formula hero-formula-canonical">
+              <div class="formula-peak-rails" aria-label="双峰体验覆盖范围">
+                <span class="formula-peak-label peak-one-label">
+                  <b>多巴胺峰值 ①</b>
+                  <small>结果揭晓 · 即时价值识别</small>
+                </span>
+                <span class="formula-peak-label peak-two-label">
+                  <b>多巴胺峰值 ②</b>
+                  <small>二次揭晓 · 结果结算</small>
+                </span>
+                <span class="formula-peak-label build-loop-label">
+                  <b>长期循环</b>
+                </span>
+              </div>
+              <div class="formula-flow-row">
+                <span class="formula-bracket">[</span>
                 <span class="formula-stage stage-one">Random<small>@ Pool_Symbol</small></span>
                 <span class="formula-arrow">→</span>
                 <span class="formula-stage stage-one">Put<small>@ Show_TP</small></span>
-              </span>
-            </span>
-            <span class="formula-arrow">→</span>
-            <span class="formula-peak-group peak-two-group">
-              <span class="formula-peak-label">
-                <b>多巴胺峰值 ②</b>
-                <small>协同识别 · 结算</small>
-              </span>
-              <span class="formula-group-row">
-                <span class="formula-stage stage-two">Combo<small>(C₁ → C₂) @ Show_TP</small></span>
-              </span>
-            </span>
-            <span class="formula-bracket">]ₙ</span>
-            <span class="formula-arrow">→</span>
-            <span class="formula-peak-group build-loop-group">
-              <span class="formula-peak-label">
-                <b>长期循环</b>
-              </span>
-              <span class="formula-group-row">
+                <span class="formula-reference-operator" aria-label="结合读取">×</span>
+                <span class="formula-c1-reference" data-model-node="c1" aria-label="C₁ 的体验侧引用：即时识别">
+                  <b>C₁</b>
+                  <small>即时识别</small>
+                </span>
+                <span class="formula-arrow">→</span>
+                <span class="formula-combo-group" aria-label="Combo 由 C₁ 与 C₂ 组合构成">
+                  <span class="formula-combo-title">Combo</span>
+                  <span class="formula-combo-bracket" aria-hidden="true">[</span>
+                  <span class="formula-stage stage-one" data-model-node="c1">C₁<small>符号协同</small></span>
+                  <span class="formula-combo-operator" aria-label="组合">+</span>
+                  <span class="formula-stage stage-two">C₂<small>二次揭晓</small></span>
+                  <span class="formula-combo-bracket" aria-hidden="true">]</span>
+                </span>
+                <span class="formula-bracket">]ₙ</span>
+                <span class="formula-arrow">→</span>
                 <span class="formula-stage stage-build">BD<small>构筑决策</small></span>
-              </span>
-            </span>
+              </div>
+            </div>
           </div>
           <p class="hero-pressure-domain-foot">
-            P(t) 是可选的外层边界；它可以拥有独立于 N 的目标检查周期。
+            虚线 C₁ 是体验层对同一协同规则的即时读取，不新增一次机制运算；正式机制仍为 Combo(C₁ + C₂)，“+”表示规则组合，不表示数值相加或固定先后顺序。
           </p>
         </div>
 
         <div class="formula-annotations formula-summary-annotations">
           <div class="formula-note note-experience">
             <span class="note-index">多巴胺峰值 ①</span>
-            <strong>随机结果被揭晓</strong>
-            <p>Random + Put 把等待变成可见结果，形成揭晓与呈现的第一峰。</p>
+            <strong>结果被揭晓，并被立即读懂</strong>
+            <p>Random + Put 把等待变成可见结果；玩家借助 C₁ 符号协同形成“这次大概好不好”的即时判断。</p>
           </div>
           <div class="formula-note note-combo">
             <span class="note-index">多巴胺峰值 ②</span>
-            <strong>协同被识别并结算</strong>
-            <p>Combo 把符号协同转化为数值、战斗、资源或状态结果，形成第二峰。</p>
+            <strong>结果被二次揭晓并结算</strong>
+            <p>C₂ 依托 C₁ 协同继续释放关键信息，并将数值、战斗、资源或状态结果封闭为 Spin_Result。</p>
           </div>
           <div class="formula-note note-cycle">
             <span class="note-index">长期循环</span>
@@ -206,9 +211,9 @@
               data-case-select="settle" aria-pressed="false">
               <span class="case-evidence-image evidence-settle-image">
                 <img
-                  src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1404850/ss_9ffe2163998d8302d215c05da91cd30cf84f8c2b.600x338.jpg?t=1769555096"
-                  alt="《幸运房东》的单次 Spin 结算画面：中央盘面用于符号协同，两侧道具修饰结果，左下显示累计金币"
-                  loading="lazy" referrerpolicy="no-referrer">
+                  src="./assets/media/experience-model/luck-be-a-landlord-spin-result.png"
+                  alt="《幸运房东》的单次 Spin 结果画面：五列盘面已完成符号落位，左下显示当前金币"
+                  loading="lazy">
                 <span class="evidence-callout callout-c1"><b>C₁</b> 盘面协同</span>
                 <span class="evidence-callout callout-c2"><b>C₂</b> 道具修饰</span>
                 <span class="evidence-callout callout-result"><b>Result</b> 收入</span>
@@ -337,9 +342,16 @@
                   <strong>符号落位完成</strong>
                   <em>Show_State</em>
                 </button>
+                <span class="case-edge case-edge-reference" data-case-edge="state-c1" aria-hidden="true">→</span>
+                <button type="button" class="case-node node-rule node-c1-reference"
+                  data-case-node="c1" data-case-select="reveal" aria-pressed="false">
+                  <small>C₁</small>
+                  <strong>即时识别</strong>
+                  <em>快速判断大致好坏</em>
+                </button>
               </section>
 
-              <span class="case-edge" data-case-edge="state-c1" aria-hidden="true">→</span>
+              <span class="case-edge" data-case-edge="c1-settle" aria-hidden="true">→</span>
 
               <section class="case-zone zone-settle" data-case-zone="settle">
                 <span class="case-zone-label">多巴胺峰值 ② · 结算</span>
@@ -422,10 +434,15 @@
                 <button type="button" data-case-node="show-tp" data-case-select="reveal" aria-pressed="false">Show_TP · 2D 网格</button>
               </span>
               <span class="case-edge" data-case-edge="state-c1" aria-hidden="true">→</span>
+              <span class="case-formula-stage formula-c1-reference-stage" data-case-zone="reveal">
+                <button type="button" class="case-formula-c1-reference"
+                  data-case-node="c1" data-case-select="reveal" aria-pressed="false">C₁ · 即时识别</button>
+              </span>
+              <span class="case-edge" data-case-edge="c1-settle" aria-hidden="true">→</span>
               <span class="case-formula-stage formula-combo-stage" data-case-zone="settle">
                 <span>Combo(</span>
                 <button type="button" data-case-node="c1" data-case-select="settle" aria-pressed="false">C₁</button>
-                <span>→</span>
+                <span>+</span>
                 <button type="button" data-case-node="c2" data-case-select="settle" aria-pressed="false">C₂</button>
                 <span>) @</span>
                 <button type="button" data-case-node="show-tp" data-case-select="settle" aria-pressed="false">Show_TP · 2D 网格</button>
@@ -462,7 +479,10 @@
       <div class="section-heading">
         <div>
           <p class="eyebrow">02 · 体验模型的抽象架构</p>
-          <h2>三个体验阶段：<br>揭晓 → 结算 → 构筑</h2>
+          <h2 class="experience-architecture-heading">
+            三个体验阶段：<br>
+            <span>揭晓与识别 → 二次揭晓与结算 → 构筑</span>
+          </h2>
         </div>
       </div>
 
@@ -496,8 +516,8 @@
                 data-experience-preset="reveal" aria-pressed="false">
                 <span class="timeline-dot">01</span>
                 <span>
-                  <strong>揭晓</strong>
-                  <small>Random + Put · 第一峰</small>
+                  <strong>揭晓与识别</strong>
+                  <small>Random → Put；C₁ 即时识别 · 第一峰</small>
                 </span>
               </button>
               <span class="timeline-arrow" aria-hidden="true">→</span>
@@ -505,8 +525,8 @@
                 data-experience-preset="settle" aria-pressed="false">
                 <span class="timeline-dot">02</span>
                 <span>
-                  <strong>结算</strong>
-                  <small>Combo · 第二峰</small>
+                  <strong>二次揭晓</strong>
+                  <small>(C₁ + C₂) → Spin_Result · 第二峰</small>
                 </span>
               </button>
               <span class="timeline-repeat" aria-label="重复 N 次">× N</span>
@@ -537,11 +557,11 @@
             <span class="stage-index">阶段 01</span>
             <span class="peak-tag">多巴胺第一峰</span>
           </div>
-          <h3>结果揭晓与呈现</h3>
-          <code>Random + Put</code>
+          <h3>结果揭晓与即时识别</h3>
+          <code>Random → Put；C₁ 即时识别</code>
           <button type="button" class="stage-visual stage-visual-reveal"
             data-experience-preset="reveal" aria-pressed="false"
-            aria-label="聚焦揭晓阶段：符号池经过随机抽取后进入 Show_TP">
+            aria-label="聚焦第一峰：随机结果进入 Show_TP，并通过 C₁ 被即时识别">
             <span class="visual-sequence" aria-hidden="true">
               <span class="visual-pool">
                 <i>◆</i><i>7</i><i>●</i>
@@ -556,14 +576,19 @@
                 <i></i><i class="is-landed">◆</i><i></i>
                 <i></i><i></i><i></i>
               </span>
+              <span class="visual-plus">×</span>
+              <span class="visual-modifier">
+                <b>C₁</b>
+                <em>即时识别</em>
+              </span>
             </span>
-            <span class="stage-visual-caption">Pool_Symbol → 随机抽取 → 呈现于 Show_TP</span>
+            <span class="stage-visual-caption">结果揭晓，并由 C₁ 即时识别；无需精算，只需判断大致好坏</span>
           </button>
           <p>
-            玩家等待随机结果出现，并看到结果进入 Show_TP。
-            如果 Put 允许玩家参与，还会产生放置或选择的控制感。
+            玩家等待随机结果进入 Show_TP，并借助 C₁ 符号协同立即形成大致价值判断。
+            C₁ 在公式上属于 Combo，在体验上通过即时识别帮助第一峰成立。
           </p>
-          <strong>玩家此刻关心：这次抽到了什么，结果怎样落下？</strong>
+          <strong>玩家此刻关心：这次抽到了什么，它大概好不好？</strong>
         </article>
 
         <span class="cycle-connector" aria-hidden="true">→</span>
@@ -573,12 +598,13 @@
             <span class="stage-index">阶段 02</span>
             <span class="peak-tag">多巴胺第二峰</span>
           </div>
-          <h3>协同识别与结算</h3>
-          <code>Combo(C₁ → C₂)</code>
+          <h3>二次揭晓与结果结算</h3>
+          <code>(C₁ + C₂) → Spin_Result</code>
           <button type="button" class="stage-visual stage-visual-settle"
             data-experience-preset="settle" aria-pressed="false"
-            aria-label="聚焦结算阶段：识别符号协同并生成单次结果">
+            aria-label="聚焦第二峰：C₂ 依托 C₁ 协同进行二次揭晓并生成单次结果">
             <span class="visual-sequence" aria-hidden="true">
+              <span class="visual-bracket">(</span>
               <span class="visual-combo">
                 <i>◆</i><i>◆</i><i>◆</i>
                 <b>C₁</b>
@@ -588,17 +614,18 @@
                 <b>C₂</b>
                 <em>修饰／转译</em>
               </span>
+              <span class="visual-bracket">)</span>
               <span class="visual-arrow">→</span>
               <span class="visual-result">
                 <small>Spin_Result</small>
                 <strong>+12</strong>
               </span>
             </span>
-            <span class="stage-visual-caption">C₁ 建立价值锚点 → C₂ 可选二次揭晓 → 生成单次结果</span>
+            <span class="stage-visual-caption">(C₁ + C₂) → Spin_Result；允许接续、并行或嵌套</span>
           </button>
           <p>
-            玩家先识别 C₁ 符号协同，再观察可选的 C₂ 如何修饰基础结果，
-            或将其转译为数值、战斗、资源与状态结果。
+            玩家已能借助 C₁ 判断大致好坏；C₂ 继续释放关键信息，
+            或将协同转译为数值、战斗、资源与状态结果。C₂ 可以接续、并行或嵌入 C₁。
           </p>
           <strong>玩家此刻关心：组合触发了什么，最终得到多少（数值），或呈现了怎样的开奖过程（表演）？</strong>
         </article>
@@ -671,13 +698,13 @@
             <h3 id="c2-depth-title">答案如何从价值锚点，逐步封闭为最终结果</h3>
           </div>
           <div class="c2-depth-definition">
-            <p>C₂ 深度衡量的不是动画长度，而是 C₁ 之后关键结果信息随时间释放、使玩家修正预测的结构。</p>
+            <p>C₂ 深度衡量的不是动画长度，而是围绕 C₁ 协同的关键结果信息如何继续释放、使玩家修正预测的结构。</p>
             <strong>攻击次数多、动画时间长，不等于 C₂ 分数高。只有过程真正释放新信息，并继续改变玩家对 C₁ 兑现程度的预测，才构成更深的二次揭晓。</strong>
           </div>
         </header>
 
         <div class="c2-depth-scale" aria-hidden="true">
-          <span>C₁ 建立价值锚点</span><i></i><span>Spin_Result 最终封闭</span>
+          <span>C₁ 提供价值锚点</span><i></i><span>Spin_Result 最终封闭</span>
         </div>
 
         <div class="c2-depth-rows" role="group" aria-label="C₂ 二次揭晓深度零到四分">
@@ -733,7 +760,7 @@
         <div class="c2-depth-info" data-c2-depth-info aria-live="polite">
           <span data-c2-depth-info-label>2 分 · 单次关键揭晓</span>
           <strong data-c2-depth-info-title>一个此前未知的关键信息，使玩家明显更新一次预测。</strong>
-          <p data-c2-depth-info-copy>同样从 20 点基础攻击开始；暴击是否成立在 C₁ 后揭晓，答案在这个关键节点之后封闭。</p>
+          <p data-c2-depth-info-copy>同样从 20 点基础攻击开始；暴击是否成立通过 C₂ 揭晓，答案在这个关键节点之后封闭。</p>
           <small data-c2-depth-info-boundary>边界：多次播放同一答案不会自动升到 3 分。</small>
         </div>
       </section>
@@ -756,7 +783,7 @@
 
       <div class="atlas-method-formula" aria-label="原型图谱共同继承的体验公式">
         <span>共同分析底座</span>
-        <strong>P(t) ⟦ [ Random @ Pool_Symbol → Put @ Show_TP → Combo(C₁ → C₂) @ Show_TP ]ₙ → BD ⟧</strong>
+        <strong>P(t) ⟦ [ Random @ Pool_Symbol → Put @ Show_TP → Combo(C₁ + C₂) @ Show_TP ]ₙ → BD ⟧</strong>
         <small>P(t) 是可选外层目标压力；每条分支都要说明它是否启用、如何检查，以及它与 N 的区别。</small>
       </div>
 
@@ -1101,10 +1128,18 @@
       <section class="library-panel" data-library-panel="products" aria-labelledby="product-catalog-title">
         <div class="library-panel-head">
           <div>
-            <p class="eyebrow">游戏目录</p>
-            <h3 id="product-catalog-title">全部具体游戏</h3>
+            <p class="eyebrow" id="product-catalog-eyebrow">当前游戏</p>
+            <h3 id="product-catalog-title">当前品类生态游戏</h3>
           </div>
           <div class="product-catalog-tools">
+            <div class="product-scope-switch" role="group" aria-label="选择游戏资料范围">
+              <button type="button" class="is-active" data-library-product-scope="current" aria-pressed="true">
+                当前游戏 <b>26</b>
+              </button>
+              <button type="button" data-library-product-scope="history" aria-pressed="false">
+                历史资料 <b>20</b>
+              </button>
+            </div>
             <button
               type="button"
               class="product-mother-filter is-active"
@@ -1232,11 +1267,11 @@
       <section class="section insights-section" id="insights-content">
         <div class="insights-hero">
           <div>
-            <p class="eyebrow">00 · 核心洞察总览</p>
+            <p class="eyebrow">01 · 洞察一</p>
             <h1>C₁ 立即可读，<br><em>C₂ 二次揭晓，</em><br><span>决策保持轻量</span></h1>
           </div>
           <div class="insights-thesis">
-            <span>总原则</span>
+            <span>洞察 1 · 总原则</span>
             <strong>学习负责放大，决策不能打断</strong>
             <p>
               玩家应当依靠先验知识直接进入最小爽环；新的规则、构筑和策略可以放大结果，
@@ -1253,11 +1288,11 @@
               <h2 id="insight-model-title">双峰爽环与决策节奏</h2>
             </div>
             <div class="insight-model-controls" aria-label="核心洞察视角">
-              <button type="button" data-insight-preset="all" aria-pressed="true">总原则</button>
-              <button type="button" data-insight-preset="c1" aria-pressed="false">洞察 1 · C₁</button>
-              <button type="button" data-insight-preset="c2" aria-pressed="false">洞察 2 · C₂</button>
-              <button type="button" data-insight-preset="c3" aria-pressed="false">洞察 3 · 轻决策</button>
-              <button type="button" data-insight-preset="c4" aria-pressed="false">洞察 4 · 禁止自动 Spin</button>
+              <button type="button" data-insight-preset="all" aria-pressed="true">洞察 1 · 总原则</button>
+              <button type="button" data-insight-preset="c1" aria-pressed="false">洞察 2 · C₁</button>
+              <button type="button" data-insight-preset="c2" aria-pressed="false">洞察 3 · C₂</button>
+              <button type="button" data-insight-preset="c3" aria-pressed="false">洞察 4 · 轻决策</button>
+              <button type="button" data-insight-preset="c4" aria-pressed="false">洞察 5 · 禁止自动 Spin</button>
               <button type="button" data-insight-preset="hybrid" aria-pressed="false">高风险 · Slot改+战斗</button>
             </div>
           </div>
@@ -1266,7 +1301,7 @@
             <section class="insight-zone insight-zone-first" data-insight-zone="first-peak">
               <header>
                 <span>多巴胺峰值 ①</span>
-                <strong>先验驱动的即时识别</strong>
+                <strong>结果揭晓与即时价值识别</strong>
               </header>
               <div class="insight-node-row">
                 <button type="button" class="insight-node node-prior"
@@ -1293,8 +1328,8 @@
               <p>这里不应该插入必须先学会才能继续的规则。</p>
             </section>
 
-            <i class="insight-edge insight-edge-major"
-              data-insight-edge="c1-c2" aria-hidden="true">→</i>
+            <i class="insight-edge insight-edge-major insight-edge-composition"
+              data-insight-edge="c1-c2" aria-hidden="true"><b>+</b><small>可接续／并行／嵌套</small></i>
 
             <section class="insight-zone insight-zone-second" data-insight-zone="second-peak">
               <header>
@@ -1394,7 +1429,7 @@
                 <button type="button" class="insight-node node-double-peak"
                   data-insight-node="double-peak" data-insight-select="c4" aria-pressed="false">
                   <small>离散事件</small>
-                  <strong>C₁ → C₂ 双峰</strong>
+                  <strong>峰值① + 峰值②</strong>
                   <span>两次峰值拥有清晰边界</span>
                 </button>
                 <i class="insight-edge" data-insight-edge="peaks-return" aria-hidden="true">→</i>
@@ -1405,7 +1440,7 @@
           </div>
 
           <div class="insight-selection-info" data-insight-info aria-live="polite">
-            <span data-insight-info-label>总原则</span>
+            <span data-insight-info-label>洞察 1 · 总原则</span>
             <div>
               <strong data-insight-info-title>C₁ 负责立即可读，C₂ 负责二次揭晓，轻决策与手动 Spin 让双峰持续成立。</strong>
               <p data-insight-info-copy>
@@ -1422,7 +1457,7 @@
       <section class="section insights-section insight-principle-section" id="insight-prior">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">01 · 洞察一</p>
+            <p class="eyebrow">02 · 洞察二</p>
             <h2>最小爽环不可被<br>学习成本阻断</h2>
           </div>
           <p>
@@ -1523,13 +1558,13 @@
       <section class="section insights-section insight-reveal-section" id="insight-reveal">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">02 · 洞察二</p>
-            <h2>C₂ 是基于 C₁ 结果的二次揭晓<br>不是结算动画，也不是重新开奖</h2>
+            <p class="eyebrow">03 · 洞察三</p>
+            <h2>C₂ 是依托 C₁ 协同的二次揭晓<br>不是结算动画，也不是重新开奖</h2>
           </div>
           <p>
-            C₁ 首先建立本次结果的价值锚点，让玩家知道“这次大概抽得怎么样”。
-            C₂ 不推翻或重置 C₁，也不引入一套与 C₁ 无关的新结果；它是在 C₁ 已经确定的基础上，
-            通过过程逐步释放结果信息，让玩家持续预测：“这次好结果，最终能兑现得多好？”
+            玩家借助 C₁ 符号协同形成“这次大概抽得怎么样”的价值锚点。
+            C₂ 不推翻或重置 C₁，也不引入一套与 C₁ 无关的新结果；它依托 C₁ 协同逐步释放结果信息，
+            可以接续、并行或嵌入 C₁，让玩家持续预测：“这次好结果，最终能兑现得多好？”
           </p>
         </div>
 
@@ -1540,7 +1575,7 @@
               <strong>建立价值锚点</strong>
               <small>我已经知道“这次抽得不错”</small>
             </div>
-            <i aria-hidden="true">→</i>
+            <i aria-hidden="true">+</i>
             <div class="c2-reveal-step c2-step-reveal">
               <span>C₂</span>
               <strong>二次揭晓 C₁ 的兑现程度</strong>
@@ -1556,14 +1591,14 @@
           <div class="c2-boundary-grid">
             <p><b>只是结算动画</b>只有确定结果的播放，没有期待。</p>
             <p><b>接近重新开奖</b>推翻 C₁，或引入与 C₁ 无关的新随机。</p>
-            <p><b>有效的 C₂</b>保留不确定性，但它必须来自 C₁ 结果的后续展开。</p>
+            <p><b>有效的 C₂</b>保留不确定性，但它必须来自 C₁ 协同，并允许接续、并行或嵌套展开。</p>
           </div>
         </div>
 
         <div class="reveal-case-group reveal-case-group-bad">
           <div class="reveal-case-group-heading">
             <span>BAD CASE</span>
-            <h3>没有延续 C₁ 的二次揭晓</h3>
+            <h3>没有依托 C₁ 的有效二次揭晓</h3>
             <p>结果过早封闭，只剩答案播放；转入策略规划，也无法延续结果期待。</p>
           </div>
           <div class="reveal-case-grid reveal-case-grid-three">
@@ -1611,8 +1646,8 @@
         <div class="reveal-case-group reveal-case-group-good">
           <div class="reveal-case-group-heading">
             <span>GOOD CASE</span>
-            <h3>沿 C₁ 结果继续揭晓</h3>
-            <p>每一步都承接 C₁，逐步揭晓兑现程度，直到 Spin_Result 封闭。</p>
+            <h3>依托 C₁ 协同继续揭晓</h3>
+            <p>C₂ 可以接续、并行或嵌入 C₁，但释放的信息必须延续同一价值含义，直到 Spin_Result 封闭。</p>
           </div>
           <div class="reveal-case-grid">
             <article class="reveal-case-card reveal-case-reference">
@@ -1645,7 +1680,7 @@
 
         <div class="insight-rule-banner rule-banner-c2">
           <span>规则 02</span>
-          <strong>C₂ 必须继承 C₁ 的价值锚点，并逐步揭晓它最终能兑现到什么程度。</strong>
+          <strong>C₂ 必须依托 C₁ 的价值锚点，并逐步揭晓它最终能兑现到什么程度。</strong>
           <p>第二峰来自“我已经知道自己抽得不错，但还不知道最终能兑现得多好”，而不是系统突然增加另一套随机结果。</p>
         </div>
       </section>
@@ -1653,7 +1688,7 @@
       <section class="section insights-section insight-decision-section" id="insight-decision">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">03 · 洞察三</p>
+            <p class="eyebrow">04 · 洞察四</p>
             <h2>限制决策复杂度，<br>保护双峰循环的连续性</h2>
           </div>
           <p>
@@ -2049,7 +2084,7 @@
       <section class="section insights-section insight-autospin-section" id="insight-autospin">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">04 · 洞察四</p>
+            <p class="eyebrow">05 · 洞察五</p>
             <h2>绝对，千万，<br>不要做自动 Spin</h2>
           </div>
           <p>
@@ -2069,7 +2104,7 @@
           <article class="autospin-lane autospin-lane-manual">
             <header><span>MANUAL SPIN</span><strong>主动开启一次完整双峰</strong></header>
             <div>
-              <b>明确操作</b><i>→</i><b>期待建立</b><i>→</i><b>C₁ 识别</b><i>→</i><b>C₂ 揭晓</b><i>→</i><b>回到主动权</b>
+              <b>明确操作</b><i>→</i><b>期待建立</b><i>→</i><b>C₁ 识别 + C₂ 揭晓</b><i>→</i><b>回到主动权</b>
             </div>
             <p>每轮都有清晰起点、等待过程与结束边界，玩家知道“是我开启了这次结果”。</p>
           </article>
@@ -2096,7 +2131,7 @@
             aria-label="Devils Due 的自动 Spin 把双峰压成连续随机奖励">
             <div><span>AUTO SPIN ON</span><strong>系统连续拉动</strong></div>
             <i>→</i>
-            <div><span>BOUNDARY LOST</span><strong>C₁／C₂ 失去边界</strong></div>
+            <div><span>峰值边界丢失</span><strong>第一峰／第二峰失去边界</strong></div>
             <i>→</i>
             <div><span>PASSIVE LOOP</span><strong>等待下一次随机奖励</strong></div>
           </div>
@@ -2105,7 +2140,7 @@
             <h3>自动 Spin 直接拆掉了双峰体验的主动起点</h3>
             <p>
               Devils Due 让系统自动推进 Spin。玩家不再通过一次明确操作建立期待，而是被动接收连续结果；
-              C₁ 与 C₂ 难以形成可感知的两次峰值，只剩等待下一次随机回报。
+              第一峰与第二峰难以形成可感知的边界，只剩等待下一次随机回报。
               变动奖励与无间断重复共同构成斯金纳箱式循环，引导无意识重复行为并放大行为成瘾风险。
             </p>
             <footer>设计风险：<b>主动权消失 × 峰值扁平化 × 变动奖励无尽循环</b></footer>
@@ -2122,7 +2157,7 @@
       <section class="section insights-section insight-pool-section" id="insight-effective-pool">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">05 · 洞察五</p>
+            <p class="eyebrow">06 · 洞察六</p>
             <h2>盘面扩大时，<br>符号种类不能按面积增长</h2>
           </div>
           <p>
@@ -2242,7 +2277,7 @@
       <section class="section insights-section insight-c2-tempo-section" id="insight-c2-tempo">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">06 · 洞察六</p>
+            <p class="eyebrow">07 · 洞察七</p>
             <h2>C₂ 不只看揭晓深度，<br>还要观察信息如何随时间释放</h2>
           </div>
           <p>
@@ -2268,7 +2303,7 @@
             <article>
               <b>T<sub>C₂</sub></b>
               <span>总体时间</span>
-              <small>从 C₁ 基础结果成立，到最终结果封闭所经历的时间。</small>
+              <small>从 C₂ 开始释放额外结果信息，到最终结果封闭所经历的时间。</small>
             </article>
             <article>
               <b>Q<sub>C₂</sub></b>
@@ -2360,7 +2395,7 @@
       <section class="section insights-section insight-check-section" id="insight-checks">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">07 · 设计检查</p>
+            <p class="eyebrow">08 · 设计检查</p>
             <h2>把洞察变成<br>可验证的问题</h2>
           </div>
           <p>这些问题用于检查新原型，而不是把洞察固化成不可调整的数值上限。</p>
@@ -2729,6 +2764,6 @@
       activateTab();
     })();
   </script>
-  <script type="module" src="./assets/app.js?v=20260811-108"></script>
+  <script type="module" src="./assets/app.js?v=20260812-120"></script>
 </body>
 </html>

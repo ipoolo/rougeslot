@@ -5,7 +5,7 @@
       "id": "mechanism.slot",
       "name": "Slot母体",
       "type": "mechanism_archetype",
-      "status": "working",
+      "status": "reference_confirmed",
       "order": 10,
       "summary": "以拉霸机、老虎机与赌博机长期传播所形成的大众认知为先验的机制母型。",
       "definition": "Slot 母体不是某一款具体游戏，而是一组建立在广泛社会认知之上的装置规则。拉霸机、老虎机与赌博机经过长期传播，使大量玩家即使没有接受专门教学，也能预期“启动装置 → 随机结果停落 → 按符号组合判奖”的基本过程。本模型把这套强先验认知抽象为：从符号池产生随机结果，由装置完成主要放置，再在承载空间中识别符号协同。",

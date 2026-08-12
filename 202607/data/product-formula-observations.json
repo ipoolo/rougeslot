@@ -3563,7 +3563,7 @@
           "value": "玩家 Pool_Symbol 由武器、食物、魔法物品与伙伴组成；敌方使用独立池，不与玩家构筑池混合。",
           "source_fields": [
             "Steam 商店页：weapons, magical artifacts, companions",
-            "2026-08-10 用户确认：植物应为食物；敌方使用独立池"
+            "2026-08-10 用户确认：玩家池应记录为食物；敌方使用独立池"
           ],
           "review_status": "confirmed"
         },

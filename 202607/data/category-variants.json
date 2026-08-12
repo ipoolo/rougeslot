@@ -378,7 +378,7 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承原型工作定义继承 Slot 的 2D 网格承载",
+          "summary": "继承品类原型的 2D 网格 Show_TP。",
           "review_status": "confirmed",
           "last_modified_at": "2026-07-31T19:00:04.954Z",
           "review_note": "",
@@ -468,7 +468,7 @@
       "id": "variant.lucky-mayor",
       "name": "幸运市长",
       "type": "category_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 20,
       "prototype_id": "prototype.slot-numeric",
       "product_ids": [
@@ -649,7 +649,7 @@
       "name": "猫神牧场",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 30,
       "prototype_id": "prototype.slot-numeric",
       "product_ids": [
@@ -831,7 +831,7 @@
       "name": "狗与哥布林",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785214652351,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
@@ -1211,7 +1211,7 @@
       "name": "拉杆英雄",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785221569115,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
@@ -1263,7 +1263,7 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承：工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。",
+          "summary": "继承品类原型的 2D 网格 Show_TP。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T08:47:13.054Z",
@@ -1332,7 +1332,7 @@
       "name": "命运转轮",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785221569117,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
@@ -1477,7 +1477,7 @@
       "name": "幸运猎人",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785221569122,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
@@ -1544,7 +1544,7 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承：工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。\n7*7",
+          "summary": "继承品类原型的 2D 网格 Show_TP；实际盘面为 7×7。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T09:24:50.755Z",
@@ -1628,7 +1628,7 @@
       "name": "幸运勇者",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785221569124,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
@@ -1696,7 +1696,7 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承：工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。",
+          "summary": "继承品类原型的 2D 网格 Show_TP。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T09:24:58.142Z",
@@ -1773,7 +1773,7 @@
       "name": "轮作法",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785221569126,
       "prototype_id": "prototype.slot-numeric",
       "product_ids": [
@@ -1955,7 +1955,7 @@
       "name": "死守危城",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785221569128,
       "prototype_id": "prototype.slot-numeric",
       "product_ids": [
@@ -2108,7 +2108,7 @@
       "name": "幸运大陆",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785221569130,
       "prototype_id": "prototype.slot-numeric",
       "product_ids": [
@@ -2261,7 +2261,7 @@
       "name": "幸运岛",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785221569132,
       "prototype_id": "prototype.slot-numeric",
       "product_ids": [
@@ -2443,7 +2443,7 @@
       "name": "Rogue Slots",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785222861975,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
@@ -2457,7 +2457,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：以敌方生命、玩家生存、波次期限、Boss 与失败代价判断结果是否足够；P(t) 独立于 C₂ 的战斗表演。",
           "review_status": "confirmed",
-          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。",
+          "review_note": "所属品类及当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T15:00:25.659Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T15:00:25.659Z"
@@ -2467,7 +2467,7 @@
           "constraint_label": "扩展 敌方符号+货币符号",
           "summary": "继承：覆写 Slot 的固定符号池：玩家可以获得、删除、升级或调整属于自己的棋子、随从与符号类型。\n扩展 敌方符号+货币符号",
           "review_status": "confirmed",
-          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。",
+          "review_note": "所属品类及当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T15:05:32.982Z",
           "evidence_images": [
             {
@@ -2485,7 +2485,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：Random 从 Pool_Symbol 产生结果的职责；因为本层已覆写 Pool_Symbol，所以实际从当前构筑后的动态棋子／随从池抽取。",
           "review_status": "confirmed",
-          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。",
+          "review_note": "所属品类及当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T15:05:54.469Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T15:05:54.469Z"
@@ -2495,7 +2495,7 @@
           "constraint_label": "扩展：敌方符号进入同一盘面",
           "summary": "继承：继续由 Slot 装置自动把本次结果写入主要承载空间。\n扩展：敌方符号与我方符号进入同一盘面并占据盘面位置，供后续 C₁ 协同计算。",
           "review_status": "confirmed",
-          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。",
+          "review_note": "所属品类及当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T15:41:39.573Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T15:41:39.573Z"
@@ -2503,9 +2503,9 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承：工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。",
+          "summary": "继承品类原型的 2D 网格 Show_TP，敌方符号与我方符号进入同一盘面。",
           "review_status": "confirmed",
-          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。",
+          "review_note": "所属品类及当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T15:06:03.244Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T15:06:03.244Z"
@@ -2515,7 +2515,7 @@
           "constraint_label": "覆写：基于支付线符号类型协同 + 敌方符号也在盘面",
           "summary": "spin转换成战斗能力（回合））\n覆写：基于支付线符号类型协同",
           "review_status": "confirmed",
-          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。",
+          "review_note": "所属品类及当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T17:34:35.118Z",
           "evidence_images": [
             {
@@ -2551,7 +2551,7 @@
           "constraint_label": "继承原型",
           "summary": "N >=1 每次战斗用回合数",
           "review_status": "confirmed",
-          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。",
+          "review_note": "所属品类及当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T18:28:27.997Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T18:28:27.997Z"
@@ -2561,7 +2561,7 @@
           "constraint_label": "扩展 BD货币符号",
           "summary": "继承：通过符号池、规则与数值构筑持续改变 Pool_Symbol、C₁、C₂ 二次揭晓与后续战斗能力；具体操作由产品继续定义。",
           "review_status": "confirmed",
-          "review_note": "2026-07-28 调整所属品类为“Slot改·战斗型”，需要重新确认。",
+          "review_note": "所属品类及当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T15:13:41.953Z",
           "evidence_images": [
             {
@@ -2588,13 +2588,13 @@
       "name": "Spinny Dungeon",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785222861989,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
         "product.spinny-dungeon"
       ],
-      "summary": "“Slot改·战斗型”下的具体游戏变体：老虎机 Roguelike、牌组构建与自动战斗的结合；每次 Spin 后，武器、植物、魔法物品和伙伴会在棋盘上重新随机排列。",
+      "summary": "“Slot改·战斗型”下的具体游戏变体：老虎机 Roguelike、牌组构建与自动战斗的结合；每次 Spin 后，武器、食物、魔法物品和伙伴会在棋盘上重新随机排列。",
       "definition": "本节点以《Spinny Dungeon》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、覆写或扩展。",
       "formula_changes": {
         "P_t": {
@@ -2671,7 +2671,7 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承：工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。",
+          "summary": "继承品类原型的 2D 网格 Show_TP，敌方与我方符号共同在盘面中参与战斗。",
           "review_status": "confirmed",
           "review_note": "",
           "last_modified_at": "2026-07-31T17:50:04.984Z",
@@ -2740,7 +2740,7 @@
       "name": "Slot or Not",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785223000000,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
@@ -2752,7 +2752,7 @@
         "P_t": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承品类原型的敌我战斗与失败压力；具体关卡周期等待继续拆解。",
+          "summary": "继承品类原型的敌我战斗与失败压力，由关卡目标与敌我生存结果判断本轮是否达标。",
           "review_status": "confirmed",
           "last_modified_at": "2026-07-31T17:15:47.220Z",
           "review_note": "",
@@ -3302,7 +3302,7 @@
       "name": "拉杆战士：弓箭与魔法",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785223000040,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [
@@ -3316,7 +3316,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：以敌方生命、玩家生存、波次期限、Boss 与失败代价判断结果是否足够；P(t) 独立于 C₂ 的战斗表演。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T17:50:10.432Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T17:50:10.432Z"
@@ -3326,7 +3326,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：覆写 Slot 的固定符号池：玩家可以获得、删除、升级或调整属于自己的棋子、随从与符号类型。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T17:50:12.408Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T17:50:12.408Z"
@@ -3336,7 +3336,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：Random 从 Pool_Symbol 产生结果的职责；因为本层已覆写 Pool_Symbol，所以实际从当前构筑后的动态棋子／随从池抽取。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T17:50:21.458Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T17:50:21.458Z"
@@ -3346,7 +3346,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：继续由 Slot 装置自动把本次结果写入主要承载空间。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T17:52:50.403Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T17:52:50.403Z"
@@ -3354,9 +3354,9 @@
         "Show_TP": {
           "operation": "inherit",
           "constraint_label": "继承原型",
-          "summary": "继承：工作定义继承 Slot 的 2D 网格承载；具体战场与 Slot 网格是否分层，等待产品拆解确认。",
+          "summary": "继承品类原型的 2D 网格 Show_TP。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T17:52:52.611Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T17:52:52.611Z"
@@ -3376,7 +3376,7 @@
           "constraint_label": "扩展 攻防血战斗+战斗距离",
           "summary": "继承：沿自有 C₁ 已建立的阵容价值锚点，通过攻击、防御、技能、自动战斗与敌我状态变化逐步揭晓最终兑现程度。\n扩展：将品类原型沿 C₁ 结果展开的战斗二次揭晓，扩展 转化为回合战斗能力(攻击与防御)\n攻击有多种：普通、远程、魔法 其中魔法需要消耗资源\n防御有多种：血量、防御\n扩展 攻防血战斗\n\n几乎和拉霸英雄一毛一样",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T18:10:54.673Z",
           "evidence_images": [
             {
@@ -3401,7 +3401,7 @@
           "constraint_label": "继承原型",
           "summary": "N >=1 每次战斗用回合数",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T18:28:47.230Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T18:28:47.230Z"
@@ -3411,7 +3411,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：通过符号池、规则与数值构筑持续改变 Pool_Symbol、C₁、C₂ 二次揭晓与后续战斗能力；具体操作由产品继续定义。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T17:53:36.427Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T17:53:36.427Z"
@@ -3430,7 +3430,7 @@
       "name": "Re: Spin. Die. Repeat. Demo",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785223000060,
       "prototype_id": "prototype.slot-numeric",
       "product_ids": [
@@ -3444,7 +3444,7 @@
           "constraint_label": "继承原型",
           "summary": "继承外层数值目标压力；在本作中落实为任务给定的固定目标与有限解题范围。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:13:35.087Z",
           "evidence_images": [
             {
@@ -3462,7 +3462,7 @@
           "constraint_label": "继承原型",
           "summary": "继承可构筑 Pool_Symbol：玩家仍能调整后续 Spin 可以抽到的符号，但候选池与构筑范围受当前任务限制。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:13:53.862Z",
           "evidence_images": [
             {
@@ -3480,7 +3480,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：Random 从 Pool_Symbol 产生结果的职责；因为本层已覆写 Pool_Symbol，所以实际从玩家当前构筑的动态符号池抽取。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:13:56.783Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T22:13:56.783Z"
@@ -3490,7 +3490,7 @@
           "constraint_label": "继承原型",
           "summary": "继承：Slot 母体的自动 Put：装置把本次抽取结果写入当前产品采用的 Show_TP，玩家不决定主要安置结果。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:13:59.614Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T22:13:59.614Z"
@@ -3500,7 +3500,7 @@
           "constraint_label": "继承原型",
           "summary": "继承 2D 网格 Show_TP，以固定盘面承载并呈现当前符号结果。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:14:14.462Z",
           "evidence_images": [
             {
@@ -3518,7 +3518,7 @@
           "constraint_label": "继承原型",
           "summary": "继承原型 C₁：由符号类型、数量、关系、阈值或资源转换规则建立基础数值结果。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:14:27.592Z",
           "evidence_images": [
             {
@@ -3536,7 +3536,7 @@
           "constraint_label": "覆写 任务式 C₂·不可由 BD 养成",
           "summary": "C₁ 结果进入固定任务条件与系统给定增益的结算；C₂ 仍可能产生高值结果，但玩家不能通过 BD 持续构筑这层修饰，第二峰更像在任务中抽中超级大奖。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:21:09.049Z",
           "evidence_images": [
             {
@@ -3554,7 +3554,7 @@
           "constraint_label": "继承原型",
           "summary": "Spin N = 1 即每次 Spin 后进入一次符号选择类 BD。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:15:35.641Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T22:15:35.641Z"
@@ -3564,7 +3564,7 @@
           "constraint_label": "覆写 收敛为 Pool_Symbol 构筑",
           "summary": "玩家仍可构筑 Pool_Symbol，但 BD 不提供 C₂ 修饰养成；决策空间被收敛到任务限定的符号池与候选范围，体验更像寻找当前任务的解法，而非构筑大奖概率。",
           "review_status": "confirmed",
-          "review_note": "依据最新分类清单建立结构，具体公式差异尚未人工确认。",
+          "review_note": "当前字段已经用户确认。",
           "last_modified_at": "2026-07-31T22:25:26.075Z",
           "evidence_images": [],
           "confirmed_at": "2026-07-31T22:25:26.075Z"
@@ -3583,7 +3583,7 @@
       "name": "Hoptale Demo",
       "type": "category_variant",
       "variant_role": "product_variant",
-      "status": "structure_ready_content_pending",
+      "status": "reference_confirmed",
       "order": 1785518334449,
       "prototype_id": "prototype.slot-transform-combat",
       "product_ids": [

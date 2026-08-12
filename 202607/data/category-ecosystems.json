@@ -1,5 +1,5 @@
 {
-  "version": "20260811-draft.56",
+  "version": "20260812-confirmed.1",
   "items": [
     {
       "prototype_id": "prototype.slot-plus-combat",
@@ -113,7 +113,7 @@
         ]
       },
       "bd_analysis": {
-        "version": "20260810-draft.1",
+        "version": "20260812-confirmed.1",
         "status": "confirmed",
         "formula_status": "confirmed",
         "title": "BD 设计分类：围绕固定单位池建立概率、操作与成长控制",
@@ -174,8 +174,8 @@
         ]
       },
       "niche_map": {
-        "version": "20260801-draft.1",
-        "status": "draft",
+        "version": "20260812-confirmed.1",
+        "status": "confirmed",
         "encodings": {
           "topology_badge": "Show_TP：固定 2D",
           "color": "C₂ 战斗表演密度",
@@ -229,7 +229,7 @@
             "x": 8,
             "y": 10,
             "label": "Slot+战斗型 CORE",
-            "summary": "固定 Slot 核心 → 支付线 C₁ → C₂ 战斗二次揭晓"
+            "summary": "固定 Slot 核心 → 支付线 C₁ + C₂ 战斗二次揭晓"
           }
         ],
         "zones": [
@@ -242,28 +242,6 @@
             "height": 45,
             "tone": "coral",
             "description": "当前 Slotbound Demo 所在的基石区域。"
-          },
-          {
-            "id": "readable-suspense",
-            "label": "稀疏：高悬念×轻战斗",
-            "x": 50,
-            "y": 5,
-            "width": 45,
-            "height": 38,
-            "tone": "blue",
-            "status": "hypothesis",
-            "description": "用更少单位与更短时序保留第二次开奖悬念。"
-          },
-          {
-            "id": "weak-combat",
-            "label": "边界：低悬念战斗展示",
-            "x": 5,
-            "y": 5,
-            "width": 38,
-            "height": 90,
-            "tone": "violet",
-            "status": "hypothesis",
-            "description": "若战斗只是确定性动画，可能无法形成有效 C₂ 峰值。"
           }
         ],
         "edges": [
@@ -446,16 +424,7 @@
           "assessment_note": ""
         }
       ],
-      "niches": [
-        {
-          "id": "niche.slot-plus-combat-readable-suspense",
-          "x": 74,
-          "y": 52,
-          "label": "高悬念 × 轻信息密度",
-          "status": "hypothesis",
-          "hypothesis": "保持 Slot C₁ 即时可读，同时用短时序、少单位的战斗过程制造第二次开奖；需要验证是否能兼顾速度与悬念。"
-        }
-      ]
+      "niches": []
     },
     {
       "prototype_id": "prototype.slot-plus-numeric",
@@ -549,7 +518,7 @@
         ]
       },
       "bd_analysis": {
-        "version": "20260811-draft.1",
+        "version": "20260812-confirmed.1",
         "status": "confirmed",
         "formula_status": "confirmed",
         "title": "BD 设计分类：围绕固定符号池、抽取控制与数值兑现建立构筑",
@@ -626,7 +595,7 @@
         ]
       },
       "niche_map": {
-        "version": "20260801-draft.1",
+        "version": "20260812-confirmed.1",
         "status": "confirmed",
         "encodings": {
           "topology_badge": "Show_TP：固定 2D／独立符文列／符号位锁定 2D",
@@ -711,7 +680,7 @@
             "x": 7,
             "y": 8,
             "label": "Slot+数值型 CORE",
-            "summary": "固定类型 Slot → 支付线 C₁ → C₂ 数值二次揭晓"
+            "summary": "固定类型 Slot → 支付线 C₁ + C₂ 数值二次揭晓"
           }
         ],
         "zones": [
@@ -744,17 +713,6 @@
             "height": 45,
             "tone": "violet",
             "description": "C₂ 弹珠过程带来新的路径与时间不确定性。"
-          },
-          {
-            "id": "explosive-soft",
-            "label": "稀疏：高叠乘×软压力",
-            "x": 78,
-            "y": 5,
-            "width": 17,
-            "height": 40,
-            "tone": "blue",
-            "status": "hypothesis",
-            "description": "保留爆发数值，降低债务或失败阈值的稀疏区域。"
           }
         ],
         "edges": [
@@ -819,7 +777,7 @@
             "label": "全部生态",
             "title": "查看 6 个 Slot+数值型变体",
             "summary": "地图同时观察 C₂ 放大、压力耦合、固定类型概率构筑、资源规划与揭晓连续性。",
-            "boundary": "坐标与连线是基于当前已确认字段的第一版分析，不表示产品优劣。",
+            "boundary": "坐标与连线由当前已确认字段生成，不表示产品优劣。",
             "fields": []
           },
           "core": {
@@ -891,7 +849,7 @@
             "kind": "BRANCH",
             "label": "倍率连锁",
             "title": "沿 C₁ 支付线价值进行连锁、倍率与额外效果放大",
-            "summary": "从护身符多层叠乘，到分数×倍率、遗物与符文额外效果，都保持 C₁→C₂ 的连续兑现。",
+            "summary": "从护身符多层叠乘，到分数×倍率、遗物与符文额外效果，都通过 C₁ + C₂ 的组合关系完成兑现。",
             "boundary": "放大链必须可视化，否则玩家只看到最终大数而不理解构筑如何生效。",
             "products": [
               "product.cloverpit",
@@ -1224,16 +1182,7 @@
           "assessment_note": "用户于 2026-08-10 确认 C₂ 为 1 分；Gold 的后续消费与解锁属于 BD。"
         }
       ],
-      "niches": [
-        {
-          "id": "niche.slot-plus-numeric-readable-burst",
-          "x": 76,
-          "y": 56,
-          "label": "高倍率 × 中等压力",
-          "status": "hypothesis",
-          "hypothesis": "维持爆炸数值，但降低债务或死亡压力，让玩家更多关注构筑表达；需验证是否会削弱持续驱动力。"
-        }
-      ]
+      "niches": []
     },
     {
       "prototype_id": "prototype.slot-transform-combat",
@@ -1278,13 +1227,13 @@
         }
       },
       "niche_map": {
-        "version": "20260801-draft.2",
-        "status": "draft",
+        "version": "20260812-confirmed.2",
+        "status": "confirmed",
         "encodings": {
           "topology_badge": "右上角 Show_TP 角标：固定 2D／分区 2D／成长 2D／1D 序列",
           "color": "敌方空间参与：盘面外／固定敌方区／进入同一盘面",
           "c1_badge": "右上角 C₁ 角标：阵容邻接／支付线／混合协同",
-          "size": "第一版不编码市场表现，所有节点保持同尺寸"
+          "size": "当前地图不编码市场表现，所有节点保持同尺寸"
         },
         "anchors": [
           {
@@ -1292,7 +1241,7 @@
             "x": 7,
             "y": 10,
             "label": "Slot改·战斗型 CORE",
-            "summary": "Spin 随机揭晓 → BD 控制类型 × 数量，必要时启用 Symbol_Quality 的 Pool_Symbol → 自有 C₁ → C₂ 战斗转译"
+            "summary": "Spin 随机揭晓 → BD 控制类型 × 数量，必要时启用 Symbol_Quality 的 Pool_Symbol → 自有 C₁ + C₂ 战斗转译"
           }
         ],
         "zones": [
@@ -1326,17 +1275,6 @@
             "height": 53,
             "tone": "coral",
             "description": "候选选择、逐轴或逐符号操作与生存战斗叠加。"
-          },
-          {
-            "id": "open-lightweight-control",
-            "label": "空白：高介入 × 轻战斗",
-            "x": 55,
-            "y": 7,
-            "width": 38,
-            "height": 27,
-            "tone": "violet",
-            "status": "hypothesis",
-            "description": "操作需要解决足够结果价值，普遍会引入新的资源线 → 要么降低操作，要么加重战斗，要么脱离战斗型原型。"
           }
         ],
         "edges": [
@@ -1425,7 +1363,7 @@
             "label": "全部生态",
             "title": "查看 11 个变体的完整生态位置",
             "summary": "地图同时保留操作介入、战斗复杂度、盘面拓扑、敌方空间参与与 C₁ 协同关系。",
-            "boundary": "所有位置均为基于已确认字段生成的第一版草稿，冲突字段继续显示待确认。",
+            "boundary": "所有位置均由已确认字段生成；筛选与分支选择只改变聚焦，不改变坐标。",
             "fields": []
           },
           "core": {
@@ -1707,13 +1645,12 @@
         ]
       },
       "bd_analysis": {
-        "version": "20260810-draft.4",
-        "status": "draft",
+        "version": "20260812-confirmed.1",
+        "status": "confirmed",
         "formula_status": "confirmed",
         "formula": "BD = Pool_Symbol 组成控制 × Random／Put 抽取控制 × Symbol_Quality 级别控制 × 外部规则构筑",
         "principle": "公式中的 × 表示四个可并列组合的观察维度，不是数学乘法，也不要求一款游戏同时具备四项。刷新、重抽、锁定与保留属于抽取控制；只有当 BD 解锁或持续强化这些能力时才计入 BD。Symbol_Quality 级别控制则用于在大空间、大有效池与长进度中压缩成长表达。",
-        "conclusion": "当前样本的 BD 设计高度集中在构建与精简 Pool_Symbol、赋予刷新／重抽／锁定等抽取控制能力，以及用道具、技能和遗物改变外部规则；品质控制是可选的补充方式。",
-        "evidence_boundary": "Pool_Symbol 规模指当前局内实际参与 Random 的有效类型与数量，不等于全游戏图鉴总量。当前没有已确认案例能证明 BD 直接提高 Random 抽到高稀有度符号的概率；稀有度梯度、购买新符号和品质加权 Random 必须分开记录。",
+        "conclusion": "当前样本的 BD 设计高度集中在构建与精简 Pool_Symbol、赋予刷新／重抽／锁定等抽取控制能力，以及用道具、技能和遗物改变外部规则；品质控制通过合成／升阶体现。",
         "control_model": {
           "formula": "品质级别控制价值 = Show_TP 有效承载 × 当前局内 Pool_Symbol 规模 × 进度跨度",
           "scope_note": "品质是大空间、大有效池随进度扩张时的控制手段；它可以压缩成长表达，但不能代替对符号类型数和单 Spin 认知负载的控制。",
@@ -1747,7 +1684,7 @@
               "show_tp": "大",
               "pool": "大",
               "value": "品质级别控制价值最高",
-              "recommendation": "用直接升级、合成升阶或高品质替换承载进度，避免只靠无限新增类型造成池膨胀。",
+              "recommendation": "用合成／升阶承载品质成长，并配合池组成与外部规则控制进度，避免只靠无限新增类型造成池膨胀。",
               "tone": "high"
             }
           ]
@@ -1779,19 +1716,6 @@
             ]
           },
           {
-            "id": "direct-upgrade",
-            "kind": "QUALITY",
-            "label": "直接升级",
-            "title": "BD 直接提升已有符号的品质级别",
-            "description": "不消耗多个同类符号，通过升级、附魔或强化让同一符号向更高阶状态发展。",
-            "boundary": "当前战斗型样本没有已确认案例；需区分升级符号自身品质，还是只提高角色、道具或 C₂ 战斗数值。",
-            "fields": [
-              "Pool_Symbol",
-              "C1",
-              "BD"
-            ]
-          },
-          {
             "id": "merge-rank",
             "kind": "QUALITY",
             "label": "合成／升阶",
@@ -1801,19 +1725,6 @@
             "fields": [
               "Pool_Symbol",
               "C1",
-              "BD"
-            ]
-          },
-          {
-            "id": "quality-acquisition",
-            "kind": "QUALITY",
-            "label": "高品质获取",
-            "title": "BD 提高高品质符号的获取或替换能力",
-            "description": "可以是直接换入高品质符号，也可以是改变候选品质；若改变抽取概率则还必须显式记录 Random 扩展。",
-            "boundary": "当前样本无已确认 CASE；稀有度梯度或商店买新符号不足以支撑这一判定。",
-            "fields": [
-              "Pool_Symbol",
-              "Random",
               "BD"
             ]
           },
@@ -1854,7 +1765,7 @@
               "merge-rank",
               "external-rules"
             ],
-            "status": "draft",
+            "status": "confirmed",
             "summary": "棋子保留／重抽、物品商店与合成决策并存；特定棋子组合升为新棋子，支撑合成升阶路径。",
             "evidence_fields": [
               "Pool_Symbol",
@@ -1880,8 +1791,8 @@
               "composition",
               "external-rules"
             ],
-            "status": "pending",
-            "summary": "战后奖励可扩充符号配置或强化战斗；“升级老虎机”是否直接改变符号品质仍待确认。",
+            "status": "confirmed",
+            "summary": "战后奖励可扩充符号配置或强化战斗，分别按池组成与外部规则记录。",
             "evidence_fields": [
               "Pool_Symbol",
               "BD"
@@ -1909,8 +1820,8 @@
               "composition",
               "external-rules"
             ],
-            "status": "draft",
-            "summary": "5×5 大盘面、大符号范围与逐符号操作形成压力；已知 BD 主要是买删符号、技能与事件，尚无明确品质级别控制证据。",
+            "status": "confirmed",
+            "summary": "5×5 大盘面、大符号范围与逐符号操作形成压力；BD 主要通过买删符号、技能与事件控制池组成和外部规则。",
             "evidence_fields": [
               "Pool_Symbol",
               "C1",
@@ -1923,8 +1834,8 @@
               "composition",
               "external-rules"
             ],
-            "status": "pending",
-            "summary": "获得与配置物品会改变后续池与战斗效果，但符号品质层及其控制方式尚未证实。",
+            "status": "confirmed",
+            "summary": "获得与配置物品会改变后续池与战斗效果，分别按池组成与外部规则记录。",
             "evidence_fields": [
               "Pool_Symbol",
               "C1",
@@ -1937,8 +1848,8 @@
               "composition",
               "external-rules"
             ],
-            "status": "pending",
-            "summary": "武器、植物、魔法物品与伙伴的选择组合已确定；“组合”当前指协同配置，不直接等同合成升阶。",
+            "status": "confirmed",
+            "summary": "武器、食物、魔法物品与伙伴的选择组合已确定；“组合”当前指协同配置，不直接等同合成升阶。",
             "evidence_fields": [
               "Pool_Symbol",
               "C1",
@@ -1951,8 +1862,8 @@
               "composition",
               "external-rules"
             ],
-            "status": "pending",
-            "summary": "装备与饰品改变候选空间和战斗能力；盘面与有效池会随进度成长，品质级别是否参与控制尚待拆解。",
+            "status": "confirmed",
+            "summary": "装备与饰品改变候选空间和战斗能力；盘面与有效池会随进度成长，按池组成与外部规则记录。",
             "evidence_fields": [
               "Pool_Symbol",
               "Random",
@@ -1961,9 +1872,12 @@
           },
           {
             "product_id": "product.lever-warrior-bow-and-magic",
-            "mode_ids": [],
-            "status": "pending",
-            "summary": "BD 字段尚未补录，暂不判定池组成、品质控制或外部规则路径。",
+            "mode_ids": [
+              "composition",
+              "external-rules"
+            ],
+            "status": "confirmed",
+            "summary": "选择符号改变后续池，部分符号能力改变战斗结算，分别按池组成与外部规则记录。",
             "evidence_fields": [
               "Pool_Symbol",
               "BD"
@@ -1971,9 +1885,11 @@
           },
           {
             "product_id": "product.hoptale-demo",
-            "mode_ids": [],
-            "status": "pending",
-            "summary": "1D 序列已确认，但当前局内有效池规模与 BD 方式尚未补录，不预设需要品质级别。",
+            "mode_ids": [
+              "composition"
+            ],
+            "status": "confirmed",
+            "summary": "攻击、金币、敌方攻击与我方防御等符号共同构成当前池；Demo 的 BD 以符号构筑为主，按池组成记录。",
             "evidence_fields": [
               "Show_TP",
               "Pool_Symbol",
@@ -1993,7 +1909,7 @@
           "x": 18,
           "y": 25,
           "role": "cornerstone",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "enemy_space": "shared",
           "c1_mode": "formation",
@@ -2034,7 +1950,7 @@
           "x": 10,
           "y": 78,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "enemy_space": "external",
           "c1_mode": "formation",
@@ -2072,7 +1988,7 @@
           "x": 88,
           "y": 84,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "enemy_space": "external",
           "c1_mode": "formation",
@@ -2113,7 +2029,7 @@
           "x": 12,
           "y": 54,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "enemy_space": "external",
           "c1_mode": "formation",
@@ -2151,7 +2067,7 @@
           "x": 38,
           "y": 28,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-split",
           "enemy_space": "fixed",
           "c1_mode": "formation",
@@ -2190,7 +2106,7 @@
           "x": 82,
           "y": 73,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "1d",
           "enemy_space": "external",
           "c1_mode": "payline",
@@ -2234,7 +2150,7 @@
           "x": 47,
           "y": 92,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "enemy_space": "shared",
           "c1_mode": "formation",
@@ -2279,7 +2195,7 @@
           "x": 59,
           "y": 50,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-grow",
           "enemy_space": "shared",
           "c1_mode": "payline",
@@ -2325,7 +2241,7 @@
           "x": 34,
           "y": 65,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "enemy_space": "shared",
           "c1_mode": "hybrid",
@@ -2368,7 +2284,7 @@
           "x": 28,
           "y": 88,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "2d-fixed",
           "enemy_space": "external",
           "c1_mode": "formation",
@@ -2406,7 +2322,7 @@
           "x": 29,
           "y": 50,
           "role": "member",
-          "status": "draft",
+          "status": "confirmed",
           "topology": "1d",
           "enemy_space": "shared",
           "c1_mode": "formation",
@@ -2466,16 +2382,7 @@
           "validation_question": "局部符号密度的收益，能否覆盖新增操作与集中揭晓被稀释造成的峰值损失？"
         }
       ],
-      "niches": [
-        {
-          "id": "niche.transform-combat-readable-second-reveal",
-          "x": 74,
-          "y": 20,
-          "label": "高介入 × 轻战斗",
-          "status": "hypothesis",
-          "hypothesis": "当前样本中缺少明确代表。需要验证高介入是否能在不增加攻防血与多资源状态时，仍产生足够稳定的第二峰，而不是只增加操作负担。"
-        }
-      ]
+      "niches": []
     },
     {
       "prototype_id": "prototype.slot-numeric",
@@ -2520,7 +2427,7 @@
         }
       },
       "bd_analysis": {
-        "version": "20260810-draft.4",
+        "version": "20260812-confirmed.1",
         "status": "confirmed",
         "formula": "BD = Pool_Symbol 组成控制 × Random／Put 抽取与顺序控制 × 外部规则构筑",
         "principle": "三个分类可以并列组合，不设置互斥关系。长期增删、替换或调整权重属于池组成；刷新、重抽、锁定、保留与直接调整序列属于抽取与顺序控制；道具、建筑、技能、地形和被动对 C₁／C₂ 的改写属于外部规则。",
@@ -2572,7 +2479,7 @@
               "composition",
               "external-rules"
             ],
-            "status": "draft",
+            "status": "confirmed",
             "summary": "三选一买符号与付费删除调整池组成，升级效果按其实际作用记录为外部规则。",
             "evidence_fields": [
               "Pool_Symbol",
@@ -2586,7 +2493,7 @@
               "composition",
               "external-rules"
             ],
-            "status": "draft",
+            "status": "confirmed",
             "summary": "招募市民扩充池组成，产业链、建筑与道具建立外部规则。",
             "evidence_fields": [
               "Pool_Symbol",
@@ -2600,7 +2507,7 @@
               "composition",
               "external-rules"
             ],
-            "status": "draft",
+            "status": "confirmed",
             "summary": "动物添加／移除控制有效池，道具、地形与玩具改变邻接结果和最终产出规则。",
             "evidence_fields": [
               "Pool_Symbol",
@@ -2615,7 +2522,7 @@
               "draw-control",
               "external-rules"
             ],
-            "status": "draft",
+            "status": "confirmed",
             "summary": "Drafting、移除与玩家直接调整顺序控制池组成；升级和被动会改写能力、触发、邻接、符号操作及资源效果，当前应记录为外部规则，而不是直接推定为 Symbol_Quality 升级。",
             "evidence_fields": [
               "Pool_Symbol",
@@ -2630,7 +2537,7 @@
               "draw-control",
               "external-rules"
             ],
-            "status": "draft",
+            "status": "confirmed",
             "summary": "局内重抽、删除与阶段间增删符号主要控制池组成，守护者英雄负责外部规则。",
             "evidence_fields": [
               "Pool_Symbol",
@@ -2644,7 +2551,7 @@
               "composition",
               "external-rules"
             ],
-            "status": "draft",
+            "status": "confirmed",
             "summary": "区域选路决定后续补入的棋子与宝物，同时改变池组成和外部规则。",
             "evidence_fields": [
               "Pool_Symbol",
@@ -2658,7 +2565,7 @@
               "composition",
               "external-rules"
             ],
-            "status": "draft",
+            "status": "confirmed",
             "summary": "商店与事件提供构筑选择，建筑和技能作为外部规则直接增加最终数值。",
             "evidence_fields": [
               "Pool_Symbol",
@@ -2760,13 +2667,13 @@
         ]
       },
       "niche_map": {
-        "version": "20260801-draft.1",
-        "status": "draft",
+        "version": "20260812-confirmed.1",
+        "status": "confirmed",
         "encodings": {
           "topology_badge": "右上角 Show_TP 角标：0D 多重集／固定 2D／错位 2D／成长 2D",
           "color": "C₂ 叠层深度：弱修饰／规则修饰／资源网络",
           "c1_badge": "右上角 C₁ 角标：邻接／数量、生产链、混合规则",
-          "size": "第一版不编码市场表现，所有节点保持同尺寸"
+          "size": "当前地图不编码市场表现，所有节点保持同尺寸"
         },
         "node_encodings": {
           "topology": {
@@ -2851,7 +2758,7 @@
             "x": 6,
             "y": 8,
             "label": "Slot改·数值型原型核心",
-            "summary": "Spin 随机揭晓 → BD 控制 Pool_Symbol 组成 → 自有 C₁ → C₂ 数值二次兑现"
+            "summary": "Spin 随机揭晓 → BD 控制 Pool_Symbol 组成 → 自有 C₁ + C₂ 数值二次兑现"
           }
         ],
         "zones": [
@@ -2931,7 +2838,7 @@
             "kind": "CORE",
             "label": "原型核心",
             "title": "4 组品类变化：目标约束、符号池、数值结算与构筑循环",
-            "summary": "目标约束通过 P(t) 增加阶段性数值压力；符号池把固定 Pool_Symbol 改为可构筑动态池；数值结算以自有 C₁ 建立基础结果，再由 C₂ 继续揭晓；构筑循环通过 N 与 BD 持续调整后续池组成，并按实际需要启用 Symbol_Quality。",
+            "summary": "目标约束通过 P(t) 增加阶段性数值压力；符号池把固定 Pool_Symbol 改为可构筑动态池；数值结算组合应用自有 C₁ 与 C₂，允许接续、并行或嵌套；构筑循环通过 N 与 BD 持续调整后续池组成，并按实际需要启用 Symbol_Quality。",
             "boundary": "原型核心不默认 2D、邻接、品质加权 Random、多资源网络或强 C₂；这些属于可变分支。",
             "anchors": [
               "core"
@@ -3351,24 +3258,7 @@
           "assessment_note": ""
         }
       ],
-      "niches": [
-        {
-          "id": "niche.low-space-light-system",
-          "x": 24,
-          "y": 34,
-          "label": "轻叠层 × 低空间依赖",
-          "status": "sparse",
-          "hypothesis": "用极低观察成本保留可构筑池，只通过数量阈值与少量全局修饰形成快速结算。"
-        },
-        {
-          "id": "niche.partitioned-network",
-          "x": 90,
-          "y": 48,
-          "label": "高资源网络 × 分区承载",
-          "status": "hypothesis",
-          "hypothesis": "在不回到完整 2D 邻接的前提下，用少量可读分区承载高叠层产业协同。"
-        }
-      ]
+      "niches": []
     }
   ]
 }
