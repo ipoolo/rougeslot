@@ -28,6 +28,11 @@
   color: var(--green);
 }
 
+.insights-hero h1 b {
+  color: var(--violet);
+  font-weight: inherit;
+}
+
 .insights-thesis {
   padding: 16px 20px;
   border: 1px solid rgba(233, 105, 77, 0.28);
@@ -199,6 +204,53 @@
   display: block;
   margin-top: 7px;
   line-height: 1.55;
+}
+
+.insight-zone-pool {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(270px, 0.75fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: 24px;
+  border-color: rgba(39, 143, 118, 0.28);
+  background:
+    radial-gradient(circle at 88% 18%, rgba(39, 143, 118, 0.11), transparent 26rem),
+    rgba(232, 244, 240, 0.62);
+}
+
+.insight-zone-pool > header {
+  display: block;
+  margin: 0;
+}
+
+.insight-zone-pool > header span {
+  display: block;
+  color: var(--green);
+}
+
+.insight-zone-pool > header strong {
+  display: block;
+  margin-top: 7px;
+  line-height: 1.55;
+}
+
+.insight-zone-pool > p {
+  grid-column: 1 / -1;
+  margin-top: -8px;
+}
+
+.insight-pool-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.node-pool-capacity,
+.node-pool-types,
+.node-pool-total,
+.node-pool-density {
+  min-height: 88px;
+  background: rgba(39, 143, 118, 0.065);
 }
 
 .insight-zone-rhythm {
@@ -498,6 +550,12 @@
   border-color: var(--coral);
   background: var(--coral-soft);
   box-shadow: 0 0 0 4px rgba(233, 105, 77, 0.1);
+}
+
+.insight-zone-pool .insight-node.is-focused {
+  border-color: var(--green);
+  background: rgba(220, 238, 233, 0.92);
+  box-shadow: 0 0 0 4px rgba(39, 143, 118, 0.1);
 }
 
 .insight-edge.is-focused {
@@ -1075,6 +1133,10 @@
 
 .insight-concept-grid-four {
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.insight-concept-grid-overview {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .insight-concept-grid-three {
@@ -4553,11 +4615,23 @@
   font-weight: 600;
 }
 
+.autospin-chapter > .insight-subsection-heading:first-child + .insight-detail-heading {
+  border-top: 0;
+}
+
 .decision-load-composition > .insight-subsection-heading:first-child {
   border-bottom: 0;
 }
 
 .decision-load-composition > .insight-subsection-heading:first-child + .insight-subsection-heading {
+  border-top: 0;
+}
+
+.decision-load-blocking > .insight-subsection-heading:first-child {
+  border-bottom: 0;
+}
+
+.decision-load-blocking > .insight-subsection-heading:first-child + .insight-detail-heading {
   border-top: 0;
 }
 
@@ -4639,16 +4713,26 @@
   line-height: 1.7;
 }
 
+.decision-blocking-principles article {
+  border-color: color-mix(in srgb, var(--insight-section-accent) 22%, var(--line));
+  border-top-color: color-mix(in srgb, var(--insight-section-accent) 82%, white);
+  background: color-mix(in srgb, var(--insight-section-accent) 4.5%, white);
+}
+
+.decision-blocking-principles span {
+  color: var(--insight-section-accent);
+}
+
 .decision-blocking-principles .decision-flywheel-break {
   grid-column: 1 / -1;
   min-height: 0;
-  border-color: rgba(233, 105, 77, 0.27);
-  border-top-color: var(--coral);
-  background: rgba(233, 105, 77, 0.05);
+  border-color: color-mix(in srgb, var(--insight-section-accent) 22%, var(--line));
+  border-top-color: color-mix(in srgb, var(--insight-section-accent) 82%, white);
+  background: color-mix(in srgb, var(--insight-section-accent) 4.5%, white);
 }
 
 .decision-blocking-principles .decision-flywheel-break > span {
-  color: var(--coral);
+  color: var(--insight-section-accent);
 }
 
 .decision-flywheel-break > div {
@@ -4692,7 +4776,7 @@
 .decision-flywheel-break > div em {
   flex: 1 0 100%;
   margin-top: 3px;
-  color: var(--coral);
+  color: var(--insight-section-accent);
   font-size: 9px;
   font-style: normal;
   font-weight: 750;
@@ -5868,24 +5952,24 @@
 }
 
 .combat-model-contrast > article.is-light {
-  border-color: rgba(24, 122, 103, 0.27);
-  background: rgba(24, 122, 103, 0.05);
+  border-color: rgba(30, 99, 151, 0.25);
+  background: rgba(30, 99, 151, 0.05);
 }
 
 .combat-model-contrast > article.is-heavy {
-  border-color: rgba(233, 105, 77, 0.27);
-  background: rgba(233, 105, 77, 0.045);
+  border-color: rgba(30, 99, 151, 0.25);
+  background: rgba(30, 99, 151, 0.05);
 }
 
 .combat-model-contrast span {
-  color: var(--green);
+  color: var(--blue);
   font-size: 9px;
   font-weight: 900;
   letter-spacing: 0.06em;
 }
 
 .combat-model-contrast .is-heavy span {
-  color: var(--coral);
+  color: var(--blue);
 }
 
 .combat-model-contrast h4 {
@@ -5894,11 +5978,11 @@
   line-height: 1.5;
 }
 
-.combat-model-contrast p {
+.combat-model-contrast > article > p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 10px;
-  line-height: 1.7;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .combat-model-signature {
@@ -5907,18 +5991,20 @@
   gap: 8px 12px;
   margin-top: 16px;
   padding-top: 14px;
-  border-top: 1px solid rgba(24, 122, 103, 0.17);
+  border-top: 1px solid rgba(30, 99, 151, 0.18);
 }
 
 .combat-model-signature b {
-  color: var(--green);
-  font-size: 9px;
+  color: var(--blue);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .combat-model-signature em {
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   font-style: normal;
+  line-height: 1.5;
 }
 
 .survival-variant-list {
@@ -5929,33 +6015,36 @@
 
 .survival-variant-list > div {
   padding: 12px 13px;
-  border: 1px solid rgba(233, 105, 77, 0.18);
+  border: 1px solid rgba(30, 99, 151, 0.18);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.54);
 }
 
 .survival-variant-list > div span {
   display: block;
-  font-size: 8px;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .survival-variant-list > div strong {
   display: block;
   margin-top: 5px;
-  font-size: 11px;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .survival-variant-list > div p {
   margin-top: 5px;
-  font-size: 9px;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .combat-complexity-compensation {
   margin-top: 12px;
   padding: 18px;
-  border: 1px solid rgba(112, 84, 170, 0.2);
+  border: 1px solid rgba(30, 99, 151, 0.22);
   border-radius: 14px;
-  background: rgba(112, 84, 170, 0.045);
+  background: rgba(30, 99, 151, 0.05);
 }
 
 .combat-complexity-compensation > header {
@@ -5966,7 +6055,7 @@
 }
 
 .combat-complexity-compensation > header span {
-  color: var(--violet);
+  color: var(--blue);
   font-size: 9px;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -5999,7 +6088,7 @@
 .combat-compensation-map > article,
 .combat-compensation-routes > article {
   padding: 15px;
-  border: 1px solid rgba(112, 84, 170, 0.2);
+  border: 1px solid rgba(30, 99, 151, 0.22);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.64);
 }
@@ -6007,7 +6096,7 @@
 .combat-compensation-map > i {
   display: grid;
   place-items: center;
-  color: var(--violet);
+  color: var(--blue);
   font-size: 17px;
   font-style: normal;
   font-weight: 900;
@@ -6015,7 +6104,7 @@
 
 .combat-compensation-map span {
   display: block;
-  color: var(--violet);
+  color: var(--blue);
   font-size: 8px;
   font-weight: 900;
   letter-spacing: 0.06em;
@@ -6042,7 +6131,7 @@
 }
 
 .combat-compensation-routes > article:first-child {
-  border-color: rgba(24, 122, 103, 0.24);
+  border-color: rgba(30, 99, 151, 0.24);
 }
 
 .combat-compensation-routes > article:last-child {
@@ -6052,7 +6141,7 @@
 .combat-complexity-compensation > footer {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(112, 84, 170, 0.16);
+  border-top: 1px solid rgba(30, 99, 151, 0.18);
   color: var(--ink-soft);
   font-size: 9px;
   line-height: 1.65;
@@ -6071,19 +6160,22 @@
 .combat-cognitive-budget > footer span {
   grid-row: 1 / span 2;
   color: var(--blue);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 900;
+  line-height: 1.5;
   letter-spacing: 0.08em;
 }
 
 .combat-cognitive-budget > footer strong {
-  font-size: 12px;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 .combat-cognitive-budget > footer p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 1.65;
 }
 
 .decision-bad-case-visual {
@@ -6378,6 +6470,349 @@
   background: rgba(233, 105, 77, 0.045);
 }
 
+/* 第二章内容块统一使用章节紫色；红／绿仅保留给内部语义状态。 */
+.decision-load-blocking .combat-cognitive-budget,
+.decision-load-blocking .choice-pool-attempt,
+.decision-load-blocking .decision-case-card {
+  border-color: color-mix(in srgb, var(--insight-section-accent) 24%, var(--line));
+  border-top-color: var(--insight-section-accent);
+  background:
+    linear-gradient(130deg, color-mix(in srgb, var(--insight-section-accent) 7%, transparent), transparent 44%),
+    rgba(255, 255, 255, 0.66);
+}
+
+.decision-load-blocking .combat-cognitive-budget > header span,
+.decision-load-blocking .combat-cognitive-formula > article span,
+.decision-load-blocking .combat-cognitive-formula > i,
+.decision-load-blocking .combat-model-contrast span,
+.decision-load-blocking .combat-model-signature b,
+.decision-load-blocking .combat-complexity-compensation > header span,
+.decision-load-blocking .combat-compensation-map span,
+.decision-load-blocking .combat-compensation-map > i,
+.decision-load-blocking .combat-cognitive-budget > footer span,
+.decision-load-blocking .choice-pool-attempt > header span,
+.decision-load-blocking .choice-pool-attempt > footer span,
+.decision-load-blocking .decision-case-card > header span {
+  color: var(--insight-section-accent);
+}
+
+.decision-load-blocking .combat-cognitive-formula > article,
+.decision-load-blocking .combat-cognitive-formula > .combat-cognitive-total,
+.decision-load-blocking .combat-model-contrast > article.is-light,
+.decision-load-blocking .combat-model-contrast > article.is-heavy,
+.decision-load-blocking .survival-variant-list > div,
+.decision-load-blocking .combat-complexity-compensation,
+.decision-load-blocking .combat-compensation-map > article,
+.decision-load-blocking .combat-compensation-routes > article,
+.decision-load-blocking .combat-compensation-routes > article:first-child,
+.decision-load-blocking .combat-compensation-routes > article:last-child {
+  border-color: color-mix(in srgb, var(--insight-section-accent) 22%, var(--line));
+  background: color-mix(in srgb, var(--insight-section-accent) 4.5%, white);
+}
+
+.decision-load-blocking .combat-cognitive-formula > .combat-cognitive-total span {
+  color: var(--insight-section-accent);
+}
+
+.decision-load-blocking .combat-model-signature,
+.decision-load-blocking .combat-complexity-compensation > footer,
+.decision-load-blocking .combat-cognitive-budget > footer {
+  border-color: color-mix(in srgb, var(--insight-section-accent) 18%, var(--line));
+}
+
+/* 第三章内容块统一使用章节紫色。 */
+.decision-load-control .decision-control-grid article {
+  border-color: color-mix(in srgb, var(--insight-section-accent) 24%, var(--line));
+  border-top-color: var(--insight-section-accent);
+  background: color-mix(in srgb, var(--insight-section-accent) 4.5%, white);
+}
+
+.decision-load-control .decision-control-grid article > span,
+.decision-load-control .decision-control-grid article > small,
+.decision-load-control .decision-control-grid article > .decision-control-case,
+.decision-load-control .decision-control-rule span {
+  color: var(--insight-section-accent);
+}
+
+.decision-load-control .decision-control-rule {
+  border-color: color-mix(in srgb, var(--insight-section-accent) 22%, var(--line));
+  background: color-mix(in srgb, var(--insight-section-accent) 6%, white);
+}
+
+/* 第四章使用紫色结构色，红／绿只表达禁止、风险与手动／自动对比。 */
+.autospin-chapter .active-start-principles article,
+.autospin-chapter > .decision-case-card {
+  border-color: color-mix(in srgb, var(--insight-section-accent) 24%, var(--line));
+  border-top-color: var(--insight-section-accent);
+  background:
+    linear-gradient(130deg, color-mix(in srgb, var(--insight-section-accent) 5.5%, transparent), transparent 46%),
+    rgba(255, 255, 255, 0.7);
+}
+
+.autospin-chapter .active-start-principles article > span {
+  color: var(--insight-section-accent);
+}
+
+.autospin-chapter .autospin-prohibition {
+  display: block;
+  margin-top: 18px;
+}
+
+.autospin-chapter .autospin-prohibition > span,
+.autospin-chapter .autospin-prohibition > strong,
+.autospin-chapter .autospin-prohibition > p {
+  display: block;
+}
+
+.autospin-chapter .autospin-prohibition > strong {
+  margin-top: 10px;
+}
+
+.autospin-chapter .autospin-prohibition > p {
+  margin-top: 9px;
+}
+
+.autospin-why-disclosure {
+  margin-top: 16px;
+}
+
+.autospin-why-disclosure > summary {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 249, 244, 0.3);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.4;
+  cursor: pointer;
+  list-style: none;
+}
+
+.autospin-why-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.autospin-why-lead {
+  margin: 16px 0 0;
+  color: #fff8f2;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.autospin-why-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.autospin-why-grid article {
+  padding: 14px 15px;
+  border: 1px solid rgba(255, 156, 134, 0.22);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.autospin-why-grid article > strong {
+  display: block;
+  color: #fff8f2;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.autospin-why-grid article > p {
+  margin: 7px 0 0;
+  color: rgba(255, 249, 244, 0.7);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+@media (max-width: 760px) {
+  .autospin-why-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 洞察四的文字层级对齐洞察二：标题保持层级，放大卡片正文、标签与图示节点。 */
+#insight-decision .insight-concept-grid article > span {
+  font-size: 12px;
+}
+
+#insight-decision .insight-concept-grid article > strong {
+  font-size: 17px;
+}
+
+#insight-decision .insight-concept-grid article > p {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+#insight-decision .decision-performance-timeline > header span,
+#insight-decision .decision-performance-flow span {
+  font-size: 12px;
+}
+
+#insight-decision .decision-performance-timeline > header strong {
+  font-size: 16px;
+}
+
+#insight-decision .decision-performance-flow strong {
+  font-size: 15px;
+}
+
+#insight-decision .decision-performance-flow small,
+#insight-decision .decision-performance-timeline > p {
+  font-size: 12px;
+}
+
+#insight-decision .insight-detail-heading > span {
+  font-size: 10px;
+}
+
+#insight-decision .insight-detail-heading h4 {
+  font-size: 19px;
+}
+
+#insight-decision .insight-detail-heading p {
+  font-size: 12px;
+}
+
+#insight-decision .decision-blocking-principles span,
+#insight-decision .active-start-principles span,
+#insight-decision .decision-control-grid article > span,
+#insight-decision .decision-control-rule span,
+#insight-decision .decision-budget-grid > article span,
+#insight-decision .decision-rhythm-primary span,
+#insight-decision .decision-rhythm-boundary span,
+#insight-decision .operation-granularity-analysis > header span,
+#insight-decision .operation-granularity-formula > span,
+#insight-decision .operation-granularity-axis,
+#insight-decision .operation-granularity-timeline span,
+#insight-decision .decision-board-tradeoff > header span,
+#insight-decision .decision-board-matrix span,
+#insight-decision .decision-case-card > header span,
+#insight-decision .decision-case-card > aside span,
+#insight-decision .choice-pool-attempt > header span,
+#insight-decision .choice-pool-progressive-board > span,
+#insight-decision .choice-pool-flow-lane > span,
+#insight-decision .choice-pool-tradeoff-grid span,
+#insight-decision .choice-pool-attempt > footer span,
+#insight-decision .combat-cognitive-budget > header span,
+#insight-decision .combat-cognitive-formula > article span,
+#insight-decision .combat-model-contrast > article > span,
+#insight-decision .combat-complexity-compensation > header span,
+#insight-decision .combat-compensation-map span,
+#insight-decision .decision-bad-case-visual span,
+#insight-decision .decision-bad-case-copy header span,
+#insight-decision .autospin-prohibition > span,
+#insight-decision .autospin-lane header span,
+#insight-decision .skinner-warning > span {
+  font-size: 10px;
+}
+
+#insight-decision .decision-blocking-principles strong,
+#insight-decision .active-start-principles strong {
+  font-size: 16px;
+}
+
+#insight-decision .decision-blocking-principles p,
+#insight-decision .active-start-principles p,
+#insight-decision .decision-control-grid article > p,
+#insight-decision .decision-budget-grid > article p,
+#insight-decision .operation-granularity-analysis > header p,
+#insight-decision .operation-granularity-timeline p,
+#insight-decision .operation-granularity-formula > p,
+#insight-decision .decision-board-tradeoff > header p,
+#insight-decision .decision-board-tradeoff > footer p,
+#insight-decision .decision-board-matrix p,
+#insight-decision .decision-case-checks dt,
+#insight-decision .decision-case-checks dd,
+#insight-decision .decision-case-card > aside p,
+#insight-decision .choice-pool-attempt > header p,
+#insight-decision .choice-pool-progressive-board > p,
+#insight-decision .choice-pool-tradeoff-grid ul,
+#insight-decision .choice-pool-tradeoff-grid article > p,
+#insight-decision .choice-pool-attempt > footer p,
+#insight-decision .combat-cognitive-budget > header p,
+#insight-decision .combat-complexity-compensation > header p,
+#insight-decision .autospin-lane > p,
+#insight-decision .skinner-warning > p {
+  font-size: 12px;
+}
+
+#insight-decision .decision-control-grid article > small,
+#insight-decision .decision-rhythm-boundary small,
+#insight-decision .combat-cognitive-formula > article p,
+#insight-decision .combat-compensation-map p,
+#insight-decision .combat-complexity-compensation > footer,
+#insight-decision .decision-bad-case-copy footer,
+#insight-decision .column-library-flow small {
+  font-size: 11px;
+}
+
+#insight-decision .decision-control-grid article > .decision-control-case {
+  margin-top: auto;
+  color: var(--insight-section-accent);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+#insight-decision .decision-control-grid article > .decision-control-case + small {
+  margin-top: 8px;
+}
+
+#insight-decision .decision-control-rule strong,
+#insight-decision .decision-rhythm-primary b,
+#insight-decision .decision-rhythm-boundary b,
+#insight-decision .choice-pool-progressive-board > strong,
+#insight-decision .choice-pool-flow-lane b,
+#insight-decision .choice-pool-flow-lane strong,
+#insight-decision .autospin-lane > div b {
+  font-size: 12px;
+}
+
+#insight-decision .operation-granularity-timeline strong,
+#insight-decision .operation-granularity-formula > strong,
+#insight-decision .decision-board-matrix strong,
+#insight-decision .combat-cognitive-formula > article strong {
+  font-size: 15px;
+}
+
+#insight-decision .decision-board-tradeoff > footer strong {
+  font-size: 11px;
+}
+
+#insight-decision .decision-flywheel-break > div b,
+#insight-decision .decision-flywheel-break > div strong,
+#insight-decision .decision-flywheel-break > div i,
+#insight-decision .decision-flywheel-break > div em {
+  font-size: 11px;
+}
+
+#insight-decision .choice-pool-tradeoff-grid h4 {
+  font-size: 16px;
+}
+
+#insight-decision .choice-pool-attempt > footer strong {
+  font-size: 14px;
+}
+
+#insight-decision .combat-complexity-compensation > header h4 {
+  font-size: 17px;
+}
+
+#insight-decision .combat-compensation-map strong {
+  font-size: 14px;
+}
+
+#insight-decision .decision-bad-case-visual strong {
+  font-size: 13px;
+}
+
+#insight-decision .column-library-flow > b {
+  font-size: 11px;
+}
+
 .insight-pool-section .insight-heading h2 {
   color: #235c4e;
   font-size: clamp(36px, 3.6vw, 52px);
@@ -6443,7 +6878,7 @@
 
 .effective-pool-table {
   width: 100%;
-  min-width: 840px;
+  min-width: 960px;
   border-collapse: collapse;
 }
 
@@ -6461,9 +6896,9 @@
 .effective-pool-table thead th {
   color: #315f54;
   background: rgba(220, 238, 233, 0.66);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 850;
-  letter-spacing: 0.045em;
+  letter-spacing: 0.025em;
 }
 
 .effective-pool-table tbody tr:last-child > * {
@@ -6529,9 +6964,10 @@
 
 .effective-pool-adjustments span {
   color: var(--green);
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 850;
-  letter-spacing: 0.06em;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
 }
 
 .effective-pool-adjustments strong {
@@ -6544,7 +6980,7 @@
 .effective-pool-adjustments p {
   margin: 7px 0 0;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -7672,6 +8108,10 @@
     min-width: 980px;
   }
 
+  .insight-zone-pool {
+    min-width: 980px;
+  }
+
   .insight-zone-rhythm {
     min-width: 980px;
   }
@@ -7728,6 +8168,12 @@
   .skinner-warning {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .insight-concept-grid-overview {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -7788,6 +8234,10 @@
   .insight-selection-info {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .insight-concept-grid-overview {
+    grid-template-columns: 1fr;
   }
 
   .minimum-loop-definition > header,

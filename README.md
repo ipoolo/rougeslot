@@ -1,3 +1,38 @@
+# R_RougeSlot · RougeSlot 体验研究
+
+RougeSlot 是一份围绕“双峰多巴胺体验”的 Slot、Slot 改玩法与肉鸽构筑研究。
+
+- 当前定稿版本：`20260814`
+- 阅读入口：`202607/index.html`
+- 内容范围：体验模型、原型图谱、品类生态、46 款游戏库与核心洞察
+- 在线版本：https://ipoolo.github.io/rougeslot/
+- 发布方式：通过 GitHub Pages 自动发布 `202607/` 目录
+
+## 在线版与本地版
+
+GitHub Pages 提供只读浏览。页面会自动识别静态环境，关闭字段修改、人工确认和证据上传功能。
+
+如需在本地编辑数据，请安装 Node.js，在仓库根目录运行：
+
+```bash
+node 202607/server.mjs
+```
+
+然后访问：
+
+```text
+http://localhost:8765/202607/
+```
+
+## 数据说明
+
+当前游戏库包含 46 款产品。部分产品观察字段仍保留为研究草稿，用于后续补录，不影响定稿洞察的只读展示。
+
+---
+
+<details>
+<summary>查看早期版本说明</summary>
+
 # R_RougeSlot · RPB 装置类分析系统
 
 个人用、HTML 产出、单一事实源驱动、Claude session 增量分析。
@@ -211,3 +246,5 @@ v1 完成后，按需触发：
 - 在 session 里逐个补齐其他 11 款 analysis
 - 数据全后跑各 cluster + cross-dim
 - 启动 `design-process/` v2（设计 RPB 流程 + 阶段健壮性评估）
+
+</details>

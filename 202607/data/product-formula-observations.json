@@ -4064,9 +4064,9 @@
           "review_status": "confirmed"
         },
         "N": {
-          "value": "待拆解：已确认《Hoptale Demo》的品类归属，N 的具体表现尚待补录。",
+          "value": "N ≥ 1。",
           "source_fields": [
-            "用户提供的 2026-07-28 最新品类分类截图"
+            "用户 2026-08-14 确认：N ≥ 1"
           ],
           "review_status": "confirmed"
         },

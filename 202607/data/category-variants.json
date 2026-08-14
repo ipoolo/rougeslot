@@ -3308,8 +3308,8 @@
       "product_ids": [
         "product.lever-warrior-bow-and-magic"
       ],
-      "summary": "“Slot改·战斗型”下的具体游戏变体：具体公式差异等待人工拆解。",
-      "definition": "本节点以《拉杆战士：弓箭与魔法》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项确认它相对原型的变化。",
+      "summary": "“Slot改·战斗型”下的具体游戏变体：固定 5×5 盘面生成多种攻击伤害，并通过攻、防、血量与战斗距离完成二次揭晓；C₁ 与 C₂ 差异已确认，其余字段当前继承品类原型。",
+      "definition": "本节点以《拉杆战士：弓箭与魔法》作为“Slot改·战斗型”下的具体游戏变体。当前已确认固定 5×5 盘面、自动 Put、多攻击类型 C₁ 与攻防血战斗 C₂；P(t)、Pool_Symbol、Random、N 与 BD 暂按品类原型继承，等待产品级细节继续补证。",
       "formula_changes": {
         "P_t": {
           "operation": "inherit",
@@ -3418,9 +3418,9 @@
         }
       },
       "inheritance_summary": {
-        "inherited_fields": 9,
-        "changed_fields": 0,
-        "note": "依据最新分类清单建立结构，默认继承全部父级字段，等待人工比较。"
+        "inherited_fields": 7,
+        "changed_fields": 2,
+        "note": "C₁ 扩展为多攻击类型的单回合伤害，C₂ 扩展为包含战斗距离的攻、防、血量演绎；其余七项当前继承品类原型。"
       },
       "created_at": "2026-07-28T14:30:00.000Z",
       "updated_at": "2026-07-31T06:39:58.176Z"
@@ -3436,8 +3436,8 @@
       "product_ids": [
         "product.re-spin-die-repeat-demo"
       ],
-      "summary": "“Slot改·数值型”下的具体游戏变体：具体公式差异等待人工拆解。",
-      "definition": "本节点以《Re: Spin. Die. Repeat. Demo》作为“Slot改·数值型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项确认它相对原型的变化。",
+      "summary": "“Slot改·数值型”下的具体游戏变体：保留固定盘面与符号构筑，但把 C₂ 覆写为不可由 BD 养成的任务式结算，并将 BD 收敛到任务限定的符号池与候选范围。",
+      "definition": "本节点以《Re: Spin. Die. Repeat. Demo》作为“Slot改·数值型”下的具体游戏变体。P(t)、Pool_Symbol、Random、Put、Show_TP、C₁ 与 N 继承品类原型；C₂ 与 BD 已完成产品差异确认。",
       "formula_changes": {
         "P_t": {
           "operation": "inherit",
@@ -3589,8 +3589,8 @@
       "product_ids": [
         "product.hoptale-demo"
       ],
-      "summary": "“Slot改·战斗型”下的具体游戏变体：已依据最新分类清单归入“Slot改·战斗型”；具体玩法与公式字段等待补录。",
-      "definition": "本节点以《Hoptale Demo》作为“Slot改·战斗型”下的具体游戏变体。默认继承品类原型的全部公式字段；请在公式数据表中逐项标记它相对原型的继承、收窄、扩展、覆写或禁用。",
+      "summary": "“Slot改·战斗型”下的具体游戏变体：固定 1D 序列支持锁定与重新 Random，敌我符号共同进入盘面并依次执行，最终形成自动生存战斗。",
+      "definition": "本节点以《Hoptale Demo》作为“Slot改·战斗型”下的具体游戏变体。已确认敌方与货币符号扩展、固定 1D 序列、锁定后重新 Random、敌方参与 C₁、自动生存战斗 C₂、符号型 BD，以及 N ≥ 1。",
       "formula_changes": {
         "P_t": {
           "operation": "inherit",
@@ -3727,12 +3727,12 @@
         "N": {
           "operation": "inherit",
           "constraint_label": "继承父级",
-          "summary": "N >=1 每次战斗用回合数",
+          "summary": "N ≥ 1。",
           "review_status": "confirmed",
-          "review_note": "",
+          "review_note": "用户 2026-08-14 确认：N ≥ 1。",
           "evidence_images": [],
-          "last_modified_at": "2026-07-31T18:28:51.259Z",
-          "confirmed_at": "2026-07-31T18:28:51.259Z"
+          "last_modified_at": "2026-08-14T00:00:00.000Z",
+          "confirmed_at": "2026-08-14T00:00:00.000Z"
         },
         "BD": {
           "operation": "extend",
@@ -3754,9 +3754,9 @@
         }
       },
       "inheritance_summary": {
-        "inherited_fields": 9,
-        "changed_fields": 0,
-        "note": "由游戏库归属自动建立，默认继承全部父级字段，等待人工比较和调整。"
+        "inherited_fields": 3,
+        "changed_fields": 6,
+        "note": "P(t)、Random 与 N 当前继承品类原型；Pool_Symbol、Put、Show_TP、C₁、C₂ 与 BD 已确认扩展或覆写。"
       },
       "created_at": "2026-07-31T17:18:54.449Z"
     }

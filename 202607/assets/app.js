@@ -354,10 +354,10 @@ const EXPERIENCE_STAGE_PRESETS = {
 
 const CORE_INSIGHT_PRESETS = {
   all: {
-    label: "洞察 1 · 总原则",
-    title: "第一峰由 Random + Put 揭晓结果，并通过虚线 C₁ 即时识别；第二峰由 Combo（C₁ + C₂）完成二次揭晓与结果结算。",
-    copy: "P(t) 作为外层目标压力，持续赋予结果“够不够”的意义；连续 N 次 Spin 后，BD 在周期边界调整下一轮条件。单轮只保留少量低复杂度操作，并由玩家主动触发下一次 Spin。",
-    boundary: "边界：复杂策略与新规则学习集中在阶段性构筑节点，不阻塞“主动 Spin → 第一峰 → 第二峰 → 再次操作”的最小爽环；系统不得自动开启下一次 Spin。",
+    label: "洞察 1 · 总纲",
+    title: "C₁ 让价值立即可读，C₂ 继续揭晓；决策节奏与有效池共同决定这一循环能否持续。",
+    copy: "P(t) 作为外层目标压力，持续赋予结果“够不够”的意义；连续 N 次 Spin 后，BD 在周期边界调整下一轮条件。单轮只保留少量低复杂度操作；C、T、P、D 则约束关键关系能否稳定出现并保持可读。",
+    boundary: "边界：复杂策略与新规则学习集中在阶段性构筑节点，不阻塞“主动 Spin → 第一峰 → 第二峰 → 再次操作”的最小爽环；逐轮主动触发的要求适用于依赖离散双峰体验的 Slot 改玩法。",
     nodes: [],
     edges: [],
     zones: []
@@ -384,19 +384,28 @@ const CORE_INSIGHT_PRESETS = {
     label: "洞察 4 · 主动节奏与决策预算",
     title: "同时控制决策数与单次复杂度，并让玩家亲自开启每一轮结果。",
     copy: "双峰循环依赖短操作窗口与表演窗口持续交替。复杂策略应集中在阶段边界；自动 Spin 会删除期待的主动起点，并把离散双峰压成没有边界的连续结果流。",
-    boundary: "限制的是单个双峰循环必须支付的决策成本，而不是游戏整体的策略上限；可以减少操作，但不能移除玩家对下一次 Spin 的主动触发权。",
+    boundary: "限制的是单个双峰循环必须支付的决策成本，而不是游戏整体的策略上限；对于依赖逐轮决策与离散双峰体验的 Slot 改玩法，可以减少操作，但不能移除玩家对下一次 Spin 的主动触发权。",
     nodes: ["operate", "perform", "repeat", "manual-spin", "anticipation", "double-peak", "c1", "c2", "result"],
     edges: ["operate-perform", "perform-repeat", "manual-anticipation", "anticipation-peaks", "peaks-return", "c1-c2", "c2-result"],
     zones: ["rhythm", "autospin", "first-peak", "second-peak"]
+  },
+  pool: {
+    label: "洞察 5 · 有效池与盘面容量",
+    title: "盘面扩大时，优先增加重复实例和品质跨度，不要按面积同比增加符号种类。",
+    copy: "C 决定一次承载多少内容，T 决定玩家需要区分多少类型，P 决定副本、权重与构筑长度，D = C ÷ T 用于观察同类机会是否被种类扩张稀释。",
+    boundary: "分析边界：D 是比较同屏机会的粗略指标，不替代真实抽取权重、匹配规则与玩家的锁定、重抽或候选池修正能力。",
+    nodes: ["pool-capacity", "pool-types", "pool-total", "pool-density"],
+    edges: [],
+    zones: ["pool"]
   },
   hybrid: {
     label: "高风险组合 · Slot改+战斗",
     title: "同时保护 C₁ 的大奖识别，并让 C₂ 的战斗结果保持悬念。",
     copy: "这种组合既改写基础协同，又通过战斗过程二次揭晓 C₁ 的兑现程度，最容易让两个体验阶段相互侵占。棋盘过大、符号过多或关系过深，会先削弱第一峰；结果过早可计算，又会削弱第二峰。",
     boundary: "设计约束：控制棋盘大小、符号类型、关系层数与跨区域依赖；让 C₁ 保持即时可读，并让 C₂ 的战斗时序紧凑。",
-    nodes: ["reveal", "c1", "c2", "result"],
+    nodes: ["reveal", "c1", "c2", "result", "pool-capacity", "pool-types", "pool-density"],
     edges: ["reveal-c1", "c1-c2", "c2-result"],
-    zones: ["first-peak", "second-peak"]
+    zones: ["first-peak", "second-peak", "pool"]
   }
 };
 
