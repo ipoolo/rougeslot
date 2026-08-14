@@ -382,6 +382,7 @@
       "positions": [
         {
           "product_id": "product.slotbound-demo",
+          "c1_tags": ["line", "quantity"],
           "x": 82,
           "y": 82,
           "role": "cornerstone",
@@ -942,6 +943,7 @@
       "positions": [
         {
           "product_id": "product.cloverpit",
+          "c1_tags": ["line", "quantity"],
           "x": 88,
           "y": 90,
           "role": "cornerstone",
@@ -980,6 +982,7 @@
         },
         {
           "product_id": "product.spinera",
+          "c1_tags": ["line", "quantity"],
           "x": 28,
           "y": 48,
           "role": "member",
@@ -1022,6 +1025,7 @@
         },
         {
           "product_id": "product.runeborn",
+          "c1_tags": ["line", "sequence", "mixed"],
           "x": 74,
           "y": 72,
           "role": "member",
@@ -1065,6 +1069,7 @@
         },
         {
           "product_id": "product.devils-due",
+          "c1_tags": ["line", "quantity"],
           "x": 52,
           "y": 58,
           "role": "member",
@@ -1103,6 +1108,7 @@
         },
         {
           "product_id": "product.peglotto-demo",
+          "c1_tags": ["line", "quantity"],
           "x": 18,
           "y": 66,
           "role": "member",
@@ -1143,6 +1149,7 @@
         },
         {
           "product_id": "product.spin-tactics-demo",
+          "c1_tags": ["line", "partition", "mixed"],
           "x": 46,
           "y": 34,
           "role": "member",
@@ -1906,6 +1913,7 @@
       "positions": [
         {
           "product_id": "product.endgame-of-devil",
+          "c1_tags": ["adjacency", "partition", "relation", "mixed"],
           "x": 18,
           "y": 25,
           "role": "cornerstone",
@@ -1947,6 +1955,7 @@
         },
         {
           "product_id": "product.spin-hero",
+          "c1_tags": ["quantity", "relation", "mixed"],
           "x": 10,
           "y": 78,
           "role": "member",
@@ -1985,6 +1994,7 @@
         },
         {
           "product_id": "product.lucky-hero",
+          "c1_tags": ["adjacency", "relation", "mixed"],
           "x": 88,
           "y": 84,
           "role": "member",
@@ -2026,6 +2036,7 @@
         },
         {
           "product_id": "product.lucky-hunter",
+          "c1_tags": ["adjacency", "quantity", "relation", "mixed"],
           "x": 12,
           "y": 54,
           "role": "member",
@@ -2064,6 +2075,7 @@
         },
         {
           "product_id": "product.dog-and-goblin",
+          "c1_tags": ["adjacency", "quantity", "relation", "mixed"],
           "x": 38,
           "y": 28,
           "role": "member",
@@ -2103,6 +2115,7 @@
         },
         {
           "product_id": "product.slots-and-daggers",
+          "c1_tags": ["sequence", "relation", "mixed"],
           "x": 82,
           "y": 73,
           "role": "member",
@@ -2147,6 +2160,7 @@
         },
         {
           "product_id": "product.spinny-dungeon",
+          "c1_tags": ["adjacency", "relation", "mixed"],
           "x": 47,
           "y": 92,
           "role": "member",
@@ -2192,6 +2206,7 @@
         },
         {
           "product_id": "product.slot-or-not",
+          "c1_tags": ["line", "relation", "mixed"],
           "x": 59,
           "y": 50,
           "role": "member",
@@ -2238,6 +2253,7 @@
         },
         {
           "product_id": "product.rogue-slots",
+          "c1_tags": ["line", "relation", "mixed"],
           "x": 34,
           "y": 65,
           "role": "member",
@@ -2281,6 +2297,7 @@
         },
         {
           "product_id": "product.lever-warrior-bow-and-magic",
+          "c1_tags": ["quantity", "relation", "mixed"],
           "x": 28,
           "y": 88,
           "role": "member",
@@ -2319,6 +2336,7 @@
         },
         {
           "product_id": "product.hoptale-demo",
+          "c1_tags": ["sequence", "relation", "mixed"],
           "x": 29,
           "y": 50,
           "role": "member",
@@ -2961,6 +2979,7 @@
       "positions": [
         {
           "product_id": "product.luck-be-a-landlord",
+          "c1_tags": ["quantity", "adjacency", "relation", "mixed"],
           "x": 45,
           "y": 72,
           "role": "cornerstone",
@@ -2994,6 +3013,7 @@
         },
         {
           "product_id": "product.lucky-mayor",
+          "c1_tags": ["partition", "relation", "mixed"],
           "x": 82,
           "y": 18,
           "role": "member",
@@ -3033,6 +3053,7 @@
         },
         {
           "product_id": "product.cat-god-ranch",
+          "c1_tags": ["adjacency"],
           "x": 84,
           "y": 86,
           "role": "member",
@@ -3072,6 +3093,7 @@
         },
         {
           "product_id": "product.luckland",
+          "c1_tags": ["adjacency", "relation", "mixed"],
           "x": 25,
           "y": 80,
           "role": "member",
@@ -3107,6 +3129,7 @@
         },
         {
           "product_id": "product.lucky-island",
+          "c1_tags": ["relation"],
           "x": 40,
           "y": 58,
           "role": "member",
@@ -3145,6 +3168,7 @@
         },
         {
           "product_id": "product.die-shou-wei-cheng",
+          "c1_tags": ["adjacency"],
           "x": 16,
           "y": 65,
           "role": "member",
@@ -3180,6 +3204,7 @@
         },
         {
           "product_id": "product.crop-rotation",
+          "c1_tags": ["adjacency", "sequence", "relation", "mixed"],
           "x": 64,
           "y": 66,
           "role": "member",
@@ -3223,6 +3248,7 @@
         },
         {
           "product_id": "product.re-spin-die-repeat-demo",
+          "c1_tags": ["adjacency"],
           "x": 24,
           "y": 64,
           "role": "member",

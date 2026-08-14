@@ -1,5 +1,5 @@
 {
-  "version": "202607-draft.4",
+  "version": "20260812-confirmed.1",
   "status": "core_confirmed",
   "terms": [
     {
@@ -26,6 +26,39 @@
         "期限与检查时点",
         "失败后果",
         "随进度变化的压力曲线"
+      ],
+      "classification_dimensions": [
+        {
+          "key": "goal_nature",
+          "name": "目标性质",
+          "enum_ref": "p_t_goal_nature_enum"
+        },
+        {
+          "key": "check_mode",
+          "name": "检查方式",
+          "enum_ref": "p_t_check_mode_enum"
+        },
+        {
+          "key": "failure_cost",
+          "name": "失败代价",
+          "enum_ref": "p_t_failure_cost_enum"
+        },
+        {
+          "key": "pressure_curve",
+          "name": "压力曲线",
+          "enum_ref": "p_t_pressure_curve_enum"
+        }
+      ],
+      "classification_rule": "四个维度分别记录并自由组合，不强制形成互斥子类型。",
+      "classification_examples": [
+        {
+          "name": "幸运房东",
+          "tags": ["硬目标", "周期检查", "立即失败", "阶梯增长"]
+        },
+        {
+          "name": "战斗关卡／Boss",
+          "tags": ["硬目标", "阶段检查", "立即失败"]
+        }
       ],
       "boundaries": [],
       "detail_sections": [
@@ -344,6 +377,14 @@
       "formula_location": "Spin 第二步",
       "scope": "Show_TP",
       "enum_ref": "put_control_enum",
+      "classification_dimensions": [
+        {
+          "key": "control",
+          "name": "介入程度",
+          "enum_ref": "put_control_enum"
+        }
+      ],
+      "classification_rule": "分类依据不是操作次数，而是玩家是否持续决定主要结果结构；移除玩家操作后系统仍能形成基本完整 Show_TP，偏向微手动，否则属于全手动。",
       "boundaries": [
         "不负责从 Pool_Symbol 随机抽取",
         "不负责 Combo 判定与结算"
@@ -427,6 +468,42 @@
       ],
       "formula_location": "Put 与 Combo 的共同承载域",
       "enum_ref": "show_tp_enum",
+      "classification_dimensions": [
+        {
+          "key": "topology",
+          "name": "拓扑",
+          "enum_ref": "show_tp_enum"
+        },
+        {
+          "key": "scale",
+          "name": "规模",
+          "enum_ref": "show_tp_scale_enum"
+        },
+        {
+          "key": "layer",
+          "name": "层级",
+          "enum_ref": "show_tp_layer_enum"
+        }
+      ],
+      "classification_rule": "拓扑、规模与层级分别记录；多个区域只有在各自具有独立落位和结算规则时，才属于并列或多层承载。",
+      "classification_examples": [
+        {
+          "name": "5×4 普通盘面",
+          "tags": ["2D 离散网格", "固定尺寸", "单层"]
+        },
+        {
+          "name": "狗与哥布林",
+          "tags": ["2D 离散网格", "固定尺寸", "主盘面＋外部区域"]
+        },
+        {
+          "name": "Slot or Not",
+          "tags": ["2D 离散网格", "成长尺寸", "单层"]
+        },
+        {
+          "name": "四个无序集合",
+          "tags": ["0D 多重集", "固定尺寸", "并列分区"]
+        }
+      ],
       "boundaries": [
         "Show_TP 是类型",
         "Show_State 是某次 Spin 的具体实例"
@@ -575,10 +652,19 @@
         "Combo"
       ],
       "formula_location": "Combo 参数",
+      "classification_dimensions": [
+        {
+          "key": "synergy",
+          "name": "协同关系",
+          "enum_ref": "c1_synergy_enum",
+          "multi_select": true
+        }
+      ],
+      "classification_rule": "同一条 C₁ 可以同时使用多个协同标签；混合协同表示同时依赖两种以上关系，不替代其组成标签。",
       "boundaries": [
         "描述符号之间如何形成装置先验中的基础协同",
         "强调低学习成本和可由先验知识识别",
-        "具体子类型与少数边界案例由后续实例校准"
+        "数量、连线、邻接、顺序、分区与关系标签可以组合使用"
       ],
       "detail_sections": [
         {
@@ -670,7 +756,8 @@
       ],
       "detail_sections": [
         {
-          "title": "C₂ 的两种一级实现方式",
+          "title": "后续研究框架",
+          "status": "research_only",
           "items": [
             {
               "name": "修饰型",
@@ -683,6 +770,14 @@
             {
               "name": "不是结算动画或重新开奖",
               "description": "C₂ 必须延续 C₁ 的结果价值；只有确定答案的播放没有期待，与 C₁ 无关的新随机又会推翻价值锚点。"
+            },
+            {
+              "name": "演绎形态",
+              "description": "后续观察线性、并行、链式、嵌套与混合演绎，但当前不冻结为正式分类。"
+            },
+            {
+              "name": "时间指标",
+              "description": "后续记录 C₂ 总时长、单位时间信息烈度、烈度变化，以及跨 Spin 后是否加速、延长或变复杂。"
             }
           ]
         },
@@ -1066,6 +1161,90 @@
     }
   ],
   "enums": {
+    "p_t_goal_nature_enum": {
+      "status": "stable",
+      "source": "confirmed_2026-08-12",
+      "values": [
+        {
+          "key": "hard",
+          "name": "硬目标",
+          "definition": "存在明确达标线，未满足时触发确定的不利后果。"
+        },
+        {
+          "key": "soft",
+          "name": "软目标",
+          "definition": "目标主要引导效率、成长或策略方向，不以单一达标线直接结束流程。"
+        }
+      ]
+    },
+    "p_t_check_mode_enum": {
+      "status": "stable",
+      "source": "confirmed_2026-08-12",
+      "values": [
+        {
+          "key": "periodic",
+          "name": "周期检查",
+          "definition": "每经过约定数量的 Spin 或回合检查一次目标。"
+        },
+        {
+          "key": "stage",
+          "name": "阶段检查",
+          "definition": "在关卡、波次、Boss 或其他阶段节点检查目标。"
+        },
+        {
+          "key": "continuous",
+          "name": "持续检查",
+          "definition": "流程持续读取目标状态，条件满足或失败时即时响应。"
+        }
+      ]
+    },
+    "p_t_failure_cost_enum": {
+      "status": "stable",
+      "source": "confirmed_2026-08-12",
+      "values": [
+        {
+          "key": "immediate_failure",
+          "name": "立即失败",
+          "definition": "未满足目标时立即结束本局或当前挑战。"
+        },
+        {
+          "key": "resource_loss",
+          "name": "损失资源",
+          "definition": "未满足目标会扣除生命、货币、容错或其他可继续承担的资源。"
+        },
+        {
+          "key": "growth_efficiency_loss",
+          "name": "降低成长效率",
+          "definition": "未满足目标不会立即失败，但会降低后续成长速度、收益或选项质量。"
+        }
+      ]
+    },
+    "p_t_pressure_curve_enum": {
+      "status": "stable",
+      "source": "confirmed_2026-08-12",
+      "values": [
+        {
+          "key": "fixed",
+          "name": "固定",
+          "definition": "目标压力在观察区间内保持基本不变。"
+        },
+        {
+          "key": "linear",
+          "name": "线性增长",
+          "definition": "目标或惩罚按近似固定增量持续提高。"
+        },
+        {
+          "key": "stepwise",
+          "name": "阶梯增长",
+          "definition": "压力在阶段节点跳升，阶段内部相对稳定。"
+        },
+        {
+          "key": "dynamic",
+          "name": "动态适配",
+          "definition": "压力根据玩家表现、构筑状态或系统条件动态变化。"
+        }
+      ]
+    },
     "put_control_enum": {
       "status": "stable",
       "source": "confirmed_2026-07-23",
@@ -1079,14 +1258,14 @@
         {
           "key": "semi_manual",
           "name": "微手动",
-          "definition": "系统完成主要安置过程，玩家只能调整局部步骤、有限选项或少量位置。",
-          "decision_boundary": "玩家具有真实干预权，但无法主导整个 Show_State 的形成。"
+          "definition": "系统仍能形成基本完整的 Show_TP；玩家只能影响局部结果，例如锁定、重抽、单次选择或停止一列。",
+          "decision_boundary": "移除玩家操作后，系统仍能形成主要结果结构，玩家没有持续决定其整体形态。"
         },
         {
           "key": "full_manual",
           "name": "全手动",
-          "definition": "玩家主导主要的选择、放置、映射或排列过程，决定 Show_State 的核心结构。",
-          "decision_boundary": "系统可以提供限制或候选项，但主要安置结果由玩家决定。"
+          "definition": "玩家连续决定主要空间结构或结果顺序，例如逐格放置、持续移动或完整排序。",
+          "decision_boundary": "移除玩家操作后，系统无法形成主要结果结构；主要 Show_State 必须由玩家持续完成。"
         }
       ]
     },
@@ -1123,6 +1302,94 @@
           "name": "2D 连续物理空间",
           "definition": "元素位于连续坐标空间，可使用路径、碰撞、速度或物理接触关系。",
           "example": "《哥布林弹球》的弹珠台"
+        }
+      ]
+    },
+    "show_tp_scale_enum": {
+      "status": "stable",
+      "source": "confirmed_2026-08-12",
+      "values": [
+        {
+          "key": "fixed",
+          "name": "固定尺寸",
+          "definition": "承载容量和边界在当前局内保持不变。"
+        },
+        {
+          "key": "growing",
+          "name": "成长尺寸",
+          "definition": "承载空间按明确规则逐步扩展或解锁。"
+        },
+        {
+          "key": "dynamic",
+          "name": "动态尺寸",
+          "definition": "承载容量或边界会随当前状态动态增减，不只单向成长。"
+        }
+      ]
+    },
+    "show_tp_layer_enum": {
+      "status": "stable",
+      "source": "confirmed_2026-08-12",
+      "values": [
+        {
+          "key": "single",
+          "name": "单层",
+          "definition": "所有结果在同一承载结构中落位并结算。"
+        },
+        {
+          "key": "parallel_zones",
+          "name": "并列分区",
+          "definition": "多个区域并列承载，并具有可区分的区域归属或规则。"
+        },
+        {
+          "key": "overlapping",
+          "name": "重叠层",
+          "definition": "多个可独立读取的承载层占用同一显示范围或坐标空间。"
+        },
+        {
+          "key": "board_external",
+          "name": "主盘面＋外部区域",
+          "definition": "主盘面之外另有独立落位和结算规则的承载区域。"
+        }
+      ]
+    },
+    "c1_synergy_enum": {
+      "status": "stable",
+      "source": "confirmed_2026-08-12",
+      "values": [
+        {
+          "key": "quantity",
+          "name": "数量协同",
+          "definition": "读取同类数量、阈值或集合规模。"
+        },
+        {
+          "key": "line",
+          "name": "连线协同",
+          "definition": "读取支付线、连续符号或路径关系。"
+        },
+        {
+          "key": "adjacency",
+          "name": "邻接协同",
+          "definition": "读取相邻、距离、方向或包围关系。"
+        },
+        {
+          "key": "sequence",
+          "name": "顺序协同",
+          "definition": "读取前后顺序、队列或执行次序。"
+        },
+        {
+          "key": "partition",
+          "name": "分区协同",
+          "definition": "读取同一集合、阵营、区域或前后排归属。"
+        },
+        {
+          "key": "relation",
+          "name": "关系协同",
+          "definition": "读取生产／消耗、克制、角色或其他语义关系。"
+        },
+        {
+          "key": "mixed",
+          "name": "混合协同",
+          "definition": "同时依赖上述两种以上关系；记录时仍应保留具体组成标签。"
         }
       ]
     }

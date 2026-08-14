@@ -103,7 +103,7 @@ const NODE_TYPE_ORDER = {
   category_variant: 3
 };
 
-const DATA_VERSION = "20260812-120";
+const DATA_VERSION = "20260813-124";
 const DEFAULT_ATLAS_VARIANT_ID = "variant.custom-ms4430m6-dycxc";
 
 const DATA_FILES = {
@@ -173,6 +173,7 @@ const state = {
     topology: null,
     color: null,
     secondary_badge: null,
+    c1_synergy: null,
     sales_tier: null,
     branch: null
   },
@@ -199,6 +200,11 @@ const elements = {
   c2DepthPage: document.querySelector("#c2-reveal-depth"),
   c2DepthInfo: document.querySelector("[data-c2-depth-info]"),
   insightModel: document.querySelector("#insight-model"),
+  cognitionScoreDialog: document.querySelector("#cognition-score-dialog"),
+  cognitionScoreDialogTitle: document.querySelector("#cognition-score-dialog-title"),
+  cognitionScoreDialogSummary: document.querySelector("#cognition-score-dialog-summary"),
+  cognitionScoreDialogContent: document.querySelector("#cognition-score-dialog-content"),
+  cognitionScoreDialogClose: document.querySelector("#cognition-score-dialog-close"),
   slotPrototypeMatrix: document.querySelector("#slot-prototype-matrix"),
   slotPrototypeMatrixInfo: document.querySelector("#slot-prototype-matrix-info"),
   atlasFormulaMap: document.querySelector("#atlas-formula-map"),
@@ -349,48 +355,39 @@ const EXPERIENCE_STAGE_PRESETS = {
 const CORE_INSIGHT_PRESETS = {
   all: {
     label: "洞察 1 · 总原则",
-    title: "结果揭晓通过 C₁ 被立即读懂，C₂ 负责二次揭晓；轻决策与手动 Spin 让双峰持续成立。",
-    copy: "学习、构筑和压力验证位于结果之后或循环外层，用来放大体验；单轮只保留少量、低复杂度操作，并由玩家主动开启。",
-    boundary: "边界：复杂策略可以进入阶段性构筑，但不应占满两次表演之间的操作窗口；系统也不能替玩家触发下一次 Spin。",
+    title: "第一峰由 Random + Put 揭晓结果，并通过虚线 C₁ 即时识别；第二峰由 Combo（C₁ + C₂）完成二次揭晓与结果结算。",
+    copy: "P(t) 作为外层目标压力，持续赋予结果“够不够”的意义；连续 N 次 Spin 后，BD 在周期边界调整下一轮条件。单轮只保留少量低复杂度操作，并由玩家主动触发下一次 Spin。",
+    boundary: "边界：复杂策略与新规则学习集中在阶段性构筑节点，不阻塞“主动 Spin → 第一峰 → 第二峰 → 再次操作”的最小爽环；系统不得自动开启下一次 Spin。",
     nodes: [],
     edges: [],
     zones: []
   },
   c1: {
-    label: "洞察 2 · C₁ 先验可读性",
-    title: "玩家不依赖新教学，也应能判断这次抽取的基础价值。",
-    copy: "Slot改 可以替换支付线和基础协同，但新规则必须继续借用常识、物理关系或成熟的品类先验。学习应该在结果之后解释怎样变强，而不是在结果之前解释有没有中奖。",
-    boundary: "检查边界：决定基础协同是否成立的规则属于 C₁；只在基础结果之上修饰或转译的规则应优先放入 C₂。",
-    nodes: ["prior", "reveal", "c1", "learning"],
-    edges: ["prior-reveal", "reveal-c1", "learning-next"],
-    zones: ["first-peak", "long-cycle"]
+    label: "洞察 2 · 认、知与内化",
+    title: "玩家应先认出 C₁ 的结果价值，再按需理解其原因。",
+    copy: "Slot+ 继承传统 Slot 的 C₁ 识别先验；Slot改 必须为新 C₁ 重新建立可被图形化的即时可读性。初期不可避免的理解，应能随学习被压缩为自动完成的识别。",
+    boundary: "分析边界：只评估当前 Spin 的 C₁；C₂ 的结果演绎、BD 与长期策略不进入本洞察评分。",
+    nodes: ["prior", "reveal", "c1"],
+    edges: ["prior-reveal", "reveal-c1"],
+    zones: ["first-peak"]
   },
   c2: {
-    label: "洞察 3 · C₂ 二次揭晓",
-    title: "C₂ 不是播放确定答案，而是让最终答案在过程中逐步封闭。",
-    copy: "玩家借助 C₁ 符号协同知道“大概不错”，但仍不能精确算完结果；C₂ 可以接续、并行或嵌入 C₁，通过位置、顺序、局部交互与连续反馈，让玩家持续预测并修正预测。",
-    boundary: "检查边界：只有动画而没有主观不确定性，只是结算展示；目标是否达标仍由 P(t) 判断，不属于 C₂。",
+    label: "洞察 3 · 峰型与 C₂ 演绎节奏",
+    title: "先判断 C₂ 是否延续 C₁ 的价值锚点，再观察信息如何随时间释放。",
+    copy: "有效 C₂ 不是已知答案动画，也不是独立重新开奖；它可以接续、并行或嵌入 C₁，并通过时长、信息烈度与演绎结构把同一结果推向更高的第二峰。",
+    boundary: "检查边界：成立性看价值锚点是否延续；演绎质量再看深度、时长、信息烈度、结构及其跨 Spin 的变化。目标是否达标仍由 P(t) 判断。",
     nodes: ["c1", "c2", "result"],
-    edges: ["c1-c2", "c2-result"],
+    edges: ["c1-c2", "c1-c2-combo", "c2-result"],
     zones: ["first-peak", "second-peak"]
   },
   c3: {
-    label: "洞察 4 · 决策复杂度",
-    title: "同时控制决策数与单次复杂度，让玩家尽快从操作回到下一次表演。",
-    copy: "双峰多巴胺循环依赖短操作窗口与表演窗口持续交替。每次操作也可以成为低复杂度、带技巧的短开奖，但要控制持续输入造成的疲劳；复杂策略应在阶段边界集中处理。",
-    boundary: "检查边界：限制的是单个双峰循环必须支付的决策成本，而不是游戏整体的策略上限。",
-    nodes: ["operate", "perform", "repeat"],
-    edges: ["operate-perform", "perform-repeat"],
-    zones: ["rhythm"]
-  },
-  c4: {
-    label: "洞察 5 · 禁止自动 Spin",
-    title: "每一次 Spin 都必须由玩家明确触发，主动操作为期待建立清晰起点。",
-    copy: "自动 Spin 把离散的“操作 → 期待 → 第一峰／第二峰”压成无边界结果流，使双峰失去起点与间隔，并滑向依赖变动奖励维持重复行为的斯金纳箱式循环。",
-    boundary: "不可妥协：可以减少单次操作成本，但不能移除玩家对下一次 Spin 的主动触发权。",
-    nodes: ["manual-spin", "anticipation", "double-peak", "c1", "c2", "result"],
-    edges: ["manual-anticipation", "anticipation-peaks", "peaks-return", "c1-c2", "c2-result"],
-    zones: ["autospin", "first-peak", "second-peak"]
+    label: "洞察 4 · 主动节奏与决策预算",
+    title: "同时控制决策数与单次复杂度，并让玩家亲自开启每一轮结果。",
+    copy: "双峰循环依赖短操作窗口与表演窗口持续交替。复杂策略应集中在阶段边界；自动 Spin 会删除期待的主动起点，并把离散双峰压成没有边界的连续结果流。",
+    boundary: "限制的是单个双峰循环必须支付的决策成本，而不是游戏整体的策略上限；可以减少操作，但不能移除玩家对下一次 Spin 的主动触发权。",
+    nodes: ["operate", "perform", "repeat", "manual-spin", "anticipation", "double-peak", "c1", "c2", "result"],
+    edges: ["operate-perform", "perform-repeat", "manual-anticipation", "anticipation-peaks", "peaks-return", "c1-c2", "c2-result"],
+    zones: ["rhythm", "autospin", "first-peak", "second-peak"]
   },
   hybrid: {
     label: "高风险组合 · Slot改+战斗",
@@ -620,6 +617,289 @@ function bindCoreInsights() {
   });
 
   selectCoreInsight("all");
+}
+
+const COGNITION_SCORE_CASES = {
+  slot: {
+    name: "传统 Slot",
+    role: "基准样本",
+    summary: "相同符号、支付线与数量关系能够直接形成稳定图形；完整理解可以继续涉及赔率和特殊符号，但不阻塞中奖识别。",
+    conclusion: "看见图形 → 直接认出价值",
+    recognition: {
+      score: 1,
+      rawTotal: 1,
+      denominator: 8,
+      formula: "1 ÷ 8 × 10 = 1.25，四舍五入为 1",
+      items: [
+        ["图形压缩成本", 0, "相同符号与支付线直接形成整体图形。"],
+        ["特征整合成本", 0, "依靠同类连续这一显著模式即可判断。"],
+        ["视觉搜索成本", 1, "需要扫描支付线覆盖的盘面，但不必跨多个区域反复比对。"],
+        ["映射稳定成本", 0, "相同支付线与符号数量长期表达相同价值方向。"]
+      ]
+    },
+    knowledge: {
+      necessaryScore: 2,
+      completeScore: 4,
+      necessaryTotal: 2,
+      completeTotal: 5,
+      necessaryFormula: "2 ÷ 12 × 10 = 1.67，四舍五入为 2",
+      completeFormula: "5 ÷ 12 × 10 = 4.17，四舍五入为 4",
+      items: [
+        ["规则调用", 0, 1, "必要：成熟 Slot 先验即可。完整：还需理解 Wild、Scatter 等少量稳定规则。"],
+        ["关系跨越", 1, 1, "必要与完整解释都只需理解一层支付线关系。"],
+        ["状态保持", 0, 1, "必要：当前盘面已包含信息。完整：可能还需同时查看赔率表或符号价值表。"],
+        ["因果推演", 0, 0, "组合成立便直接产生价值，完整解释也无需继续推演。"],
+        ["时间跨度", 0, 0, "当前静态盘面足够，无需追踪前后状态。"],
+        ["数值计算", 1, 2, "必要：简单计算连续符号数量。完整：需汇总赔率、特殊符号和多个收益来源。"]
+      ]
+    },
+    internalization: {
+      score: 1,
+      rawTotal: 1,
+      formula: "0 + 0 + 0 + 0 + 1 = 1",
+      items: [
+        ["图形压缩难度", 0, "支付线天然对应稳定的连线和连续图形。"],
+        ["映射不稳定性", 0, "相同支付线图形长期表达相同价值方向。"],
+        ["关系非局部性", 0, "相关符号连续并同时可见。"],
+        ["反馈不清晰度", 0, "基础中奖与价值方向会被立即、明确地反馈。"],
+        ["例外密度", 1, "Wild、Scatter 等带来少量特殊符号和例外条件。"]
+      ]
+    }
+  },
+  cloverpit: {
+    name: "《四叶草深渊》",
+    role: "继承样本",
+    summary: "传统支付线、同类与连线仍承担当前 Spin 的 C₁ 即时识别；倍率、连击与债务压力属于 C₂ 或外层循环，不计入本节的 C₁ 入口评分。",
+    conclusion: "看见支付线与同类 → 认出基础 C₁；倍率与连击留到 C₂",
+    recognition: {
+      score: 1,
+      rawTotal: 1,
+      denominator: 8,
+      formula: "1 ÷ 8 × 10 = 1.25，四舍五入为 1",
+      items: [
+        ["图形压缩成本", 0, "相同符号与支付线仍能直接形成整体图形。"],
+        ["特征整合成本", 0, "依靠同类连续这一成熟模式即可判断，基础识别入口没有被重写。"],
+        ["视觉搜索成本", 1, "需要沿支付线扫描 5×4 盘面，但不必跨多个区域反复匹配。"],
+        ["映射稳定成本", 0, "基础 C₁ 的价值方向稳定；倍率与连击属于 C₂，不计入本项。"]
+      ]
+    },
+    knowledge: {
+      necessaryScore: 2,
+      completeScore: 4,
+      necessaryTotal: 2,
+      completeTotal: 5,
+      necessaryFormula: "2 ÷ 12 × 10 = 1.67，四舍五入为 2",
+      completeFormula: "5 ÷ 12 × 10 = 4.17，四舍五入为 4",
+      items: [
+        ["规则调用", 0, 1, "必要：成熟 Slot 先验即可。完整：还需理解少量特殊符号规则。"],
+        ["关系跨越", 1, 1, "必要与完整解释都只需理解一层支付线关系。"],
+        ["状态保持", 0, 1, "必要：当前盘面已包含信息。完整：可能还需同时查看赔率表。"],
+        ["因果推演", 0, 0, "组合成立便直接产生价值，完整解释也无需继续推演。"],
+        ["时间跨度", 0, 0, "当前静态盘面足够；C₂ 与外层循环不计入当前 C₁。"],
+        ["数值计算", 1, 2, "必要：简单计算同类数量。完整：需汇总赔率与特殊符号收益。"]
+      ]
+    },
+    internalization: {
+      score: 1,
+      rawTotal: 1,
+      formula: "0 + 0 + 0 + 0 + 1 = 1",
+      items: [
+        ["图形压缩难度", 0, "支付线和同类符号天然形成稳定图形。"],
+        ["映射不稳定性", 0, "基础 C₁ 的相同图形长期表达相同价值方向。"],
+        ["关系非局部性", 0, "支付线范围清楚、连续并且同时可见。"],
+        ["反馈不清晰度", 0, "基础命中反馈明确，能够与后续 C₂ 演绎区分。"],
+        ["例外密度", 1, "特殊符号带来少量需要学习的例外。"]
+      ]
+    }
+  },
+  landlord: {
+    name: "《幸运房东》",
+    role: "良好样本",
+    summary: "邻接和现实语义让新 C₁ 仍可被压缩为局部图形；知的入口浅，但完整解释符号、道具和收益关系可以较深。",
+    conclusion: "理解局部关系 → 压缩为图形 → 直接认出价值",
+    recognition: {
+      score: 5,
+      rawTotal: 4,
+      denominator: 8,
+      formula: "4 ÷ 8 × 10 = 5",
+      items: [
+        ["图形压缩成本", 1, "需要读取少量符号后，才能把猫与牛奶、蜜蜂与花等组合成局部图形块。"],
+        ["特征整合成本", 1, "需要同时识别符号语义与邻接关系。"],
+        ["视觉搜索成本", 1, "需要扫描盘面寻找局部组合，但不必跨多个独立区域反复比对。"],
+        ["映射稳定成本", 1, "基础关系稳定，但少量公开道具会修改组合价值。"]
+      ]
+    },
+    knowledge: {
+      necessaryScore: 2,
+      completeScore: 7,
+      necessaryTotal: 2,
+      completeTotal: 8,
+      necessaryFormula: "2 ÷ 12 × 10 = 1.67，四舍五入为 2",
+      completeFormula: "8 ÷ 12 × 10 = 6.67，四舍五入为 7",
+      items: [
+        ["规则调用", 0, 2, "必要：基础关系可借助广泛熟悉的现实语义。完整：需调用大量符号、道具、条件和特殊规则。"],
+        ["关系跨越", 1, 1, "必要与完整解释主要都发生在一层局部邻接关系中。"],
+        ["状态保持", 0, 1, "必要：只看当前盘面。完整：需同时保持少量公开道具修饰。"],
+        ["因果推演", 0, 2, "必要：基础语义关系成立即可判断。完整：包含生成、消除和转换等多阶段因果链。"],
+        ["时间跨度", 0, 0, "当前盘面和公开构筑状态足以解释本次 C₁。"],
+        ["数值计算", 1, 2, "必要：简单计数组合数量。完整：需汇总多个符号、道具和触发来源的收益。"]
+      ]
+    },
+    internalization: {
+      score: 4,
+      rawTotal: 4,
+      formula: "1 + 1 + 0 + 1 + 1 = 4",
+      items: [
+        ["图形压缩难度", 1, "需要学习后，才能把符号语义和邻接关系压缩成局部图形块。"],
+        ["映射不稳定性", 1, "少量可见道具会改变基础组合的价值。"],
+        ["关系非局部性", 0, "多数核心关系位于一个局部邻接范围。"],
+        ["反馈不清晰度", 1, "收益反馈可见，但多个同时触发的来源需要辨认。"],
+        ["例外密度", 1, "道具和特殊符号构成少量公开例外。"]
+      ]
+    }
+  },
+  mayor: {
+    name: "《幸运市长》",
+    role: "问题样本",
+    summary: "C₁ 同时要求识别四个 0D 集合并推演跨集合资源产销；必要理解已接近完整理解，且动态供需难以压缩成一个稳定图形。",
+    conclusion: "四集合识别 → 检查状态 → 推演资源产销 → 得出价值",
+    recognition: {
+      score: 9,
+      rawTotal: 7,
+      denominator: 8,
+      formula: "7 ÷ 8 × 10 = 8.75，四舍五入为 9",
+      items: [
+        ["图形压缩成本", 2, "四个集合与跨集合关系无法形成单一局部图形。"],
+        ["特征整合成本", 2, "需同时整合集合归属、资源类型和产销关系。"],
+        ["视觉搜索成本", 2, "必须在四个区域之间反复查找与匹配。"],
+        ["映射稳定成本", 1, "符号价值会随其他集合的供需状态变化。"]
+      ]
+    },
+    knowledge: {
+      necessaryScore: 8,
+      completeScore: 9,
+      necessaryTotal: 10,
+      completeTotal: 11,
+      necessaryFormula: "10 ÷ 12 × 10 = 8.33，四舍五入为 8",
+      completeFormula: "11 ÷ 12 × 10 = 9.17，四舍五入为 9",
+      items: [
+        ["规则调用", 2, 2, "必要：判断方向已需理解多个集合的职能与产销规则。完整：还需覆盖建筑、道具和外部修饰。"],
+        ["关系跨越", 2, 2, "必须跨越多个 0D 集合重建关系。"],
+        ["状态保持", 2, 2, "必须同时保持四个集合及多类资源状态。"],
+        ["因果推演", 2, 2, "生产、消耗、修饰和兑现形成多阶段链条。"],
+        ["时间跨度", 1, 2, "必要：当前判断需参考累积状态。完整：还需追踪多个 Spin 或阶段的持续变化。"],
+        ["数值计算", 1, 1, "需要比较供需与兑现关系，但未达到多来源复杂换算。"]
+      ]
+    },
+    internalization: {
+      score: 9,
+      rawTotal: 9,
+      formula: "2 + 2 + 2 + 1 + 2 = 9",
+      items: [
+        ["图形压缩难度", 2, "跨集合因果链无法稳定映射成一个可见静态图形。"],
+        ["映射不稳定性", 2, "同一符号价值会随动态供需和其他集合状态频繁反转。"],
+        ["关系非局部性", 2, "关系跨四个集合、多个时刻和多跳链条。"],
+        ["反馈不清晰度", 1, "最终产出可见，但多个贡献来源需要辨认。"],
+        ["例外密度", 2, "建筑、道具和外部规则持续改写已经形成的判断模式。"]
+      ]
+    }
+  }
+};
+
+let cognitionScoreDialogTrigger = null;
+let cognitionScoreDialogCase = "slot";
+
+function scoreItemsMarkup(items, mode = "single") {
+  return items.map((item) => {
+    const label = item[0];
+    const first = item[1];
+    const second = mode === "knowledge" ? item[2] : null;
+    const copy = mode === "knowledge" ? item[3] : item[2];
+    const scores = mode === "knowledge"
+      ? `<span><b>${first}<em>/2</em></b><small>必要</small></span><span><b>${second}<em>/2</em></b><small>完整</small></span>`
+      : `<span><b>${first}<em>/2</em></b><small>单项分</small></span>`;
+    return `<li><div><strong>${escapeHtml(label)}</strong><p>${escapeHtml(copy)}</p></div><div class="cognition-raw-scores">${scores}</div></li>`;
+  }).join("");
+}
+
+function renderCognitionScoreDialog(caseKey, focus = "recognition") {
+  const entry = COGNITION_SCORE_CASES[caseKey];
+  if (!entry || !elements.cognitionScoreDialogContent) return;
+  cognitionScoreDialogCase = caseKey;
+  elements.cognitionScoreDialogTitle.textContent = `${entry.name} · 评分详细计算`;
+  elements.cognitionScoreDialogSummary.textContent = `${entry.role}｜${entry.summary}`;
+  elements.cognitionScoreDialog.querySelectorAll("[data-cognition-dialog-focus]").forEach((button) => {
+    const selected = button.dataset.cognitionDialogFocus === focus;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+  const recognition = entry.recognition;
+  const knowledge = entry.knowledge;
+  const internalization = entry.internalization;
+  elements.cognitionScoreDialogContent.innerHTML = `
+    <section class="cognition-score-detail ${focus === "recognition" ? "is-focused" : ""}" data-cognition-detail="recognition">
+      <header><div><span>认</span><h4>即时识别成本</h4></div><strong>${recognition.score}<small>/10</small></strong></header>
+      <ol>${scoreItemsMarkup(recognition.items)}</ol>
+      <p class="cognition-score-formula">${escapeHtml(recognition.formula)}</p>
+    </section>
+    <section class="cognition-score-detail ${focus === "knowledge" ? "is-focused" : ""}" data-cognition-detail="knowledge">
+      <header><div><span>知</span><h4>必要理解 → 完整理解</h4></div><strong>${knowledge.necessaryScore} → ${knowledge.completeScore}<small>/10</small></strong></header>
+      <ol>${scoreItemsMarkup(knowledge.items, "knowledge")}</ol>
+      <div class="cognition-knowledge-formulas"><p><b>必要</b>${escapeHtml(knowledge.necessaryFormula)}</p><p><b>完整</b>${escapeHtml(knowledge.completeFormula)}</p></div>
+    </section>
+    <section class="cognition-score-detail ${focus === "internalization" ? "is-focused" : ""}" data-cognition-detail="internalization">
+      <header><div><span>内化</span><h4>认知内化难度</h4></div><strong>${internalization.score}<small>/10</small></strong></header>
+      <ol>${scoreItemsMarkup(internalization.items)}</ol>
+      <p class="cognition-score-formula">${escapeHtml(internalization.formula)}</p>
+    </section>
+    <aside><b>案例路径</b><p>${escapeHtml(entry.conclusion)}</p></aside>
+  `;
+  requestAnimationFrame(() => {
+    elements.cognitionScoreDialogContent
+      .querySelector(`[data-cognition-detail="${CSS.escape(focus)}"]`)
+      ?.scrollIntoView({ block: "start", behavior: "instant" });
+  });
+}
+
+function openCognitionScoreDialog(trigger) {
+  cognitionScoreDialogTrigger = trigger;
+  const caseKey = trigger.dataset.cognitionScoreCase;
+  const focus = trigger.dataset.cognitionScoreFocus || "recognition";
+  renderCognitionScoreDialog(caseKey, focus);
+  if (typeof elements.cognitionScoreDialog.showModal === "function") {
+    elements.cognitionScoreDialog.showModal();
+  } else {
+    elements.cognitionScoreDialog.setAttribute("open", "");
+  }
+}
+
+function closeCognitionScoreDialog() {
+  if (typeof elements.cognitionScoreDialog.close === "function") {
+    elements.cognitionScoreDialog.close();
+  } else {
+    elements.cognitionScoreDialog.removeAttribute("open");
+  }
+}
+
+function bindCognitionScoreDialog() {
+  if (!elements.cognitionScoreDialog) return;
+  document.querySelectorAll("[data-cognition-score-case]").forEach((trigger) => {
+    trigger.setAttribute("aria-haspopup", "dialog");
+    trigger.setAttribute("aria-controls", "cognition-score-dialog");
+    trigger.addEventListener("click", () => openCognitionScoreDialog(trigger));
+  });
+  elements.cognitionScoreDialogClose.addEventListener("click", closeCognitionScoreDialog);
+  elements.cognitionScoreDialog.addEventListener("click", (event) => {
+    if (event.target === elements.cognitionScoreDialog) closeCognitionScoreDialog();
+  });
+  elements.cognitionScoreDialog.addEventListener("close", () => {
+    cognitionScoreDialogTrigger?.focus();
+  });
+  elements.cognitionScoreDialog.querySelectorAll("[data-cognition-dialog-focus]").forEach((button) => {
+    button.addEventListener("click", () => {
+      renderCognitionScoreDialog(cognitionScoreDialogCase, button.dataset.cognitionDialogFocus);
+    });
+  });
 }
 
 function escapeHtml(value = "") {
@@ -2937,6 +3217,7 @@ function openEcosystemCoordinateExpandedForBranch(branchId, returnElement = null
     topology: null,
     color: null,
     secondary_badge: null,
+    c1_synergy: null,
     sales_tier: null,
     branch: branchId
   };
@@ -2969,7 +3250,7 @@ function selectEcosystemMapPreset(presetKey) {
   state.selectedEcosystemMapPreset = config.niche_map.presets[presetKey] || isRisk || isBdMode
     ? presetKey
     : "all";
-  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, sales_tier: null, branch: null };
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, c1_synergy: null, sales_tier: null, branch: null };
   state.selectedEcosystemNicheId = null;
   state.selectedEcosystemBdMode = isBdMode ? bdModeId : "all";
   if (config.niche_map.presets[presetKey]?.kind === "BRANCH") {
@@ -2995,7 +3276,7 @@ function selectEcosystemBdMode(modeId) {
   }
   state.selectedEcosystemField = null;
   state.selectedEcosystemNicheId = null;
-  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, sales_tier: null, branch: null };
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, c1_synergy: null, sales_tier: null, branch: null };
   renderEcosystemWorkbench();
 }
 
@@ -3012,6 +3293,7 @@ function selectEcosystemMapFilter(dimension, value) {
     topology: currentFilters.topology ?? null,
     color: currentFilters.color ?? null,
     secondary_badge: currentFilters.secondary_badge ?? null,
+    c1_synergy: currentFilters.c1_synergy ?? null,
     sales_tier: currentFilters.sales_tier ?? null,
     branch: currentFilters.branch ?? null,
     [dimension]: currentFilters[dimension] === value ? null : value
@@ -3024,7 +3306,7 @@ function selectEcosystemMapFilter(dimension, value) {
 }
 
 function clearEcosystemMapFilters() {
-  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, sales_tier: null, branch: null };
+  state.ecosystemMapFilters = { topology: null, color: null, secondary_badge: null, c1_synergy: null, sales_tier: null, branch: null };
   state.selectedEcosystemMapPreset = "all";
   state.selectedEcosystemNicheId = null;
   renderEcosystemWorkbench();
@@ -3058,6 +3340,7 @@ function selectEcosystemPrototype(prototypeId) {
     topology: null,
     color: null,
     secondary_badge: null,
+    c1_synergy: null,
     sales_tier: null,
     branch: null
   };
@@ -3531,8 +3814,17 @@ function ecosystemMapFilterDimensions(config) {
   const branchLegend = (config?.four_layer_architecture?.branch_ids ?? [])
     .map((branchId) => [branchId, config?.niche_map?.presets?.[branchId]?.label])
     .filter(([, label]) => label);
+  const c1SynergyLegend = (state.data.terms.enums.c1_synergy_enum?.values ?? [])
+    .map((item) => [item.key, item.name]);
   return {
     ...ecosystemNodeEncodings(config),
+    c1_synergy: {
+      title: "C₁ 协同",
+      position_key: "c1_tags",
+      labels: Object.fromEntries(c1SynergyLegend),
+      legend: c1SynergyLegend,
+      source: "tags"
+    },
     sales_tier: {
       title: "销量门槛",
       labels: Object.fromEntries(ECOSYSTEM_SALES_FILTER_OPTIONS),
@@ -3564,6 +3856,9 @@ function ecosystemNicheMapFocus(config) {
         }
         if (filter.source === "branch") {
           return (config.niche_map.presets?.[value]?.products ?? []).includes(position.product_id);
+        }
+        if (filter.source === "tags") {
+          return (position[filter.position_key] ?? []).includes(value);
         }
         return position[filter.position_key] === value;
       }
@@ -3604,6 +3899,7 @@ function ecosystemNicheMapFocus(config) {
         topology: "Show_TP",
         color: "C2",
         secondary_badge: "C1",
+        c1_synergy: "C1",
         sales_tier: "销量估算",
         branch: "分支"
       })[item.dimension]).filter(Boolean),
@@ -3788,10 +4084,13 @@ function ecosystemLegacyNicheMapMarkup(config, prototype, products, positionedPr
   const topologyEncoding = nodeEncodings.topology;
   const colorEncoding = nodeEncodings.color;
   const secondaryEncoding = nodeEncodings.secondary_badge;
-  const salesEncoding = ecosystemMapFilterDimensions(config).sales_tier;
+  const filterDimensions = ecosystemMapFilterDimensions(config);
+  const c1SynergyEncoding = filterDimensions.c1_synergy;
+  const salesEncoding = filterDimensions.sales_tier;
   const topologyLegend = topologyEncoding.legend ?? Object.entries(topologyEncoding.labels ?? {});
   const colorLegend = colorEncoding.legend ?? Object.entries(colorEncoding.labels ?? {});
   const secondaryLegend = secondaryEncoding.legend ?? Object.entries(secondaryEncoding.labels ?? {});
+  const c1SynergyLegend = c1SynergyEncoding.legend;
   const salesLegend = salesEncoding.legend;
   const activeFilterMap = new Map((focus.activeFilters ?? []).map((item) => [item.dimension, item.value]));
   const coordinateById = new Map();
@@ -3995,6 +4294,13 @@ function ecosystemLegacyNicheMapMarkup(config, prototype, products, positionedPr
           ${secondaryLegend.map(([value, label]) => {
             const active = activeFilterMap.get("secondary_badge") === value;
             return `<button type="button" class="legend-badge badge-c1-${escapeHtml(ecosystemClassToken(value))} ${active ? "is-active" : ""}" data-ecosystem-map-filter-dimension="secondary_badge" data-ecosystem-map-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
+          }).join("")}
+        </div>
+        <div role="group" aria-label="按 ${escapeHtml(c1SynergyEncoding.title)} 筛选">
+          <b>${escapeHtml(c1SynergyEncoding.title)}</b>
+          ${c1SynergyLegend.map(([value, label]) => {
+            const active = activeFilterMap.get("c1_synergy") === value;
+            return `<button type="button" class="${active ? "is-active" : ""}" data-ecosystem-map-filter-dimension="c1_synergy" data-ecosystem-map-filter-value="${escapeHtml(value)}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
           }).join("")}
         </div>
         <div class="ecosystem-sales-tier-filters" role="group" aria-label="按 ${escapeHtml(salesEncoding.title)} 筛选">
@@ -4508,6 +4814,7 @@ function ecosystemNicheMapMarkup(config, prototype, products, positionedProducts
         ${legendGroup("topology", `Show_TP · ${nodeEncodings.topology.title}`)}
         ${legendGroup("color", nodeEncodings.color.title)}
         ${legendGroup("secondary_badge", `C₁ · ${nodeEncodings.secondary_badge.title}`)}
+        ${legendGroup("c1_synergy", "C₁ 协同")}
         ${legendGroup("sales_tier", "销量门槛")}
         ${legendGroup("branch", singleCaseMechanisms ? "机制" : "分支")}
         ${focus.isFilter ? `
@@ -6117,9 +6424,50 @@ function renderTermDetail() {
   ];
   const showTypes = state.data.terms.enums.show_tp_enum.values;
   const putTypes = state.data.terms.enums.put_control_enum.values;
+  const classificationDimensionsMarkup = (term.classification_dimensions ?? []).length ? `
+    <section class="field-classification-block field-subsection">
+      <div class="subsection-heading">
+        <div>
+          <p class="eyebrow">${escapeHtml(formulaDisplayKey(term.key))} · 正式分类</p>
+          <h3>${term.classification_dimensions.length > 1
+            ? "分别记录多个维度"
+            : term.classification_dimensions[0]?.multi_select
+              ? "使用可组合标签"
+              : "按单一维度判定"}</h3>
+        </div>
+        <p>${escapeHtml(term.classification_rule ?? "各项标签可以组合使用。")}</p>
+      </div>
+      <div class="field-classification-grid">
+        ${term.classification_dimensions.map((dimension) => {
+          const values = state.data.terms.enums[dimension.enum_ref]?.values ?? [];
+          return `
+            <article class="field-classification-card">
+              <header><strong>${escapeHtml(dimension.name)}</strong>${dimension.multi_select ? "<span>可多选</span>" : ""}</header>
+              <div class="field-classification-options">
+                ${values.map((item) => `
+                  <div>
+                    <b>${escapeHtml(item.name)}</b>
+                    <p>${escapeHtml(item.definition)}</p>
+                  </div>
+                `).join("")}
+              </div>
+            </article>
+          `;
+        }).join("")}
+      </div>
+      ${(term.classification_examples ?? []).length ? `
+        <div class="field-classification-examples">
+          <strong>组合示例</strong>
+          ${(term.classification_examples ?? []).map((example) => `
+            <div><b>${escapeHtml(example.name)}</b><span>${example.tags.map((tag) => `<i>${escapeHtml(tag)}</i>`).join("")}</span></div>
+          `).join("")}
+        </div>
+      ` : ""}
+    </section>
+  ` : "";
   const detailSectionsMarkup = (term.detail_sections ?? []).map((section) => `
-    <section class="field-detail-section">
-      <h4 class="detail-section-title">${escapeHtml(section.title)}</h4>
+    <section class="field-detail-section ${section.status === "research_only" ? "is-research-only" : ""}">
+      <h4 class="detail-section-title">${escapeHtml(section.title)}${section.status === "research_only" ? "<span>尚未冻结分类</span>" : ""}</h4>
       <div class="field-detail-grid">
         ${section.items.map((item) => `
           <article class="field-detail-card">
@@ -6162,6 +6510,7 @@ function renderTermDetail() {
         ${details.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
       </ul>
     ` : ""}
+    ${classificationDimensionsMarkup}
     ${term.key === "C2" ? `
       <section class="c2-depth-entry field-subsection">
         <div>
@@ -8222,6 +8571,7 @@ async function init() {
     bindExperienceTimeline();
     bindC2DepthPage();
     bindCoreInsights();
+    bindCognitionScoreDialog();
     bindFieldImageViewer();
     state.data = await loadData();
     setDefaultSelection();
@@ -8405,12 +8755,10 @@ function initMajorSectionCollapsibles() {
     ["#library-content", ":scope > .section-heading .eyebrow", "library-03"],
     ["#insights-content", ":scope .insights-hero .eyebrow", "insights-00-overview"],
     ["#insight-prior", ":scope > .section-heading .eyebrow", "insights-01-prior"],
-    ["#insight-reveal", ":scope > .section-heading .eyebrow", "insights-02-reveal"],
-    ["#insight-decision", ":scope > .section-heading .eyebrow", "insights-03-decision"],
-    ["#insight-autospin", ":scope > .section-heading .eyebrow", "insights-04-autospin"],
+    ["#insight-reveal", ":scope > .section-heading .eyebrow", "insights-03-reveal"],
+    ["#insight-decision", ":scope > .section-heading .eyebrow", "insights-04-decision"],
     ["#insight-effective-pool", ":scope > .section-heading .eyebrow", "insights-05-effective-pool"],
-    ["#insight-c2-tempo", ":scope > .section-heading .eyebrow", "insights-06-c2-tempo"],
-    ["#insight-checks", ":scope > .section-heading .eyebrow", "insights-07-checks"]
+    ["#insight-checks", ":scope > .section-heading .eyebrow", "insights-06-checks"]
   ];
 
   staticSections.forEach(([sectionSelector, labelSelector, key]) => {

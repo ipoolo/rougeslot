@@ -8,8 +8,8 @@
   <meta http-equiv="Expires" content="0">
   <meta name="description" content="RougeSlot 体验研究：双峰多巴胺模型、原型图谱与品类生态。">
   <title>RougeSlot 体验研究 · 双峰多巴胺模型</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260811-108">
-  <link rel="stylesheet" href="./assets/insights.css?v=20260811-97">
+  <link rel="stylesheet" href="./assets/styles.css?v=20260812-121">
+  <link rel="stylesheet" href="./assets/insights.css?v=20260814-207">
   <link rel="stylesheet" href="./assets/ecosystem.css?v=20260811-93">
 </head>
 <body>
@@ -923,7 +923,7 @@
       <div class="atlas-method-principle">
         <strong>分析规则</strong>
         <p>
-          每个下层节点必须逐字段声明：继承、固定、收窄、扩展、覆写或禁用；同一父节点下面可以并列存在多个子节点。
+          每个下层节点按公式字段记录与父级的关系：继承、扩展或覆写；同一父节点下面可以并列存在多个子节点。
           基石游戏与代表游戏作为原型的提炼来源和分析证据进入游戏库，不额外制造一层继承关系。
         </p>
       </div>
@@ -1272,27 +1272,57 @@
           </div>
           <div class="insights-thesis">
             <span>洞察 1 · 总原则</span>
-            <strong>学习负责放大，决策不能打断</strong>
+            <strong>学习负责放大，决策不能阻塞</strong>
             <p>
               玩家应当依靠先验知识直接进入最小爽环；新的规则、构筑和策略可以放大结果，
-              但不能挡在“少量操作 → 看表演 → 再次操作”的连续循环里。
+              但不能阻塞“少量操作 → 看表演 → 再次操作”的连续循环。
             </p>
           </div>
         </div>
+
+        <section class="insight-concept-definition" aria-labelledby="insight-one-concept-title">
+          <header>
+            <span>概念定义</span>
+            <h2 id="insight-one-concept-title">双峰爽环由即时识别、二次揭晓与轻量主动节奏共同构成</h2>
+            <p>洞察一先定义整套分析模型的四个核心概念。后续洞察分别展开其中一个部分，但始终服务于同一个循环：玩家快速感到价值、继续等待价值兑现，再以少量操作进入下一次结果。</p>
+          </header>
+          <div class="insight-concept-grid insight-concept-grid-four">
+            <article>
+              <span>01 · C₁</span>
+              <strong>即时识别形成第一峰</strong>
+              <p>结果画面出现后，玩家借助视觉模式、生活常识或成熟品类先验，先判断本次结果大致偏好、普通或偏差，不要求立即完成精确计算。</p>
+            </article>
+            <article>
+              <span>02 · C₂</span>
+              <strong>二次揭晓形成第二峰</strong>
+              <p>在 C₁ 已经建立价值方向后，系统继续释放同一次结果的新增信息，逐步提高玩家对兑现程度的期待，直到结果最终封闭。</p>
+            </article>
+            <article>
+              <span>03 · 主动节奏</span>
+              <strong>表演之间由玩家重新发起循环</strong>
+              <p>玩家在两次结果表演之间完成少量选择或操作。主动性负责恢复参与感，但不应把每一次表演之间都变成长时间分析。</p>
+            </article>
+            <article>
+              <span>04 · 双峰爽环</span>
+              <strong>第一峰识别价值，第二峰放大兑现</strong>
+              <p>双峰不是两次互不相关的刺激，而是同一次结果中连续发生的期待变化；第二峰必须继承第一峰，轻量决策再把玩家送入下一轮。</p>
+            </article>
+          </div>
+          <div class="insight-concept-relation"><b>结构关系</b><span>结果呈现 → C₁ 即时识别 → C₂ 继续揭晓 → 结果封闭 → 少量主动操作 → 下一次结果。学习可以提高后续识别与策略深度，但不能阻塞这条主循环。</span></div>
+        </section>
 
         <section class="insight-model-shell" id="insight-model"
           aria-labelledby="insight-model-title">
           <div class="insight-model-head">
             <div>
-              <span>CANONICAL INSIGHT MAP</span>
+              <span>核心洞察图谱</span>
               <h2 id="insight-model-title">双峰爽环与决策节奏</h2>
             </div>
             <div class="insight-model-controls" aria-label="核心洞察视角">
               <button type="button" data-insight-preset="all" aria-pressed="true">洞察 1 · 总原则</button>
               <button type="button" data-insight-preset="c1" aria-pressed="false">洞察 2 · C₁</button>
-              <button type="button" data-insight-preset="c2" aria-pressed="false">洞察 3 · C₂</button>
-              <button type="button" data-insight-preset="c3" aria-pressed="false">洞察 4 · 轻决策</button>
-              <button type="button" data-insight-preset="c4" aria-pressed="false">洞察 5 · 禁止自动 Spin</button>
+              <button type="button" data-insight-preset="c2" aria-pressed="false">洞察 3 · 峰型与 C₂ 演绎节奏</button>
+              <button type="button" data-insight-preset="c3" aria-pressed="false">洞察 4 · 主动节奏</button>
               <button type="button" data-insight-preset="hybrid" aria-pressed="false">高风险 · Slot改+战斗</button>
             </div>
           </div>
@@ -1320,28 +1350,35 @@
                 <i class="insight-edge" data-insight-edge="reveal-c1" aria-hidden="true">→</i>
                 <button type="button" class="insight-node node-c1"
                   data-insight-node="c1" data-insight-select="c1" aria-pressed="false">
-                  <small>基础协同</small>
-                  <strong>C₁ · 看懂好坏</strong>
-                  <span>第一眼形成“大奖认知”</span>
+                  <small>体验侧虚线引用</small>
+                  <strong>C₁ · 即时识别</strong>
+                  <span>快速判断大致好坏</span>
                 </button>
               </div>
-              <p>这里不应该插入必须先学会才能继续的规则。</p>
+              <p>虚线 C₁ 只表示玩家即时读取同一协同规则，不新增一次机制运算。</p>
             </section>
 
             <i class="insight-edge insight-edge-major insight-edge-composition"
-              data-insight-edge="c1-c2" aria-hidden="true"><b>+</b><small>可接续／并行／嵌套</small></i>
+              data-insight-edge="c1-c2" aria-hidden="true"><b>→</b><small>进入正式结算</small></i>
 
             <section class="insight-zone insight-zone-second" data-insight-zone="second-peak">
               <header>
                 <span>多巴胺峰值 ②</span>
-                <strong>不确定结果的阶段性揭晓</strong>
+                <strong>符号协同、二次揭晓与结果结算</strong>
               </header>
               <div class="insight-node-row">
+                <button type="button" class="insight-node node-c1 node-c1-formal"
+                  data-insight-node="c1" data-insight-select="c2" aria-pressed="false">
+                  <small>正式机制</small>
+                  <strong>C₁ · 符号协同</strong>
+                  <span>建立本次基础结果</span>
+                </button>
+                <i class="insight-edge" data-insight-edge="c1-c2-combo" aria-hidden="true">+</i>
                 <button type="button" class="insight-node node-c2"
                   data-insight-node="c2" data-insight-select="c2" aria-pressed="false">
                   <small>二次揭晓</small>
-                  <strong>C₂ · 开奖过程</strong>
-                  <span>预测不断被过程更新</span>
+                  <strong>C₂ · 结果演绎</strong>
+                  <span>继续释放关键信息</span>
                 </button>
                 <i class="insight-edge" data-insight-edge="c2-result" aria-hidden="true">→</i>
                 <button type="button" class="insight-node node-result"
@@ -1351,28 +1388,38 @@
                   <span>悬念在这里封闭</span>
                 </button>
               </div>
-              <p>只有动画而没有主观不确定性，不足以形成第二次开奖。</p>
+              <p>Combo（C₁ + C₂）共同完成正式结算；C₂ 可与 C₁ 接续、并行或嵌套。</p>
             </section>
 
             <section class="insight-zone insight-zone-long" data-insight-zone="long-cycle">
               <header>
-                <span>结果之后 · 长循环放大器</span>
-                <strong>学习、构筑与压力验证不能堵在最小爽环入口</strong>
+                <span>外层压力与周期构筑</span>
+                <strong>P(t) 包裹循环，BD 在连续 N 次 Spin 后调整下一轮条件</strong>
               </header>
-              <div class="insight-long-flow">
-                <button type="button" class="insight-node node-pressure"
-                  data-insight-node="pressure" data-insight-select="all" aria-pressed="false">
-                  <small>够不够</small>
-                  <strong>P(t) · 压力验证</strong>
-                </button>
-                <i class="insight-edge" data-insight-edge="result-pressure" aria-hidden="true">→</i>
-                <button type="button" class="insight-node node-learning"
-                  data-insight-node="learning" data-insight-select="c1" aria-pressed="false">
-                  <small>结果之后</small>
-                  <strong>学习／构筑／BD</strong>
-                </button>
-                <i class="insight-edge" data-insight-edge="learning-next" aria-hidden="true">→</i>
-                <span class="insight-next-cycle">放大下一轮</span>
+              <div class="insight-long-responsibilities">
+                <article class="insight-cycle-duty insight-cycle-duty-pressure">
+                  <span>职责 01 · 包裹整个循环</span>
+                  <button type="button" class="insight-node node-pressure"
+                    data-insight-node="pressure" data-insight-select="all" aria-pressed="false">
+                    <small>持续判断结果够不够</small>
+                    <strong>P(t) · 目标压力（包裹循环）</strong>
+                    <span>不是串行步骤，而是每次结果都处于其中的外层意义</span>
+                  </button>
+                </article>
+                <article class="insight-cycle-duty insight-cycle-duty-build">
+                  <span>职责 02 · 周期边界</span>
+                  <div class="insight-build-cycle" aria-label="连续 N 次 Spin 后进入 BD 构筑并开启下一轮">
+                    <b>[Spin] × N</b>
+                    <i aria-hidden="true">→</i>
+                    <button type="button" class="insight-node node-build"
+                      data-insight-node="bd" data-insight-select="all" aria-pressed="false">
+                      <small>调整下一轮条件</small>
+                      <strong>BD · 构筑决策</strong>
+                    </button>
+                    <i aria-hidden="true">→</i>
+                    <b>下一轮</b>
+                  </div>
+                </article>
               </div>
             </section>
 
@@ -1413,21 +1460,21 @@
               </header>
               <div class="insight-autospin-flow">
                 <button type="button" class="insight-node node-manual-spin"
-                  data-insight-node="manual-spin" data-insight-select="c4" aria-pressed="false">
+                  data-insight-node="manual-spin" data-insight-select="c3" aria-pressed="false">
                   <small>明确起点</small>
                   <strong>手动 Spin</strong>
                   <span>我决定下一轮何时开始</span>
                 </button>
                 <i class="insight-edge" data-insight-edge="manual-anticipation" aria-hidden="true">→</i>
                 <button type="button" class="insight-node node-anticipation"
-                  data-insight-node="anticipation" data-insight-select="c4" aria-pressed="false">
+                  data-insight-node="anticipation" data-insight-select="c3" aria-pressed="false">
                   <small>主观期待</small>
                   <strong>等待结果</strong>
                   <span>操作与奖励建立因果距离</span>
                 </button>
                 <i class="insight-edge" data-insight-edge="anticipation-peaks" aria-hidden="true">→</i>
                 <button type="button" class="insight-node node-double-peak"
-                  data-insight-node="double-peak" data-insight-select="c4" aria-pressed="false">
+                  data-insight-node="double-peak" data-insight-select="c3" aria-pressed="false">
                   <small>离散事件</small>
                   <strong>峰值① + 峰值②</strong>
                   <span>两次峰值拥有清晰边界</span>
@@ -1442,12 +1489,15 @@
           <div class="insight-selection-info" data-insight-info aria-live="polite">
             <span data-insight-info-label>洞察 1 · 总原则</span>
             <div>
-              <strong data-insight-info-title>C₁ 负责立即可读，C₂ 负责二次揭晓，轻决策与手动 Spin 让双峰持续成立。</strong>
+              <strong data-insight-info-title>
+                第一峰由 Random + Put 揭晓结果，并通过虚线 C₁ 即时识别；第二峰由 Combo（C₁ + C₂）完成二次揭晓与结果结算。
+              </strong>
               <p data-insight-info-copy>
-                学习、构筑和压力验证位于结果之后或循环外层，用来放大体验；单轮只保留少量、低复杂度操作，并由玩家主动开启。
+                P(t) 作为外层目标压力，持续赋予结果“够不够”的意义；连续 N 次 Spin 后，BD 在周期边界调整下一轮条件。
+                单轮只保留少量低复杂度操作，并由玩家主动触发下一次 Spin。
               </p>
               <small data-insight-info-boundary>
-                边界：复杂策略可以进入阶段性构筑，但不应占满两次表演之间的操作窗口；系统也不能替玩家触发下一次 Spin。
+                边界：复杂策略与新规则学习集中在阶段性构筑节点，不阻塞“主动 Spin → 第一峰 → 第二峰 → 再次操作”的最小爽环；系统不得自动开启下一次 Spin。
               </small>
             </div>
           </div>
@@ -1457,116 +1507,569 @@
       <section class="section insights-section insight-principle-section" id="insight-prior">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">02 · 洞察二</p>
-            <h2>最小爽环不可被<br>学习成本阻断</h2>
+            <p class="eyebrow">02 · 洞察二 · 最小爽环的认、知与内化</p>
+            <h2>先认出好坏，<br>再理解局面</h2>
           </div>
           <p>
-            Slot改 可以替换传统支付线，但新 C₁ 必须继续借用常识、物理关系或成熟品类认知，
-            让玩家不用回忆教程也能判断本次抽取得好不好。
+            本洞察只分析当前 Spin 的 C₁：玩家能否即时认出结果价值、为此至少需要理解多深，
+            以及这些理解能否随学习被压缩成自动完成的图形识别。
           </p>
         </div>
 
-        <section class="minimum-loop-definition" aria-labelledby="minimum-loop-title">
+        <section class="cognition-glossary" aria-labelledby="cognition-glossary-title">
           <header>
-            <div>
-              <span>MINIMUM REWARD LOOP</span>
-              <h3 id="minimum-loop-title">最小爽环由 R + P + C₁ 组成</h3>
-            </div>
-            <p>
-              它负责让玩家连续完成“抽到结果 → 看见结果 → 立即判断好坏”，
-              是不应被教学、查阅和复杂计算打断的最短体验闭环。
-            </p>
+            <span>概念定义</span>
+            <h3 id="cognition-glossary-title">最小爽环是体验闭环，“认、知与内化”解释它如何成立与变快</h3>
+            <p>三者只讨论当前 Spin 的 C₁：先由“认”获得价值方向并闭合最小爽环，再由“知”解释原因，最后通过“内化”让相似判断在未来变成更快的“认”。</p>
           </header>
-
-          <div class="minimum-loop-flow" aria-label="最小爽环的数据与体验流程">
-            <article>
-              <span>R · RANDOM</span>
-              <strong>抽到什么</strong>
-              <small>从 Pool_Symbol 产生本次结果</small>
+          <div class="cognition-glossary-structure">
+            <article class="cognition-glossary-loop">
+              <span>外层体验目标 · 最小爽环</span>
+              <strong>最快获得一次“大致好不好”的完整体验闭环</strong>
+              <p>从 Random 抽取、Put 呈现，到玩家即时识别 C₁ 的大致价值。终点是价值被感知，不要求 C₂ 已完成演绎，也不包含 BD 与长期策略。</p>
+              <div class="cognition-glossary-loop-path" aria-label="最小爽环闭合路径">
+                <b>结果生成与呈现</b><i aria-hidden="true">→</i><b>“认”出价值方向</b><i aria-hidden="true">→</i><b>闭合最小爽环</b>
+              </div>
             </article>
-            <i aria-hidden="true">→</i>
-            <article>
-              <span>P · PUT</span>
-              <strong>怎样呈现</strong>
-              <small>把结果写入 Show_TP，形成可观察状态</small>
-            </article>
-            <i aria-hidden="true">→</i>
-            <article>
-              <span>C₁ · 协同识别</span>
-              <strong>结果好不好</strong>
-              <small>依靠基础协同建立即时的价值判断</small>
-            </article>
-          </div>
-
-          <div class="minimum-loop-boundary">
-            <b>改动 R、P 或 C₁ 时</b>
-            <p>
-              改动带来的学习必须是<strong>直观的、有先验的</strong>：
-              玩家应能借助常识、物理关系、成熟品类认知或清晰的视觉反馈立即理解，
-              而不是停下来读说明、记忆例外或完成复杂计算后，才能知道本次结果好不好。
-            </p>
+            <div class="cognition-glossary-learning-flow" aria-label="认、知与内化的结构关系">
+              <article class="cognition-glossary-recognition">
+                <span>01 · 认 · 快脑</span>
+                <strong>先快速识别结果价值</strong>
+                <p>依靠颜色、形状、数量、邻接、连线以及成熟先验完成模式识别；玩家先感觉“这次好不好”，不必逐条调用规则或精确计算。</p>
+              </article>
+              <i aria-hidden="true">→</i>
+              <article class="cognition-glossary-knowledge">
+                <span>02 · 知 · 慢脑</span>
+                <strong>再有意识地解释为什么</strong>
+                <p>调用规则、重建关系并推演因果，解释为什么好、好在哪里以及各部分如何贡献；包含必要理解与完整理解两种深度。</p>
+              </article>
+              <i aria-hidden="true">→</i>
+              <article class="cognition-glossary-internalization">
+                <span>03 · 内化</span>
+                <strong>把反复使用的“知”压缩成新的“认”</strong>
+                <p>经过学习与稳定反馈，原本需要思考的关系被组块成整体图形；再次遇到时，玩家可以跳过逐条推演而直接识别。</p>
+              </article>
+              <div class="cognition-glossary-return"><i aria-hidden="true">↺</i><b>下一次更快的“认”</b></div>
+            </div>
+            <div class="cognition-glossary-relation"><b>结构关系</b><span>“认”负责闭合当前最小爽环；“知”发生在价值方向被感知之后，负责解释局面；“内化”不直接增加当前闭环步骤，而是让已经学会的“知”在下一次遇到相似结果时转化为更快的“认”。</span></div>
           </div>
         </section>
 
-        <div class="prior-case-grid">
-          <article class="prior-case-card prior-case-good">
-            <header>
-              <span>可读样板</span>
-              <strong>《幸运房东》</strong>
-            </header>
-            <div class="prior-mini-map map-adjacency" aria-label="二维邻近协同示意">
-              <i>🐝</i><i>🌻</i><i>🐱</i>
-              <i>🌻</i><i class="is-hit">🐝</i><i>🥛</i>
-              <i>🍒</i><i>🐱</i><i class="is-hit">🥛</i>
-            </div>
-            <h3>改写支付线，但借用了现实世界的关系</h3>
-            <p>
-              相邻、数量、猫与牛奶、蜜蜂与花等关系可以被快速识别。
-              玩家先看懂基础协同，再逐步学习道具和例外。
-            </p>
-            <footer><b>C₁变化</b><span>支付线 → 2D 邻近／语义协同</span></footer>
-          </article>
+        <section class="cognition-block cognition-formula" aria-labelledby="minimum-loop-title">
+          <header class="cognition-block-heading">
+            <div><span>01 · 最小爽环的组成</span><h3 id="minimum-loop-title">本次结果生成 → 结果画面呈现 → 即时判断价值方向</h3></div>
+            <p>最小爽环描述玩家最快完成的一次体验闭环，终点是价值被识别，不是正式结果已经全部结算。</p>
+          </header>
 
-          <article class="prior-case-card prior-case-risk">
-            <header>
-              <span>认知风险</span>
-              <strong>《幸运市长》</strong>
+          <section class="minimum-loop-subsection minimum-loop-formula-section" aria-labelledby="minimum-loop-formula-title">
+            <header class="minimum-loop-subheading">
+              <span>1.1 · 公式</span>
+              <div>
+                <h4 id="minimum-loop-formula-title">最小爽环的体验公式</h4>
+                <p>玩家从结果生成、画面呈现到感知“大致好不好”所必须经过的最短路径。</p>
+              </div>
             </header>
-            <div class="prior-mini-map map-regions" aria-label="四个一维区域与资源协同示意">
-              <div><i>A</i><i>→</i><i>B</i><i>→</i><i>C</i></div>
-              <div><i>D</i><i>→</i><i>E</i><i>→</i><i>F</i></div>
-              <div><i>G</i><i>→</i><i>H</i><i>→</i><i>I</i></div>
-              <div><i>J</i><i>→</i><i>K</i><i>→</i><i>L</i></div>
-              <b>资源跨区修饰</b>
+            <div class="minimum-loop-flow cognition-minimum-flow" aria-label="最小爽环体验公式">
+              <article><span>Random</span><strong>抽到什么</strong><small>从 Pool_Symbol 产生本次结果</small></article>
+              <i aria-hidden="true">→</i>
+              <article><span>Put</span><strong>怎样呈现</strong><small>写入 Show_TP，形成可观察结果</small></article>
+              <i aria-hidden="true">→</i>
+              <article class="cognition-c1-reference"><span>虚线 C₁ · 即时识别</span><strong>大致好不好</strong><small>体验侧读取，不新增一次机制运算</small></article>
             </div>
-            <h3>四个 1D 区域与额外资源协同同时进入 C₁</h3>
-            <p>
-              玩家需要跨区域记忆规则，基础大奖不再能被第一眼识别。
-              如果资源只是在基础协同后修改结果，应优先下沉到 C₂。
-            </p>
-            <footer><b>C₁风险</b><span>区域数量 × 关系层数 × 跨区依赖</span></footer>
-          </article>
-        </div>
+          </section>
 
-        <div class="insight-rule-banner">
-          <span>规则 01</span>
-          <strong>可以改 Slot 的规则，但不能改掉 Slot 的即时可读性。</strong>
-          <p>学习内容应解释“怎样变得更强”，而不是解释“刚才到底有没有中奖”。</p>
+          <section class="minimum-loop-subsection minimum-loop-case-section" aria-labelledby="minimum-loop-case-title">
+            <header class="minimum-loop-subheading">
+              <span>1.2 · 案例</span>
+              <div>
+                <h4 id="minimum-loop-case-title">Slot+ 与 Slot改 的最小爽环案例</h4>
+                <p>先分别观察两类游戏如何让玩家完成“结果生成 → 画面呈现 → 即时判断价值方向”，再比较它们在 C₁ 识别入口上的差异。</p>
+              </div>
+            </header>
+            <div class="cognition-c1-comparison">
+              <article class="cognition-c1-case-card">
+                <span>Slot+ 案例 · 《四叶草深渊》</span>
+                <h4>先沿用支付线识别，再承接额外系统</h4>
+                <div class="cognition-c1-case-loop"><b>固定符号池抽取</b><i>→</i><b>5×4 盘面呈现</b><i>→</i><b>认出支付线与同类成线</b></div>
+                <p>玩家看到相同符号在支付线上连续出现，便能先判断本次 C₁ 是否形成基础收益。护身符、倍率、连击与债务压力可以继续放大结果，但不应成为认出“这次大致好不好”的必要入口。</p>
+                <small><b>最小爽环终点</b>先认出支付线是否成立，以及本次结果大致偏好、普通或偏差。</small>
+              </article>
+              <article class="cognition-c1-case-card">
+                <span>Slot改 案例 · 《幸运房东》</span>
+                <h4>把新协同压缩成可重复识别的关系组块</h4>
+                <div class="cognition-c1-case-loop"><b>构筑池随机抽取</b><i>→</i><b>5×4 盘面呈现</b><i>→</i><b>认出邻接与熟悉语义组合</b></div>
+                <p>游戏取消传统支付线，改用符号能力与邻接关系建立 C₁。玩家学习少量稳定关系后，可以把“猫与牛奶”“蜜蜂与花”等组合直接看成一个整体，不必在每次 Spin 后重新逐条读取规则。</p>
+                <small><b>最小爽环终点</b>先看见高价值关系是否聚集或邻接，再判断当前结果的价值方向。</small>
+              </article>
+              <article class="cognition-c1-case-comparison">
+                <span>案例对比</span>
+                <h4>两者终点相同，区别在于即时识别依靠什么</h4>
+                <div class="cognition-c1-comparison-grid">
+                  <div><b>Slot+</b><p>继承支付线、同类连续等成熟识别先验；新增系统应在基础结果已被认出后继续放大价值。</p></div>
+                  <div><b>Slot改</b><p>需要为新的 C₁ 协同建立识别路径；邻接、聚集、颜色、形状或<span class="semantic-relation-term" data-semantic-relation-help-wrap>广泛熟悉的语义关系<button type="button" class="semantic-relation-help-button" data-semantic-relation-help aria-label="查看广泛熟悉的语义关系解释" aria-expanded="false" aria-controls="semantic-relation-help-popover">?</button><span class="semantic-relation-help-popover" id="semantic-relation-help-popover" role="tooltip" aria-hidden="true"><strong>广泛熟悉的语义关系</strong><span>指玩家无需学习当前游戏的专属规则，仅凭广泛生活常识或成熟品类经验就能理解的关系，例如猫与牛奶、蜜蜂与花、钥匙与锁。只在当前游戏中成立的特殊关系不计入。</span></span></span>必须稳定、可见并能被组块化。</p></div>
+                </div>
+                <small><b>判断标准</b>不是比较两类机制谁更复杂，而是看玩家能否在不完成精确计算的前提下，快速认出本次 C₁ 的价值方向。</small>
+              </article>
+            </div>
+          </section>
+
+          <section class="cognition-method minimum-loop-subsection minimum-loop-method-section" aria-labelledby="minimum-loop-method-title">
+            <header class="minimum-loop-subheading">
+              <span>1.3 · 判断方法</span>
+              <div>
+                <h4 id="minimum-loop-method-title">最小爽环的判定边界</h4>
+                <p>先找出“不经过解释也能感到价值”的最短路径。最小爽环不是完整战斗、完整结算或完整养成循环，而是玩家第一次获得有效价值反馈所必须经过的最短体验链。</p>
+              </div>
+            </header>
+            <ol>
+              <li><span>01</span><div><strong>冻结观察范围</strong><p>只看当前一次 Spin，从触发 Random 开始，到玩家形成“大致好不好”的判断为止。</p></div></li>
+              <li><span>02</span><div><strong>移除非必要步骤</strong><p>暂时去掉 C₂ 演绎、精确收益、BD 选择和长期策略；移除后仍不影响第一眼价值判断的步骤，不属于最小爽环。</p></div></li>
+              <li><span>03</span><div><strong>确认价值被识别</strong><p>玩家不必知道精确数字，但必须能产生方向明确的期待：好、一般或差。</p></div></li>
+            </ol>
+            <div class="cognition-boundary-grid">
+              <article><b>属于最小爽环</b><p>抽取结果、结果呈现、C₁ 的即时识别，以及判断好坏所不可缺少的少量操作。</p></article>
+              <article><b>不属于最小爽环</b><p>C₂ 的后续演绎、最终精确数值、BD 构筑、跨 Spin 规划和完整系统解释。</p></article>
+            </div>
+          </section>
+          <p class="cognition-baseline-note"><b>评分玩家基准</b>首次接触当前游戏，但具备广泛生活常识、视觉先验和大规模成熟品类先验；当前游戏独有规则不能视为已知。</p>
+        </section>
+
+        <section class="cognition-block cognition-recognition" aria-labelledby="recognition-title">
+          <header class="cognition-block-heading">
+            <div><span>02 · 认｜即时识别</span><h3 id="recognition-title">不用解释完整规则，也能先判断“大致好不好”</h3></div>
+          </header>
+
+          <section class="cognition-explainer" aria-labelledby="recognition-definition-title">
+            <header class="cognition-subsection-heading">
+              <span>2.1 · 定义</span>
+              <div><h4 id="recognition-definition-title">即时识别的定义与边界</h4><p>即时识别依靠潜意识快速认出价值方向。观察的是玩家能否仅凭当前画面和已有先验，先形成“大致好、一般或差”的判断。</p></div>
+            </header>
+            <article class="recognition-definition-card">
+              <span>认｜玩家侧行为</span><strong>即时识别</strong>
+              <p>玩家看见盘面后，先把零散符号组块成“一个形”，再直接感到这次结果偏好、普通或偏差。</p>
+              <div class="recognition-definition-example"><b>看见</b><i>三个相同符号连成一线</i><b>直接得到</b><i>这次至少有基础收益</i></div>
+            </article>
+            <aside class="recognition-definition-boundary"><b>边界判断</b><p>“我知道这次大概不错”属于认；“因为 A 邻接 B 后触发两次倍率，所以总收益是 36”已经进入知。认允许模糊，但价值方向必须明确。</p></aside>
+          </section>
+
+          <section class="recognition-patterns" aria-labelledby="recognition-patterns-title">
+            <header class="cognition-subsection-heading">
+              <span>2.2 · 视觉压缩</span>
+              <div><h4 id="recognition-patterns-title">C₁ 的视觉降维与模式识别</h4><p>C₁ 的即时识别只有从逐符号识别压缩成模式识别，才能从“逐项读取”变成“看一眼就认出”。这里的压缩是一种降维简化：玩家不再分别读取每个符号及其规则，而是把多个对象、关系和价值提示组块成更少、更稳定的视觉模式。</p></div>
+            </header>
+            <div class="recognition-compression-flow" aria-label="从逐符号识别到模式识别的降维过程">
+              <article><span>01 · 逐符号识别</span><strong>分别读取对象</strong><p>先辨认每个符号是谁、处于什么状态，以及它可能调用哪条规则。</p></article>
+              <i aria-hidden="true">→</i>
+              <article><span>02 · 提取关系</span><strong>保留价值线索</strong><p>从颜色、形状、数量、连线、邻接和语义中，提取真正影响 C₁ 的关系。</p></article>
+              <i aria-hidden="true">→</i>
+              <article><span>03 · 视觉组块</span><strong>多个对象压成一组</strong><p>把反复共同生效的符号和关系视为一个整体，减少需要分别处理的信息单元。</p></article>
+              <i aria-hidden="true">→</i>
+              <article><span>04 · 模式识别</span><strong>直接认出价值方向</strong><p>再次看到相似整体时，不再逐项读取，直接形成“大致好、一般或差”的判断。</p></article>
+            </div>
+            <div class="recognition-pattern-grid">
+              <article><div class="recognition-pattern-visual pattern-color" aria-label="三个高亮色块形成一个显著区域"><i></i><i></i><i></i><i></i><i></i><i></i></div><div><span>颜色</span><h5>先认出价值区域</h5><p>同类、高价值或已激活对象共享稳定色彩时，人眼先看到“这一片被点亮”，不必逐个读名称。</p><small>失效：同一颜色在不同情境代表相反价值，或装饰色比功能色更醒目。</small></div></article>
+              <article><div class="recognition-pattern-visual pattern-shape" aria-label="三个相同形状与一个不同形状"><i></i><i></i><i></i><i></i></div><div><span>形状</span><h5>先认出同类与异类</h5><p>轮廓、图标或姿态稳定对应对象身份时，玩家可以直接识别“三个同类＋一个例外”。</p><small>失效：符号轮廓近似，只能依靠文字、细节或颜色才能区分。</small></div></article>
+              <article><div class="recognition-pattern-visual pattern-quantity" aria-label="左右两组数量差异明显的圆点"><div><i></i><i></i></div><b>对比</b><div><i></i><i></i><i></i><i></i><i></i></div></div><div><span>数量</span><h5>先感到多与少</h5><p>数量差异足够明显、对象规则一致时，玩家无需精确计数也能判断哪组更强或是否越过阈值。</p><small>失效：必须精确计到较大数字，或每个对象的权重都不相同。</small></div></article>
+              <article><div class="recognition-pattern-visual pattern-line" aria-label="四个节点形成连续路径"><i></i><i></i><i></i><i></i></div><div><span>连线</span><h5>先认出路径成立</h5><p>相同符号沿支付线、路径或方向连续出现时，连续性本身就是一个完整图形。</p><small>失效：路径隐藏、经常跨越、方向频繁改变，必须逐格追踪才能确认。</small></div></article>
+              <article><div class="recognition-pattern-visual pattern-adjacency" aria-label="两个互相协同的符号相邻"><i>花</i><i>蜂</i><b>＋</b></div><div><span>邻接</span><h5>先认出局部关系</h5><p>两个对象靠近便产生价值，且关系来自现实语义或成熟先验时，玩家会把它们看成一个组合。</p><small>失效：邻接方向、距离、层级或触发顺序存在大量例外。</small></div></article>
+              <article><div class="recognition-pattern-visual pattern-cluster" aria-label="五个节点聚集成一组，两个节点远离"><div><i></i><i></i><i></i><i></i><i></i></div><i></i><i></i></div><div><span>聚集</span><h5>先认出一团高密度组合</h5><p>多个对象在空间中集中出现时，人眼会先把密集区域视为整体，再判断它比零散区域更有价值。</p><small>失效：聚集只是视觉靠近，实际结算却跨区或依赖不可见关系。</small></div></article>
+              <article><div class="recognition-pattern-visual pattern-semantic" aria-label="猫与牛奶组成熟悉的语义关系"><i>猫</i><b>喜欢</b><i>奶</i></div><div><span>熟悉的语义组合</span><h5>借用已有知识直接组块</h5><p>猫与牛奶、蜜蜂与花等关系不需要新教学；玩家先用生活常识预测协同，再由反馈校准。</p><small>失效：关系只在本游戏成立，名称看似熟悉但结果违反常识。</small></div></article>
+            </div>
+            <div class="recognition-pattern-contrast">
+              <article><span>整体图形识别</span><strong>看见组合 → 直接感到价值方向</strong><p>对象同时可见、关系局部、映射稳定；注意力在一个区域内完成闭合。</p></article>
+              <i aria-hidden="true">对比</i>
+              <article><span>逐项读取与组合</span><strong>查对象 → 记规则 → 跨区匹配 → 推演价值</strong><p>一旦必须执行这条链，复杂度就不再只是认，而开始进入有意识的知。</p></article>
+            </div>
+          </section>
+
+          <section class="recognition-quantification" aria-labelledby="recognition-quantification-title">
+            <header class="cognition-subsection-heading">
+              <span>2.3 · 量化方法</span>
+              <div><h4 id="recognition-quantification-title">即时识别成本的量化评估</h4><p>衡量首次接触玩家判断当前 C₁ 大致好坏时不可避免的识别成本。</p></div>
+            </header>
+            <ol class="recognition-scoring-steps">
+              <li><span>01</span><div><b>固定评分对象</b><p>选定一次静态 Show_TP，只保留当前 C₁ 需要读取的对象与关系。</p></div></li>
+              <li><span>02</span><div><b>固定玩家先验</b><p>允许生活常识与成熟 Slot-like 先验，不允许把当前游戏独有规则当作已知。</p></div></li>
+              <li><span>03</span><div><b>记录识别路径</b><p>写下玩家从第一眼到“好／一般／差”经过了哪些注视、配对和记忆步骤。</p></div></li>
+              <li><span>04</span><div><b>逐项对照评分</b><p>按图形压缩、特征整合、视觉搜索和映射稳定四项分别给 0–2 分。</p></div></li>
+            </ol>
+
+            <div class="cognition-scale-heading"><b>认分数｜即时识别成本</b><span>0–10 分，越低越好</span></div>
+            <div class="cognition-dimension-grid cognition-dimension-grid-four">
+              <article><span>01</span><b>图形压缩成本</b><p>是在“看见一个形”，还是逐项读取每个符号和关系？</p></article>
+              <article><span>02</span><b>特征整合成本</b><p>需要同时组合多少种颜色、形状、数量或空间特征？</p></article>
+              <article><span>03</span><b>视觉搜索成本</b><p>只看局部即可，还是必须扫描整盘或多个区域？</p></article>
+              <article><span>04</span><b>映射稳定成本</b><p>同一视觉模式是否长期表达相近价值，且较少被例外推翻？</p></article>
+            </div>
+
+            <section class="cognition-rubric" aria-labelledby="recognition-rubric-title">
+              <header><div><span>具体评分依据</span><h4 id="recognition-rubric-title">四个单项分别对照 0／1／2 分锚点</h4></div><p>先写出实际识别路径，再按最接近的锚点取 0、1 或 2 分。所有维度统一使用整数单项分，不记录介于两档之间的小数。</p></header>
+              <div class="cognition-rubric-table-wrap"><table class="cognition-rubric-table">
+                <thead><tr><th>评分项</th><th>0 分｜几乎无成本</th><th>1 分｜需要有限处理</th><th>2 分｜成为识别阻碍</th></tr></thead>
+                <tbody>
+                  <tr><th>图形压缩成本</th><td>能直接看成<strong>一个整体形状</strong>、颜色块或连续模式。</td><td>需要读取<strong>少量对象</strong>后，才能<strong>组合成整体</strong>。</td><td>必须<strong>逐项检查对象和关系</strong>，无法压缩成稳定图形。</td></tr>
+                  <tr><th>特征整合成本</th><td>依靠<strong>单一显著特征</strong>即可判断，如同类、颜色或连线。</td><td>需要同时整合<strong>两种特征</strong>，如符号身份＋邻接。</td><td>需要同时整合<strong>多类特征</strong>、规则和状态才能判断。</td></tr>
+                  <tr><th>视觉搜索成本</th><td>关键关系集中、显著，<strong>局部注视即可发现</strong>。</td><td>需要<strong>扫描整盘</strong>，但不必在多个区域间反复比对。</td><td>必须跨<strong>多个区域往返搜索</strong>、配对或检查缺失关系。</td></tr>
+                  <tr><th>映射稳定成本</th><td>相同视觉模式<strong>长期表达相同价值方向</strong>。</td><td><strong>少量</strong>上下文或公开修饰会<strong>改变价值</strong>，但仍可预期。</td><td>价值随隐藏状态、供需或<strong>大量例外频繁变化</strong>。</td></tr>
+                </tbody>
+              </table></div>
+              <footer><b>换算</b><span>认 = 四项原始分之和 ÷ 8 × 10。分数越低，代表首次接触时越容易直接看出 C₁ 的大致价值。</span></footer>
+            </section>
+          </section>
+
+          <section class="recognition-compression-test" aria-labelledby="recognition-test-title">
+            <header class="cognition-subsection-heading">
+              <span>2.4 · 验证方法</span>
+              <div><h4 id="recognition-test-title">即时可读性的视觉压缩测试</h4><p>去掉文字、数字和规则解释后，检查价值模式是否仍然存在，以及玩家能否继续完成方向判断。</p></div>
+            </header>
+            <div class="recognition-test-protocol">
+              <article><span>准备</span><strong>隐去辅助解释</strong><p>移除数字、文字、工具提示、闪烁边框和结算动画，只保留符号及其视觉关系。</p></article><i aria-hidden="true">→</i>
+              <article><span>展示</span><strong>短暂呈现静态结果</strong><p>不允许逐条查询规则；展示时长保持一致，用多组好、一般、差样本重复测试。</p></article><i aria-hidden="true">→</i>
+              <article><span>提问</span><strong>只判断价值方向</strong><p>让玩家选择“好／一般／差”，并指出最先注意到的图形区域或关系。</p></article>
+            </div>
+            <div class="recognition-test-interpretation">
+              <article><b>通过</b><p>判断方向稳定，且玩家指出的是颜色块、连线、邻接、聚集等整体模式。</p></article>
+              <article><b>部分通过</b><p>方向大致正确，但依赖较长扫描、简单计数或一条简短规则提示。</p></article>
+              <article><b>未通过</b><p>必须恢复文字、数字或逐项规则说明后才能判断；说明价值尚未被视觉压缩。</p></article>
+            </div>
+          </section>
+        </section>
+
+        <section class="cognition-block cognition-knowledge" aria-labelledby="knowledge-title">
+          <header class="cognition-block-heading">
+            <div><span>03 · 知｜局面理解</span><h3 id="knowledge-title">解释为什么好、好在哪里，以及结果如何形成</h3></div>
+            <p>“知”是玩家有意识地调用规则、重建关系与推演因果。它可以很深，但不应被迫占据判断结果好坏的入口。</p>
+          </header>
+
+          <section class="cognition-explainer knowledge-definition" aria-labelledby="knowledge-definition-title">
+            <header class="cognition-subsection-heading">
+              <span>3.1 · 定义</span>
+              <div><h4 id="knowledge-definition-title">局面理解的定义与边界</h4><p>“知”是为了说明 C₁ 为什么成立而进行的有意识理解。它从玩家开始调用规则、比较对象、保持状态或推演因果时发生，并能够被说出、复核和解释。</p></div>
+            </header>
+            <div class="knowledge-definition-grid">
+              <article><span>知的入口</span><strong>必要理解</strong><p>为了把“大概不错”判断得更可靠，玩家最少必须懂哪些规则与关系？多懂一步不再改变价值方向时，入口就已经闭合。<br><b>传统 Slot 例：</b>盘面呈现出许多相同符号时，玩家只需理解“同类符号大量出现通常更好”，即可形成基本价值判断。</p><div><b>回答</b><i>至少懂到哪里，才能判断好／一般／差？</i></div></article>
+              <article><span>知的上限</span><strong>完整理解</strong><p>为了完整解释当前 C₁ 的协同对象、贡献来源与最终数值，玩家最多需要追到多深？它描述研究空间，不直接代表体验好坏。<br><b>传统 Slot 例：</b>进一步逐条核对实际触发了多少条支付线、每条线由哪些符号构成以及对应收益，才算完整理解。</p><div><b>回答</b><i>要讲清为什么好、好在哪里，需要懂到哪里？</i></div></article>
+            </div>
+            <aside class="cognition-definition-boundary"><b>分析边界</b><p>这里只分析当前 Spin 的 C₁。C₂ 如何继续演绎属于洞察三；BD 如何调整下一轮属于构筑分析；长期最优策略不进入本节。</p></aside>
+          </section>
+
+          <section class="knowledge-operations" aria-labelledby="knowledge-operations-title">
+            <header class="cognition-subsection-heading">
+              <span>3.2 · 理解动作</span>
+              <div><h4 id="knowledge-operations-title">局面理解的六类认知动作</h4><p>把抽象的“理解很复杂”拆成玩家实际执行的规则调用、关系跨越、状态保持、因果推演、时间跨度与数值计算，并观察每种动作需要走多远。</p></div>
+            </header>
+            <div class="knowledge-operation-grid">
+              <article><span>01 · 规则调用</span><h5>从记忆中取回“谁与谁如何生效”</h5><p>例如先回忆“猫邻接牛奶会消耗牛奶并获得收益”，再把规则套到当前盘面。规则越独有、条件越多，调用成本越高。</p><small>低成本：成熟先验或一条稳定规则｜高成本：多组条件、例外和优先级同时生效</small></article>
+              <article><span>02 · 关系跨越</span><h5>把分散对象重新连成关系网络</h5><p>局部邻接只需看一小块；四个集合互相生产与消耗，则必须跨区查找对象并来回匹配关系。</p><small>低成本：同一区域的一层关系｜高成本：跨区、多跳、多集合关系</small></article>
+              <article><span>03 · 状态保持</span><h5>在脑中同时保留尚未处理的信息</h5><p>玩家可能需要一边看当前符号，一边记住库存、资源缺口、角色状态和外部修饰，等待后续一起判断。</p><small>低成本：当前画面信息自足｜高成本：多个区域或资源状态必须同时记住</small></article>
+              <article><span>04 · 因果推演</span><h5>沿“发生什么 → 导致什么”向后推</h5><p>直接加分只需一步；生产原料、消耗原料、触发建筑、再兑现金币，则需要按链条逐段推演。</p><small>低成本：关系成立便直接产出｜高成本：生产、消耗、转译与反馈形成多阶段链</small></article>
+              <article><span>05 · 时间跨度</span><h5>把当前结果与前后时刻连接</h5><p>静态盘面可以在一个时刻解释；若当前价值依赖上一 Spin 的库存或下一阶段的需求，就必须跨时间理解。</p><small>低成本：只看当前时刻｜高成本：追踪多个 Spin、阶段或持续变化</small></article>
+              <article><span>06 · 数值计算</span><h5>把多个贡献换算成可比较的结果</h5><p>“三个同类比两个好”只需方向判断；多来源倍率、机会成本与资源换算则要求逐项计算后汇总。</p><small>低成本：不算或简单计数｜高成本：多来源、多步换算与机会成本比较</small></article>
+            </div>
+          </section>
+
+          <section class="knowledge-quantification" aria-labelledby="knowledge-quantification-title">
+            <header class="cognition-subsection-heading">
+              <span>3.3 · 量化方法</span>
+              <div><h4 id="knowledge-quantification-title">必要理解与完整理解的双层量化</h4><p>对同一结果评估两次：先找到能够可靠判断价值方向的必要入口，再继续追踪到能够完整说明当前 C₁ 的解释终点。</p></div>
+            </header>
+            <ol class="cognition-analysis-steps">
+              <li><span>01</span><div><b>固定一个 C₁ 结果</b><p>只选当前一次 Spin，记录盘面、公开状态与已经生效的 C₁ 规则。</p></div></li>
+              <li><span>02</span><div><b>写出必要路径</b><p>从“看见结果”开始，逐步写到玩家可以稳定判断好／一般／差为止。</p></div></li>
+              <li><span>03</span><div><b>继续写完整路径</b><p>补齐所有贡献来源、关系、因果和数值，直到能够完整复述当前结果。</p></div></li>
+              <li><span>04</span><div><b>分别计分换算</b><p>六项各按 0–2 分评分，两次总和分别换算为必要知与完整知的 10 分制。</p></div></li>
+            </ol>
+            <div class="cognition-scale-heading"><b>知｜局面理解深度</b><span>必要深度与完整深度均换算为 0–10 分</span></div>
+            <section class="cognition-rubric cognition-rubric-knowledge" aria-labelledby="knowledge-rubric-title">
+              <header><div><span>具体评分依据</span><h4 id="knowledge-rubric-title">知的六个单项：必要与完整分别评分</h4></div><p>同一张表评两次：必要分回答“至少懂多少才能判断大致好坏”；完整分回答“要解释清楚当前 C₁ 需要懂多少”。</p></header>
+              <div class="cognition-rubric-table-wrap">
+                <table class="cognition-rubric-table">
+                  <thead><tr><th>评分项</th><th>0 分｜不需主动理解</th><th>1 分｜单层理解</th><th>2 分｜系统性理解</th></tr></thead>
+                  <tbody>
+                    <tr><th>规则调用</th><td><strong>成熟先验</strong>或<strong>界面本身足够</strong>，不需回忆自定义规则。</td><td>调用一组清晰、稳定且<strong>例外较少的规则</strong>。</td><td>同时调用<strong>多组自定义规则、条件与例外</strong>。</td></tr>
+                    <tr><th>关系跨越</th><td><strong>单个对象或同一局部内</strong>即可完成判断。</td><td>需要理解<strong>一层邻接、连线、集合或区域关系</strong>。</td><td>需要<strong>跨区、多跳或多集合重建关系网络</strong>。</td></tr>
+                    <tr><th>状态保持</th><td>当前<strong>静态结果</strong>已经包含判断所需信息。</td><td>需同时保持<strong>少量公开状态或一个外部区域</strong>。</td><td>需并行保持<strong>多个区域、资源、角色或条件状态</strong>。</td></tr>
+                    <tr><th>因果推演</th><td>关系成立便直接产生价值，<strong>无需继续推演</strong>。</td><td>经过<strong>一次转换</strong>、修饰、生产或消耗。</td><td>需要<strong>多阶段生产、消耗、转译或反馈链</strong>。</td></tr>
+                    <tr><th>时间跨度</th><td>只看<strong>当前时刻</strong>或当前静态盘面。</td><td>需要参考本次 Spin 内的<strong>先后状态</strong>。</td><td>必须追踪<strong>多个 Spin、阶段或持续变化</strong>。</td></tr>
+                    <tr><th>数值计算</th><td><strong>不计算</strong>或只判断明显的大小方向。</td><td><strong>简单计数</strong>、加减或一次倍率即可。</td><td>需要<strong>多来源汇总</strong>、多步换算或比较机会成本。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <footer class="cognition-knowledge-conversion"><b>换算</b><span>必要知与完整知分别将六项原始分之和 ÷ 12 × 10，显示成“必要 → 完整”。完整分高不等于体验差；真正的入口风险是必要分过高。</span></footer>
+            </section>
+          </section>
+
+          <section class="knowledge-validation" aria-labelledby="knowledge-validation-title">
+            <header class="cognition-subsection-heading">
+              <span>3.4 · 理解测试</span>
+              <div><h4 id="knowledge-validation-title">局面理解的分层验证</h4><p>逐层补充信息，观察玩家在哪一步形成价值判断、在哪一步完成因果解释，并记录两种终点各自需要多少层信息。</p></div>
+            </header>
+            <div class="cognition-validation-steps">
+              <article><span>01 · 当前结果</span><strong>先只展示画面</strong><p>询问好／一般／差，并要求玩家说出最先依据的关系。</p></article>
+              <article><span>02 · 逐层提示</span><strong>按需补规则与状态</strong><p>每次只增加一条规则、一个区域或一项状态，直到方向判断稳定。</p></article>
+              <article><span>03 · 记录入口</span><strong>锁定必要理解</strong><p>判断第一次稳定且理由正确时，记录已经调用的六类理解动作。</p></article>
+              <article><span>04 · 完整复述</span><strong>追到完整理解</strong><p>继续要求解释全部贡献来源与数值，记录完整路径所需动作。</p></article>
+            </div>
+            <div class="cognition-validation-results">
+              <article><b>入口浅、上限深</b><p>少量信息即可判断方向，但继续研究仍能发现更完整的协同与数值来源；这是健康的知识结构。</p></article>
+              <article><b>入口接近上限</b><p>玩家必须理解大部分系统后才敢判断好坏，必要知逼近完整知，说明“知”正在阻塞最小爽环。</p></article>
+              <article><b>补充后仍不稳定</b><p>相同信息无法重复得到同一判断，通常意味着映射动态变化、关键状态不可见或例外过多。</p></article>
+            </div>
+          </section>
+          <p class="cognition-scope-note">本章只计算理解当前 C₁ 所需的“知”。C₂ 的结果演绎、BD 与长期策略不进入评分。</p>
+        </section>
+
+        <section class="cognition-block cognition-internalization" aria-labelledby="internalization-title">
+          <header class="cognition-block-heading">
+            <div><span>04 · 内化｜从知转化为认</span><h3 id="internalization-title">把需要思考的关系，压缩成可以直接看见的整体模式</h3></div>
+            <p>内化不会消除系统的完整理解深度，而是降低熟练后的必要理解：原本逐条调用的规则，被人类的模式识别与信息组块能力压缩为“一个图形”。</p>
+          </header>
+
+          <section class="cognition-explainer internalization-definition" aria-labelledby="internalization-definition-title">
+            <header class="cognition-subsection-heading">
+              <span>4.1 · 定义</span>
+              <div><h4 id="internalization-definition-title">认知内化的定义与边界</h4><p>内化不是记住整套系统，而是把判断当前 C₁ 所需的“知”转化为自动识别。经过重复且稳定的刺激与反馈，常见关系会被组块为可直接读取的整体模式。</p></div>
+            </header>
+            <div class="internalization-definition-grid">
+              <article><span>可以内化</span><strong>关系稳定、局部可见、反馈及时</strong><p>同一种图形长期表达同一价值方向，相关对象能同时被看到，生效后又立即得到一致反馈，玩家就能逐步省略规则调用。</p><div><b>例如</b><i>猫与牛奶反复共同出现并立即兑现，最终会被识别成一个整体组合。</i></div></article>
+              <article><span>难以内化</span><strong>价值动态反转、关系跨区、反馈含混</strong><p>若同一图形会随库存、供需、区域或隐藏条件改变意义，玩家每次都必须重新读取状态、重建关系，熟练也难以形成固定图形块。</p><div><b>例如</b><i>四个集合之间的产销价值随当前缺口变化，无法只靠一个静态形状判断。</i></div></article>
+            </div>
+            <aside class="cognition-definition-boundary"><b>分析边界</b><p>这里只评估判断当前 C₁ 所需的必要理解能否被内化，不评估 C₂、BD、操作流程或整个游戏系统能否被记住。</p></aside>
+          </section>
+
+          <section class="internalization-mechanism" aria-labelledby="internalization-mechanism-title">
+            <header class="cognition-subsection-heading">
+              <span>4.2 · 转化机制</span>
+              <div><h4 id="internalization-mechanism-title">认知内化的转化机制</h4><p>内化发生在反复调用“知”与稳定得到同一反馈之间。只有关系可被压缩、映射足够稳定，重复学习才会把逐条推演缩短为模式识别。</p></div>
+            </header>
+            <div class="internalization-flow" aria-label="认知内化过程">
+              <article><span>初次接触</span><strong>对象 → 规则 → 关系 → 判断</strong><p>玩家需要有意识地调用“知”，逐步解释当前 C₁。</p></article>
+              <i aria-hidden="true">→</i>
+              <article><span>重复学习</span><strong>稳定关系 + 清晰反馈</strong><p>相同关系反复出现，并持续对应相同的价值方向。</p></article>
+              <i aria-hidden="true">→</i>
+              <article><span>熟练以后</span><strong>整体模式 → 直接判断</strong><p>中间规则被压缩，原本的“知”成为新的“认”。</p></article>
+            </div>
+            <div class="internalization-condition-grid">
+              <article><span>01 · 图形可压缩</span><h5>关系能否成为一个可见整体</h5><p>颜色块、形状组、连线、邻接、聚集等模式，能让多个对象被一次性识别；若只能逐项读取文字和数值，就难以形成组块。</p></article>
+              <article><span>02 · 映射稳定</span><h5>同一模式是否长期同向</h5><p>相同图形持续代表“更好”或“更差”时，玩家才敢跳过推演；如果价值经常反转，旧经验反而会制造误判。</p></article>
+              <article><span>03 · 关系局部</span><h5>相关对象能否同时进入视野</h5><p>一个局部内的邻接与连线容易被组块；跨多个区域、多个 Spin 或多跳链条会迫使玩家重新搜索和记忆。</p></article>
+              <article><span>04 · 反馈清晰</span><h5>哪条关系生效是否立即可见</h5><p>高亮、连线与即时数值变化能把图形和价值绑定；贡献来源隐藏、延迟或混在总数中，会阻断学习。</p></article>
+              <article><span>05 · 例外稀少</span><h5>已经形成的模式是否经常被推翻</h5><p>少量清楚标出的例外仍可学习；大量隐藏条件和动态特例会让玩家每次都回到规则推演。</p></article>
+            </div>
+          </section>
+
+          <section class="internalization-quantification" aria-labelledby="internalization-quantification-title">
+            <header class="cognition-subsection-heading">
+              <span>4.3 · 量化方法</span>
+              <div><h4 id="internalization-quantification-title">认知内化难度的量化评估</h4><p>先锁定判断当前 C₁ 所需的必要“知”，再逐项检查它能否通过可学习图形、稳定映射和即时反馈被压缩成识别捷径。</p></div>
+            </header>
+            <ol class="cognition-analysis-steps">
+              <li><span>01</span><div><b>提取必要知</b><p>只列出判断当前 C₁ 大致好坏时真正必须调用的规则与关系。</p></div></li>
+              <li><span>02</span><div><b>寻找识别捷径</b><p>检查这些关系能否映射成颜色、形状、连线、邻接或稳定语义组。</p></div></li>
+              <li><span>03</span><div><b>检查反复可靠性</b><p>比较不同盘面和状态，确认同一模式是否仍然表达同一价值方向。</p></div></li>
+              <li><span>04</span><div><b>五项直接计分</b><p>五项各按 0–2 分评分，原始分相加即得到 10 分制内化难度。</p></div></li>
+            </ol>
+            <div class="cognition-scale-heading"><b>内化｜认知内化难度</b><span>0–10 分，越低越容易从知转化为认</span></div>
+            <section class="cognition-rubric cognition-rubric-internalization" aria-labelledby="internalization-rubric-title">
+              <header><div><span>具体评分依据</span><h4 id="internalization-rubric-title">内化的五个单项：判断“知”能否变成“认”</h4></div><p>评估对象不是整个游戏系统，而是判断当前 C₁ 所需的那部分理解，经过学习后能否被压缩成快速模式识别。</p></header>
+              <div class="cognition-rubric-table-wrap">
+                <table class="cognition-rubric-table">
+                  <thead><tr><th>评分项</th><th>0 分｜容易内化</th><th>1 分｜需要反复学习</th><th>2 分｜难以内化</th></tr></thead>
+                  <tbody>
+                    <tr><th>图形压缩难度</th><td>规则<strong><u>天然对应稳定颜色、形状、连线或空间模式</u></strong>。</td><td><strong><u>需要学习后</u></strong>才能形成局部图形块。</td><td>关系<strong><u>无法稳定映射</u></strong>为可见图形，只能持续推演。</td></tr>
+                    <tr><th>映射不稳定性</th><td>相同模式长期对应<strong><u>相同价值方向</u></strong>。</td><td>价值受<strong><u>少量可见上下文影响</u></strong>。</td><td>同一模式会因<strong><u>动态供需、隐藏状态等频繁反转</u></strong>。</td></tr>
+                    <tr><th>关系非局部性</th><td>相关对象同时出现在一个<strong><u>局部范围</u></strong>。</td><td>需要<strong><u>跨一个区域或一层关系</u></strong>建立组块。</td><td>关系<strong><u>跨多个区域、多个时刻或多跳链条</u></strong>。</td></tr>
+                    <tr><th>反馈不清晰度</th><td>组合生效与价值方向被<strong><u>立即、明确地反馈</u></strong>。</td><td>反馈可见，但<strong><u>多个来源需要辨认</u></strong>。</td><td>贡献来源<strong><u>隐藏、延迟或无法与图形对应</u></strong>。</td></tr>
+                    <tr><th>例外密度</th><td>核心关系稳定，几乎<strong><u>没有推翻模式的例外</u></strong>。</td><td>存在<strong><u>少量特殊符号、道具或条件</u></strong>。</td><td><strong><u>大量例外</u></strong>持续改写已经形成的判断模式。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <footer><b>合计</b><span>内化 = 五项原始分直接相加，满分 10。分数越低，代表必要的“知”越容易随熟练度转化为新的“认”。</span></footer>
+            </section>
+          </section>
+
+          <section class="internalization-validation" aria-labelledby="internalization-validation-title">
+            <header class="cognition-subsection-heading">
+              <span>4.4 · 内化测试</span>
+              <div><h4 id="internalization-validation-title">认知内化的迁移验证</h4><p>撤掉提示并更换盘面，确认玩家学会的是可迁移的模式而不是固定答案；若新结果仍需逐条计算，就没有完成从“知”到“认”的转化。</p></div>
+            </header>
+            <div class="cognition-validation-steps">
+              <article><span>01 · 核心教学</span><strong>只教必要关系</strong><p>不讲完整系统，只让玩家理解判断当前 C₁ 所需的最低规则。</p></article>
+              <article><span>02 · 重复样本</span><strong>呈现多组同构结果</strong><p>改变符号位置与外观，但保持核心关系和价值方向不变。</p></article>
+              <article><span>03 · 撤掉提示</span><strong>移除文字与高亮</strong><p>只留下原始盘面，观察玩家是否仍能快速识别整体模式。</p></article>
+              <article><span>04 · 新局迁移</span><strong>测试未见布局</strong><p>让玩家判断新的 C₁ 结果，避免把记住固定答案误认为内化。</p></article>
+            </div>
+            <div class="cognition-validation-results">
+              <article><b>完成内化</b><p>新布局中仍能快速、稳定判断价值方向，并以整体图形而非逐条规则作为理由。</p></article>
+              <article><b>部分内化</b><p>熟悉布局可以直读，新布局仍需简单计数、一次提示或较长扫描。</p></article>
+              <article><b>难以内化</b><p>每次都必须重新读规则、查状态或推演因果；同一图形在不同上下文中还会反转。</p></article>
+            </div>
+          </section>
+        </section>
+
+        <section class="cognition-block cognition-composite" aria-labelledby="cognition-composite-title">
+          <header class="cognition-block-heading">
+            <div><span>05 · 三个维度的综合判断</span><h3 id="cognition-composite-title">理想状态：认成本低、知的入口浅、内化难度低</h3></div>
+            <p>三个分数不相加：它们分别描述“现在能否看出”“至少需要理解多少”“这些理解以后能否变成直接识别”。</p>
+          </header>
+          <div class="cognition-metric-summary">
+            <article><span>认</span><strong>即时识别成本</strong><p>0 一眼直读 → 10 难以直接看出</p></article>
+            <article><span>知</span><strong>必要 → 完整</strong><p>知的入口应浅，完整理解上限可以深</p></article>
+            <article><span>内化</span><strong>认知内化难度</strong><p>0 极易形成图形块 → 10 难以内化</p></article>
+          </div>
+          <section class="composite-reading-order" aria-labelledby="composite-reading-order-title">
+            <header class="cognition-subsection-heading">
+              <span>5.1 · 判读顺序</span>
+              <div><h4 id="composite-reading-order-title">认、知与内化的判读顺序</h4><p>先判断玩家现在能否看出，再判断理解入口与熟练后的变化。四个数字回答不同问题，完整“知”只表示研究上限，不是负担分。</p></div>
+            </header>
+            <div class="composite-reading-steps">
+              <article><span>01 · 先看认</span><strong>第一次接触时能否大致看出？</strong><p>认低，说明结果已经被压缩成可直接读取的图形；认高，继续检查玩家缺少的是知识还是视觉支持。</p></article>
+              <article><span>02 · 再看必要知</span><strong>为了可靠判断，最少还要懂多少？</strong><p>必要知低，少量规则就能补足判断；必要知高，玩家必须先理解系统，最小爽环容易被阻塞。</p></article>
+              <article><span>03 · 再看内化</span><strong>这些必要知能否随学习变成认？</strong><p>内化低代表初期负担会下降；内化高代表熟练玩家仍需重复推演，属于持续性成本。</p></article>
+              <article><span>04 · 最后看完整知</span><strong>愿意深挖时还有多大研究空间？</strong><p>完整知可以很深。只要它不是判断大致好坏的前置条件，就能作为长期研究深度存在。</p></article>
+            </div>
+          </section>
+          <section class="cognition-reading-guide" aria-labelledby="cognition-reading-guide-title">
+            <header class="cognition-subsection-heading"><span>5.2 · 典型结构</span><div><h4 id="cognition-reading-guide-title">四项分数的典型结构</h4><p>不求一个总分，而是观察“认、必要知、完整知与内化”四个数字共同形成了怎样的体验结构。</p></div></header>
+            <div>
+              <article><b>理想结构</b><strong>认低 · 必要知低 · 完整知可深 · 内化低</strong><p>第一眼能看出好坏，愿意研究时又有足够深度，并且学习能持续降低入口成本。</p></article>
+              <article><b>教学型结构</b><strong>认中高 · 必要知中 · 内化低</strong><p>初次进入较慢，但规则稳定、反馈清楚；随着学习可以逐渐接近直觉识别。</p></article>
+              <article><b>浅而顺畅</b><strong>认低 · 必要知低 · 完整知低</strong><p>即时体验非常顺畅，但可研究空间有限；它不是坏结构，只是长期策略深度较浅。</p></article>
+              <article><b>持续阻塞 ❌</b><strong>认高 · 必要知高 · 内化高</strong><p>每次判断都必须重新调用规则或推演状态；熟练后仍无法把过程压缩成图形。</p></article>
+            </div>
+            <footer>完整知描述研究上限，不作为惩罚项；即使完整知很深，只要“认”和“必要知”足够低，最小爽环仍然可以顺畅成立。</footer>
+          </section>
+          <section class="composite-thresholds" aria-labelledby="composite-thresholds-title">
+            <header class="cognition-subsection-heading">
+              <span>5.3 · 当前阈值</span>
+              <div><h4 id="composite-thresholds-title">综合风险的阈值判定</h4><p>阈值用于定位初次门槛、可教学门槛和长期阻塞，不把三个维度相加，也不将当前模型阈值视为用户实验得出的绝对标准。</p></div>
+            </header>
+            <div class="composite-threshold-grid">
+              <article><span>入口风险</span><strong>认 ≥ 7 或必要知 ≥ 7</strong><p>玩家第一次判断当前 C₁ 时，需要长时间搜索、读取或理解；应回查视觉压缩与必要规则数量。</p></article>
+              <article><span>知阻塞认</span><strong>必要知接近完整知</strong><p>二者相差不超过 1 分时，意味着玩家几乎要懂完整系统才能判断大致好坏。</p></article>
+              <article><span>可以教学</span><strong>认偏高，但内化 ≤ 3</strong><p>初次体验不够直读，但核心关系稳定、可学习，可以通过教学与反馈逐渐降低成本。</p></article>
+              <article><span>持续阻塞</span><strong>认高且内化 ≥ 7</strong><p>初次难看出，熟练后也难形成稳定图形块；需要调整 C₁ 关系本身，而不只是增加提示。</p></article>
+            </div>
+          </section>
+        </section>
+
+        <section class="cognition-block cognition-cases" aria-labelledby="cognition-cases-title">
+          <header class="cognition-block-heading">
+            <div><span>06 · 最小爽环案例</span><h3 id="cognition-cases-title">同一套 10 分制下比较 C₁ 的认、知与内化</h3></div>
+            <p>分数均为模型分析评分，不是用户实验或生理测量结果。点击任一分数可查看逐项计算过程。</p>
+          </header>
+
+          <section class="case-reading-guide" aria-labelledby="case-reading-guide-title">
+            <header class="cognition-subsection-heading">
+              <span>6.1 · 比较方法</span>
+              <div><h4 id="case-reading-guide-title">案例比较的统一观察基准</h4><p>四款案例只比较当前 Spin 的 C₁；评分对象是具备大众生活常识和成熟 Slot 先验、但尚未学习当前游戏自定义规则的首次接触玩家。</p></div>
+            </header>
+            <div class="case-method-grid">
+              <article><span>基准样本</span><strong>传统 Slot</strong><p>说明成熟支付线与同类图形怎样让 C₁ 几乎直接成为“认”，作为最低识别成本参照。</p></article>
+              <article><span>继承样本</span><strong>《四叶草深渊》</strong><p>传统支付线、同类与连线仍负责 C₁ 的即时识别；倍率、连击和债务压力进入 C₂ 与外层循环，不抬高本节的 C₁ 入口。</p></article>
+              <article><span>良好样本</span><strong>《幸运房东》</strong><p>说明 Slot改 可以重写 C₁，但仍能借用现实语义、局部邻接和稳定反馈形成新图形块。</p></article>
+              <article><span>问题样本</span><strong>《幸运市长》</strong><p>复杂度由“四个 0D 集合的识别困难”与“跨集合资源产销推演”共同组成，知持续占据判断入口。</p></article>
+            </div>
+            <aside class="cognition-definition-boundary"><b>阅读方式</b><p>先横向比较“认”，再看必要知是否阻塞入口，最后用内化判断这份负担会随熟练下降还是长期保留；点击分数查看单项原始分。</p></aside>
+          </section>
+
+          <section class="case-score-comparison" aria-labelledby="case-score-comparison-title">
+            <header class="cognition-subsection-heading">
+              <span>6.2 · 评分结果</span>
+              <div><h4 id="case-score-comparison-title">四类 C₁ 结构的评分对照</h4><p>使用同一量表比较四种 C₁ 结构。分数是模型分析结果，不是用户实验或生理测量；表格呈现结论，弹窗保留完整计算过程。</p></div>
+            </header>
+          <div class="cognition-score-table-wrap">
+            <table class="cognition-score-table">
+              <thead><tr><th>案例</th><th>认</th><th>知：必要 → 完整</th><th>内化</th><th>对最小爽环的影响</th><th>评分依据</th></tr></thead>
+              <tbody>
+                <tr>
+                  <th><span>基准样本</span>传统 Slot</th>
+                  <td><button type="button" data-cognition-score-case="slot" data-cognition-score-focus="recognition">1<small>/10</small></button></td>
+                  <td><button type="button" data-cognition-score-case="slot" data-cognition-score-focus="knowledge">2 → 4<small>/10</small></button></td>
+                  <td><button type="button" data-cognition-score-case="slot" data-cognition-score-focus="internalization">1<small>/10</small></button></td>
+                  <td>三项成本均低，最小爽环可立即闭合</td>
+                  <td><button class="cognition-score-detail-button" type="button" data-cognition-score-case="slot">查看详细计算</button></td>
+                </tr>
+                <tr>
+                  <th><span>继承样本</span>《四叶草深渊》</th>
+                  <td><button type="button" data-cognition-score-case="cloverpit" data-cognition-score-focus="recognition">1<small>/10</small></button></td>
+                  <td><button type="button" data-cognition-score-case="cloverpit" data-cognition-score-focus="knowledge">2 → 4<small>/10</small></button></td>
+                  <td><button type="button" data-cognition-score-case="cloverpit" data-cognition-score-focus="internalization">1<small>/10</small></button></td>
+                  <td>当前 C₁ 的入口与完整理解成本均接近传统 Slot，差异留在 C₂ 与外层循环</td>
+                  <td><button class="cognition-score-detail-button" type="button" data-cognition-score-case="cloverpit">查看详细计算</button></td>
+                </tr>
+                <tr>
+                  <th><span>良好样本</span>《幸运房东》</th>
+                  <td><button type="button" data-cognition-score-case="landlord" data-cognition-score-focus="recognition">5<small>/10</small></button></td>
+                  <td><button type="button" data-cognition-score-case="landlord" data-cognition-score-focus="knowledge">2 → 7<small>/10</small></button></td>
+                  <td><button type="button" data-cognition-score-case="landlord" data-cognition-score-focus="internalization">4<small>/10</small></button></td>
+                  <td>入口轻度变重，但必要知低且易内化，爽环仍成立</td>
+                  <td><button class="cognition-score-detail-button" type="button" data-cognition-score-case="landlord">查看详细计算</button></td>
+                </tr>
+                <tr>
+                  <th><span>问题样本</span>《幸运市长》</th>
+                  <td><button type="button" data-cognition-score-case="mayor" data-cognition-score-focus="recognition">9<small>/10</small></button></td>
+                  <td><button type="button" data-cognition-score-case="mayor" data-cognition-score-focus="knowledge">8 → 9<small>/10</small></button></td>
+                  <td><button type="button" data-cognition-score-case="mayor" data-cognition-score-focus="internalization">9<small>/10</small></button></td>
+                  <td>认与必要知均高且难内化，理解过程阻塞爽环</td>
+                  <td><button class="cognition-score-detail-button" type="button" data-cognition-score-case="mayor">查看详细计算</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </section>
+        </section>
+
+        <div class="insight-rule-banner cognition-conclusion">
+          <span>洞察二 · 结论</span>
+          <strong>复杂可以存在，但<b class="conclusion-emphasis">不能阻塞即时识别</b>。</strong>
+          <p>新的 C₁ 要么能够直接被认出，要么应让必要的“知”快速内化成“认”；完整理解则可以继续向深处展开。</p>
         </div>
       </section>
 
       <section class="section insights-section insight-reveal-section" id="insight-reveal">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">03 · 洞察三</p>
-            <h2>C₂ 是依托 C₁ 协同的二次揭晓<br>不是结算动画，也不是重新开奖</h2>
+            <p class="eyebrow">03 · 洞察三 · 多巴胺峰型与 C₂ 演绎节奏</p>
+            <h2>先判断 C₂ 是否成立，<br>再观察峰型与演绎节奏</h2>
           </div>
           <p>
-            玩家借助 C₁ 符号协同形成“这次大概抽得怎么样”的价值锚点。
-            C₂ 不推翻或重置 C₁，也不引入一套与 C₁ 无关的新结果；它依托 C₁ 协同逐步释放结果信息，
-            可以接续、并行或嵌入 C₁，让玩家持续预测：“这次好结果，最终能兑现得多好？”
+            有效 C₂ 必须继承 C₁ 建立的价值锚点，继续揭晓同一个 Spin 结果；
+            整体上形成连续且第二峰更高的双峰，内部则以可读的演绎节奏逐步释放信息，直到结果最终封闭。
+            因此，洞察三需要分两层观察：先判断“后续内容是否仍属于同一次结果”，再分别观察 Spin 整体的多巴胺峰型，
+            以及 C₂ 内部的信息释放曲线。峰型决定期待如何升高；演绎节奏既决定玩家能否看懂升高的原因，也决定玩家能否直觉感到结果正在变得更强。
           </p>
         </div>
+
+        <section class="insight-concept-definition" aria-labelledby="insight-three-concept-title">
+          <header>
+            <span>概念定义</span>
+            <h3 id="insight-three-concept-title">先区分 Spin 整体的多巴胺峰型，与 C₂ 内部的演绎节奏</h3>
+            <p>C₁ 与 C₂ 沿用前文已经建立的定义，本节不再重复。洞察三新引入两个不同尺度的观察概念：多巴胺峰型描述整个 Spin 的期待变化，C₂ 演绎节奏描述第二峰内部的信息如何随时间展开。</p>
+          </header>
+          <div class="insight-concept-grid insight-concept-grid-two">
+            <article>
+              <span>01 · 多巴胺峰型</span>
+              <strong>观察整个 Spin 的期待如何升高</strong>
+              <p>多巴胺峰型是对一个 Spin 内期待变化的整体描述：C₁ 建立第一峰，C₂ 继承同一价值方向并形成第二峰。它用于判断两峰是否连续、结果是否被重置，以及第二峰是否在最终封闭时高于第一峰；不用于描述 C₂ 内部每个信息节点的展开方式。</p>
+            </article>
+            <article>
+              <span>02 · C₂ 演绎节奏</span>
+              <strong>观察 C₂ 内部的信息如何随时间作用</strong>
+              <p>C₂ 演绎节奏描述新增信息在第二峰内部以什么顺序、密度、烈度变化和结构展开。它既决定玩家能否理解价值为什么升高，也让玩家在完成分析前直觉感到结果正在累积、加速并接近高潮；它不等同于演绎越快或信息越多越好。</p>
+            </article>
+          </div>
+          <div class="insight-concept-relation"><b>结构关系</b><span>前者决定整体峰形是否成立，后者决定第二峰内部如何被体验。</span></div>
+        </section>
+
+        <section class="insight-reveal-block insight-reveal-validity insight-reveal-prerequisite" aria-labelledby="c2-validity-title">
+          <header class="insight-subsection-heading">
+            <span>分析前提 · C₂ 成立门槛</span>
+            <div>
+              <h3 id="c2-validity-title">C₂ 必须继续揭晓同一个 C₁ 结果</h3>
+              <p>这部分不属于正文分析维度，而是进入分析前必须通过的门槛：先确认后续信息仍在回答“这次结果最终能兑现得多好”，再讨论整体多巴胺峰型与内部演绎节奏。</p>
+            </div>
+          </header>
 
         <div class="c2-reveal-definition" aria-label="C₁、C₂ 与最终结果的关系">
           <div class="c2-reveal-flow">
@@ -1588,108 +2091,622 @@
               <small>结果被完整确认</small>
             </div>
           </div>
-          <div class="c2-boundary-grid">
-            <p><b>只是结算动画</b>只有确定结果的播放，没有期待。</p>
-            <p><b>接近重新开奖</b>推翻 C₁，或引入与 C₁ 无关的新随机。</p>
-            <p><b>有效的 C₂</b>保留不确定性，但它必须来自 C₁ 协同，并允许接续、并行或嵌套展开。</p>
+
+          <div class="c2-validity-formula" aria-label="有效 C₂ 的条件公式">
+            <span>条件公式</span>
+            <code>有效 C₂ = 同一结果 × 未完全封闭 × 增量信息 × 最终封闭</code>
+            <p>
+              这里的“×”表示四项均为必要条件，而不是用于计算数值：任一条件为零，后续内容就不能被视为有效 C₂。
+              它可能仍然是一段有表现力的动画、一次新的随机事件或一段策略过程，但不会延续 C₁ 已经建立的结果期待。
+            </p>
+          </div>
+
+          <div class="c2-validity-grid" aria-label="C₂ 成立的四个必要条件">
+            <article>
+              <span>条件 01</span>
+              <strong>继续回答同一个结果对象</strong>
+              <p>C₂ 仍在回答“这次 Spin 最终能兑现得多好”，而不是切换到下一次开奖、另一场独立战斗或局外资源规划。</p>
+              <small>判断问题：拿掉 C₂ 后，被揭晓的结果对象是否仍然与 C₁ 相同？</small>
+            </article>
+            <article>
+              <span>条件 02</span>
+              <strong>C₁ 已经建立价值锚点</strong>
+              <p>玩家必须先能从 C₁ 认出一个方向明确的初始价值，例如“形成了高价值组合”“这次结果明显偏好”。</p>
+              <small>判断问题：进入 C₂ 前，玩家是否已经知道自己正在期待什么？</small>
+            </article>
+            <article>
+              <span>条件 03</span>
+              <strong>结果尚未完全封闭</strong>
+              <p>C₁ 只能给出价值方向，不能提前给出全部兑现答案；玩家仍需等待倍率、连锁、战斗关系或其他结果信息继续出现。</p>
+              <small>判断问题：C₂ 开始时，玩家的主观预测是否仍可能被新信息修正？</small>
+            </article>
+            <article>
+              <span>条件 04</span>
+              <strong>新增信息持续修正期待并最终封闭</strong>
+              <p>每个关键节点都应让玩家更接近最终答案，并在演绎结束时明确完成结算，而不是无限延长、突然中止或留下无意义悬置。</p>
+              <small>判断问题：信息是否一边改变兑现预期，一边把同一结果推向清晰终点？</small>
+            </article>
+          </div>
+
+          <div class="c2-invalid-boundaries" aria-label="不构成有效 C₂ 的三种边界">
+            <header>
+              <span>快速排除</span>
+              <p>出现以下任一情况，即可判定它不构成有效 C₂，无需继续评价其演绎节奏；详细原因继续在峰型对照与案例中展开。</p>
+            </header>
+            <div>
+              <article>
+                <b>已知答案动画</b>
+                <i aria-hidden="true">→</i>
+                <small>没有新增结果信息</small>
+              </article>
+              <article>
+                <b>独立重新开奖</b>
+                <i aria-hidden="true">→</i>
+                <small>结果已经发生重置</small>
+              </article>
+              <article>
+                <b>无关的策略规划</b>
+                <i aria-hidden="true">→</i>
+                <small>已经离开本次结果</small>
+              </article>
+            </div>
+          </div>
+        </div>
+        </section>
+
+        <section class="insight-reveal-block insight-reveal-peaks" aria-labelledby="c2-peaks-title">
+          <header class="insight-subsection-heading">
+            <span>1 · 多巴胺峰型</span>
+            <div>
+              <h3 id="c2-peaks-title">Spin 整体的信息释放，应形成连续且第二峰更高的双峰</h3>
+              <p>峰型只描述一整个 Spin 的期待变化：C₁ 建立第一峰，C₂ 继承同一价值方向并继续增加结果信息，最终在结果封闭时形成更高的第二峰。</p>
+            </div>
+          </header>
+
+        <header class="insight-detail-heading">
+          <span>1.1 · 成立与失效</span>
+          <div>
+            <h4>三种峰型的连续性差异</h4>
+            <p>使用统一时间轴与峰值尺度，比较第二峰坍缩、双峰离散与连续双峰；重点不在视觉演出有多强，而在玩家的结果期待是否继续被新信息改变。</p>
+          </div>
+        </header>
+
+        <div class="c2-peak-criteria" aria-label="连续双峰的四项判断标准">
+          <span>连续双峰的判断标准</span>
+          <div>
+            <b>第二峰继承第一峰的价值方向</b>
+            <b>演绎期间没有重置结果</b>
+            <b>峰间低谷不代表前一结果已经结束</b>
+            <b>第二峰来自新增结果信息，而非单纯提高声画强度</b>
+          </div>
+        </div>
+
+        <div class="c2-boundary-grid">
+            <article class="c2-boundary-card c2-boundary-collapse">
+              <header>
+                <span>峰形：第一峰 → 平线</span>
+                <b>只有结算动画：第二峰坍缩</b>
+              </header>
+              <svg class="c2-peak-diagram" viewBox="0 0 260 92" role="img" aria-label="第一峰出现后回落为平线，没有形成第二峰">
+                <path class="c2-peak-baseline" d="M12 72H248" />
+                <path class="c2-peak-guide" d="M76 16V76M184 16V76" />
+                <path class="c2-peak-area" d="M12 72C30 70 45 61 56 42C65 25 72 18 78 18C88 18 94 39 108 55C125 71 146 72 168 72H248V72H12Z" />
+                <path class="c2-peak-line" d="M12 72C30 70 45 61 56 42C65 25 72 18 78 18C88 18 94 39 108 55C125 71 146 72 168 72H248" />
+                <circle class="c2-peak-point" cx="78" cy="18" r="3.5" />
+                <text class="c2-peak-label" x="78" y="11" text-anchor="middle">第一峰</text>
+                <text class="c2-peak-note" x="215" y="65" text-anchor="middle">平线</text>
+              </svg>
+              <p>C₁ 后答案已经确定，后续只是播放已知结果；主观不确定性不再更新，因此没有形成多巴胺第二峰。</p>
+            </article>
+            <article class="c2-boundary-card c2-boundary-reset">
+              <header>
+                <span>峰形：第一峰 ｜ 新峰</span>
+                <b>第一峰被稀释</b>
+              </header>
+              <svg class="c2-peak-diagram" viewBox="0 0 260 92" role="img" aria-label="第一峰结束后结果被重置，随后出现一个彼此断开的独立新峰">
+                <path class="c2-peak-baseline" d="M12 72H248" />
+                <path class="c2-peak-guide" d="M65 16V76M190 16V76" />
+                <path class="c2-peak-reset-line" d="M128 13V78" />
+                <path class="c2-peak-area c2-peak-area-muted" d="M12 72C28 69 39 56 49 37C56 24 61 20 66 20C75 20 81 42 94 58C103 68 111 72 120 72V72H12Z" />
+                <path class="c2-peak-line c2-peak-line-muted" d="M12 72C28 69 39 56 49 37C56 24 61 20 66 20C75 20 81 42 94 58C103 68 111 72 120 72" />
+                <path class="c2-peak-area" d="M138 72C151 68 162 52 172 35C180 22 186 18 191 18C200 18 207 39 219 56C228 68 238 72 248 72V72H138Z" />
+                <path class="c2-peak-line" d="M138 72C151 68 162 52 172 35C180 22 186 18 191 18C200 18 207 39 219 56C228 68 238 72 248 72" />
+                <circle class="c2-peak-point c2-peak-point-muted" cx="66" cy="20" r="3.5" />
+                <circle class="c2-peak-point" cx="191" cy="18" r="3.5" />
+                <text class="c2-peak-label c2-peak-label-muted" x="66" y="12" text-anchor="middle">第一峰</text>
+                <text class="c2-peak-note" x="128" y="89" text-anchor="middle">结果重置</text>
+                <text class="c2-peak-label" x="191" y="11" text-anchor="middle">独立新峰</text>
+              </svg>
+              <p>推翻 C₁ 或引入无关的新随机，会重置已有价值锚点；原本连续递升的双峰被拆成两个离散峰值。</p>
+            </article>
+            <article class="c2-boundary-card c2-boundary-valid">
+              <header>
+                <span>峰形：第一峰 ↗ 第二峰</span>
+                <b>第二峰高于第一峰</b>
+              </header>
+              <svg class="c2-peak-diagram" viewBox="0 0 260 92" role="img" aria-label="第一峰的价值锚点持续存在，并连续上升为更高的第二峰">
+                <path class="c2-peak-baseline" d="M12 72H248" />
+                <path class="c2-peak-guide" d="M76 25V76M192 12V76" />
+                <path class="c2-peak-area" d="M12 72C29 68 44 56 56 42C64 33 70 29 77 29C90 29 99 49 115 52C132 55 144 40 157 28C171 15 182 10 192 10C205 10 216 31 228 48C236 60 242 68 248 72V72H12Z" />
+                <path class="c2-peak-line" d="M12 72C29 68 44 56 56 42C64 33 70 29 77 29C90 29 99 49 115 52C132 55 144 40 157 28C171 15 182 10 192 10C205 10 216 31 228 48C236 60 242 68 248 72" />
+                <circle class="c2-peak-point" cx="77" cy="29" r="3.5" />
+                <circle class="c2-peak-point" cx="192" cy="10" r="3.5" />
+                <text class="c2-peak-label" x="77" y="21" text-anchor="middle">第一峰</text>
+                <text class="c2-peak-label" x="192" y="8" text-anchor="middle">第二峰</text>
+                <text class="c2-peak-note" x="134" y="67" text-anchor="middle">同一价值锚点</text>
+              </svg>
+              <p>不确定性继续来自同一 C₁ 协同，并以接续、并行或嵌套方式释放，直到更高的第二峰完成结果封闭。</p>
+            </article>
+        </div>
+
+        <header class="insight-detail-heading">
+          <span>1.2 · 峰型案例</span>
+          <div>
+            <h4>用同一套判断模板横向比较案例</h4>
+            <p>每个案例依次检查 C₁ 锚点、C₂ 新信息、主观不确定性、结果连续性与最终峰型，避免只凭演出强弱或系统复杂度判断 C₂ 是否成立。</p>
+          </div>
+        </header>
+
+        <div class="c2-case-template" aria-label="C₂ 案例统一判断模板">
+          <span>统一判断顺序</span>
+          <div>
+            <b>① C₁ 建立了什么价值锚点</b>
+            <b>② C₂ 新增了什么结果信息</b>
+            <b>③ 主观不确定性是否继续存在</b>
+            <b>④ 前后是否属于同一个结果</b>
+            <b>⑤ 最终形成哪一种峰型</b>
           </div>
         </div>
 
         <div class="reveal-case-group reveal-case-group-bad">
           <div class="reveal-case-group-heading">
-            <span>BAD CASE</span>
-            <h3>没有依托 C₁ 的有效二次揭晓</h3>
-            <p>结果过早封闭，只剩答案播放；转入策略规划，也无法延续结果期待。</p>
+            <span>反例</span>
           </div>
           <div class="reveal-case-grid reveal-case-grid-three">
             <article class="reveal-case-card reveal-case-bad">
-              <header><span>BAD CASE 01</span><strong>拉杆英雄 · Slot改</strong></header>
+              <header><span>反例 · 第二峰坍缩</span><strong>拉杆英雄 · Slot改</strong></header>
+              <figure class="reveal-case-game-image">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2917350/header.jpg?t=1760025570" alt="拉杆英雄游戏画面" loading="lazy">
+              </figure>
               <div class="reveal-mini-flow">
                 <b>12 攻击</b><i>+</i><b>8 增益</b><i>=</i><strong>20 伤害</strong>
               </div>
               <h3>确定答案的播放</h3>
+              <dl class="c2-case-evaluation">
+                <div><dt>C₁ 锚点</dt><dd>攻击与增益已经给出完整伤害答案</dd></div>
+                <div><dt>C₂ 新信息</dt><dd>没有新增结果信息，只有命中与伤害表演</dd></div>
+                <div><dt>主观不确定性</dt><dd>进入动画前已经归零</dd></div>
+                <div><dt>结果连续性</dt><dd>仍是同一结果，但结果已经提前封闭</dd></div>
+                <div><dt>最终峰型</dt><dd>第一峰后回落为平线，第二峰坍缩</dd></div>
+              </dl>
               <p>
                 血量与攻击力已经直接展示，玩家在战斗开始前就能算出结果。
-                后续表演没有预测变化，只是在播放一个已经知道的答案。
+                后续表演没有预测变化，只是在播放一个已经知道的答案；它可以强化表现力，
+                但没有继续更新主观不确定性，因此不能构成多巴胺第二峰。
               </p>
-              <footer>第二峰风险：<b>主观不确定性接近于零</b></footer>
             </article>
 
             <article class="reveal-case-card reveal-case-bad">
-              <header><span>BAD CASE 02</span><strong>帝国轮盘 · Slot+数值</strong></header>
+              <header><span>反例 · 第二峰缺失</span><strong>帝国轮盘 · Slot+数值</strong></header>
+              <figure class="reveal-case-game-image">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3576520/2d9f43ddbd134a25e0942e725ffca4c5ec0ca298/header.jpg?t=1777038565" alt="帝国轮盘游戏画面" loading="lazy">
+              </figure>
               <div class="reveal-mini-flow strategy-flow">
                 <b>Slot 产出</b><i>→</i><b>资源数值</b><i>→</i><b>文明策略</b><i>→</i><strong>规划决策</strong>
               </div>
               <h3>策略接管了 C₂，却没有再次开奖</h3>
+              <dl class="c2-case-evaluation">
+                <div><dt>C₁ 锚点</dt><dd>Slot 先给出资源数量与价值方向</dd></div>
+                <div><dt>C₂ 新信息</dt><dd>新增的是资源用途与长期策略空间，不是本次结果信息</dd></div>
+                <div><dt>主观不确定性</dt><dd>不确定性转向“下一步如何选择”</dd></div>
+                <div><dt>结果连续性</dt><dd>观察对象从本次开奖切换到后续经营</dd></div>
+                <div><dt>最终峰型</dt><dd>第一峰之后进入思考平台，缺少连续第二峰</dd></div>
+              </dl>
               <p>
                 它属于 Slot+数值型变体，但 C₂主要表现为类文明的资源分配与策略经营。
                 玩家进入的是分析和规划状态，而不是等待未知结果逐步揭晓，因此第二峰表现较弱。
               </p>
-              <footer>第二峰风险：<b>有策略深度，但缺少结果期待过程</b></footer>
             </article>
 
             <article class="reveal-case-card reveal-case-bad">
-              <header><span>BAD CASE 03</span><strong>PegLotto!</strong></header>
+              <header><span>反例 · 双峰离散</span><strong>PegLotto!</strong></header>
+              <figure class="reveal-case-game-image">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4372270/9a0b6f39f5b4004333d9fec78ae25e61b7c521f4/capsule_616x353.jpg?t=1773815564" alt="PegLotto! 游戏画面" loading="lazy">
+              </figure>
               <div class="reveal-mini-flow pinball-flow">
                 <b>C₁ 结果</b><i>→</i><b>重置起点</b><i>→</i><b>弹珠长时演算</b><i>→</i><strong>新结果</strong>
               </div>
               <h3>C₂ 推翻 C₁，接近重新开奖</h3>
+              <dl class="c2-case-evaluation">
+                <div><dt>C₁ 锚点</dt><dd>先由 Slot 结果形成一次初始价值判断</dd></div>
+                <div><dt>C₂ 新信息</dt><dd>弹珠路径与碰撞重新生成一套独立结果</dd></div>
+                <div><dt>主观不确定性</dt><dd>不是继续修正，而是从新起点重新建立</dd></div>
+                <div><dt>结果连续性</dt><dd>C₁ 与弹珠结果之间发生重置</dd></div>
+                <div><dt>最终峰型</dt><dd>两个彼此分离的独立峰，第一峰被稀释</dd></div>
+              </dl>
               <p>
                 C₁ 建立的结果价值没有被延续；进入弹珠机后，结果由新的弹射过程重新决定。
-                表演时间长、路径与碰撞复杂，玩家更像开始第二场独立开奖，而不是等待 C₁ 兑现。
+                玩家更像开始第二场独立开奖，而不是等待 C₁ 兑现：第一峰的价值锚点被稀释，
+                原本应当连续升高的“第一峰 → 第二峰”被拆成互不继承的两个离散峰值。
               </p>
-              <footer>第二峰风险：<b>C₁ 价值被重置 + 过程过长</b></footer>
             </article>
           </div>
         </div>
 
         <div class="reveal-case-group reveal-case-group-good">
           <div class="reveal-case-group-heading">
-            <span>GOOD CASE</span>
-            <h3>依托 C₁ 协同继续揭晓</h3>
-            <p>C₂ 可以接续、并行或嵌入 C₁，但释放的信息必须延续同一价值含义，直到 Spin_Result 封闭。</p>
+            <span>正例</span>
           </div>
           <div class="reveal-case-grid">
             <article class="reveal-case-card reveal-case-reference">
-              <header><span>GOOD CASE 01</span><strong>Slotbound · Slot+</strong></header>
+              <header><span>正例 · 接续型连续双峰</span><strong>Slotbound · Slot+</strong></header>
+              <figure class="reveal-case-game-image">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4906570/3c04c8dadcb56124838f39abe512839bfc6b3257/header.jpg?t=1783709880" alt="Slotbound 游戏画面" loading="lazy">
+              </figure>
               <div class="reveal-mini-flow battle-timeline">
                 <b>多兵种</b><i>→</i><b>位置／顺序</b><i>→</i><b>局部交互</b><i>→</i><strong>胜负？</strong>
               </div>
               <h3>紧凑的二维战斗时序</h3>
+              <dl class="c2-case-evaluation">
+                <div><dt>C₁ 锚点</dt><dd>兵种、数量、位置与协同先形成大致强弱判断</dd></div>
+                <div><dt>C₂ 新信息</dt><dd>出手顺序、局部交互与伤害结果逐段出现</dd></div>
+                <div><dt>主观不确定性</dt><dd>战斗完成前，胜负与兑现程度仍可被修正</dd></div>
+                <div><dt>结果连续性</dt><dd>战斗持续兑现同一组 C₁ 阵容</dd></div>
+                <div><dt>最终峰型</dt><dd>第一峰被继承，并在胜负封闭时形成更高第二峰</dd></div>
+              </dl>
               <p>
                 传统 Slot C₁继续承担第一峰；C₂不直接提前展示全部数值，
                 而是通过战斗过程分批揭晓结果，让胜负预测持续变化。
               </p>
-              <footer>第二峰来源：<b>可理解因果 + 尚未封闭的结果</b></footer>
             </article>
 
             <article class="reveal-case-card reveal-case-good">
-              <header><span>GOOD CASE 02</span><strong>魔王终局 · Slot改</strong></header>
+              <header><span>正例 · 嵌入型连续双峰</span><strong>魔王终局 · Slot改</strong></header>
+              <figure class="reveal-case-game-image">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2343600/header_schinese.jpg?t=1771846080" alt="魔王终局游戏画面" loading="lazy">
+              </figure>
               <div class="reveal-mini-flow grid-battle">
                 <b>阵形</b><i>→</i><b>相邻交战</b><i>→</i><b>连续反应</b><i>→</i><strong>结果</strong>
               </div>
               <h3>把数值加减变成空间战斗揭晓</h3>
+              <dl class="c2-case-evaluation">
+                <div><dt>C₁ 锚点</dt><dd>阵形、相邻关系与符号协同形成初始价值方向</dd></div>
+                <div><dt>C₂ 新信息</dt><dd>相邻交战、连续反应与局部状态变化逐步揭晓</dd></div>
+                <div><dt>主观不确定性</dt><dd>只要局部因果仍可读，最终兑现就不会过早确定</dd></div>
+                <div><dt>结果连续性</dt><dd>空间战斗继续结算同一张 C₁ 棋盘</dd></div>
+                <div><dt>最终峰型</dt><dd>具备连续双峰潜力，但复杂度过高会损伤第一峰</dd></div>
+              </dl>
               <p>
                 C₂的二维紧凑战斗强化了第二峰；但战斗与组合共用棋盘，
                 会提高 C₁的大奖识别复杂度，因此必须控制棋盘与关系规模。
               </p>
-              <footer>核心取舍：<b>强化 C₂，同时保护 C₁</b></footer>
             </article>
           </div>
         </div>
+        </section>
+
+        <section class="c2-tempo-chapter insight-reveal-block insight-reveal-tempo" id="insight-c2-tempo" aria-labelledby="c2-tempo-chapter-title">
+          <header class="insight-subsection-heading">
+            <span>2 · C₂ 演绎节奏</span>
+            <div>
+              <h3 id="c2-tempo-chapter-title">C₂ 内部的信息，应以可读且不过载的演绎节奏逐步释放</h3>
+              <p>峰型描述整个 Spin 的期待起伏；演绎节奏则进入 C₂ 内部，观察新增信息以什么顺序、密度和速度出现。</p>
+            </div>
+          </header>
+
+          <div class="c2-tempo-analysis">
+            <header class="insight-detail-heading">
+              <span>2.1 · 演绎节奏公式</span>
+              <div>
+                <h4>用五个维度观察一段 C₂ 的信息释放曲线</h4>
+                <p>演绎节奏不由单一时长或信息量决定。需要同时记录持续多久、释放多少有效信息、单位时间有多密、烈度如何变化，以及这些信息按照什么结构展开。</p>
+              </div>
+            </header>
+
+            <header class="c2-tempo-definition">
+              <div>
+                <span>初步观察框架 · 待持续补证</span>
+                <h3>把一次 C₂ 看成随时间展开的释放曲线</h3>
+                <p>
+                  同样数量的结果信息，可以缓慢均匀铺开，也可以集中并行爆发，或由前一节点不断触发下一节点。
+                  玩家能否理解价值为何上升，取决于五个维度的组合，而不是其中任何一个数字单独变大。
+                </p>
+              </div>
+              <code><span>C₂ 演绎节奏 = T<sub>C₂</sub> + Q<sub>C₂</sub> + ρ(t) + Δρ/Δt + S</span></code>
+            </header>
+
+            <p class="c2-tempo-formula-note">
+              公式中的“+”表示五个观察维度需要联合阅读，并不是把不同单位直接相加得到一个总分。
+              例如，相同的 Q<sub>C₂</sub> 被压缩进更短的 T<sub>C₂</sub>，会提高 ρ(t)；如果后段又连续触发新节点，Δρ/Δt 会转为上升，价值累积与高潮临近的直觉随之增强，但超过识别能力后也会同步增加理解压力。
+            </p>
+
+            <div class="c2-tempo-metrics" aria-label="单次 C₂ 演绎观察指标">
+              <article>
+                <b>T<sub>C₂</sub></b>
+                <span>总体时间</span>
+                <small>从 C₂ 开始释放额外结果信息，到最终结果封闭所经历的时间。</small>
+              </article>
+              <article>
+                <b>Q<sub>C₂</sub></b>
+                <span>总信息量</span>
+                <small>期间新增的关键结果节点、状态变化与预测修正总量。</small>
+              </article>
+              <article>
+                <b>ρ(t)</b>
+                <span>单位时间信息烈度</span>
+                <small>短时间窗口内新增有效信息的密度及其即时价值刺激；既影响玩家的识别压力，也影响“结果正在变强”的直觉感受。</small>
+              </article>
+              <article>
+                <b>Δρ/Δt</b>
+                <span>烈度随时间的变化</span>
+                <small>信息烈度是保持稳定、逐渐衰减，还是在演绎后段持续加速；持续上升会形成高潮临近的直觉，加速过快则会把玩家推入高压识别。</small>
+              </article>
+              <article>
+                <b>S</b>
+                <span>演绎结构</span>
+                <small>关键节点按线性、并行、链式或混合关系组织；结构既决定因果与终点是否清楚，也决定直觉感受是稳定推进、集中爆发还是连续加速。</small>
+              </article>
+            </div>
+
+            <header class="insight-detail-heading">
+              <span>2.2 · 演绎方式</span>
+              <div>
+                <h4>不同演绎结构，会形成不同的信息烈度曲线与识别风险</h4>
+                <p>下图画的是 C₂ 内部单位时间信息烈度 ρ(t) 随时间的变化，不是 C₁／C₂ 多巴胺峰型。四种方式不是优劣排序，而是不同的信息组织方法。</p>
+              </div>
+            </header>
+
+            <section class="c2-tempo-shapes" aria-labelledby="c2-tempo-shapes-title">
+              <h3 class="sr-only" id="c2-tempo-shapes-title">C₂ 的四种演绎方式</h3>
+              <div>
+                <article class="shape-linear">
+                  <span>线性</span>
+                  <strong>A → B → C</strong>
+                  <figure class="c2-intensity-chart" aria-label="线性演绎的信息烈度随时间曲线">
+                    <figcaption><b>信息烈度曲线</b><span>ρ(t) 随时间</span></figcaption>
+                    <svg viewBox="0 0 260 100" role="img" aria-label="A、B、C 三次强度相近且间隔均匀的信息脉冲">
+                      <path class="c2-intensity-grid" d="M22 48H244" />
+                      <path class="c2-intensity-axis" d="M22 14V78H244" />
+                      <path class="c2-intensity-area" d="M22 78C30 78 34 48 44 48S58 78 70 78C78 78 83 48 94 48S110 78 122 78C131 78 136 48 147 48S163 78 176 78H244V78H22Z" />
+                      <path class="c2-intensity-line" d="M22 78C30 78 34 48 44 48S58 78 70 78C78 78 83 48 94 48S110 78 122 78C131 78 136 48 147 48S163 78 176 78H244" />
+                      <text class="c2-intensity-node" x="44" y="40">A</text><text class="c2-intensity-node" x="94" y="40">B</text><text class="c2-intensity-node" x="147" y="40">C</text>
+                      <text class="c2-intensity-axis-label" x="4" y="17">ρ(t)</text><text class="c2-intensity-axis-label" x="218" y="94">时间 t</text>
+                    </svg>
+                  </figure>
+                  <p>结果按固定次序逐项出现，前后关系最容易理解；节点之间通常不继续生成新的分支。</p>
+                  <small><b>烈度曲线</b>：各节点形成强度相近、间隔均匀的信息脉冲。</small>
+                  <small><b>主要风险</b>：节点过多或间隔过长时，体验会退化成逐项报账与拖长结算。</small>
+                </article>
+                <article class="shape-parallel">
+                  <span>并行</span>
+                  <strong>A → B₁＋B₂＋B₃</strong>
+                  <figure class="c2-intensity-chart" aria-label="并行演绎的信息烈度随时间曲线">
+                    <figcaption><b>信息烈度曲线</b><span>ρ(t) 随时间</span></figcaption>
+                    <svg viewBox="0 0 260 100" role="img" aria-label="一个较低的起始脉冲之后出现一次高而集中的并行信息峰">
+                      <path class="c2-intensity-grid" d="M22 48H244" />
+                      <path class="c2-intensity-axis" d="M22 14V78H244" />
+                      <path class="c2-intensity-area" d="M22 78C31 78 37 61 49 61S65 78 79 78C101 78 111 22 132 22S163 78 189 78H244V78H22Z" />
+                      <path class="c2-intensity-line" d="M22 78C31 78 37 61 49 61S65 78 79 78C101 78 111 22 132 22S163 78 189 78H244" />
+                      <text class="c2-intensity-node" x="49" y="53">A</text><text class="c2-intensity-node" x="132" y="15">B₁＋B₂＋B₃</text>
+                      <text class="c2-intensity-axis-label" x="4" y="17">ρ(t)</text><text class="c2-intensity-axis-label" x="218" y="94">时间 t</text>
+                    </svg>
+                  </figure>
+                  <p>多个结果在同一时间窗口同时释放，总时长可以较短，但玩家必须同时识别多个价值来源。</p>
+                  <small><b>烈度曲线</b>：前段蓄积后形成短促高峰，瞬时 ρ(t) 明显升高。</small>
+                  <small><b>主要风险</b>：信息过密时，玩家只感到“很多东西发生了”，却不知道价值为何提高。</small>
+                </article>
+                <article class="shape-chain">
+                  <span>链式</span>
+                  <strong>A → B → C → …</strong>
+                  <figure class="c2-intensity-chart" aria-label="链式演绎的信息烈度随时间曲线">
+                    <figcaption><b>信息烈度曲线</b><span>ρ(t) 随时间</span></figcaption>
+                    <svg viewBox="0 0 260 100" role="img" aria-label="信息脉冲逐渐变高、间隔逐渐缩短，表现链式演绎持续加速">
+                      <path class="c2-intensity-grid" d="M22 48H244" />
+                      <path class="c2-intensity-axis" d="M22 14V78H244" />
+                      <path class="c2-intensity-area" d="M22 78C28 78 32 62 40 62S52 78 61 78C67 78 71 55 80 55S93 78 101 78C107 78 111 45 121 45S134 78 142 78C148 78 152 33 163 33S177 78 184 78C190 78 194 20 206 20S224 78 236 78H244V78H22Z" />
+                      <path class="c2-intensity-line" d="M22 78C28 78 32 62 40 62S52 78 61 78C67 78 71 55 80 55S93 78 101 78C107 78 111 45 121 45S134 78 142 78C148 78 152 33 163 33S177 78 184 78C190 78 194 20 206 20S224 78 236 78H244" />
+                      <text class="c2-intensity-node" x="40" y="54">A</text><text class="c2-intensity-node" x="80" y="47">B</text><text class="c2-intensity-node" x="121" y="37">C</text><text class="c2-intensity-node" x="206" y="14">…</text>
+                      <text class="c2-intensity-axis-label" x="4" y="17">ρ(t)</text><text class="c2-intensity-axis-label" x="218" y="94">时间 t</text>
+                    </svg>
+                  </figure>
+                  <p>前一结果继续触发下一结果，链长与结束时间可能未知；每次触发都会同时带来结果信息和继续触发的可能。</p>
+                  <small><b>烈度曲线</b>：脉冲逐渐变高、间隔逐渐缩短，Δρ/Δt 在后段转为正值。</small>
+                  <small><b>主要风险</b>：终点不清会让玩家无法判断何时完成结算，重复结构也容易迅速程序化。</small>
+                </article>
+                <article class="shape-mixed">
+                  <span>混合</span>
+                  <strong>线性起点 → 并行／链式爆发</strong>
+                  <figure class="c2-intensity-chart" aria-label="混合演绎的信息烈度随时间曲线">
+                    <figcaption><b>信息烈度曲线</b><span>ρ(t) 随时间</span></figcaption>
+                    <svg viewBox="0 0 260 100" role="img" aria-label="前段为稳定的低强度脉冲，后段转为高强度集中爆发">
+                      <path class="c2-intensity-grid" d="M22 48H244" />
+                      <path class="c2-intensity-guide" d="M112 16V78" />
+                      <path class="c2-intensity-axis" d="M22 14V78H244" />
+                      <path class="c2-intensity-area" d="M22 78C30 78 34 59 44 59S58 78 70 78C78 78 82 53 93 53S107 78 117 78C126 78 131 43 143 43S158 78 166 78C173 78 178 22 190 22S207 78 216 78C223 78 226 35 236 35S244 72 244 78V78H22Z" />
+                      <path class="c2-intensity-line" d="M22 78C30 78 34 59 44 59S58 78 70 78C78 78 82 53 93 53S107 78 117 78C126 78 131 43 143 43S158 78 166 78C173 78 178 22 190 22S207 78 216 78C223 78 226 35 236 35S244 72 244 78" />
+                      <text class="c2-intensity-phase" x="63" y="18">线性建立</text><text class="c2-intensity-phase" x="183" y="18">并行／链式爆发</text>
+                      <text class="c2-intensity-axis-label" x="4" y="17">ρ(t)</text><text class="c2-intensity-axis-label" x="218" y="94">时间 t</text>
+                    </svg>
+                  </figure>
+                  <p>先用线性节点建立清晰因果，再在后段集中释放并行或链式结果，兼顾前段可读性与后段爆发力。</p>
+                  <small><b>烈度曲线</b>：前段为稳定的低强度脉冲，后段转为高强度集中爆发。</small>
+                  <small><b>主要风险</b>：后段压缩过度时，前面建立的因果会被密集表演覆盖，玩家只能读取总结果。</small>
+                </article>
+              </div>
+            </section>
+
+            <header class="insight-detail-heading">
+              <span>2.3 · 有效边界</span>
+              <div>
+                <h4>演绎节奏的目标不是更快或更多，而是让期待增强既能被理解，也能被直觉感受</h4>
+                <p>有效演绎节奏需要在信息增量、识别时间、即时烈度与结果期待之间取得平衡。以下五类边界都会让 C₂ 仍有内容，却失去清晰或持续增强的期待推进。</p>
+              </div>
+            </header>
+
+            <section class="c2-tempo-boundaries" aria-label="C₂ 演绎节奏的五类失效边界">
+              <article>
+                <span>过短</span>
+                <strong>信息尚未被识别，就已经被下一节点覆盖</strong>
+                <p>总时长不足以完成视觉定位、关系识别与价值判断。玩家可能感到刺激，却无法说出是哪一条信息让结果变好，最终只剩声画噪声。</p>
+              </article>
+              <article>
+                <span>过长</span>
+                <strong>新增信息不足以支撑等待，期待开始衰减</strong>
+                <p>节点之间停顿过久或表演重复占据大量时间，玩家已经理解答案却仍需等待系统播完，C₂ 会退化成拖长的结算过程。</p>
+              </article>
+              <article>
+                <span>过密</span>
+                <strong>单位时间的有效节点超过同时识别能力</strong>
+                <p>多个倍率、伤害、状态和连锁并发出现，虽然 Q<sub>C₂</sub> 很高，但因果来源相互遮蔽，玩家只能感到总价值上升，无法建立可复用的理解。</p>
+              </article>
+              <article>
+                <span>过疏</span>
+                <strong>连续关系被拆成没有意义的微反馈</strong>
+                <p>每次只释放极少信息，并用过多间隔分开，本应连贯的结果被切碎；单个节点不足以改变预测，第二峰也难以积累。</p>
+              </article>
+              <article>
+                <span>重复</span>
+                <strong>结构被完全记熟后，不确定性被固定流程取代</strong>
+                <p>即使链条仍然很长，只要每次都按相同顺序和相同反馈出现，玩家就会跳过中间判断，直接等待答案；C₂ 从揭晓过程退化为已知程序。</p>
+              </article>
+            </section>
+
+            <header class="insight-detail-heading">
+              <span>2.4 · 节奏案例</span>
+              <div>
+                <h4>同为战斗二次揭晓，敌我空间关系会形成不同的演绎节奏</h4>
+                <p>以下用同一套五维框架，对比《狗与哥布林》与《魔王终局》的 C₂ 信息如何随时间释放。曲线表示单位时间信息烈度 ρ(t)，不是多巴胺峰型，也不代表伤害数值。</p>
+              </div>
+            </header>
+
+            <section class="c2-tempo-case-study" aria-labelledby="c2-tempo-case-title">
+              <h3 class="sr-only" id="c2-tempo-case-title">狗与哥布林和魔王终局的演绎节奏对比</h3>
+              <header class="c2-tempo-case-intro">
+                <span>对比前提</span>
+                <p>两者都沿 C₁ 已建立的阵容价值继续揭晓战果；差异不在于“有没有战斗动画”，而在于战斗关系被组织成多少可辨认节点、这些节点如何并发，以及烈度是否在封闭前继续上升。</p>
+              </header>
+
+              <div class="c2-tempo-case-grid">
+                <article class="c2-tempo-case-card case-dog-goblin">
+                  <header>
+                    <span>案例 · 分段线性</span>
+                    <h3>狗与哥布林</h3>
+                    <p>盘外固定敌方区，使攻击方向和承受结果始终指向同一组明确目标。</p>
+                  </header>
+                  <figure class="c2-tempo-case-image">
+                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2666230/header_schinese.jpg?t=1749176310" alt="狗与哥布林游戏画面" loading="lazy">
+                  </figure>
+                  <div class="c2-tempo-event-flow" aria-label="狗与哥布林的 C₂ 事件顺序">
+                    <b>阵形确认</b><i>→</i><b>按方向／前后排激活</b><i>→</i><b>固定敌人依次承伤</b><i>→</i><strong>战果封闭</strong>
+                  </div>
+                  <figure class="c2-tempo-case-chart" aria-label="狗与哥布林的单位时间信息烈度曲线">
+                    <figcaption><b>ρ(t) · 分段线性</b><span>节点清楚 · 峰值较均匀</span></figcaption>
+                    <svg viewBox="0 0 520 150" role="img" aria-label="数次间隔清晰且强度逐步提高的信息脉冲">
+                      <path class="case-chart-grid" d="M34 70H496M34 110H496" />
+                      <path class="case-chart-axis" d="M34 24V110H496" />
+                      <path class="case-chart-area" d="M34 110C55 110 65 83 83 83S111 110 135 110C154 110 164 70 184 70S214 110 237 110C255 110 267 61 290 61S323 110 346 110C365 110 378 48 402 48S439 110 463 110H496V110H34Z" />
+                      <path class="case-chart-line" d="M34 110C55 110 65 83 83 83S111 110 135 110C154 110 164 70 184 70S214 110 237 110C255 110 267 61 290 61S323 110 346 110C365 110 378 48 402 48S439 110 463 110H496" />
+                      <text class="case-chart-node" x="83" y="73">定位</text><text class="case-chart-node" x="184" y="60">激活</text><text class="case-chart-node" x="290" y="51">承伤</text><text class="case-chart-node" x="402" y="38">封闭</text>
+                      <text class="case-chart-label" x="8" y="24">ρ(t)</text><text class="case-chart-label" x="455" y="137">时间 t</text>
+                    </svg>
+                  </figure>
+                  <dl class="c2-tempo-case-metrics">
+                    <div><dt>T<sub>C₂</sub> · 总体时间</dt><dd>由我方激活到固定敌方承伤，阶段边界明确，时间较容易预期。</dd></div>
+                    <div><dt>Q<sub>C₂</sub> · 总信息量</dt><dd>主要来自单位方向、前后排、攻击对象与敌方血量变化。</dd></div>
+                    <div><dt>ρ(t) · 信息烈度</dt><dd>信息按单位或战线分批出现，单个时间窗需要同时读取的关系较少。</dd></div>
+                    <div><dt>Δρ/Δt · 烈度变化</dt><dd>随更多单位进入攻击略有上升，但整体仍是相近脉冲的<strong class="tempo-emphasis-coral">逐段推进</strong>。</dd></div>
+                    <div><dt>S · 演绎结构</dt><dd>以线性为主，局部并行；空间分区帮助玩家把攻击与承伤一一对应。</dd></div>
+                  </dl>
+                  <footer><b>体验结果</b><p>理解成本较低：玩家容易知道“谁打了谁”。风险是相同攻击顺序反复出现后，中段会被记成固定程序，烈度虽持续却不再产生新的判断。</p></footer>
+                </article>
+
+                <article class="c2-tempo-case-card case-endgame-devil">
+                  <header>
+                    <span>案例 · 协同蓄积后爆发</span>
+                    <h3>魔王终局</h3>
+                    <p>敌我符号同处盘面并参与关系计算：先由多处协同并发建立价值，再通过连锁累积，最后集中进入交战兑现。</p>
+                  </header>
+                  <figure class="c2-tempo-case-image">
+                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2343600/header_schinese.jpg?t=1771846080" alt="魔王终局游戏画面" loading="lazy">
+                  </figure>
+                  <div class="c2-tempo-event-flow" aria-label="魔王终局的 C₂ 事件顺序">
+                    <b>敌我同盘定位</b><i>→</i><b>多处协同并发</b><i>→</i><b>连锁累积</b><i>→</i><b>集中交战爆发</b><i>→</i><strong>战果封闭</strong>
+                  </div>
+                  <figure class="c2-tempo-case-chart" aria-label="魔王终局的单位时间信息烈度曲线">
+                    <figcaption><b>ρ(t) · 先蓄积后爆发</b><span>协同并发 · 连锁抬升 · 交战集中兑现</span></figcaption>
+                    <svg viewBox="0 0 520 150" role="img" aria-label="定位后协同并发，连锁持续累积，并在末段通过集中交战形成最高信息烈度峰">
+                      <path class="case-chart-grid" d="M34 70H496M34 110H496" />
+                      <path class="case-chart-axis" d="M34 24V110H496" />
+                      <path class="case-chart-area" d="M34 110C51 110 59 91 77 91S104 106 123 104C141 102 151 77 171 77S199 94 217 91C234 88 243 71 262 70S290 82 307 77C323 72 330 57 348 54S375 65 390 60C405 55 411 22 435 22S470 71 480 110H496V110H34Z" />
+                      <path class="case-chart-line" d="M34 110C51 110 59 91 77 91S104 106 123 104C141 102 151 77 171 77S199 94 217 91C234 88 243 71 262 70S290 82 307 77C323 72 330 57 348 54S375 65 390 60C405 55 411 22 435 22S470 71 480 110H496" />
+                      <path class="case-chart-guide" d="M121 30V110M306 30V110M394 30V110" />
+                      <text class="case-chart-node" x="77" y="81">定位</text><text class="case-chart-node" x="171" y="67">并发协同</text><text class="case-chart-node" x="298" y="55">连锁累积</text><text class="case-chart-node" x="435" y="15">交战爆发</text>
+                      <text class="case-chart-label" x="8" y="24">ρ(t)</text><text class="case-chart-label" x="455" y="137">时间 t</text>
+                    </svg>
+                  </figure>
+                  <dl class="c2-tempo-case-metrics">
+                    <div><dt>T<sub>C₂</sub> · 总体时间</dt><dd>由定位、协同计算、连锁累积和集中交战构成；前段负责蓄积，末段负责快速兑现。</dd></div>
+                    <div><dt>Q<sub>C₂</sub> · 总信息量</dt><dd>先读取敌我位置与多处协同，再读取连锁形成的增量，最后由交战统一揭晓兑现结果。</dd></div>
+                    <div><dt>ρ(t) · 信息烈度</dt><dd>定位阶段较低，并发协同与连锁阶段持续抬升，最高烈度集中在最终交战窗口。</dd></div>
+                    <div><dt>Δρ/Δt · 烈度变化</dt><dd>价值关系由并发协同进入连锁后不断增厚，并在集中交战时陡升，形成<strong class="tempo-emphasis-coral">烈度呈明显上升</strong>的后段。</dd></div>
+                    <div><dt>S · 演绎结构</dt><dd>并发协同 → 链式累积 → 集中爆发；因果在前段建立，战果在末段集中兑现。</dd></div>
+                  </dl>
+                  <footer><b>体验结果</b><p>前段不断增加“这次会更强”的依据，末段再以集中交战完成爆发，使玩家直觉感到局面正在累积、加速并接近高潮。风险是协同和连锁过密时，玩家只能感到“整体更强”，却无法辨认具体价值来源。</p></footer>
+                </article>
+              </div>
+
+              <footer class="c2-tempo-case-conclusion">
+                <span>横向结论</span>
+                <p><b>《狗与哥布林》优先保证因果可读，</b>用固定敌方区把信息拆成清楚的分段脉冲；<b>《魔王终局》优先制造烈度累积，</b>让敌我同盘的协同先并发成立、再连锁增厚，最后通过集中交战爆发。相较于前者，后者会让 ρ(t) 在封闭前持续抬升，并在最终兑现时形成最高烈度，使玩家更强烈地直觉感到结果正在累积、加速并接近高潮，因此更容易强化多巴胺峰型中的第二峰。</p>
+              </footer>
+            </section>
+
+            <section class="c2-tempo-across-spins" aria-labelledby="c2-tempo-across-title">
+              <header>
+                <span>补充观察 · 跨 Spin</span>
+                <h3 id="c2-tempo-across-title">构筑成长如何改变 C₂ 的时间结构</h3>
+                <p>构筑可以增加总信息量与高潮强度，但必须同步检查时长、可读性与重复疲劳，避免后期只剩更长或更挤的结算。</p>
+              </header>
+              <div class="c2-tempo-progression" aria-label="跨 Spin 的 C₂ 演绎变化示意">
+                <article><span>前期</span><strong>短时 · 低密度</strong><i style="--level: 24%"></i></article>
+                <b aria-hidden="true">→</b>
+                <article><span>中期</span><strong>触发增多 · 密度上升</strong><i style="--level: 55%"></i></article>
+                <b aria-hidden="true">→</b>
+                <article><span>后期</span><strong>并行／链式 · 峰值压缩</strong><i style="--level: 88%"></i></article>
+              </div>
+              <aside class="c2-tempo-working-example">
+                <span>工作假设 · 四叶草深渊</span>
+                <p>
+                  后期护身符与连锁反应可能让演绎速度随时间加快；新增信息没有等比例拉长表演，
+                  而是被压缩进较短窗口，使单位时间信息烈度逐步提高。
+                </p>
+              </aside>
+            </section>
+
+            <footer class="c2-tempo-observation-list">
+              <span>后续记录项</span>
+              <div>
+                <b>开始与封闭时间</b>
+                <b>关键结果节点数</b>
+                <b>同时发生的最大节点数</b>
+                <b>节点之间的触发关系</b>
+                <b>前／中／后期的烈度曲线</b>
+              </div>
+            </footer>
+          </div>
+        </section>
 
         <div class="insight-rule-banner rule-banner-c2">
-          <span>规则 02</span>
-          <strong>C₂ 必须依托 C₁ 的价值锚点，并逐步揭晓它最终能兑现到什么程度。</strong>
-          <p>第二峰来自“我已经知道自己抽得不错，但还不知道最终能兑现得多好”，而不是系统突然增加另一套随机结果。</p>
+          <span>洞察三 · 结论</span>
+          <strong>有效的 C₂ 必须延续同一个 C₁ 结果，以持续抬升的<b class="conclusion-emphasis">信息烈度强化期待</b>，最终形成<b class="conclusion-emphasis">高于第一峰的第二峰</b>并封闭结果。</strong>
         </div>
       </section>
 
       <section class="section insights-section insight-decision-section" id="insight-decision">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">04 · 洞察四</p>
-            <h2>限制决策复杂度，<br>保护双峰循环的连续性</h2>
+            <p class="eyebrow">04 · 洞察四 · 决策负荷</p>
+            <h2>控制两次表演之间的决策负荷，<br>保留每一次 Spin 的主动起点</h2>
           </div>
           <p>
             双峰多巴胺游戏需要同时限制<strong>决策数</strong>与<strong>单次决策复杂度</strong>，
@@ -1698,27 +2715,83 @@
           </p>
         </div>
 
-        <section class="decision-budget-definition" aria-labelledby="decision-budget-title">
+        <section class="insight-concept-definition" aria-labelledby="insight-four-concept-title">
           <header>
-            <div>
-              <span>DECISION BUDGET</span>
-              <h3 id="decision-budget-title">循环负荷 ≈ 决策数 × 单次决策复杂度</h3>
-            </div>
-            <p>
-              决策负荷越高，玩家从一次表演回到下一次表演所需的时间越长。
-              这里限制的不是策略上限，而是单个双峰循环必须支付的操作成本。
-            </p>
+            <span>概念定义</span>
+            <h3 id="insight-four-concept-title">决策负荷决定玩家多久进入下一次表演，主动起点决定下一次期待是否由玩家亲自建立</h3>
+            <p>玩家在两次表演之间需要支付多少操作与理解成本，以及下一次 Spin 是否仍由玩家明确开启。</p>
           </header>
+          <div class="insight-concept-grid insight-concept-grid-two decision-concept-core">
+            <article>
+              <span>01 · 决策负荷</span>
+              <strong>进入下一次表演前必须支付的主动成本</strong>
+              <p>它由决策数、单次决策复杂度、操作粒度与持续状态追踪共同形成；不能只用点击次数衡量。</p>
+            </article>
+            <article>
+              <span>02 · 主动起点</span>
+              <strong>玩家明确开启下一次 Spin 的时刻</strong>
+              <p>它确认上一轮已经结束、主动权已经返回，并由玩家亲自建立“我要再来一次”的新期待。</p>
+            </article>
+          </div>
+          <div class="decision-performance-timeline" aria-label="两次 Spin 表演之间的时间关系">
+            <header>
+              <span>时间关系</span>
+              <strong>表演间隔是两次 Spin 表演之间的时间窗口</strong>
+            </header>
+            <div class="decision-performance-flow">
+              <div class="decision-performance-stop">
+                <span>上一轮</span>
+                <strong>Spin 表演结束</strong>
+                <small>结果封闭</small>
+              </div>
+              <i aria-hidden="true">→</i>
+              <div class="decision-performance-gap">
+                <span>表演间隔</span>
+                <strong>吸收结果 · 必要策略 · 主动权返回</strong>
+                <small>决策负荷会占用并拉长这段时间；长期占满间隔，就会阻塞下一轮期待。</small>
+              </div>
+              <i aria-hidden="true">→</i>
+              <div class="decision-performance-stop is-active">
+                <span>主动起点</span>
+                <strong>玩家触发下一次 Spin</strong>
+                <small>下一轮表演开始，建立新的期待</small>
+              </div>
+            </div>
+            <p>进入下一次表演前必须把主动权交还玩家，由玩家亲自启动下一次“触发 → 等待 → 揭晓”。</p>
+          </div>
+        </section>
+
+        <section class="decision-insight-block insight-reveal-block decision-load-composition" aria-labelledby="decision-load-composition-title">
+          <header class="insight-subsection-heading">
+            <span>1 · 决策负荷的构成</span>
+            <div>
+              <h3 id="decision-load-composition-title">负荷不只取决于操作次数，还取决于每次决策需要处理多少关系</h3>
+              <p>
+                决策数、单次复杂度、操作粒度与认知残留共同决定玩家从一次表演回到下一次表演所需的成本。
+                这里限制的不是策略上限，而是每个双峰循环重复支付的负荷。
+              </p>
+            </div>
+          </header>
+
+          <header class="insight-subsection-heading">
+            <span>1.1 · 循环负荷</span>
+            <div>
+              <h3 id="decision-budget-title">循环负荷 ≈ 决策数 × 单次决策复杂度</h3>
+              <p>一次表演前需要连续做多少决定，与每次决定需要比较多少分支和依赖，共同构成基础决策负荷。</p>
+            </div>
+          </header>
+
+          <section class="decision-budget-definition" aria-labelledby="decision-budget-title">
 
           <div class="decision-budget-grid">
             <article>
-              <span>01 · 决策数</span>
+              <span>构成 01 · 决策数</span>
               <strong>一次表演前要连续做多少次选择？</strong>
               <p>选择入口越多、确认步骤越长，循环越容易停在操作区。</p>
             </article>
             <b aria-hidden="true">×</b>
             <article>
-              <span>02 · 单次复杂度</span>
+              <span>构成 02 · 单次决策复杂度</span>
               <strong>每次选择要比较多少分支与依赖？</strong>
               <p>分支、资源、跨系统依赖与计算量，都会延长单次判断。</p>
             </article>
@@ -1741,170 +2814,192 @@
               <small>低频集中处理，不占满每轮表演之间的窗口</small>
             </div>
           </div>
+          </section>
+
+        <header class="insight-subsection-heading">
+          <span>1.2 · 操作粒度</span>
+          <div>
+            <h3>先判断玩家一次操作处理什么，再判断单轮需要重复多少次</h3>
+            <p>操作粒度描述一次输入直接作用的最小对象与覆盖范围；粒度越细，同一盘面通常需要越多次输入才能完成揭晓。</p>
+          </div>
+        </header>
+
+        <section class="operation-granularity-analysis" aria-labelledby="operation-granularity-analysis-title">
+          <header>
+            <span>操作粒度分析方法</span>
+            <h3 id="operation-granularity-analysis-title">从操作对象、覆盖范围、重复次数与反馈距离判断粒度是否合适</h3>
+            <p>不能只看“点了几次”。同一次点击可能处理整张盘面，也可能只处理一个符号；两者产生的单轮负荷完全不同。</p>
+          </header>
+          <div class="operation-granularity-axis" aria-label="一次 Spin 内的操作时间轴">
+            <span>首次输入 t₀</span>
+            <b aria-hidden="true"></b>
+            <span>最终揭晓 tₙ</span>
+          </div>
+          <div class="operation-granularity-timeline">
+            <article>
+              <span>t₀ · 操作对象</span>
+              <strong>一次输入直接控制什么？</strong>
+              <p>单个符号、单列、局部区域，还是整张盘面。对象越小，操作粒度越细。</p>
+            </article>
+            <article>
+              <span>t₁ · 覆盖范围</span>
+              <strong>一次输入能完成多少处理？</strong>
+              <p>只改变一个对象，还是同时决定多个对象与结果。覆盖越窄，所需操作批次越多。</p>
+            </article>
+            <article>
+              <span>t₂…tₙ₋₁ · 重复次数</span>
+              <strong>一次 Spin 内要重复多少次？</strong>
+              <p>同一操作需要逐符号、逐列或逐阶段重复时，细粒度会直接累积为操作数量。</p>
+            </article>
+            <article>
+              <span>tₙ · 反馈距离</span>
+              <strong>操作后多久看到一次揭晓？</strong>
+              <p>每次操作都立即兑现，负荷会被短反馈切分；必须全部完成后才揭晓，间隔就会持续拉长。</p>
+            </article>
+          </div>
+          <div class="operation-granularity-formula">
+            <span>适配判断</span>
+            <strong>单轮操作批次 ≈ 可操作对象数 ÷ 单次操作覆盖对象数</strong>
+            <p>盘面扩大意味着对象数增加；若覆盖范围没有同步扩大，操作粒度就会被盘面规模放大成阻塞。</p>
+          </div>
         </section>
-
-        <article class="decision-bad-case decision-good-case">
-          <div class="decision-bad-case-visual decision-good-case-visual"
-            aria-label="命运转轮用低复杂度的技巧型斯金纳箱维持连续双峰">
-            <div><span>LOW COMPLEXITY</span><strong>单轴轻操作</strong></div>
-            <i>→</i>
-            <div><span>SKILL INPUT</span><strong>选择时机停轮</strong></div>
-            <i>→</i>
-            <div><span>MICRO SKINNER BOX</span><strong>每次操作再开奖</strong></div>
-            <i>→</i>
-            <div><span>DOUBLE-PEAK LOOP</span><strong>快速进入下一峰</strong></div>
-          </div>
-          <div class="decision-bad-case-copy decision-good-case-copy">
-            <header><span>GOOD CASE 01 · 洞察 03</span><strong>命运转轮 · Slot改·战斗</strong></header>
-            <h3>把复杂策略压缩成一次时机判断，让每次操作都成为新的开奖</h3>
-            <p>
-              《命运转轮》把复杂决策降维成单轴、单时机的轻操作：玩家观察数值，在合适时点点击停轮。
-              每次点击既带有技巧成分，又会立刻进入一次随机兑现，形成一个短小的<strong>“技巧型斯金纳箱”</strong>。
-              “操作 → 期待 → 揭晓”高频连续，使玩家能够持续处在多轮双峰多巴胺体验状态。
-            </p>
-            <aside>
-              <span>TRADE-OFF</span>
-              <p>每一轴都需要持续注意并主动判断停轮时机；交互频率过高时，长时间游玩会明显疲劳。</p>
-            </aside>
-            <footer>有效机制：<b>低复杂度 × 技巧型斯金纳箱 × 高频双峰</b>；代价：<b>持续注意力疲劳</b></footer>
-          </div>
-        </article>
-
-        <article class="decision-bad-case lucky-hero-bad-case">
-          <div class="decision-bad-case-visual lucky-hero-operation-flow"
-            aria-label="幸运勇者的 5×5 盘面把单 Spin 逐符号操作放大为大量操作对象">
-            <div><span>BOARD</span><strong>5×5 大盘面</strong></div>
-            <i>→</i>
-            <div><span>OBJECTS</span><strong>最多 25 个符号对象</strong></div>
-            <i>→</i>
-            <div><span>PER-SYMBOL INPUT</span><strong>单 Spin 逐符号操作</strong></div>
-            <i>→</i>
-            <div><span>FATIGUE</span><strong>持续注意与输入疲劳</strong></div>
-          </div>
-          <div class="decision-bad-case-copy">
-            <header><span>BAD CASE 01 · 洞察 03</span><strong>幸运勇者 · Slot改·战斗</strong></header>
-            <h3>5×5 的盘面容量，被逐符号操作转化成了操作数量</h3>
-            <p>
-              《幸运勇者》仍使用 5×5 盘面，并要求玩家在单次 Spin 内逐符号操作。
-              大盘面本可用于承载更多符号与协同；当每个符号同时成为操作对象时，
-              即使单次判断并不复杂，重复到大量符号上仍会显著拉长操作窗口，
-              打断“少量操作 → 看表演”的节奏，并让长时间游玩产生明显疲劳。
-            </p>
-            <footer>负荷来源：<b>5×5 盘面 × 逐符号操作 × 高频重复</b></footer>
-          </div>
-        </article>
 
         <section class="decision-board-tradeoff" aria-labelledby="decision-board-tradeoff-title">
           <header>
             <div>
-              <span>DESIGN TRADE-OFF · 基于幸运猎人的改造推导</span>
-              <h3 id="decision-board-tradeoff-title">盘面大小不能脱离操作粒度与符号养成方式单独决定</h3>
+              <span>操作粒度的设计取舍</span>
+              <h3 id="decision-board-tradeoff-title">盘面越大，单次操作的覆盖范围就必须越大</h3>
             </div>
             <p>
-              以下不是《幸运勇者》或《幸运猎人》的当前盘面设定，而是基于《幸运猎人》改造方向得到的通用取舍：
-              大盘面适合承载符号协同，小盘面适合承载逐符号操作；组合错误，会在操作疲劳与养成承载不足之间付出代价。
+              盘面大小决定潜在操作对象数，操作粒度决定每次输入能覆盖多少对象。
+              两者必须共同设计：大盘面适合整盘或分区处理，小盘面才适合逐对象操作。
             </p>
           </header>
 
           <div class="decision-board-matrix">
             <article class="is-good">
-              <span>✓ 玩符号协同</span>
-              <strong>大盘面 + 符号类型 BD + 自动处理盘面</strong>
-              <p>把注意力留给符号组合、流派构筑与结果观察，不要求玩家逐个处理盘面对象。</p>
+              <span>✓ 大盘面的合适粒度</span>
+              <strong>大盘面 × 整盘／分区处理</strong>
+              <p>一次操作覆盖多个对象，把注意力留给整体关系、结果判断与表演。</p>
             </article>
             <article class="is-good">
-              <span>✓ 玩单次操作决策</span>
-              <strong>小盘面 + 逐符号操作 + 概率 BD／不养成符号类型</strong>
-              <p>缩小每次要处理的对象集合，让少量操作本身成为主要决策体验。</p>
+              <span>✓ 小盘面的合适粒度</span>
+              <strong>小盘面 × 逐对象／分区处理</strong>
+              <p>对象总量受控，少量细粒度或分区操作可以成为明确、可反馈的决策体验。</p>
+              <p>案例：命运转轮</p>
+            </article>
+            <article class="is-good is-limited">
+              <span>✓ 小盘面的受控分区粒度</span>
+              <strong>小盘面 × 分区处理（限制次数）</strong>
+              <p>将对象按少量区域成组处理，每轮只允许有限次分区选择；既保留局部取舍，也防止分区数量继续拉长表演间隔。</p>
+              <p>案例：Slotbound</p>
             </article>
             <article class="is-bad">
-              <span>✕ 操作数太高</span>
-              <strong>大盘面 + 单 Spin 逐符号操作</strong>
-              <p>盘面容量直接转化成输入数量，单次循环被大量重复操作占满。</p>
+              <span>✕ 粒度过细</span>
+              <strong>大盘面 × 逐对象处理</strong>
+              <p>盘面对象数直接转化成输入次数，单次循环被大量重复操作占满。</p>
             </article>
             <article class="is-bad">
-              <span>✕ 盘面单次承载太低</span>
-              <strong>小盘面 + 深度符号类型养成</strong>
-              <p>可同时出现的符号过少，协同难以展开，养成成果也缺少展示空间。</p>
+              <span>✕ 粒度过粗</span>
+              <strong>小盘面 × 整盘一次处理</strong>
+              <p>一次输入已经覆盖全部对象，玩家参与感过低，操作难以形成有效决策。</p>
             </article>
           </div>
 
           <footer>
             <strong>核心取舍</strong>
             <p>
-              要么让大盘面负责“看更多符号协同”，把操作移出单 Spin；
-              要么让小盘面负责“做少量关键操作”，降低符号类型养成的承载要求。
+              要么扩大单次操作覆盖范围，让大盘面仍能快速处理；
+              要么缩小盘面对象数，为逐对象操作保留可承受的重复次数。
             </p>
           </footer>
         </section>
 
-        <section class="choice-pool-attempt" aria-labelledby="choice-pool-attempt-title">
-          <header>
-            <div>
-              <span>DESIGN ATTEMPT · 洞察 03</span>
-              <h3 id="choice-pool-attempt-title">《Slot or Not》：用 Choice_Pool 换取支付线密度，但以操作数和峰值强度为代价</h3>
-            </div>
-            <p>
-              这是“大盘面 + 符号类型 BD”的一种结构思路，不是默认推荐的 Good Case。
-              它解决了全局符号池与单 Spin 同屏类型数量的冲突，但没有消除复杂度，而是把复杂度转移到抽取阶段与玩家操作中。
-            </p>
-          </header>
-
-          <div class="choice-pool-progressive-board">
-            <span>盘面成长</span>
-            <strong>1×3 初始盘面</strong><i>→</i><strong>随单局进度扩展</strong><i>→</i><strong>逐步释放盘面容量</strong>
-            <p>初期认知压力得到延后；当盘面持续扩大时，后期识别量与操作负担仍会重新上升。</p>
+        <header class="insight-detail-heading">
+          <span>案例验证</span>
+          <div>
+            <h4>命运转轮：用单轴、单时机与即时反馈控制操作粒度 - 小盘面 × 逐对象／分区处理</h4>
+            <p>每次只判断一个对象，但操作后立即揭晓，不需要累积处理整张大盘面。</p>
           </div>
+        </header>
 
-          <div class="choice-pool-flow-compare">
-            <div class="choice-pool-flow-lane is-direct">
-              <span>直接抽取 · 集中揭晓</span>
-              <div>
-                <b>Pool_Symbol</b><i>→</i><b>Random</b><i>→</i><b>SingleSpin_Symbol</b><i>→</i><b>Put</b><i>→</i><strong>C₁ 盘面揭晓</strong>
-              </div>
-            </div>
-            <div class="choice-pool-flow-lane is-staged">
-              <span>Slot or Not · 多阶段抽取</span>
-              <div>
-                <b>Pool_Symbol</b><i>→</i><b>Random</b><i>→</i><b>Choice_Pool</b><i>→</i><b>玩家主动选择</b><i>→</i><b>SingleSpin_Symbol</b><i>→</i><b>Put</b>
-              </div>
-            </div>
+        <article class="decision-case-card decision-case-good decision-case-single-split">
+          <header><span>正例 · 轻操作即时开奖</span><strong>命运转轮 · Slot改·战斗</strong></header>
+          <figure class="decision-case-game-image">
+            <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3631290/e6717abc9fe7d15049543614ffd69317b9e1e4b4/header.jpg?t=1780064257" alt="命运转轮游戏画面" loading="lazy">
+          </figure>
+          <div class="decision-case-flow" aria-label="命运转轮的单轴轻操作循环">
+            <b>观察单轴</b><i>→</i><b>判断时机</b><i>→</i><b>点击停轮</b><i>→</i><strong>立即揭晓</strong>
           </div>
+          <h3>把复杂策略压缩成一次时机判断，让每次操作都成为新的开奖</h3>
+          <dl class="decision-case-checks">
+            <div><dt>决策数</dt><dd>每轴只保留一次关键停轮判断</dd></div>
+            <div><dt>单次复杂度</dt><dd>只比较当前数值与停轮时机</dd></div>
+            <div><dt>操作粒度</dt><dd>单轴、单时机、低对象数</dd></div>
+            <div><dt>表演间隔</dt><dd>点击后立即进入随机兑现</dd></div>
+            <div><dt>节奏结果</dt><dd>操作 → 期待 → 揭晓快速闭环</dd></div>
+          </dl>
+          <p>
+            《命运转轮》把复杂决策降维成单轴、单时机的轻操作：玩家观察数值，在合适时点点击停轮。
+            每次点击既带有技巧成分，又会立刻进入一次随机兑现，形成一个短小的<strong>“技巧型斯金纳箱”</strong>。
+            “操作 → 期待 → 揭晓”高频连续，使玩家能够持续处在多轮双峰多巴胺体验状态。
+          </p>
+          <aside><span>设计取舍</span><p>每一轴都需要持续注意并主动判断停轮时机；交互频率过高时，长时间游玩会明显疲劳。</p></aside>
+        </article>
 
-          <div class="choice-pool-tradeoff-grid">
-            <article class="choice-pool-gain">
-              <span>结构收益</span>
-              <h4>限制单 Spin 同屏类型，提高支付线协同概率</h4>
-              <ul>
-                <li>全局 Pool_Symbol 可以保留较大的构筑空间。</li>
-                <li>Choice_Pool 每次只暴露少量候选，降低进入盘面的符号类型数量。</li>
-                <li>相同符号的重复密度提高，更容易形成支付线协同反应。</li>
-              </ul>
-              <p>支付线的结构限制是：盘面格数固定时，符号类型越多，相同符号越稀疏，协同越难发生。</p>
-            </article>
-            <article class="choice-pool-cost">
-              <span>体验代价</span>
-              <h4>一次强揭晓被拆成多个操作阶段</h4>
-              <ul>
-                <li>候选揭晓与主动选择增加了单 Spin 的操作阶段和操作数。</li>
-                <li>玩家在落盘前已经看到并筛选候选，最终盘面的未知性下降。</li>
-                <li>“盘面中大奖”的 C₁ 刺激被提前拆散，强峰值可能变成多个较弱的小揭晓。</li>
-              </ul>
-              <p>多阶段抽取并不必然产生更多有效峰值；它也可能稀释单次大奖的认知刺激，削弱连续维持多巴胺峰值的能力。</p>
-            </article>
-          </div>
-
-          <footer>
-            <span>结论</span>
-            <strong>全局符号池可以很大，但限制单 Spin 类型的方式不能破坏集中揭晓。</strong>
-            <p>Choice_Pool 是可研究的结构思路；是否成立，取决于支付线密度收益能否覆盖新增操作数与 C₁ 峰值损失。</p>
-          </footer>
         </section>
+
+        <section class="decision-insight-block insight-reveal-block decision-load-blocking" aria-labelledby="decision-load-blocking-title">
+        <header class="insight-subsection-heading">
+          <span>2 · 决策负荷如何阻塞下一次表演</span>
+          <div>
+            <h3 id="decision-load-blocking-title">负荷过高最终会中断双峰体验飞轮，使玩家退出连续心流</h3>
+            <p>时间阻塞与认知残留是两条阻塞路径；真正的体验后果，是玩家无法在本轮第二峰封闭后顺势开启下一轮，连续的“期待 → 双峰兑现 → 再次触发”被切断。</p>
+          </div>
+        </header>
+
+        <header class="insight-detail-heading decision-blocking-types-heading">
+          <span>2.1 · 阻塞类型</span>
+          <div>
+            <h4>阻塞先表现为时间与认知占用，最终中断双峰体验飞轮</h4>
+            <p>前两类描述负荷怎样占用下一轮之前的窗口，第三类描述它们共同造成的核心体验后果。</p>
+          </div>
+        </header>
+
+        <div class="decision-blocking-principles">
+          <article>
+            <span>类型 01 · 时间阻塞</span>
+            <strong>连续操作和长时间规划会直接拉长表演间隔</strong>
+            <p>如果思考与处理时间持续长于表演时间，体验重心就会从“期待下一次揭晓”转为“处理上一轮遗留问题”。</p>
+          </article>
+          <article>
+            <span>类型 02 · 认知残留</span>
+            <strong>未完成的状态追踪会越过下一次 Spin 的起点</strong>
+            <p>玩家即使停止操作，仍可能继续记忆状态、比较方案与预测后果；这些任务同样占用下一轮期待所需的注意力。</p>
+          </article>
+          <article class="decision-flywheel-break">
+            <span>类型 03 · 双峰飞轮中断</span>
+            <strong>无法连续开启下一轮，玩家就会退出双峰体验的心流</strong>
+            <p>当表演间隔过长或上一轮任务没有清空，第二峰封闭后无法立即转入下一次主动触发。双峰不再连续形成期待与兑现的飞轮，这与以连续双峰多巴胺为核心的爽游戏设定直接冲突。</p>
+            <div aria-label="双峰体验飞轮被决策负荷中断">
+              <b>主动触发</b><i>→</i><b>双峰兑现</b><i>→</i><b>再次触发</b><i>→</i><strong>连续心流</strong>
+              <em>决策负荷在“再次触发”前造成阻断</em>
+            </div>
+          </article>
+        </div>
+
+        <header class="insight-detail-heading">
+          <span>2.2 · 认知负荷验证</span>
+          <div>
+            <h4>新增系统必须从同一轮的有限预算中支付成本</h4>
+            <p>战斗状态、资源规划、独立符号库和跨系统依赖都会延长理解时间，不能被当作 Slot 之外的免费复杂度。</p>
+          </div>
+        </header>
 
         <section class="combat-cognitive-budget" aria-labelledby="combat-cognitive-budget-title">
           <header>
             <div>
-              <span>COMBAT COGNITIVE BUDGET · 单 Spin 压力验证</span>
+              <span>战斗认知预算 · 单 Spin 压力验证</span>
               <h3 id="combat-cognitive-budget-title">战斗模型也占用单 Spin 的认知预算</h3>
             </div>
             <p>
@@ -1939,7 +3034,7 @@
             </article>
             <i aria-hidden="true">=</i>
             <article class="combat-cognitive-total">
-              <span>SINGLE SPIN</span>
+              <span>单次 Spin</span>
               <strong>有效认知负荷</strong>
               <p>四部分共同决定下一次双峰循环能否立即开始。</p>
             </article>
@@ -1989,7 +3084,7 @@
 
           <section class="combat-complexity-compensation" aria-labelledby="combat-compensation-title">
             <header>
-              <span>LOAD COMPENSATION · 当前样本观察</span>
+              <span>负担补偿 · 当前样本观察</span>
               <h4 id="combat-compensation-title">增加战斗认知后，用盘面降维归还 C₁ 与符号池预算</h4>
               <p>
                 生存型战斗相较基础模型增加了状态与符号分叉；较有效的解法不是继续让所有层级一起增长，
@@ -2028,136 +3123,247 @@
           </footer>
         </section>
 
-        <article class="decision-bad-case">
-          <div class="decision-bad-case-visual" aria-label="帝国轮盘的决策负荷不断累积">
-            <div><span>SLOT</span><strong>资源产出</strong></div>
-            <i>→</i>
-            <div><span>DECISION 01</span><strong>资源分配</strong></div>
-            <i>→</i>
-            <div><span>DECISION 02</span><strong>发展路线</strong></div>
-            <i>→</i>
-            <div><span>DECISION 03+</span><strong>文明经营</strong></div>
-          </div>
-          <div class="decision-bad-case-copy">
-            <header><span>BAD CASE 02 · 洞察 03</span><strong>帝国轮盘 · Slot+数值</strong></header>
-            <h3>连续规划拉长了两次表演之间的静默区</h3>
-            <p>
-              Slot 产出后，玩家需要处理多种资源，并连续完成分配、发展与经营决策。
-              决策数与依赖复杂度同时累积，使体验长时间停留在分析状态，
-              “少量操作 → 看表演”的节奏被策略规划截断。
-            </p>
-            <footer>节奏风险：<b>决策数上升 × 依赖层数上升 × 表演间隔拉长</b></footer>
-          </div>
-        </article>
-
-        <article class="decision-bad-case">
-          <div
-            class="decision-bad-case-visual column-library-flow"
-            aria-label="死而符生的五列 Slot 分别使用独立符号库"
-          >
-            <div><span>COL 01</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
-            <div><span>COL 02</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
-            <div><span>COL 03</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
-            <div><span>COL 04</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
-            <div><span>COL 05</span><strong>独立符号库</strong><small>单列候选与价值</small></div>
-            <b>5 个独立库 × 刷新／锁定 × 支付线序列 → 决策认知负荷不止 5×</b>
-          </div>
-          <div class="decision-bad-case-copy">
-            <header><span>BAD CASE 03 · 洞察 03</span><strong>死而符生 · Slot+数值</strong></header>
-            <h3>五列独立符号库，把一次大奖判断拆成五套认知任务</h3>
-            <p>
-              传统 Slot 依靠共享符号先验支持一次性识别；《死而符生》让五列分别维护独立符号库。
-              玩家需要同时理解每列的候选、价值与组合关系，再叠加刷新、锁定和从左到右的支付线序列。
-              原本“一套符号认知 + 一次操作判断”被放大为至少五套并行认知，实际决策认知复杂度不止 5 倍。
-            </p>
-            <footer>认知风险：<b>5 个独立符号库 × 列间比较 × 刷新／锁定 ≫ 5×</b></footer>
-          </div>
-        </article>
-
-        <div class="insight-rule-banner rule-banner-c3">
-          <span>规则 03</span>
-          <strong>让玩家频繁做小决定，阶段性做大决定；不要每次开奖前都完成一轮经营。</strong>
-          <p>好的策略深度会放大下一轮期待，过密的策略决策则会取代双峰体验本身。</p>
-        </div>
-      </section>
-
-      <section class="section insights-section insight-autospin-section" id="insight-autospin">
-        <div class="section-heading insight-heading">
+        <header class="insight-detail-heading">
+          <span>2.3 · 阻塞案例</span>
           <div>
-            <p class="eyebrow">05 · 洞察五</p>
-            <h2>绝对，千万，<br>不要做自动 Spin</h2>
+            <h4>不同形式的负荷，最终都会阻断双峰体验飞轮</h4>
+            <p>以下案例分别观察多阶段操作、连续规划与多个独立认知对象如何延迟下一次集中揭晓，使玩家无法持续处在“主动触发 → 双峰兑现 → 再次触发”的心流中。</p>
           </div>
-          <p>
-            手动触发不是可以省略的冗余操作。它为每一轮建立明确的时间起点与玩家主动权，
-            让期待、C₁ 识别和 C₂ 揭晓被感知为一次完整事件。
-            自动 Spin 会直接打断双峰多巴胺体验的设计目的。
-          </p>
-        </div>
+        </header>
 
-        <div class="autospin-prohibition" role="note" aria-label="禁止自动 Spin 的不可妥协原则">
-          <span>NON-NEGOTIABLE</span>
-          <strong>绝对，千万，<em>不要做自动 Spin。</em></strong>
-          <p>可以让操作更轻，但不能替玩家按下下一次 Spin。</p>
-        </div>
-
-        <section class="autospin-contrast" aria-label="手动 Spin 与自动 Spin 的体验差异">
-          <article class="autospin-lane autospin-lane-manual">
-            <header><span>MANUAL SPIN</span><strong>主动开启一次完整双峰</strong></header>
+        <section class="choice-pool-attempt choice-pool-bad-case" aria-labelledby="choice-pool-attempt-title">
+          <header>
             <div>
-              <b>明确操作</b><i>→</i><b>期待建立</b><i>→</i><b>C₁ 识别 + C₂ 揭晓</b><i>→</i><b>回到主动权</b>
+              <span>反例 · 多阶段操作阻塞</span>
+              <h3 id="choice-pool-attempt-title">《Slot or Not》：用 Choice_Pool 换取支付线密度，但以操作数和峰值强度为代价</h3>
             </div>
-            <p>每轮都有清晰起点、等待过程与结束边界，玩家知道“是我开启了这次结果”。</p>
+            <p>
+              Choice_Pool 解决了全局符号池与单 Spin 同屏类型数量的冲突，但没有消除复杂度，
+              而是把复杂度转移到抽取阶段与玩家操作中，因此应作为“负荷如何阻塞表演”的案例观察。
+            </p>
+          </header>
+
+          <div class="choice-pool-progressive-board">
+            <span>盘面成长</span>
+            <strong>1×3 初始盘面</strong><i>→</i><strong>随单局进度扩展</strong><i>→</i><strong>逐步释放盘面容量</strong>
+            <p>初期认知压力得到延后；当盘面持续扩大时，后期识别量与操作负担仍会重新上升。</p>
+          </div>
+
+          <div class="choice-pool-flow-compare">
+            <div class="choice-pool-flow-lane is-direct">
+              <span>直接抽取 · 集中揭晓</span>
+              <div><b>Pool_Symbol</b><i>→</i><b>Random</b><i>→</i><b>SingleSpin_Symbol</b><i>→</i><b>Put</b><i>→</i><strong>C₁ 盘面揭晓</strong></div>
+            </div>
+            <div class="choice-pool-flow-lane is-staged">
+              <span>Slot or Not · 多阶段抽取</span>
+              <div><b>Pool_Symbol</b><i>→</i><b>Random</b><i>→</i><b>Choice_Pool</b><i>→</i><b>玩家主动选择</b><i>→</i><b>SingleSpin_Symbol</b><i>→</i><b>Put</b></div>
+            </div>
+          </div>
+
+          <div class="choice-pool-tradeoff-grid">
+            <article class="choice-pool-gain">
+              <span>结构收益</span>
+              <h4>限制单 Spin 同屏类型，提高支付线协同概率</h4>
+              <ul>
+                <li>全局 Pool_Symbol 可以保留较大的构筑空间。</li>
+                <li>Choice_Pool 每次只暴露少量候选，降低进入盘面的符号类型数量。</li>
+                <li>相同符号的重复密度提高，更容易形成支付线协同反应。</li>
+              </ul>
+              <p>支付线的结构限制是：盘面格数固定时，符号类型越多，相同符号越稀疏，协同越难发生。</p>
+            </article>
+            <article class="choice-pool-cost">
+              <span>阻塞代价</span>
+              <h4>一次强揭晓被拆成多个操作阶段</h4>
+              <ul>
+                <li>候选揭晓与主动选择增加了单 Spin 的操作阶段和操作数。</li>
+                <li>玩家在落盘前已经看到并筛选候选，最终盘面的未知性下降。</li>
+                <li>“盘面中大奖”的 C₁ 刺激被提前拆散，强峰值可能变成多个较弱的小揭晓。</li>
+              </ul>
+              <p>多阶段抽取既拉长下一次表演的等待时间，也可能稀释单次大奖的认知刺激。</p>
+            </article>
+          </div>
+
+          <footer>
+            <span>阻塞判断</span>
+            <strong>支付线密度的收益，未必能覆盖新增操作数与 C₁ 峰值损失。</strong>
+            <p>Choice_Pool 是否成立，应同时比较协同概率提升、表演间隔增加与集中揭晓强度下降。</p>
+          </footer>
+        </section>
+
+        <div class="decision-case-grid decision-case-grid-three">
+          <article class="decision-case-card decision-case-bad">
+            <header><span>反例 · 操作数量阻塞</span><strong>幸运勇者 · Slot改·战斗</strong></header>
+            <figure class="decision-case-game-image"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2404510/header.jpg" alt="幸运勇者游戏画面" loading="lazy"></figure>
+            <div class="decision-case-flow"><b>5×5 盘面</b><i>→</i><b>25 个对象</b><i>→</i><b>逐符号输入</b><i>→</i><strong>操作疲劳</strong></div>
+            <h3>盘面容量被逐符号操作转化成了操作数量</h3>
+            <dl class="decision-case-checks">
+              <div><dt>决策数</dt><dd>单 Spin 内重复处理大量符号</dd></div>
+              <div><dt>单次复杂度</dt><dd>单项不高，但高频重复</dd></div>
+              <div><dt>操作粒度</dt><dd>每个符号都成为操作对象</dd></div>
+              <div><dt>表演间隔</dt><dd>操作窗口随盘面容量拉长</dd></div>
+              <div><dt>阻塞结果</dt><dd>持续输入取代“少量操作 → 看表演”</dd></div>
+            </dl>
+            <p>《幸运勇者》使用 5×5 盘面，并要求玩家在单次 Spin 内逐符号操作。即使单次判断并不复杂，重复到大量符号上仍会显著拉长操作窗口，并让长时间游玩产生明显疲劳。</p>
           </article>
-          <article class="autospin-lane autospin-lane-auto">
-            <header><span>AUTO SPIN</span><strong>把离散双峰压成连续结果流</strong></header>
+
+          <article class="decision-case-card decision-case-bad">
+            <header><span>反例 · 时间规划阻塞</span><strong>帝国轮盘 · Slot+数值</strong></header>
+            <figure class="decision-case-game-image"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3576520/2d9f43ddbd134a25e0942e725ffca4c5ec0ca298/header.jpg?t=1777038565" alt="帝国轮盘游戏画面" loading="lazy"></figure>
+            <div class="decision-case-flow"><b>Slot 产出</b><i>→</i><b>资源分配</b><i>→</i><b>发展路线</b><i>→</i><strong>文明经营</strong></div>
+            <h3>连续规划拉长了两次表演之间的静默区</h3>
+            <dl class="decision-case-checks">
+              <div><dt>决策数</dt><dd>一次产出引出多次连续选择</dd></div>
+              <div><dt>依赖层数</dt><dd>分配影响发展，发展影响经营</dd></div>
+              <div><dt>认知残留</dt><dd>上一选择持续占用后续判断</dd></div>
+              <div><dt>表演间隔</dt><dd>分析状态长期占据循环中段</dd></div>
+              <div><dt>阻塞结果</dt><dd>策略规划截断下一次揭晓</dd></div>
+            </dl>
+            <p>Slot 产出后，玩家需要处理多种资源，并连续完成分配、发展与经营决策。决策数与依赖复杂度同时累积，使体验长时间停留在分析状态。</p>
+          </article>
+
+          <article class="decision-case-card decision-case-bad">
+            <header><span>反例 · 并行认知阻塞</span><strong>死而符生 · Slot+数值</strong></header>
+            <figure class="decision-case-game-image"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3073990/25e2c04f07c2e274bf89090de2bb8fc63d92ad23/header_schinese.jpg?t=1773151370" alt="死而符生游戏画面" loading="lazy"></figure>
+            <div class="decision-case-flow"><b>五列独立库</b><i>→</i><b>列间比较</b><i>→</i><b>刷新／锁定</b><i>→</i><strong>支付线判断</strong></div>
+            <h3>五列独立符号库，把一次大奖判断拆成五套认知任务</h3>
+            <dl class="decision-case-checks">
+              <div><dt>认知对象</dt><dd>五列分别维护独立符号库</dd></div>
+              <div><dt>比较关系</dt><dd>同时理解各列候选与价值</dd></div>
+              <div><dt>操作分支</dt><dd>刷新、锁定与支付线叠加</dd></div>
+              <div><dt>认知残留</dt><dd>前列信息持续影响后列判断</dd></div>
+              <div><dt>阻塞结果</dt><dd>一次判断被拆成并行认知任务</dd></div>
+            </dl>
+            <p>传统 Slot 依靠共享符号先验支持一次性识别；《死而符生》让五列分别维护独立符号库，再叠加刷新、锁定和从左到右的支付线序列，实际决策认知复杂度不止 5 倍。</p>
+          </article>
+        </div>
+
+        </section>
+
+        <section class="decision-insight-block insight-reveal-block decision-load-control" aria-labelledby="decision-load-control-title">
+          <header class="insight-subsection-heading">
+            <span>3 · 在不删除策略深度的前提下控制负荷</span>
             <div>
-              <b>系统触发</b><i>→</i><b>结果不断</b><i>→</i><b>起点消失</b><i>→</i><b>峰值扁平</b><i>→</i><b>等待下次奖励</b>
+              <h3 id="decision-load-control-title">限制负荷不是删除策略，而是重新安排策略发生的时间与粒度</h3>
+              <p>高频循环只承担少量、方向明确的决定；复杂策略集中到阶段边界；任何操作压缩都要以“是否更快回到下一次集中揭晓”来判断是否有效。</p>
             </div>
-            <p>玩家从主动发起者退化为被动观看者，只剩下一次随机回报何时出现的等待。</p>
+          </header>
+
+          <div class="decision-control-grid">
+            <article>
+              <span>频繁的小决定</span>
+              <strong>快速影响下一次结果，完成后立即回到表演</strong>
+              <p>小决定应具有明确对象和即时后果，不要求长链推演，也不连续引出新的确认步骤。它的价值是让玩家参与下一次结果，而不是占据下一次结果之前的全部时间。</p>
+              <small>设计检验：决定完成后，玩家是否能立即触发或观看新的 C₁／C₂？</small>
+            </article>
+            <article>
+              <span>阶段性的大决定</span>
+              <strong>把复杂构筑集中放在明确的低频边界</strong>
+              <p>长期规划、资源重组和流派调整可以保留，但应集中在商店、阶段结束、Boss 前后等清楚节点，避免每次 Spin 都重复支付完整策略成本。</p>
+              <small>设计检验：同一套复杂判断是否正在每轮重复收费？</small>
+            </article>
+            <article>
+              <span>操作压缩案例</span>
+              <strong>点击变少不等于负荷降低，集中揭晓不能被拆散</strong>
+              <p>《命运转轮》把策略压缩成一次时机判断后立刻开奖；《Slot or Not》的 Choice_Pool 虽限制同屏类型，却增加候选选择并提前拆散 C₁。操作压缩必须同时缩短间隔并保护峰值。</p>
+              <small>设计检验：压缩后是更快进入强揭晓，还是把一次强揭晓拆成多个弱阶段？</small>
+            </article>
+          </div>
+
+          <footer class="decision-control-rule">
+            <span>控制原则</span>
+            <strong>频繁做小决定，阶段性做大决定；让策略放大下一次期待，而不是替代下一次表演。</strong>
+          </footer>
+        </section>
+
+        <section class="autospin-chapter insight-reveal-block" id="insight-autospin" aria-labelledby="autospin-chapter-title">
+          <header class="insight-subsection-heading">
+            <span>4 · 下一次表演必须由玩家主动开启</span>
+            <div>
+              <h3 id="autospin-chapter-title">每一轮都必须由玩家明确触发</h3>
+              <p>手动触发为期待建立起点，也让第一峰、第二峰与回到主动权形成完整事件；自动 Spin 会把离散双峰压成没有边界的连续结果流。</p>
+            </div>
+          </header>
+
+          <div class="active-start-principles">
+            <article>
+              <span>4.1 · 主动触发建立期待起点</span>
+              <strong>一次明确操作确认上一轮结束，并建立“我要再来一次”的新期待</strong>
+              <p>手动触发不仅提供参与感，也划定新一轮第一峰的起点，让等待、揭晓与主动权返回形成完整事件。</p>
+            </article>
+            <article>
+              <span>4.2 · 自动 Spin 删除事件边界</span>
+              <strong>系统替玩家开启下一轮，会把离散双峰压成连续结果流</strong>
+              <p>上一轮尚未被吸收，下一轮就已经开始；玩家从主动发起者变成被动接收者，新的期待也失去明确起点。</p>
+            </article>
+          </div>
+
+          <div class="autospin-prohibition" role="note" aria-label="禁止自动 Spin 的不可妥协原则">
+            <span>不可妥协原则</span>
+            <strong>绝对，千万，<em>不要做自动 Spin。</em></strong>
+            <p>可以让操作更轻，但不能替玩家按下下一次 Spin。</p>
+          </div>
+
+          <section class="autospin-contrast" aria-label="手动 Spin 与自动 Spin 的体验差异">
+            <article class="autospin-lane autospin-lane-manual">
+              <header><span>手动 Spin</span><strong>主动开启一次完整双峰</strong></header>
+              <div>
+                <b>明确操作</b><i>→</i><b>期待建立</b><i>→</i><b>C₁ 识别 + C₂ 揭晓</b><i>→</i><b>回到主动权</b>
+              </div>
+              <p>每轮都有清晰起点、等待过程与结束边界，玩家知道“是我开启了这次结果”。</p>
+            </article>
+            <article class="autospin-lane autospin-lane-auto">
+              <header><span>自动 Spin</span><strong>把离散双峰压成连续结果流</strong></header>
+              <div>
+                <b>系统触发</b><i>→</i><b>结果不断</b><i>→</i><b>起点消失</b><i>→</i><b>峰值扁平</b><i>→</i><b>等待下次奖励</b>
+              </div>
+              <p>玩家从主动发起者退化为被动观看者，只剩下一次随机回报何时出现的等待。</p>
+            </article>
+          </section>
+
+          <div class="skinner-warning">
+            <span>行为风险 · 斯金纳箱式循环</span>
+            <strong>自动 Spin + 变动比率奖励 + 无间断重复</strong>
+            <p>
+              自动推进让重复行为不再需要新的主动决定，变动奖励则持续提供“下一次也许会更好”的刺激。
+              这不是在完成双峰设计，而是在引导无意识重复行为，并放大行为成瘾风险。
+            </p>
+          </div>
+
+          <header class="insight-detail-heading">
+            <span>4.3 · 自动触发反例</span>
+            <div>
+              <h4>系统连续推进会删除每一次 Spin 的主动起点</h4>
+              <p>用同一套判断维度检查触发权、事件边界、期待起点与最终节奏结果。</p>
+            </div>
+          </header>
+
+          <article class="decision-case-card decision-case-bad decision-case-single-split autospin-bad-case">
+            <header><span>反例 · 自动触发</span><strong>Devils Due · Slot+数值</strong></header>
+            <figure class="decision-case-game-image"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3907520/fe419c334a88e04fcdb130fe7193ca97c85e40db/capsule_616x353_alt_assets_0.jpg?t=1775658131" alt="Devils Due 游戏画面" loading="lazy"></figure>
+            <div class="decision-case-flow"><b>系统触发</b><i>→</i><b>连续拉动</b><i>→</i><b>起点消失</b><i>→</i><strong>被动等待奖励</strong></div>
+            <h3>自动 Spin 直接拆掉了双峰体验的主动起点</h3>
+            <dl class="decision-case-checks">
+              <div><dt>触发权</dt><dd>由玩家交给系统连续推进</dd></div>
+              <div><dt>事件边界</dt><dd>相邻 Spin 之间不再清晰分隔</dd></div>
+              <div><dt>期待起点</dt><dd>玩家没有亲自建立新的期待</dd></div>
+              <div><dt>行为循环</dt><dd>变动奖励与无间断重复叠加</dd></div>
+              <div><dt>节奏结果</dt><dd>离散双峰被压成连续结果流</dd></div>
+            </dl>
+            <p>Devils Due 让系统自动推进 Spin。玩家不再通过一次明确操作建立期待，而是被动接收连续结果；第一峰与第二峰难以形成可感知的边界，只剩等待下一次随机回报。</p>
           </article>
         </section>
 
-        <div class="skinner-warning">
-          <span>BEHAVIORAL RISK · 斯金纳箱式循环</span>
-          <strong>自动 Spin + 变动比率奖励 + 无间断重复</strong>
-          <p>
-            自动推进让重复行为不再需要新的主动决定，变动奖励则持续提供“下一次也许会更好”的刺激。
-            这不是在完成双峰设计，而是在引导无意识重复行为，并放大行为成瘾风险。
-          </p>
-        </div>
-
-        <article class="decision-bad-case autospin-bad-case">
-          <div class="decision-bad-case-visual autospin-bad-flow"
-            aria-label="Devils Due 的自动 Spin 把双峰压成连续随机奖励">
-            <div><span>AUTO SPIN ON</span><strong>系统连续拉动</strong></div>
-            <i>→</i>
-            <div><span>峰值边界丢失</span><strong>第一峰／第二峰失去边界</strong></div>
-            <i>→</i>
-            <div><span>PASSIVE LOOP</span><strong>等待下一次随机奖励</strong></div>
-          </div>
-          <div class="decision-bad-case-copy">
-            <header><span>BAD CASE 01 · 洞察 04</span><strong>Devils Due · Slot+数值</strong></header>
-            <h3>自动 Spin 直接拆掉了双峰体验的主动起点</h3>
-            <p>
-              Devils Due 让系统自动推进 Spin。玩家不再通过一次明确操作建立期待，而是被动接收连续结果；
-              第一峰与第二峰难以形成可感知的边界，只剩等待下一次随机回报。
-              变动奖励与无间断重复共同构成斯金纳箱式循环，引导无意识重复行为并放大行为成瘾风险。
-            </p>
-            <footer>设计风险：<b>主动权消失 × 峰值扁平化 × 变动奖励无尽循环</b></footer>
-          </div>
-        </article>
-
-        <div class="insight-rule-banner rule-banner-c4">
-          <span>规则 04</span>
-          <strong>可以降低 Spin 的操作成本，但绝不能把“下一次何时开始”的权力交给系统。</strong>
-          <p>双峰需要玩家主动开启每一轮；自动 Spin 优化的是重复次数，不是体验质量。</p>
+        <div class="insight-rule-banner rule-banner-c3">
+          <span>洞察四 · 结论</span>
+          <strong>决策不能阻塞下一次表演，自动化不能替玩家开启下一次表演。</strong>
+          <p>好的策略深度应让玩家在第二峰封闭后迅速主动开启下一轮；过密决策会切断双峰体验飞轮，使玩家退出连续心流，自动 Spin 则会删除每轮期待的主动起点。</p>
         </div>
       </section>
 
       <section class="section insights-section insight-pool-section" id="insight-effective-pool">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">06 · 洞察六</p>
+            <p class="eyebrow">05 · 洞察五 · 有效池与盘面容量</p>
             <h2>盘面扩大时，<br>符号种类不能按面积增长</h2>
           </div>
           <p>
@@ -2166,21 +3372,61 @@
           </p>
         </div>
 
+        <section class="insight-concept-definition" aria-labelledby="insight-five-concept-title">
+          <header>
+            <span>概念定义</span>
+            <h3 id="insight-five-concept-title">有效池描述当前真正参与抽取的内容，盘面容量描述这些内容当下能够如何相遇</h3>
+            <p>洞察五先区分“游戏总共设计了多少符号”与“当前局内实际可能抽到多少符号”。真正影响同屏组合、C₁ 可读性与构筑持续时间的，是有效池与盘面容量之间的动态关系。</p>
+          </header>
+          <div class="insight-concept-grid insight-concept-grid-four">
+            <article>
+              <span>01 · 有效池</span>
+              <strong>当前局内真正参与 Random 的符号集合</strong>
+              <p>未解锁、已移除、只存在于图鉴或当前条件下不可能出现的符号，不计入有效池。分析对象是本次抽取实际面对的可能性空间。</p>
+            </article>
+            <article>
+              <span>02 · 承载格数 C</span>
+              <strong>Show_TP 当前能够同时呈现多少格</strong>
+              <p>C 决定同一时刻容纳符号与关系的上限。扩大盘面会增加相遇机会，也会同步增加视觉搜索与关系识别范围。</p>
+            </article>
+            <article>
+              <span>03 · 有效种类 T</span>
+              <strong>当前抽取中可能出现多少种不同类型</strong>
+              <p>T 主要影响同类相遇概率、规则记忆和 C₁ 识别负担。种类随面积等比例增长，会快速稀释稳定组合与可见模式。</p>
+            </article>
+            <article>
+              <span>04 · 总数 P 与密度 D</span>
+              <strong>分别描述构筑长度与同类机会</strong>
+              <p>P 是有效符号副本或等价权重的总量；D = C ÷ T，用于粗略比较同屏遇到同类或相关类型的机会，两者不能被当作同一个增长指标。</p>
+            </article>
+          </div>
+          <div class="insight-concept-relation"><b>结构关系</b><span>C 决定一次能放多少内容，T 决定需要区分多少类型，P 决定有效池能够容纳多少副本与成长，D 用于观察同类机会是否被种类扩张稀释。</span></div>
+        </section>
+
         <div class="effective-pool-analysis">
-          <header class="effective-pool-definition">
+          <header class="insight-subsection-heading">
+            <span>5.1 · 分析口径</span>
             <div>
-              <span>分析口径</span>
-              <strong>同屏机会由种类密度决定，构筑耐久度由符号总数决定</strong>
+              <h3>同屏机会由种类密度决定，构筑耐久度由符号总数决定</h3>
               <p>
                 下列区间适用于以支付线、邻接或轻度合成为主，并提供少量锁定、重抽或候选选择的 Slot+ 原型。
                 它们是原型起测区间，不是脱离 C₁ 规则与抽取权重的绝对上限。
               </p>
             </div>
-            <div class="effective-pool-metrics" aria-label="有效池分析指标">
-              <article><b>C</b><span>承载格数</span><small>Show_TP 当前可用格</small></article>
-              <article><b>T</b><span>有效种类数</span><small>当局可被抽到的类型</small></article>
-              <article><b>P</b><span>有效符号总数</span><small>实体副本或等价权重</small></article>
-              <article><b>D</b><span>同类机会密度</span><small>C ÷ T，用于比较同屏机会</small></article>
+          </header>
+
+          <div class="effective-pool-metrics" aria-label="有效池分析指标">
+            <article><b>C</b><span>承载格数</span><small>Show_TP 当前可用格</small></article>
+            <article><b>T</b><span>有效种类数</span><small>当局可被抽到的类型</small></article>
+            <article><b>P</b><span>有效符号总数</span><small>实体副本或等价权重</small></article>
+            <article><b>D</b><span>同类机会密度</span><small>C ÷ T，用于比较同屏机会</small></article>
+          </div>
+
+          <header class="insight-subsection-heading">
+            <span>5.2 · 起测区间</span>
+            <div>
+              <h3>盘面扩大时，有效种类与有效总数采用不同增速</h3>
+              <p>区间用于建立原型测试起点；最终数值仍需结合 C₁ 关系、抽取权重与玩家修正能力验证。</p>
             </div>
           </header>
 
@@ -2235,6 +3481,14 @@
             </table>
           </div>
 
+          <header class="insight-subsection-heading">
+            <span>5.3 · 区间修正</span>
+            <div>
+              <h3>根据匹配强度、结果修正能力与分池结构调整上限</h3>
+              <p>同一盘面尺寸不能直接套用同一个种类上限；越依赖精确关系，越需要提高重复密度。</p>
+            </div>
+          </header>
+
           <div class="effective-pool-adjustments" aria-label="有效池区间修正条件">
             <article>
               <span>强匹配／合成</span>
@@ -2258,144 +3512,31 @@
             </article>
           </div>
 
-          <footer class="effective-pool-boundary">
-            <span>使用边界</span>
-            <p>
-              最终是否有效，仍要同时观察命中率、空转率、关键关系出现频率与玩家的结果修正能力。
-              同样的 T／P，在支付线、邻接、合成和独立列池中会产生完全不同的体验。
-            </p>
-          </footer>
+          <section class="effective-pool-boundary" aria-labelledby="effective-pool-boundary-title">
+            <header class="insight-subsection-heading">
+              <span>5.4 · 使用边界</span>
+              <div>
+                <h3 id="effective-pool-boundary-title">用实际命中与玩家修正能力验证有效池</h3>
+                <p>
+                  最终是否有效，仍要同时观察命中率、空转率、关键关系出现频率与玩家的结果修正能力。
+                  同样的 T／P，在支付线、邻接、合成和独立列池中会产生完全不同的体验。
+                </p>
+              </div>
+            </header>
+          </section>
         </div>
 
         <div class="insight-rule-banner rule-banner-pool">
-          <span>规则 05</span>
+          <span>洞察五 · 结论</span>
           <strong>盘面扩大优先增加重复实例和品质跨度，不要按面积同比增加符号种类。</strong>
           <p>种类决定玩家需要理解多少关系；总数与权重决定这些关系能否稳定出现并支撑长期构筑。</p>
-        </div>
-      </section>
-
-      <section class="section insights-section insight-c2-tempo-section" id="insight-c2-tempo">
-        <div class="section-heading insight-heading">
-          <div>
-            <p class="eyebrow">07 · 洞察七</p>
-            <h2>C₂ 不只看揭晓深度，<br>还要观察信息如何随时间释放</h2>
-          </div>
-          <p>
-            这是后续持续补证的观察框架：同时记录单次 C₂ 的时长、单位时间信息烈度、烈度曲线与演绎方式，
-            再比较这些指标如何随构筑进度跨 Spin 变化。
-          </p>
-        </div>
-
-        <div class="c2-tempo-analysis">
-          <header class="c2-tempo-definition">
-            <div>
-              <span>初步观察框架 · 待持续补证</span>
-              <h3>把一次 C₂ 看成随时间展开的信息曲线</h3>
-              <p>
-                C₂ 的体验不只由“揭晓了几层”决定。同样数量的信息，可以均匀铺开，也可以并行爆发，
-                或由前一结果不断生成下一结果。三者会形成完全不同的节奏、峰值与可读性。
-              </p>
-            </div>
-            <code>C₂ 演绎 = 总体时间 T<sub>C₂</sub> × 信息烈度 ρ(t) × 演绎结构 S</code>
-          </header>
-
-          <div class="c2-tempo-metrics" aria-label="单次 C₂ 演绎观察指标">
-            <article>
-              <b>T<sub>C₂</sub></b>
-              <span>总体时间</span>
-              <small>从 C₂ 开始释放额外结果信息，到最终结果封闭所经历的时间。</small>
-            </article>
-            <article>
-              <b>Q<sub>C₂</sub></b>
-              <span>总信息量</span>
-              <small>期间新增的关键结果节点、状态变化与预测修正总量。</small>
-            </article>
-            <article>
-              <b>ρ(t)</b>
-              <span>单位时间信息烈度</span>
-              <small>短时间窗口内新增了多少需要玩家识别的有效信息。</small>
-            </article>
-            <article>
-              <b>Δρ/Δt</b>
-              <span>烈度随时间的变化</span>
-              <small>信息密度保持稳定、逐渐衰减，还是在演绎后段持续加速。</small>
-            </article>
-          </div>
-
-          <section class="c2-tempo-shapes" aria-labelledby="c2-tempo-shapes-title">
-            <header>
-              <span>单次 Spin 内</span>
-              <h3 id="c2-tempo-shapes-title">记录 C₂ 的演绎方式</h3>
-            </header>
-            <div>
-              <article class="shape-linear">
-                <span>线性</span>
-                <strong>A → B → C</strong>
-                <p>结果按固定次序逐项出现；节点之间不继续生成新节点，信息烈度通常较稳定。</p>
-              </article>
-              <article class="shape-parallel">
-                <span>并行</span>
-                <strong>A → B₁＋B₂＋B₃</strong>
-                <p>多个结果在同一时间窗口同时释放；总体时间可能较短，但瞬时信息峰值更高。</p>
-              </article>
-              <article class="shape-chain">
-                <span>链式</span>
-                <strong>A → B → C → …</strong>
-                <p>前一结果继续触发下一结果；链长与结束时间可能未知，信息烈度也可能随演绎推进而加速。</p>
-              </article>
-              <article class="shape-mixed">
-                <span>混合</span>
-                <strong>线性起点 → 并行／链式爆发</strong>
-                <p>先建立清晰价值锚点，再在后段集中释放多条结果；需要重点检查峰值是否仍然可读。</p>
-              </article>
-            </div>
-          </section>
-
-          <section class="c2-tempo-across-spins" aria-labelledby="c2-tempo-across-title">
-            <header>
-              <span>跨 Spin 观察</span>
-              <h3 id="c2-tempo-across-title">构筑成长是否改变 C₂ 的时间结构</h3>
-              <p>不要只比较最终数值大小；应持续记录 C₂ 时长、平均烈度、峰值烈度和演绎结构是否随局内进度改变。</p>
-            </header>
-            <div class="c2-tempo-progression" aria-label="跨 Spin 的 C₂ 演绎变化示意">
-              <article><span>前期</span><strong>短时 · 低密度</strong><i style="--level: 24%"></i></article>
-              <b aria-hidden="true">→</b>
-              <article><span>中期</span><strong>触发增多 · 密度上升</strong><i style="--level: 55%"></i></article>
-              <b aria-hidden="true">→</b>
-              <article><span>后期</span><strong>并行／链式 · 峰值压缩</strong><i style="--level: 88%"></i></article>
-            </div>
-            <aside class="c2-tempo-working-example">
-              <span>工作假设 · 四叶草深渊</span>
-              <p>
-                后期护身符与连锁反应可能让演绎速度随时间加快；新增信息没有等比例拉长表演，
-                而是被压缩进较短窗口，使单位时间信息烈度逐步提高。后续需要用实际录像和事件时间戳验证。
-              </p>
-            </aside>
-          </section>
-
-          <footer class="c2-tempo-observation-list">
-            <span>后续记录项</span>
-            <div>
-              <b>开始与封闭时间</b>
-              <b>关键结果节点数</b>
-              <b>同时发生的最大节点数</b>
-              <b>节点之间的触发关系</b>
-              <b>前／中／后期的烈度曲线</b>
-            </div>
-          </footer>
-        </div>
-
-        <div class="insight-rule-banner rule-banner-c2-tempo">
-          <span>提醒 06</span>
-          <strong>后续评估 C₂ 时，同时记录“多深、多久、多密、如何展开，以及它如何跨 Spin 变化”。</strong>
-          <p>单一的二次揭晓深度分数无法代替时间结构分析；相同深度可能对应平缓、并行爆发或链式加速三种完全不同的体验。</p>
         </div>
       </section>
 
       <section class="section insights-section insight-check-section" id="insight-checks">
         <div class="section-heading insight-heading">
           <div>
-            <p class="eyebrow">08 · 设计检查</p>
+            <p class="eyebrow">06 · 设计检查</p>
             <h2>把洞察变成<br>可验证的问题</h2>
           </div>
           <p>这些问题用于检查新原型，而不是把洞察固化成不可调整的数值上限。</p>
@@ -2446,6 +3587,26 @@
       </section>
     </div>
   </main>
+
+  <dialog class="cognition-score-dialog" id="cognition-score-dialog" aria-labelledby="cognition-score-dialog-title">
+    <article>
+      <header>
+        <div>
+          <span id="cognition-score-dialog-type">最小爽环案例评分</span>
+          <h3 id="cognition-score-dialog-title">评分详细计算</h3>
+          <p id="cognition-score-dialog-summary"></p>
+        </div>
+        <button type="button" class="cognition-score-dialog-close" id="cognition-score-dialog-close" aria-label="关闭评分详细计算">×</button>
+      </header>
+      <nav class="cognition-score-dialog-tabs" aria-label="评分维度">
+        <button type="button" data-cognition-dialog-focus="recognition" aria-pressed="false">认 · 即时识别</button>
+        <button type="button" data-cognition-dialog-focus="knowledge" aria-pressed="false">知 · 局面理解</button>
+        <button type="button" data-cognition-dialog-focus="internalization" aria-pressed="false">内化 · 转化难度</button>
+      </nav>
+      <div class="cognition-score-dialog-content" id="cognition-score-dialog-content"></div>
+      <footer>本评分是基于模型定义的分析评分，不是用户实验或生理测量结果。</footer>
+    </article>
+  </dialog>
 
   <dialog class="field-editor" id="field-editor" aria-labelledby="field-editor-title">
     <form id="field-editor-form">
@@ -2762,8 +3923,44 @@
 
       window.addEventListener("hashchange", activateTab);
       activateTab();
+
+      const semanticRelationHelp = document.querySelector("[data-semantic-relation-help]");
+      const semanticRelationHelpWrap = semanticRelationHelp?.closest("[data-semantic-relation-help-wrap]");
+      const semanticRelationHelpPopover = document.querySelector("#semantic-relation-help-popover");
+
+      function setSemanticRelationHelp(open, pinned = false) {
+        if (!semanticRelationHelp || !semanticRelationHelpWrap || !semanticRelationHelpPopover) return;
+        semanticRelationHelpWrap.classList.toggle("is-open", open);
+        semanticRelationHelpWrap.classList.toggle("is-pinned", open && pinned);
+        semanticRelationHelp.setAttribute("aria-expanded", open ? "true" : "false");
+        semanticRelationHelpPopover.setAttribute("aria-hidden", open ? "false" : "true");
+      }
+
+      semanticRelationHelpWrap?.addEventListener("mouseenter", () => {
+        setSemanticRelationHelp(true, semanticRelationHelpWrap.classList.contains("is-pinned"));
+      });
+      semanticRelationHelpWrap?.addEventListener("mouseleave", () => {
+        if (!semanticRelationHelpWrap.classList.contains("is-pinned")) setSemanticRelationHelp(false);
+      });
+      semanticRelationHelp?.addEventListener("focus", () => {
+        setSemanticRelationHelp(true, semanticRelationHelpWrap.classList.contains("is-pinned"));
+      });
+      semanticRelationHelp?.addEventListener("blur", () => {
+        if (!semanticRelationHelpWrap.classList.contains("is-pinned")) setSemanticRelationHelp(false);
+      });
+      semanticRelationHelp?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const shouldOpen = !semanticRelationHelpWrap.classList.contains("is-pinned");
+        setSemanticRelationHelp(shouldOpen, shouldOpen);
+      });
+      document.addEventListener("click", (event) => {
+        if (!semanticRelationHelpWrap?.contains(event.target)) setSemanticRelationHelp(false);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setSemanticRelationHelp(false);
+      });
     })();
   </script>
-  <script type="module" src="./assets/app.js?v=20260812-120"></script>
+  <script type="module" src="./assets/app.js?v=20260813-134"></script>
 </body>
 </html>
